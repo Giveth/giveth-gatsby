@@ -1,20 +1,34 @@
-import React from "react"
-import { Link } from "gatsby"
+import React from 'react'
+import { Link } from 'gatsby'
 
-import Layout from "../components/layout"
-import Image from "../components/image"
-import SEO from "../components/seo"
+import Layout from '../components/layout'
+import Image from '../components/image'
+import SEO from '../components/seo'
+import web3Obj from '../components/helper'
+
+//xdai
+//rinkeby
+// web3Obj.initialize('production', 'istanbul')
+const ethConfig = {
+  buildEnv: 'production',
+  host: 'rinkeby'
+}
+// const xdaiConfig = {
+//   buildEnv: 'production',
+//   host: 'xdai',
+//   chainId: 100
+// }
+web3Obj.initialize(ethConfig)
 
 const IndexPage = () => (
   <Layout>
-    <SEO title="Home" />
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
+    <SEO title='Home' />
+    <h1>Giveth Tor.us</h1>
+    <Link to='/iframe/'>Torus iframe</Link>
+    {/* <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
       <Image />
     </div>
-    <Link to="/page-2/">Go to page 2</Link>
+     */}
   </Layout>
 )
 
