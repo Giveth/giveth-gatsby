@@ -13,12 +13,14 @@ const ethConfig = {
   buildEnv: 'production',
   host: 'rinkeby'
 }
-// const xdaiConfig = {
-//   buildEnv: 'production',
-//   host: 'xdai',
-//   chainId: 100
-// }
-web3Obj.initialize(ethConfig)
+const xdaiConfig = {
+  buildEnv: 'production',
+  host: 'https://xdai.poanetwork.dev',
+  chainId: 100,
+  networkName: 'xDai' // optional
+}
+
+web3Obj.initialize(xdaiConfig)
 
 const IndexPage = () => (
   <Layout>
