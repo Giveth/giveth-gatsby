@@ -26,11 +26,6 @@ const IndexPage = () => (
   <Layout>
     <SEO title='Home' />
     <h1>Giveth Tor.us</h1>
-    <Link to='/iframe/'>Torus iframe</Link>
-    {/* <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
-      <Image />
-    </div>
-     */}
   </Layout>
 )
 
