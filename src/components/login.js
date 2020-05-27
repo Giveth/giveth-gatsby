@@ -1,12 +1,14 @@
 import React from 'react'
 import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
 
+console.log(
+  `process.env.GOOGLE_CLIENT_ID ---> : ${process.env.GOOGLE_CLIENT_ID}`
+)
 const torus = new DirectWebSdk({
-  baseUrl: 'http://localhost:8000/serviceworker/',
-  GOOGLE_CLIENT_ID:
-    '900646569779-qgs70nf540ss4dqr8dqirlu5f9g4kc5h.apps.googleusercontent.com',
-  proxyContractAddress: '0x4023d2a0D330bF11426B12C6144Cfb96B7fa6183', // details for test net
-  network: 'ropsten', // details for test net,
+  baseUrl: process.env.BASE_URL,
+  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+  proxyContractAddress: process.env.PROXY_CONTRACT_ADDRESS,
+  network: process.env.NETWORK,
   enableLogging: true
 })
 
