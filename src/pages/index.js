@@ -4,24 +4,7 @@ import { Link } from 'gatsby'
 import Layout from '../components/layout'
 import Image from '../components/image'
 import SEO from '../components/seo'
-import web3Obj from '../components/helper'
 import { Grid, Box } from 'theme-ui'
-
-//xdai
-//rinkeby
-// web3Obj.initialize('production', 'istanbul')
-const ethConfig = {
-  buildEnv: 'production',
-  host: 'rinkeby'
-}
-const xdaiConfig = {
-  buildEnv: 'production',
-  host: 'https://xdai.poanetwork.dev',
-  chainId: 100,
-  networkName: 'xDai' // optional
-}
-
-web3Obj.initialize(xdaiConfig)
 
 const IndexPage = () => (
   <Layout>
@@ -42,7 +25,7 @@ const IndexPage = () => (
           <br />
           <button
             onClick={() => {
-              web3Obj.torus.showWallet('transfer')
+              // web3Obj.torus.showWallet('transfer')
             }}
           >
             donate
@@ -54,7 +37,7 @@ const IndexPage = () => (
           <br />
           <button
             onClick={() => {
-              web3Obj.torus.showWallet('transfer')
+              // web3Obj.torus.showWallet('transfer')
             }}
           >
             donate
@@ -66,7 +49,7 @@ const IndexPage = () => (
           <br />
           <button
             onClick={() => {
-              web3Obj.torus.showWallet('transfer')
+              // web3Obj.torus.showWallet('transfer')
             }}
           >
             donate
@@ -78,7 +61,7 @@ const IndexPage = () => (
           <br />
           <button
             onClick={() => {
-              web3Obj.torus.showWallet('transfer')
+              // web3Obj.torus.showWallet('transfer')
             }}
           >
             donate

@@ -2,6 +2,9 @@ import { Link } from 'gatsby'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Image from './image'
+import Loadable from '@loadable/component'
+
+const Login = Loadable(() => import('../components/login'))
 
 const Header = ({ siteTitle }) => (
   <header
@@ -18,6 +21,7 @@ const Header = ({ siteTitle }) => (
       }}
     >
       <Image />
+      <Login />
       <h1 style={{ margin: 0 }}>
         <Link
           to='/'
