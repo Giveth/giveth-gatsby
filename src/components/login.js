@@ -2,7 +2,7 @@ import React from "react"
 import DirectWebSdk from "@toruslabs/torus-direct-web-sdk"
 
 console.log(
-  `process.env.GOOGLE_CLIENT_ID ---> : ${process.env.GOOGLE_CLIENT_ID}`
+  `process.env.GOOGLE_CLIENT_ID ---> : ${process.env.GATSBY_GOOGLE_CLIENT_ID}`
 )
 const torus = new DirectWebSdk({
   baseUrl: process.env.GATSBY_BASE_URL,
