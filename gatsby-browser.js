@@ -3,5 +3,15 @@
  *
  * See: https://www.gatsbyjs.org/docs/browser-apis/
  */
+export { wrapRootElement } from './src/apollo/wrapRootElement'
 
-// You can delete this file if you're not using it
+// import React from 'react'
+// import { ApolloProvider } from '@apollo/client'
+
+// const client = new ApolloClient({
+//   uri: process.env.GATSBY_APOLLO_SERVER
+// })
+
+// export const wrapRootElement = ({ element }) => (
+//   <ApolloProvider client={client}>{element}</ApolloProvider>
+// )
