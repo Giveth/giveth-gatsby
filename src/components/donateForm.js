@@ -37,7 +37,7 @@ const Donate = props => {
           mb={3}
         />
 
-        <Button>Donate</Button>
+        <Button style={{ cursor: 'pointer' }}>Donate</Button>
       </Box>
     </Box>
   )

@@ -9,7 +9,7 @@ import {
   handleLogout
 } from '../services/auth'
 import ApolloClient from 'apollo-boost'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN, DO_REGISTER } from '../apollo/gql/auth'
 import Web3 from 'web3'
 import LoginButton from './loginButton'
