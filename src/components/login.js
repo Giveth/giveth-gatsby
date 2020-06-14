@@ -17,10 +17,6 @@ import UserDetails from './userDetails'
 
 var web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
 
-console.log(
-  `process.env.GOOGLE_CLIENT_ID ---> : ${process.env.GATSBY_GOOGLE_CLIENT_ID}`
-)
-
 const torus = new DirectWebSdk({
   baseUrl: process.env.GATSBY_BASE_URL,
   GOOGLE_CLIENT_ID: process.env.GATSBY_GOOGLE_CLIENT_ID,
