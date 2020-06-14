@@ -12,6 +12,7 @@
     "@toruslabs/torus-embed": "^1.4.3",
     "apollo-boost": "^0.4.9",
     "buffer": "^5.6.0",
+    "electron": "^9.0.4",
     "gatsby": "^2.21.21",
     "gatsby-image": "^2.4.3",
     "gatsby-plugin-manifest": "^2.4.2",
