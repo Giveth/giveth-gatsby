@@ -26,7 +26,6 @@ import {
 const IndexPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
 
-  console.log(`isLoggedIn ---> : ${isLoggedIn}`)
   const [showProjectForm, setShowProjectForm] = useState(false)
   const { loading, error, data } = useQuery(FETCH_PROJECTS)
   const [addProjectQuery, x] = useMutation(ADD_PROJECT_SIMPLE)
@@ -55,12 +54,12 @@ const IndexPage = () => {
     return null
   }
 
-  function AddProjectButton (toggleProjectForm) {
+  function AddProjectButton (props) {
     if (isLoggedIn === true) {
       return (
         <Button
           style={{ float: 'right', cursor: 'pointer' }}
-          onClick={toggleProjectForm}
+          onClick={props.toggleProjectForm}
         >
           Add project
         </Button>

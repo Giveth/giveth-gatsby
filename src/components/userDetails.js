@@ -1,4 +1,5 @@
 import React from 'react'
+import { Button, Heading } from 'theme-ui'
 
 const UserDetails = props => {
   const { user, balance, logout } = props
@@ -22,7 +23,12 @@ const UserDetails = props => {
           {user.publicAddress}
           <p>Your balance:{balance}</p>
           <p>
-            <button onClick={logout}>logout</button>
+            <Button
+              style={{ float: 'right', cursor: 'pointer' }}
+              onClick={logout}
+            >
+              logout
+            </Button>
           </p>
         </main>
         <aside>
