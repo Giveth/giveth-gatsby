@@ -17,10 +17,6 @@ import UserDetails from './userDetails'
 
 var web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
 
-console.log(
-  `process.env.GOOGLE_CLIENT_ID ---> : ${process.env.GATSBY_GOOGLE_CLIENT_ID}`
-)
-
 const torus = new DirectWebSdk({
   baseUrl: process.env.GATSBY_BASE_URL,
   GOOGLE_CLIENT_ID: process.env.GATSBY_GOOGLE_CLIENT_ID,
@@ -82,7 +78,7 @@ const Login = () => {
       )
       // console.log(`token : ${JSON.stringify(token, null, 2)}`)
     } catch (error) {
-      console.log(`error : ${JSON.stringify(error, null, 2)}`)
+      console.error(`error : ${JSON.stringify(error, null, 2)}`)
     }
 
     //web3.eth.getBalance(user.publicAddress).then(setBalance)

@@ -2,13 +2,6 @@ import React, { useState } from 'react'
 import { Link } from 'gatsby'
 import { Grid, Box, Button, Heading } from 'theme-ui'
 import gql from 'graphql-tag'
-// import {
-//   // gql,
-//   useQuery,
-//   // ,
-//   useMutation
-//   // useSubscription
-// } from '@apollo/react-hooks'
 import Loadable from '@loadable/component'
 import Layout from '../components/layout'
 import Image from '../components/image'
@@ -16,6 +9,13 @@ import SEO from '../components/seo'
 import ProjectListing from '../components/projectListing'
 import AddProject from '../components/AddProject'
 import { useQuery, useMutation } from '@apollo/react-hooks'
+import {
+  setUser,
+  checkIfLoggedIn,
+  setIsLoggedIn,
+  getUser,
+  handleLogout
+} from '../services/auth'
 
 import {
   FETCH_PROJECTS,
@@ -24,6 +24,8 @@ import {
 } from '../apollo/gql/projects'
 
 const IndexPage = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
+
   const [showProjectForm, setShowProjectForm] = useState(false)
   const { loading, error, data } = useQuery(FETCH_PROJECTS)
   const [addProjectQuery, x] = useMutation(ADD_PROJECT_SIMPLE)
@@ -38,13 +40,10 @@ const IndexPage = () => {
       },
       refetchQueries: [{ query: FETCH_PROJECTS }]
     })
-    console.log(`project A : ${JSON.stringify(project, null, 2)}`)
   }
-  if (data && data.projects)
-    console.log(`data.projects : ${JSON.stringify(data.projects, null, 2)}`)
 
   function ProjectForm () {
-    if (showProjectForm) {
+    if (isLoggedIn === true && showProjectForm) {
       return (
         <>
           <AddProject addProject={addProject} />
@@ -55,6 +54,18 @@ const IndexPage = () => {
     return null
   }
 
+  function AddProjectButton (toggleProjectForm) {
+    if (isLoggedIn === true && showProjectForm) {
+      return (
+        <Button
+          style={{ float: 'right', cursor: 'pointer' }}
+          onClick={toggleProjectForm}
+        >
+          Add project
+        </Button>
+      )
+    } else return null
+  }
   function toggleProjectForm () {
     setShowProjectForm(!showProjectForm)
   }
@@ -69,12 +80,7 @@ const IndexPage = () => {
         }}
       >
         <SEO title='Home' />
-        <Button
-          style={{ float: 'right', cursor: 'pointer' }}
-          onClick={toggleProjectForm}
-        >
-          Add project
-        </Button>
+        <AddProjectButton toggleProjectForm={toggleProjectForm} />
         <Heading as='h1'>Giveth</Heading>
         <Heading as='h3'>The future of giving</Heading>
         <br />
