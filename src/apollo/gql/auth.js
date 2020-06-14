@@ -1,4 +1,5 @@
-import { gql } from '@apollo/client'
+import { useQuery } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
 
 const DO_LOGIN = gql`
   mutation DoLoginWallet(

@@ -11,8 +11,18 @@ import Donate from '../components/donateForm'
 
 const ProjectListing = props => (
   <>
-    <Box>
-      <Heading as='h3'>{props.name}</Heading>
+    <Box style={{ marinBottom: '30px' }}>
+      <Heading
+        as='h3'
+        style={{
+          width: '220px',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}
+      >
+        {props.name}
+      </Heading>
       <img src={props.image} style={{ height: '123px' }} />
       <br />
       <Donate doDonate={values => alert('donating' + values.amount)} />
