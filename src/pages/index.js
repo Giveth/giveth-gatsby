@@ -23,6 +23,9 @@ import {
   ADD_PROJECT_SIMPLE
 } from '../apollo/gql/projects'
 
+// placeholder image
+import NoImage from '../images/no-image-available.jpg'
+
 const IndexPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
 
@@ -42,7 +45,7 @@ const IndexPage = () => {
     })
   }
 
-  function ProjectForm () {
+  function ProjectForm() {
     if (isLoggedIn === true && showProjectForm) {
       return (
         <>
@@ -54,7 +57,7 @@ const IndexPage = () => {
     return null
   }
 
-  function AddProjectButton (props) {
+  function AddProjectButton(props) {
     if (isLoggedIn === true) {
       return (
         <Button
@@ -66,7 +69,7 @@ const IndexPage = () => {
       )
     } else return null
   }
-  function toggleProjectForm () {
+  function toggleProjectForm() {
     setShowProjectForm(!showProjectForm)
   }
   return (
@@ -79,10 +82,10 @@ const IndexPage = () => {
           width: ['100%', '50%', '25%']
         }}
       >
-        <SEO title='Home' />
+        <SEO title="Home" />
         <AddProjectButton toggleProjectForm={toggleProjectForm} />
-        <Heading as='h1'>Giveth</Heading>
-        <Heading as='h3'>The future of giving</Heading>
+        <Heading as="h1">Giveth</Heading>
+        <Heading as="h3">The future of giving</Heading>
         <br />
 
         <br />
@@ -90,29 +93,26 @@ const IndexPage = () => {
         <br />
         <Grid width={[128, null, 192]}>
           <ProjectListing
-            name='Giveth DAC'
-            image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
+            name="Giveth DAC"
+            image="https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png"
           />
           <ProjectListing
-            name='Aragon DAC'
-            image='https://feathers.beta.giveth.io/uploads/3aa88b6ed3a6e0f54542086886194696a21c06b756864b97a1c1a0dcf58d4e17.png'
+            name="Aragon DAC"
+            image="https://feathers.beta.giveth.io/uploads/3aa88b6ed3a6e0f54542086886194696a21c06b756864b97a1c1a0dcf58d4e17.png"
           />
           <ProjectListing
-            name='OSBE DAC'
-            image='https://ipfs.giveth.io/ipfs/QmUCepVMUhCHhZ5mSEXqWgL3taxPU5gaUhczTZgA4JLyPk'
+            name="OSBE DAC"
+            image="https://ipfs.giveth.io/ipfs/QmUCepVMUhCHhZ5mSEXqWgL3taxPU5gaUhczTZgA4JLyPk"
           />
           <ProjectListing
-            name='Unicorn DAC'
-            image='https://feathers.beta.giveth.io/uploads/5906e1be14c47c0a18b44a29fe8873ddfb6440a8a212cf42bacb84b7e2e1c0c1.png'
+            name="Unicorn DAC"
+            image="https://feathers.beta.giveth.io/uploads/5906e1be14c47c0a18b44a29fe8873ddfb6440a8a212cf42bacb84b7e2e1c0c1.png"
           />
           {data &&
             data.projects &&
             data.projects &&
             data.projects.map(project => (
-              <ProjectListing
-                name={project.title}
-                image='http://maestroselectronics.com/wp-content/uploads/2017/12/No_Image_Available.jpg'
-              />
+              <ProjectListing name={project.title} image={NoImage} />
             ))}
         </Grid>
       </div>
