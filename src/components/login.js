@@ -82,7 +82,7 @@ const Login = () => {
       )
       // console.log(`token : ${JSON.stringify(token, null, 2)}`)
     } catch (error) {
-      console.log(`error : ${JSON.stringify(error, null, 2)}`)
+      console.error(`error : ${JSON.stringify(error, null, 2)}`)
     }
 
     //web3.eth.getBalance(user.publicAddress).then(setBalance)

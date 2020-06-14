@@ -50,7 +50,6 @@ const AddProject = props => {
 
   const { handleSubmit, register, errors } = useForm()
   const onSubmit = values => {
-    console.log(`values : ${JSON.stringify(values, null, 2)}`)
     props.addProject(values)
   }
 
