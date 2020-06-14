@@ -11,7 +11,7 @@ import Donate from '../components/donateForm'
 
 const ProjectListing = props => (
   <>
-    <Box key={props.name} style={{ marinBottom: '30px' }}>
+    <Box style={{ marinBottom: '30px' }}>
       <Heading
         as='h3'
         style={{
