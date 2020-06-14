@@ -18,7 +18,7 @@ import UserDetails from './userDetails'
 var web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
 
 const torus = new DirectWebSdk({
-  baseUrl: process.env.GATSBY_BASE_URL,
+  baseUrl: process.env.GATSBY_BASE_URL + '/serviceworker/',
   GOOGLE_CLIENT_ID: process.env.GATSBY_GOOGLE_CLIENT_ID,
   proxyContractAddress: process.env.GATSBY_PROXY_CONTRACT_ADDRESS,
   network: process.env.GATSBY_NETWORK,
@@ -42,6 +42,7 @@ const Login = () => {
   function logout () {
     handleLogout()
     setIsLoggedIn(false)
+    window.location = process.env.GATSBY_BASE_URL
   }
 
   async function login () {
@@ -77,6 +78,7 @@ const Login = () => {
         process.env.GATSBY_JWT_SECRET
       )
       // console.log(`token : ${JSON.stringify(token, null, 2)}`)
+      window.location = process.env.GATSBY_BASE_URL
     } catch (error) {
       console.error(`error : ${JSON.stringify(error, null, 2)}`)
     }
