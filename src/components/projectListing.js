@@ -1,19 +1,28 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React from 'react'
-import { Heading, Box } from 'theme-ui'
+import { Heading, Box, Card, Text, ThemeProvider } from 'theme-ui'
+import styled from '@emotion/styled'
+
+import theme from '../gatsby-plugin-theme-ui/index'
 import Donate from '../components/donateForm'
 
+const ProjectCard = styled(Card)`
+  background-color: ${theme.colors.background};
+  margin-bottom: 30px;
+  padding: 1rem;
+  border-radius: 6px;
+  width: 220px;
+`
+
 const ProjectListing = props => (
-  <>
-    <Box style={{ marinBottom: '30px' }}>
+  <ThemeProvider theme={theme}>
+    <ProjectCard style={{}}>
+      <img
+        src={props.image}
+        style={{ width: '190px', height: '100px', margin: '0 auto' }}
+        alt={props.name}
+      />
       <Heading
-        as='h3'
+        sx={{ variant: 'headings.h6' }}
         style={{
           width: '220px',
           whiteSpace: 'nowrap',
@@ -23,11 +32,13 @@ const ProjectListing = props => (
       >
         {props.name}
       </Heading>
-      <img src={props.image} style={{ height: '123px' }} />
       <br />
+      <Text sx={{ variant: 'text.default' }}>
+        Textdescriptions should be included in the data model as a blurb.
+      </Text>
       <Donate doDonate={values => alert('donating' + values.amount)} />
-    </Box>
-  </>
+    </ProjectCard>
+  </ThemeProvider>
 )
 
 export default ProjectListing

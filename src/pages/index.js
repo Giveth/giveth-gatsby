@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
-import { Grid, Box, Button, Heading } from 'theme-ui'
+import { Grid, Box, Button, Heading, Text } from 'theme-ui'
 import gql from 'graphql-tag'
 import Loadable from '@loadable/component'
 import Layout from '../components/layout'
@@ -84,14 +84,9 @@ const IndexPage = () => {
       >
         <SEO title="Home" />
         <AddProjectButton toggleProjectForm={toggleProjectForm} />
-        <Heading as="h1">Giveth</Heading>
-        <Heading as="h3">The future of giving</Heading>
-        <br />
-
-        <br />
         <ProjectForm />
         <br />
-        <Grid width={[128, null, 192]}>
+        <Grid width={[128, null, 220]}>
           <ProjectListing
             name="Giveth DAC"
             image="https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png"
