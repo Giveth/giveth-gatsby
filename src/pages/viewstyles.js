@@ -140,7 +140,7 @@ const ViewStyles = () => {
           </StyleGuide>
 
           <StyleGuide>
-            <Text sx={{ variant: 'text.styleGuide' }}>Cards</Text>
+            <Text sx={{ variant: 'text.styleGuide' }}>Components</Text>
             <Container>
               <Grid width={[128, null, 192]}>
                 <ProjectListing
@@ -178,7 +178,7 @@ const ViewStyles = () => {
               Illustrations - People
             </Text>
             <Container>
-              <img src={imgPeopleHeader} alt={''} />
+              <img src={imgPeopleHeader} alt={''} width="400px" />
               <br />
               <img src={imgPeopleAnnounce} alt={''} />
               <br />
