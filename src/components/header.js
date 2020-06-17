@@ -13,7 +13,6 @@ import {
   ThemeProvider
 } from 'theme-ui'
 import styled from '@emotion/styled'
-import isMobile from 'react-device-detect'
 
 import theme from '../gatsby-plugin-theme-ui/index'
 import logo from '../images/giveth-logo-blue.svg'
@@ -90,13 +89,9 @@ const Header = ({ siteTitle }) => (
       <HeaderSpan>
         <LogoSpan>
           <img src={logo} alt="logo" width="80px" height="80px" />
-          {isMobile === true ? null : (
-            <Text
-              sx={{ variant: 'text.large', color: 'secondary', fontSize: 4 }}
-            >
-              The future of giving
-            </Text>
-          )}
+          <Text sx={{ variant: 'text.large', color: 'secondary', fontSize: 4 }}>
+            The future of giving
+          </Text>
         </LogoSpan>
         <MiddleSpan>
           <NavLink to="/">Home</NavLink>
