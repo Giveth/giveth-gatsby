@@ -149,6 +149,8 @@ const ViewStyles = () => {
                 <ProjectListing
                   name="Giveth DAC"
                   image="https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png"
+                  raised={1223}
+                  category="Blockchain 4 Good"
                 />
               </Grid>
               <UserDetails
