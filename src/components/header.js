@@ -13,6 +13,7 @@ import {
   ThemeProvider
 } from 'theme-ui'
 import styled from '@emotion/styled'
+import isMobile from 'react-device-detect'
 
 import theme from '../gatsby-plugin-theme-ui/index'
 import logo from '../images/giveth-logo-blue.svg'
@@ -53,10 +54,7 @@ const MiddleSpan = styled.span`
 const UserSpan = styled.span`
   display: grid;
   grid-template-columns: repeat(4, auto);
-  transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-  & :hover {
-    transform: scale(1.2);
-  }
+  align-items: center;
 `
 
 const NavLink = styled(Link)`
@@ -77,7 +75,6 @@ const CreateLink = styled(Link)`
   align-self: center;
   :hover {
     color: ${theme.colors.accent};
-    transform: scale(1);
   }
 `
 
@@ -93,9 +90,13 @@ const Header = ({ siteTitle }) => (
       <HeaderSpan>
         <LogoSpan>
           <img src={logo} alt="logo" width="80px" height="80px" />
-          <Text sx={{ variant: 'text.large', color: 'secondary', fontSize: 4 }}>
-            The future of giving
-          </Text>
+          {isMobile === true ? null : (
+            <Text
+              sx={{ variant: 'text.large', color: 'secondary', fontSize: 4 }}
+            >
+              The future of giving
+            </Text>
+          )}
         </LogoSpan>
         <MiddleSpan>
           <NavLink to="/">Home</NavLink>
