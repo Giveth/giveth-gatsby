@@ -28,6 +28,11 @@ const HeaderSpan = styled.nav`
   grid-template-columns: auto 1fr auto;
   align-items: center;
   background-color: ${theme.colors.background};
+  @media (max-width: 850px) {
+    padding: 25px;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, auto);
+  }
 `
 
 const LogoSpan = styled.span`
