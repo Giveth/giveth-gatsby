@@ -123,6 +123,7 @@ const ViewStyles = () => {
               <Text sx={{ variant: 'text.overline' }}>Overline</Text>
               <Text sx={{ variant: 'text.overlineSmall' }}>Overline small</Text>
               <Text sx={{ variant: 'text.caption' }}>Caption</Text>
+              <Text sx={{ variant: 'text.microbold' }}>Microbold</Text>
             </Container>
           </StyleGuide>
 

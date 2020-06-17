@@ -86,22 +86,26 @@ const IndexPage = () => {
         <AddProjectButton toggleProjectForm={toggleProjectForm} />
         <ProjectForm />
         <br />
-        <Grid width={[128, null, 220]}>
+        <Grid columns={[1, 2, 3]} style={{ justifyItems: 'center' }}>
           <ProjectListing
             name="Giveth DAC"
             image="https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png"
+            raised={1223}
           />
           <ProjectListing
             name="Aragon DAC"
             image="https://feathers.beta.giveth.io/uploads/3aa88b6ed3a6e0f54542086886194696a21c06b756864b97a1c1a0dcf58d4e17.png"
+            raised={423}
           />
           <ProjectListing
             name="OSBE DAC"
             image="https://ipfs.giveth.io/ipfs/QmUCepVMUhCHhZ5mSEXqWgL3taxPU5gaUhczTZgA4JLyPk"
+            raised={0}
           />
           <ProjectListing
             name="Unicorn DAC"
             image="https://feathers.beta.giveth.io/uploads/5906e1be14c47c0a18b44a29fe8873ddfb6440a8a212cf42bacb84b7e2e1c0c1.png"
+            raised={10004}
           />
           {data &&
             data.projects &&

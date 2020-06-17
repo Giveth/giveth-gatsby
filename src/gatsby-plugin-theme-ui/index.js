@@ -2,6 +2,7 @@ import { nominalTypeHack } from 'prop-types'
 
 // Giveth V2 theme
 export default {
+  breakpoints: ['700px', '1024px', '1280px'],
   colors: {
     text: '#2C0B3F',
     background: '#fff',
@@ -9,7 +10,8 @@ export default {
     hover: '#DB5CB8',
     muted: '#DFDAE8',
     secondary: '#303B72',
-    accent: '#109CF1'
+    accent: '#109CF1',
+    attention: '#E01C6B'
   },
   fonts: {
     body: '"Red Hat Text", sans serif',
@@ -85,6 +87,11 @@ export default {
       fontFamily: 'heading',
       fontWeight: 'regular',
       fontStyle: 'italic'
+    },
+    microbold: {
+      fontSize: 0,
+      fontWeight: 'bold',
+      letterSpacing: 'narrow'
     },
     styleGuide: {
       fontSize: 6,
