@@ -1,9 +1,12 @@
 import React from 'react'
-import { Heading, Box, Card, Text, ThemeProvider } from 'theme-ui'
+import { Heading, Box, Card, IconButton, Text, ThemeProvider } from 'theme-ui'
 import styled from '@emotion/styled'
 
 import theme from '../gatsby-plugin-theme-ui/index'
 import Donate from '../components/donateForm'
+
+import iconShare from '../images/icon-share.svg'
+import iconHeart from '../images/icon-heart.svg'
 
 const Container = styled.div``
 
@@ -35,6 +38,13 @@ const DotInner = styled.span`
   align-self: center;
   position: relative;
 `
+const CardFooter = styled.span`
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 0rem 1rem;
+`
 
 const ProjectListing = props => (
   <ThemeProvider theme={theme}>
@@ -64,7 +74,7 @@ const ProjectListing = props => (
           >
             {props.raised === 0 ? (
               <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>New</Text>
+                <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
               </DotInner>
             ) : (
               <DotInner>
@@ -102,6 +112,20 @@ const ProjectListing = props => (
           Textdescriptions should be included in the data model as a blurb.
         </Text>
         */}
+        <CardFooter>
+          <Text
+            sx={{ variant: 'text.default' }}
+            style={{ color: theme.colors.muted, alignSelf: 'center' }}
+          >
+            {props.category}
+          </Text>
+          <IconButton>
+            <img src={iconHeart} alt={''} />
+          </IconButton>
+          <IconButton>
+            <img src={iconShare} alt={''} />
+          </IconButton>
+        </CardFooter>
       </ProjectCard>
       <Donate doDonate={values => alert('donating' + values.amount)} />
     </Container>

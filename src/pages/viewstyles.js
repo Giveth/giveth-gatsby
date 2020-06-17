@@ -12,6 +12,8 @@ import noImage from '../images/no-image-available.jpg'
 import iconUser from '../images/icon-user.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
+import iconShare from '../images/icon-share.svg'
+import iconHeart from '../images/icon-heart.svg'
 import imgPeopleAnnounce from '../images/people-announce.png'
 import imgPeopleHeader from '../images/people-header.png'
 import imgPeoplePuzzle from '../images/people-puzzle.png'
@@ -162,6 +164,14 @@ const ViewStyles = () => {
           <StyleGuide>
             <Text sx={{ variant: 'text.styleGuide' }}>Icons</Text>
             <Container>
+              <IconButton>
+                <img src={iconHeart} alt={''} />
+              </IconButton>
+              <br />
+              <IconButton>
+                <img src={iconShare} alt={''} />
+              </IconButton>
+              <br />
               <IconButton>
                 <img src={iconUser} alt={''} />
               </IconButton>
