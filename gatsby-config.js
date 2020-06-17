@@ -25,6 +25,7 @@ module.exports = {
   plugins: [
     `gatsby-plugin-theme-ui`,
     `gatsby-plugin-react-helmet`,
+    `gatsby-plugin-emotion`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -52,6 +53,10 @@ module.exports = {
         fonts: [
           {
             family: `Red Hat Display`,
+            variants: [`400`, `500`, `700`]
+          },
+          {
+            family: `Red Hat Text`,
             variants: [`400`, `500`, `700`]
           }
         ]
