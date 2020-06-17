@@ -1,41 +1,51 @@
 import React from 'react'
-import { Button, Heading } from 'theme-ui'
+import { Button, Heading, Text } from 'theme-ui'
+import styled from '@emotion/styled'
+
+const AccountDetails = styled.main`
+  display: grid;
+  grid-template-columns: 60px auto auto;
+  align-items: center;
+  grid-gap: 0px 1rem;
+  & .avatarimage {
+    grid-row: 1 / span 2;
+  }
+  & .balance {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: flex-end;
+  }
+  & .logoutbutton {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: end;
+  }
+`
 
 const UserDetails = props => {
   const { user, balance, logout } = props
   return (
-    <div
-      style={{
-        position: 'absolute',
-        right: '20px',
-        top: '20px',
-        color: 'white'
-      }}
-    >
-      <div
-        sx={{
-          display: 'grid',
-          gridGap: 4,
-          gridTemplateColumns: ['auto', '1fr 256px']
-        }}
+    <AccountDetails>
+      <img
+        style={{ width: '60px' }}
+        src={user.profileImage}
+        className="avatarimage"
+      />
+      <Text sx={{ variant: 'text.small' }}>{user.publicAddress}</Text>
+      <Text sx={{ variant: 'text.small' }} className="balance">
+        Your balance:
+        <Text sx={{ variant: 'headings.h6' }}>{balance}</Text>
+      </Text>
+
+      <Button
+        style={{}}
+        sx={{ variant: 'buttons.tiny' }}
+        onClick={logout}
+        className="logoutbutton"
       >
-        <main>
-          {user.publicAddress}
-          <p>Your balance:{balance}</p>
-          <p>
-            <Button
-              style={{ float: 'right', cursor: 'pointer' }}
-              onClick={logout}
-            >
-              logout
-            </Button>
-          </p>
-        </main>
-        <aside>
-          <img style={{ width: '50px' }} src={user.profileImage} />
-        </aside>
-      </div>
-    </div>
+        logout
+      </Button>
+    </AccountDetails>
   )
 }
 
