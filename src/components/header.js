@@ -13,6 +13,7 @@ import {
   ThemeProvider
 } from 'theme-ui'
 import styled from '@emotion/styled'
+import { useMediaQuery } from 'react-responsive'
 
 import theme from '../gatsby-plugin-theme-ui/index'
 import logo from '../images/giveth-logo-blue.svg'
@@ -28,6 +29,8 @@ const HeaderSpan = styled.nav`
   grid-template-columns: auto 1fr auto;
   align-items: center;
   background-color: ${theme.colors.background};
+  width: 100%;
+  z-index: 50;
   @media (max-width: 850px) {
     padding: 25px;
     grid-template-columns: 1fr;
@@ -79,37 +82,53 @@ const CreateLink = styled(Link)`
 
 const Login = Loadable(() => import('../components/login'))
 
-const Header = ({ siteTitle }) => (
-  <ThemeProvider theme={theme}>
-    <header
-      style={{
-        marginBottom: `1.45rem`
-      }}
-    >
-      <HeaderSpan>
-        <LogoSpan>
-          <img src={logo} alt="logo" width="80px" height="80px" />
-          <Text sx={{ variant: 'text.large', color: 'secondary', fontSize: 4 }}>
-            The future of giving
-          </Text>
-        </LogoSpan>
-        <MiddleSpan>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/causes">Causes</NavLink>
-          <NavLink to="/projects">Projects</NavLink>
-        </MiddleSpan>
-        <UserSpan>
-          <CreateLink to="/">Create a project</CreateLink>
-          <IconButton>
-            <img src={iconSearch} alt={''} />
-          </IconButton>
-          <img src={iconVerticalLine} alt={''} />
-          <Login />
-        </UserSpan>
-      </HeaderSpan>
-    </header>
-  </ThemeProvider>
-)
+const Header = ({ siteTitle }) => {
+  const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
+
+  return (
+    <ThemeProvider theme={theme}>
+      <header
+        style={{
+          marginBottom: `1.45rem`
+        }}
+      >
+        <HeaderSpan>
+          <LogoSpan>
+            {isMobile ? (
+              <img src={logo} alt="logo" width="40px" height="40px" />
+            ) : (
+              <>
+                <img src={logo} alt="logo" width="80px" height="80px" />
+                <Text
+                  sx={{
+                    variant: 'text.large',
+                    color: 'secondary',
+                    fontSize: 4
+                  }}
+                >
+                  The future of giving
+                </Text>
+              </>
+            )}
+          </LogoSpan>
+          <MiddleSpan>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/causes">Causes</NavLink>
+            <NavLink to="/projects">Projects</NavLink>
+          </MiddleSpan>
+          <UserSpan>
+            <CreateLink to="/">Create a project</CreateLink>
+            <IconButton>
+              <img src={iconSearch} alt={''} />
+            </IconButton>
+            <img src={iconVerticalLine} alt={''} />
+            <Login />
+          </UserSpan>
+        </HeaderSpan>
+      </header>
+    </ThemeProvider>
+  )
+}
 
 Header.propTypes = {
   siteTitle: PropTypes.string
