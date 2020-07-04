@@ -145,7 +145,19 @@ export default {
       letterSpacing: 'narrow'
     }
   },
+  forms: {
+    input: {
+      border: '0',
+      padding: '20px'
+    }
+  },
   buttons: {
+    cursor: 'pointer',
+    fontSize: 3,
+    letterSpacing: 'wide',
+    textTransform: 'capitalize',
+    borderRadius: '48px',
+
     default: {
       cursor: 'pointer',
       fontSize: 3,

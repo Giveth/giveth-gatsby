@@ -36,16 +36,13 @@
     "react-helmet": "^6.0.0",
     "react-hook-form": "^5.7.2",
     "react-responsive": "^8.1.0",
-    "react-typeform": "^1.0.3",
     "theme-ui": "^0.3.1",
     "web3": "^1.2.8"
   },
   "devDependencies": {
     "prettier": "2.0.5"
   },
-  "keywords": [
-    "gatsby"
-  ],
+  "keywords": ["gatsby"],
   "license": "MIT",
   "scripts": {
     "build": "GATSBY_EXPERIMENTAL_PAGE_BUILD_ON_DATA_CHANGES=true gatsby build --log-pages",

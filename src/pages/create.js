@@ -68,6 +68,10 @@ const IndexPage = () => {
           // and 25% above the next breakpoint
           width: ['100%', '50%', '25%']
         }}
+        style={{
+          maxWidth: '1440px',
+          margin: '0 auto'
+        }}
       >
         <SEO title='Home' />
 

@@ -34,7 +34,6 @@ const Layout = ({ children }) => {
           // and 25% above the next breakpoint
           width: ['100%', '50%', '25%']
         }}
-        style={{ border: '1px solid blue' }}
       >
         <main>{children}</main>
         <footer></footer>

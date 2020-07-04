@@ -80,7 +80,7 @@ const IndexPage = () => {
       <div
         style={{
           margin: `0 auto`,
-          maxWidth: '80%',
+          maxWidth: '1440px',
           padding: `0 1.0875rem 1.45rem`
         }}
       >
@@ -109,15 +109,11 @@ const IndexPage = () => {
           </Box>
         </Grid>
       </div>
-      <Box
-        pt={4}
-        sx={{ variant: 'grayBox' }}
-        style={{ border: '1px solid red' }}
-      >
+      <Box pt={4} sx={{ variant: 'grayBox' }}>
         <div
           style={{
             margin: `0 auto`,
-            maxWidth: '80%',
+            maxWidth: '1440px',
             padding: `0 1.0875rem 1.45rem`
           }}
         >

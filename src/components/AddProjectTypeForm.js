@@ -16,7 +16,7 @@ import {
   Button,
   Heading
 } from 'theme-ui'
-import TypeForm from 'react-typeform'
+import TypeForm from './TypeForm'
 import { useForm } from 'react-hook-form'
 // import {
 //   // FETCH_PROJECTS,
@@ -51,13 +51,18 @@ const AddProject = props => {
 
   const { handleSubmit, register, errors } = useForm()
   const onSubmit = values => {
+    console.log(`form submit values ---> : ${values}`)
     props.addProject(values)
   }
   const TitleComponent = props => (
     <Box>
       <br />
       <br />
-      <Label htmlFor='title'>What's the name of your project?</Label>
+      <Label htmlFor='title'>
+        <Heading as='h5' style={{ fontSize: '2em', fontWeight: 'light' }}>
+          What's the name of your project?
+        </Heading>
+      </Label>
       <br />
       <br />
 
@@ -65,8 +70,16 @@ const AddProject = props => {
         ref={register({
           validate: value => value !== 'admin' || 'Nice try!'
         })}
+        sx={{
+          variant: 'borderless',
+          '&.active': {
+            color: 'primary'
+          }
+        }}
         name='title'
         mb={3}
+        placeholder='Project Name'
+        style={{ fontSize: '1.5em' }}
       />
     </Box>
   )
@@ -99,7 +112,10 @@ const AddProject = props => {
       <br />
       <br />
 
-      <TypeForm onSubmit={handleSubmit(onSubmit)}>
+      <TypeForm
+        submitBtnText={'Start raising funds'}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {/* <Box as='form' onSubmit={handleSubmit(onSubmit)}> */}
         <TitleComponent />
         <DescriptionComponent />
