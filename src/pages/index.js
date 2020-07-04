@@ -8,7 +8,6 @@ import Image from '../components/image'
 import SEO from '../components/seo'
 import ProjectListing from '../components/projectListing'
 import AddProject from '../components/AddProject'
-import AddProjectTypeForm from '../components/AddProjectTypeForm'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import imgPeopleHeader from '../images/people-header.png'
 
@@ -20,11 +19,7 @@ import {
   handleLogout
 } from '../services/auth'
 
-import {
-  FETCH_PROJECTS,
-  ADD_PROJECT,
-  ADD_PROJECT_SIMPLE
-} from '../apollo/gql/projects'
+import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 
 // placeholder image
 import NoImage from '../images/no-image-available.jpg'
@@ -34,47 +29,7 @@ const IndexPage = () => {
 
   const [showProjectForm, setShowProjectForm] = useState(false)
   const { loading, error, data } = useQuery(FETCH_PROJECTS)
-  const [addProjectQuery, x] = useMutation(ADD_PROJECT_SIMPLE)
-  const addProject = async values => {
-    // addProject({
-    //   variables: { title: values.title, description: values.description }
-    // })
-    const project = await addProjectQuery({
-      variables: {
-        title: values.title,
-        description: values.description
-      },
-      refetchQueries: [{ query: FETCH_PROJECTS }]
-    })
-  }
 
-  function ProjectForm () {
-    if (isLoggedIn === true && showProjectForm) {
-      return (
-        <>
-          <AddProjectTypeForm addProject={addProject} />
-          <br />
-        </>
-      )
-    }
-    return null
-  }
-
-  function AddProjectButton (props) {
-    if (isLoggedIn === true) {
-      return (
-        <Button
-          style={{ float: 'right', cursor: 'pointer' }}
-          onClick={props.toggleProjectForm}
-        >
-          Add project
-        </Button>
-      )
-    } else return null
-  }
-  function toggleProjectForm () {
-    setShowProjectForm(!showProjectForm)
-  }
   return (
     <Layout>
       <div

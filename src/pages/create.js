@@ -8,7 +8,6 @@ import Image from '../components/image'
 import SEO from '../components/seo'
 import ProjectListing from '../components/projectListing'
 import AddProject from '../components/AddProject'
-import AddProjectTypeForm from '../components/AddProjectTypeForm'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import {
   setUser,
@@ -18,11 +17,7 @@ import {
   handleLogout
 } from '../services/auth'
 
-import {
-  FETCH_PROJECTS,
-  ADD_PROJECT,
-  ADD_PROJECT_SIMPLE
-} from '../apollo/gql/projects'
+import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 
 // placeholder image
 import NoImage from '../images/no-image-available.jpg'
@@ -31,7 +26,7 @@ const IndexPage = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
 
   const { loading, error, data } = useQuery(FETCH_PROJECTS)
-  const [addProjectQuery, x] = useMutation(ADD_PROJECT_SIMPLE)
+  const [addProjectQuery, x] = useMutation(ADD_PROJECT)
   const addProject = async values => {
     // addProject({
     //   variables: { title: values.title, description: values.description }
@@ -49,7 +44,7 @@ const IndexPage = () => {
     if (isLoggedIn === true) {
       return (
         <>
-          <AddProjectTypeForm addProject={addProject} />
+          <AddProject addProject={addProject} />
           <br />
         </>
       )

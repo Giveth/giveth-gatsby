@@ -1,148 +1,183 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Button } from 'theme-ui'
+import { Button, Heading, Link } from 'theme-ui'
+var util = require('util')
 
-/** Typeform component that renders each component of a form */
-class TypeForm extends React.Component {
-  /** constructor */
-  constructor (props) {
-    super(props)
+const TypeForm = props => {
+  const [current, setCurrent] = useState(0)
+  const [fields, setFields] = useState([])
+  const currentRef = useRef(null)
 
-    /** Initial State */
-    this.state = {
-      current: 0
+  const styles = {
+    tfShow: {
+      display: 'block'
+    },
+    tfHide: {
+      display: 'none'
     }
-
-    /** Styles */
-    this.styles = {
-      tfShow: {
-        display: 'block'
-      },
-      tfHide: {
-        display: 'none'
-      }
-    }
-
-    /** Binding this to methods */
-    this.incState = this.incState.bind(this)
-    this.decState = this.decState.bind(this)
-    this.isFirstComponent = this.isFirstComponent.bind(this)
-    this.isLastComponent = this.isLastComponent.bind(this)
   }
 
-  /** Set className for component to show/hide */
-  setClass (element, tfStyle) {
+  const setClass = (element, tfStyle) => {
     if (!element) {
       return null
     }
     const Element = element.type
+
     return (
       <div style={tfStyle}>
-        <Element {...element.props} />
+        <Element ref={React.createRef()} {...element.props} />
       </div>
     )
   }
 
-  /** Get the current component to show on screen */
-  getCurrentView (children) {
-    let allChildren = []
-    allChildren = React.Children.map(children, (child, index) => {
-      let currentChild = this.setClass(child, this.styles.tfHide)
-      if (index === this.state.current) {
-        currentChild = this.setClass(child, this.styles.tfShow)
-      }
-      console.log(`currentChild ---> : ${currentChild}`)
+  // const getCurrentView = children => {
+  //   let allChildren = []
+  //   allChildren = React.Children.map(children, (child, index) => {
+  //     let currentChild = setClass(child, styles.tfHide)
+  //     if (index === current) {
+  //       currentChild = setClass(child, styles.tfShow)
+  //     }
+  //     console.log(`currentChild ---> : ${currentChild}`)
 
-      return currentChild
-    })
-    /** If all elements are shown then conditionally show a review screen */
-    if (this.isLastComponent() && this.props.showReviewView) {
-      React.Children.map(children, child =>
-        allChildren.push(this.setClass(child, this.styles.tfShow))
-      )
-      if (this.props.completionText) {
-        allChildren.push(
-          <div className='form-completion-text'>
-            {this.props.completionText}
-          </div>
-        )
-      }
-    }
-    return allChildren
-  }
+  //     return currentChild
+  //   })
+  //   /** If all elements are shown then conditionally show a review screen */
+  //   if (isLastComponent() && props.showReviewView) {
+  //     React.Children.map(children, child =>
+  //       allChildren.push(setClass(child, styles.tfShow))
+  //     )
+  //     if (props.completionText) {
+  //       allChildren.push(
+  //         <div className='form-completion-text'>{props.completionText}</div>
+  //       )
+  //     }
+  //   }
+  //   return allChildren
+  // }
 
-  /** Increment State counter */
-  incState () {
-    if (this.state.current < this.props.children.length) {
-      const current = this.state.current + 1
-      console.log(`incState current : ${JSON.stringify(current, null, 2)}`)
-      this.setState({
-        current
-      })
+  const goForward = evt => {
+    if (current < props.fields.length) {
+      console.log(`goForward current : ${JSON.stringify(current, null, 2)}`)
+
+      console.log(`props.fields[i] ---> : ${props.fields[current]}`)
+      const { value, type, name } = currentRef.current
+      const { label, headStyle } = props.fields.filter(o => o.name === name)[0]
+
+      setCurrent(current + 1)
+      addFormValue(value, type, name, label, headStyle)
     }
-    this.props.nextBtnOnClick()
+    props.nextBtnOnClick()
   }
 
   /** Decrement State counter */
-  decState () {
-    if (this.state.current > 0) {
-      const current = this.state.current - 1
-      console.log(`decState current : ${JSON.stringify(current, null, 2)}`)
+  const goBackward = () => {
+    if (current > 0) {
+      console.log(
+        `goBackward current : ${JSON.stringify(current - 1, null, 2)}`
+      )
 
-      this.setState({
-        current
-      })
+      setCurrent(current - 1)
     }
-    this.props.backBtnOnClick()
+    props.backBtnOnClick()
   }
 
   /** Check if last component */
-  isFirstComponent () {
-    return this.state.current === 0
+  const isFirstComponent = () => {
+    return current === 0
   }
 
   /** Check if last component */
-  isLastComponent () {
-    return this.props.showReviewView
-      ? this.state.current === this.props.children.length
-      : this.state.current === this.props.children.length - 1
+  const isLastComponent = () => {
+    return props.showReviewView
+      ? current === props.fields.length
+      : current === props.fields.length - 1
   }
 
-  /** render the typeform */
-  render () {
-    return (
-      <div className='form-container'>
-        {this.getCurrentView(this.props.children)}
-        {!this.isFirstComponent() && (
-          <Button
-            sx={{ variant: 'buttons.default' }}
-            onClick={this.decState}
-            className={this.props.backBtnClass}
-          >
-            {this.props.backBtnText}
-          </Button>
-        )}
-        {this.isLastComponent() ? (
-          <Button
-            sx={{ variant: 'buttons.default' }}
-            type='submit'
-            onClick={this.props.onSubmit}
-            className={this.props.submitBtnClass}
-          >
-            {this.props.submitBtnText}
-          </Button>
-        ) : (
-          <Button
-            sx={{ variant: 'buttons.default' }}
-            onClick={this.incState}
-            className={this.props.nextBtnClass}
-          >
-            {this.props.nextBtnText}
-          </Button>
-        )}
-      </div>
+  const editField = name => {
+    console.log(`edit name ---> : ${name}`)
+  }
+  const showFinalDetails = data => {
+    //console.log(`data : ${JSON.stringify(data, null, 2)}`)
+
+    return data.map(o => {
+      console.log(`o.name ---> : ${o.name}`)
+      console.log(`o.type ---> : ${o.type}`)
+      console.log(`o.value ---> : ${o.value}`)
+      console.log(`o.headStyle ---> : ${o.headStyle}`)
+
+      return (
+        <>
+          <Heading pb={2} as='h3' color='muted'>
+            {o.label}
+            {'  '}
+            <Link
+              sx={{
+                color: 'primary'
+              }}
+              to={editField(o.name)}
+            >
+              Edit
+            </Link>
+          </Heading>
+          <Heading pb={4} as={o.headStyle} color='secondary'>
+            {o.value}
+          </Heading>
+        </>
+      )
+    })
+  }
+
+  const addFormValue = (value, type, name, label, headStyle) => {
+    setFields(
+      fields.concat({
+        value,
+        type,
+        name,
+        label,
+        headStyle
+      })
     )
   }
+  //const Component = React.createElement(props.fields[current].component)
+
+  console.log(`fields : ${JSON.stringify(fields, null, 2)}`)
+
+  /** render the typeform */
+  return (
+    <div className='form-container'>
+      {/* {getCurrentView(props.children)} */}
+      {!isLastComponent() &&
+        React.createElement(props.fields[current].component, { currentRef })}
+      {isLastComponent() && showFinalDetails(fields)}
+      {!isFirstComponent() && (
+        <Button
+          sx={{ variant: 'buttons.default' }}
+          onClick={goBackward}
+          className={props.backBtnClass}
+        >
+          {props.backBtnText}
+        </Button>
+      )}
+      {isLastComponent() ? (
+        <Button
+          sx={{ variant: 'buttons.default' }}
+          type='submit'
+          onClick={props.onSubmit}
+          className={props.submitBtnClass}
+        >
+          {props.submitBtnText}
+        </Button>
+      ) : (
+        <Button
+          sx={{ variant: 'buttons.default' }}
+          onClick={goForward.bind(this)}
+          className={props.nextBtnClass}
+        >
+          {props.nextBtnText}
+        </Button>
+      )}
+    </div>
+  )
 }
 
 /** Validating propTypes */
@@ -150,7 +185,7 @@ TypeForm.propTypes = {
   backBtnClass: PropTypes.string,
   backBtnOnClick: PropTypes.func,
   backBtnText: PropTypes.string,
-  children: PropTypes.array.isRequired,
+  fields: PropTypes.array.isRequired,
   completionText: PropTypes.string,
   nextBtnClass: PropTypes.string,
   nextBtnOnClick: PropTypes.func,
