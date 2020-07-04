@@ -44,6 +44,9 @@ export default {
     tall: 1.3,
     tallest: 1.5
   },
+  grayBox: {
+    background: '#E5E5E5'
+  },
   text: {
     default: {
       color: 'text',
@@ -142,7 +145,19 @@ export default {
       letterSpacing: 'narrow'
     }
   },
+  forms: {
+    input: {
+      border: '0',
+      padding: '20px'
+    }
+  },
   buttons: {
+    cursor: 'pointer',
+    fontSize: 3,
+    letterSpacing: 'wide',
+    textTransform: 'capitalize',
+    borderRadius: '48px',
+
     default: {
       cursor: 'pointer',
       fontSize: 3,

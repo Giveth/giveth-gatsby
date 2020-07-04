@@ -25,7 +25,7 @@ const torus = new DirectWebSdk({
   enableLogging: process.env.TORUS_DEBUG_LOGGING
 })
 
-async function initTorus() {
+async function initTorus () {
   await torus.init()
 }
 
@@ -39,13 +39,13 @@ const Login = () => {
   // const [user, setUser] = useState({})
   const [balance, setBalance] = useState(0)
 
-  function logout() {
+  function logout () {
     handleLogout()
     setIsLoggedIn(false)
     window.location = process.env.GATSBY_BASE_URL
   }
 
-  async function login() {
+  async function login () {
     await initTorus()
 
     const verifierName = process.env.GATSBY_VERIFIER_NAME
