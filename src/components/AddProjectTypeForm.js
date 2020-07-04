@@ -16,7 +16,7 @@ import {
   Button,
   Heading
 } from 'theme-ui'
-import TypeForm from './TypeForm'
+import TypeForm from './TypeFormHook'
 import { useForm } from 'react-hook-form'
 // import {
 //   // FETCH_PROJECTS,
@@ -67,9 +67,10 @@ const AddProject = props => {
       <br />
 
       <Input
-        ref={register({
-          validate: value => value !== 'admin' || 'Nice try!'
-        })}
+        // ref={register({
+        //   validate: value => value !== 'admin' || 'Nice try!'
+        // })}
+        ref={props.currentRef}
         sx={{
           variant: 'borderless',
           '&.active': {
@@ -95,9 +96,10 @@ const AddProject = props => {
         name='description'
         rows='6'
         mb={3}
-        ref={register({
-          validate: value => value !== 'admin' || 'Nice try!'
-        })}
+        // ref={register({
+        //   validate: value => value !== 'admin' || 'Nice try!'
+        // })}
+        ref={props.currentRef}
         name='description'
       />
     </Box>
@@ -115,13 +117,25 @@ const AddProject = props => {
       <TypeForm
         submitBtnText={'Start raising funds'}
         onSubmit={handleSubmit(onSubmit)}
+        fields={[
+          {
+            name: 'title',
+            label: 'PROJECT NAME',
+            value: '',
+            headStyle: 'h2',
+            component: TitleComponent
+          },
+          {
+            name: 'description',
+            label: 'DESCRIPTION',
+            value: '',
+            headStyle: 'h3',
+            component: DescriptionComponent
+          }
+        ]}
       >
-        {/* <Box as='form' onSubmit={handleSubmit(onSubmit)}> */}
-        <TitleComponent />
-        <DescriptionComponent />
-
-        {/* <Button>Submit</Button> */}
-        {/* </Box> */}
+        {/* <TitleComponent />
+        <DescriptionComponent /> */}
       </TypeForm>
     </Box>
   )
