@@ -44,6 +44,9 @@ export default {
     tall: 1.3,
     tallest: 1.5
   },
+  grayBox: {
+    background: '#E5E5E5'
+  },
   text: {
     default: {
       color: 'text',

@@ -8,7 +8,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
-
+import { ThemeProvider } from 'theme-ui'
+import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 // import './layout.css'
 
@@ -24,19 +25,21 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <div style={{ background: '#E5E5E5' }}>
+    <ThemeProvider theme={theme}>
       <Header siteTitle={data.site.siteMetadata.title} />
       <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`
+        sx={{
+          // applies width 100% to all viewport widths,
+          // width 50% above the first breakpoint,
+          // and 25% above the next breakpoint
+          width: ['100%', '50%', '25%']
         }}
+        style={{ border: '1px solid blue' }}
       >
         <main>{children}</main>
         <footer></footer>
       </div>
-    </div>
+    </ThemeProvider>
   )
 }
 

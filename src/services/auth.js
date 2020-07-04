@@ -27,7 +27,11 @@ export function handleLogout () {
 }
 
 export const checkIfLoggedIn = () => {
+  console.log('auth -> checkIfLoggedIn')
+
   const user = getUser()
+
+  console.log(`auth -> user : ${JSON.stringify(user, null, 2)}`)
 
   return !!user.publicAddress
 }

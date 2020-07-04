@@ -3,19 +3,11 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 
 import Loadable from '@loadable/component'
-import {
-  Grid,
-  Box,
-  Button,
-  Heading,
-  IconButton,
-  Text,
-  ThemeProvider
-} from 'theme-ui'
+import { Grid, Box, Button, Heading, IconButton, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
-
 import theme from '../gatsby-plugin-theme-ui/index'
+
 import logo from '../images/giveth-logo-blue.svg'
 
 import iconUser from '../images/icon-user.svg'
@@ -86,47 +78,46 @@ const Header = ({ siteTitle }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
 
   return (
-    <ThemeProvider theme={theme}>
-      <header
-        style={{
-          marginBottom: `1.45rem`
-        }}
-      >
-        <HeaderSpan>
-          <LogoSpan>
-            {isMobile ? (
-              <img src={logo} alt="logo" width="40px" height="40px" />
-            ) : (
-              <>
-                <img src={logo} alt="logo" width="80px" height="80px" />
-                <Text
-                  sx={{
-                    variant: 'text.large',
-                    color: 'secondary',
-                    fontSize: 4
-                  }}
-                >
-                  The future of giving
-                </Text>
-              </>
-            )}
-          </LogoSpan>
-          <MiddleSpan>
-            <NavLink to="/">Home</NavLink>
-            <NavLink to="/causes">Causes</NavLink>
-            <NavLink to="/projects">Projects</NavLink>
-          </MiddleSpan>
-          <UserSpan>
-            <CreateLink to="/">Create a project</CreateLink>
-            <IconButton>
-              <img src={iconSearch} alt={''} />
-            </IconButton>
-            <img src={iconVerticalLine} alt={''} />
-            <Login />
-          </UserSpan>
-        </HeaderSpan>
-      </header>
-    </ThemeProvider>
+    <header
+      style={{
+        marginBottom: `1.45rem`
+      }}
+    >
+      <HeaderSpan>
+        <LogoSpan>
+          {isMobile ? (
+            <img src={logo} alt='logo' width='40px' height='40px' />
+          ) : (
+            <>
+              <img src={logo} alt='logo' width='80px' height='80px' />
+              <Text
+                pl={4}
+                sx={{
+                  variant: 'text.large',
+                  color: 'secondary',
+                  fontSize: 4
+                }}
+              >
+                THE FUTURE OF GIVING
+              </Text>
+            </>
+          )}
+        </LogoSpan>
+        <MiddleSpan>
+          <NavLink to='/'>Home</NavLink>
+          <NavLink to='/causes'>Causes</NavLink>
+          <NavLink to='/projects'>Projects</NavLink>
+        </MiddleSpan>
+        <UserSpan>
+          <CreateLink to='/create'>Create a project</CreateLink>
+          <IconButton>
+            <img src={iconSearch} alt={''} />
+          </IconButton>
+          <img src={iconVerticalLine} alt={''} />
+          <Login />
+        </UserSpan>
+      </HeaderSpan>
+    </header>
   )
 }
 

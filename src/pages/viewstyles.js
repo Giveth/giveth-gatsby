@@ -147,10 +147,10 @@ const ViewStyles = () => {
             <Container>
               <Grid width={[128, null, 192]}>
                 <ProjectListing
-                  name="Giveth DAC"
-                  image="https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png"
+                  name='Giveth DAC'
+                  image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
                   raised={1223}
-                  category="Blockchain 4 Good"
+                  category='Blockchain 4 Good'
                 />
               </Grid>
               <UserDetails
@@ -158,7 +158,7 @@ const ViewStyles = () => {
                   publicAddress: '0x701d0ECB3BA780De7b2b36789aEC4493A426010a',
                   profileImage: './avatar.jpg'
                 }}
-                balance="34 xDAI"
+                balance='34 xDAI'
               />
             </Container>
           </StyleGuide>
@@ -191,7 +191,7 @@ const ViewStyles = () => {
               Illustrations - People
             </Text>
             <Container>
-              <img src={imgPeopleHeader} alt={''} width="400px" />
+              <img src={imgPeopleHeader} alt={''} width='400px' />
               <br />
               <img src={imgPeopleAnnounce} alt={''} />
               <br />

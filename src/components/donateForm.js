@@ -12,8 +12,7 @@ import {
   Slider,
   Button,
   Heading,
-  Grid,
-  ThemeProvider
+  Grid
 } from 'theme-ui'
 import { useForm } from 'react-hook-form'
 import styled from '@emotion/styled'
@@ -41,27 +40,25 @@ const Donate = props => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <DonationForm
-        onSubmit={handleSubmit(onSubmit)}
-        gap={1}
-        columns={['0px 1fr 1fr']}
-      >
-        <Label htmlFor="title"></Label>
-        <Input
-          ref={register({
-            validate: value => value !== 'admin' || 'Nice try!'
-          })}
-          name="amount"
-          mb={3}
-          placeholder="Amount"
-        />
+    <DonationForm
+      onSubmit={handleSubmit(onSubmit)}
+      gap={1}
+      columns={['0px 1fr 1fr']}
+    >
+      <Label htmlFor='title'></Label>
+      <Input
+        ref={register({
+          validate: value => value !== 'admin' || 'Nice try!'
+        })}
+        name='amount'
+        mb={3}
+        placeholder='Amount'
+      />
 
-        <Button sx={{ variant: 'buttons.tiny' }} className="donatebutton">
-          Donate
-        </Button>
-      </DonationForm>
-    </ThemeProvider>
+      <Button sx={{ variant: 'buttons.tiny' }} className='donatebutton'>
+        Donate
+      </Button>
+    </DonationForm>
   )
 }
 export default Donate

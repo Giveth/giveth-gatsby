@@ -1,5 +1,5 @@
 import React from 'react'
-import { Heading, Box, Card, IconButton, Text, ThemeProvider } from 'theme-ui'
+import { Heading, Box, Card, IconButton, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 
 import theme from '../gatsby-plugin-theme-ui/index'
@@ -14,7 +14,7 @@ const ProjectCard = styled(Card)`
   background-color: ${theme.colors.background};
   margin-bottom: 30px;
   border-radius: 6px;
-  width: 316px;
+  width: 100%;
 `
 
 const Dot = styled.span`
@@ -47,57 +47,56 @@ const CardFooter = styled.span`
 `
 
 const ProjectListing = props => (
-  <ThemeProvider theme={theme}>
-    <Container>
-      <ProjectCard style={{}}>
-        <div
-          src={props.image}
+  <Box style={{ width: '100%' }}>
+    <ProjectCard>
+      <div
+        src={props.image}
+        style={{
+          width: '100%',
+          height: '186px',
+          margin: '0 auto',
+          borderRadius: '6px 6px 0px 0px',
+          backgroundImage: `url(${props.image})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          position: 'relative'
+        }}
+        alt={props.name}
+      >
+        <Dot
           style={{
-            width: '100%',
-            height: '186px',
-            margin: '0 auto',
-            borderRadius: '6px 6px 0px 0px',
-            backgroundImage: `url(${props.image})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            position: 'relative'
-          }}
-          alt={props.name}
-        >
-          <Dot
-            style={{
-              backgroundColor:
-                props.raised === 0
-                  ? theme.colors.attention
-                  : theme.colors.secondary
-            }}
-          >
-            {props.raised === 0 ? (
-              <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
-              </DotInner>
-            ) : (
-              <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
-                <Text sx={{ variant: 'text.microbold' }}>${props.raised}</Text>
-              </DotInner>
-            )}
-          </Dot>
-        </div>
-        <Heading
-          sx={{ variant: 'headings.h6' }}
-          style={{
-            padding: '2.5rem 1rem 1rem 1rem',
-            width: '260',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            backgroundColor:
+              props.raised === 0
+                ? theme.colors.attention
+                : theme.colors.secondary
           }}
         >
-          {props.name}
-        </Heading>
-        <br />
-        {/**
+          {props.raised === 0 ? (
+            <DotInner>
+              <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
+            </DotInner>
+          ) : (
+            <DotInner>
+              <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
+              <Text sx={{ variant: 'text.microbold' }}>${props.raised}</Text>
+            </DotInner>
+          )}
+        </Dot>
+      </div>
+      <Heading
+        sx={{ variant: 'headings.h6' }}
+        style={{
+          padding: '2.5rem 1rem 1rem 1rem',
+          width: '260',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}
+      >
+        {props.name}
+      </Heading>
+      <br />
+      {/**
          * Project Description Text
          * 
          * 
@@ -112,24 +111,23 @@ const ProjectListing = props => (
           Textdescriptions should be included in the data model as a blurb.
         </Text>
         */}
-        <CardFooter>
-          <Text
-            sx={{ variant: 'text.default' }}
-            style={{ color: theme.colors.muted, alignSelf: 'center' }}
-          >
-            {props.category}
-          </Text>
-          <IconButton>
-            <img src={iconHeart} alt={''} />
-          </IconButton>
-          <IconButton>
-            <img src={iconShare} alt={''} />
-          </IconButton>
-        </CardFooter>
-      </ProjectCard>
-      <Donate doDonate={values => alert('donating' + values.amount)} />
-    </Container>
-  </ThemeProvider>
+      <CardFooter>
+        <Text
+          sx={{ variant: 'text.default' }}
+          style={{ color: theme.colors.muted, alignSelf: 'center' }}
+        >
+          {props.category}
+        </Text>
+        <IconButton>
+          <img src={iconHeart} alt={''} />
+        </IconButton>
+        <IconButton>
+          <img src={iconShare} alt={''} />
+        </IconButton>
+      </CardFooter>
+    </ProjectCard>
+    <Donate doDonate={values => alert('donating' + values.amount)} />
+  </Box>
 )
 
 export default ProjectListing
