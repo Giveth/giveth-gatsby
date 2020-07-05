@@ -78,30 +78,43 @@ const IndexPage = () => {
               image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
               raised={1223}
               category='Blockchain 4 Good'
+              listingId={'key1'}
+              key={'key1'}
             />
             <ProjectListing
               name='Aragon DAC'
               image='https://feathers.beta.giveth.io/uploads/3aa88b6ed3a6e0f54542086886194696a21c06b756864b97a1c1a0dcf58d4e17.png'
               raised={423}
               category='Blockchain 4 Good'
+              listingId={'key2'}
+              key={'key2'}
             />
             <ProjectListing
               name='Fairdata Society'
               image='https://ipfs.giveth.io/ipfs/QmUCepVMUhCHhZ5mSEXqWgL3taxPU5gaUhczTZgA4JLyPk'
               raised={0}
               category='Social Technology'
+              listingId={'key3'}
+              key={'key3'}
             />
             <ProjectListing
               name='Unicorn DAC'
               image='https://feathers.beta.giveth.io/uploads/5906e1be14c47c0a18b44a29fe8873ddfb6440a8a212cf42bacb84b7e2e1c0c1.png'
               raised={10004}
               category='All the things'
+              listingId={'key4'}
+              key={'key4'}
             />
             {data &&
               data.projects &&
               data.projects &&
-              data.projects.map(project => (
-                <ProjectListing name={project.title} image={NoImage} />
+              data.projects.map((project, index) => (
+                <ProjectListing
+                  listingId={project.title + '-' + index}
+                  key={project.title + '-' + index}
+                  name={project.title}
+                  image={NoImage}
+                />
               ))}
           </Grid>
         </div>

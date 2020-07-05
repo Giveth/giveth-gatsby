@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
-import jwt from 'jsonwebtoken'
 import {
   setUser,
   checkIfLoggedIn,
@@ -9,8 +8,6 @@ import {
   handleLogout
 } from '../services/auth'
 import ApolloClient from 'apollo-boost'
-import { gql, useMutation } from '@apollo/react-hooks'
-import { DO_LOGIN, DO_REGISTER } from '../apollo/gql/auth'
 import Web3 from 'web3'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
@@ -29,15 +26,12 @@ async function initTorus () {
   await torus.init()
 }
 
-const Login = () => {
-  const [doLogin] = useMutation(DO_LOGIN)
-  const [doRegister] = useMutation(DO_REGISTER)
+const Login = props => {
   let user = getUser()
 
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
 
   // const [user, setUser] = useState({})
-  const [balance, setBalance] = useState(0)
 
   function logout () {
     handleLogout()
@@ -58,38 +52,17 @@ const Login = () => {
       setIsLoggedIn(true)
     }
 
-    setBalance(0)
-
     const signedMessage = await web3.eth.accounts.sign(
       'our_secret',
       user.privateKey
     )
-    try {
-      const loginResponse = await doLogin({
-        variables: {
-          walletAddress: user.publicAddress,
-          signature: signedMessage.signature,
-          email: user.email
-        }
-      })
-
-      const token = jwt.verify(
-        loginResponse.data.loginWallet.token,
-        process.env.GATSBY_JWT_SECRET
-      )
-      // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      window.location = process.env.GATSBY_BASE_URL
-    } catch (error) {
-      console.error(`error : ${JSON.stringify(error, null, 2)}`)
-    }
-
-    //web3.eth.getBalance(user.publicAddress).then(setBalance)
+    await props.onLogin(signedMessage, user.publicAddress, user.email)
   }
 
   if (!isLoggedIn) {
     return <LoginButton login={login} />
   } else {
-    return <UserDetails logout={logout} user={user} balance={balance} />
+    return <UserDetails logout={logout} user={user} balance={props.balance} />
   }
 }
 export default Login
