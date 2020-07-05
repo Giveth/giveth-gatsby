@@ -3,7 +3,6 @@ import { Grid, Button, Heading, Text, IconButton } from 'theme-ui'
 import styled from '@emotion/styled'
 
 import ProjectListing from '../components/projectListing'
-import userDetails from '../components/userDetails'
 
 // import placeholder image
 import noImage from '../images/no-image-available.jpg'

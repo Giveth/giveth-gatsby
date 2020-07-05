@@ -1,34 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'gatsby'
-import { Grid, Flex, Box, Button, Heading, Text } from 'theme-ui'
-import gql from 'graphql-tag'
-import Loadable from '@loadable/component'
+import { Grid, Box, Button, Heading, Text } from 'theme-ui'
 import Layout from '../components/layout'
-import Image from '../components/image'
-import SEO from '../components/seo'
 import ProjectListing from '../components/projectListing'
-import AddProject from '../components/AddProject'
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import imgPeopleHeader from '../images/people-header.png'
 
-import {
-  setUser,
-  checkIfLoggedIn,
-  setIsLoggedIn,
-  getUser,
-  handleLogout
-} from '../services/auth'
-
-import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
+import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
 // placeholder image
 import NoImage from '../images/no-image-available.jpg'
 
 const IndexPage = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
-
-  const [showProjectForm, setShowProjectForm] = useState(false)
-  const { loading, error, data } = useQuery(FETCH_PROJECTS)
+  const { data } = useQuery(FETCH_PROJECTS)
 
   return (
     <Layout>

@@ -1,26 +1,11 @@
-import React from 'react'
 /** @jsx jsx */
-import { useQuery, useMutation } from '@apollo/react-hooks'
-import gql from 'graphql-tag'
-import {
-  jsx,
-  Box,
-  Label,
-  Input,
-  Checkbox,
-  Select,
-  Textarea,
-  Flex,
-  Radio,
-  Slider,
-  Button,
-  Heading
-} from 'theme-ui'
+import { jsx, Box, Label, Input, Textarea, Heading } from 'theme-ui'
 import TypeForm from './TypeForm'
 import { useForm } from 'react-hook-form'
 
 const AddProject = props => {
-  const { handleSubmit, register, errors } = useForm()
+  // reconsider later const { handleSubmit, register } = useForm()
+  const { handleSubmit } = useForm()
   const onSubmit = values => {
     console.log(`form submit values ---> : ${values}`)
     props.addProject(values)
@@ -71,7 +56,6 @@ const AddProject = props => {
         //   validate: value => value !== 'admin' || 'Nice try!'
         // })}
         ref={props.currentRef}
-        name='description'
       />
     </Box>
   )

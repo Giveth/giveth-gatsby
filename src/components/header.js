@@ -1,18 +1,14 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
-import { gql, useMutation } from '@apollo/react-hooks'
-import { DO_LOGIN, DO_REGISTER } from '../apollo/gql/auth'
-import jwt from 'jsonwebtoken'
+import { useMutation } from '@apollo/react-hooks'
+import { DO_LOGIN } from '../apollo/gql/auth'
 import Loadable from '@loadable/component'
-import { Grid, Box, Button, Heading, IconButton, Text } from 'theme-ui'
+import { IconButton, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
-
 import logo from '../images/giveth-logo-blue.svg'
-
-import iconUser from '../images/icon-user.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
 
@@ -79,7 +75,7 @@ const Login = Loadable(() => import('../components/login'))
 const Header = ({ siteTitle }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
   const [doLogin] = useMutation(DO_LOGIN)
-  const [doRegister] = useMutation(DO_REGISTER)
+  // const [doRegister] = useMutation(DO_REGISTER)
   const [balance, setBalance] = useState(0)
 
   const onLogin = async (signedMessage, userAddress, userEmail) => {
@@ -95,10 +91,10 @@ const Header = ({ siteTitle }) => {
 
       console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
 
-      const token = jwt.verify(
-        loginResponse.data.loginWallet.token,
-        process.env.GATSBY_JWT_SECRET
-      )
+      // const token = jwt.verify(
+      //   loginResponse.data.loginWallet.token,
+      //   process.env.GATSBY_JWT_SECRET
+      // )
       // console.log(`token : ${JSON.stringify(token, null, 2)}`)
       //web3.eth.getBalance(user.publicAddress).then(setBalance)
       console.log(`setting balance to zero`)

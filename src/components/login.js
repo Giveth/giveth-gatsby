@@ -3,11 +3,9 @@ import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
 import {
   setUser,
   checkIfLoggedIn,
-  setIsLoggedIn,
   getUser,
   handleLogout
 } from '../services/auth'
-import ApolloClient from 'apollo-boost'
 import Web3 from 'web3'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
