@@ -1,59 +1,11 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Button, Heading, Link } from 'theme-ui'
-var util = require('util')
 
 const TypeForm = props => {
   const [current, setCurrent] = useState(0)
   const [fields, setFields] = useState([])
   const currentRef = useRef(null)
-
-  const styles = {
-    tfShow: {
-      display: 'block'
-    },
-    tfHide: {
-      display: 'none'
-    }
-  }
-
-  const setClass = (element, tfStyle) => {
-    if (!element) {
-      return null
-    }
-    const Element = element.type
-
-    return (
-      <div style={tfStyle}>
-        <Element ref={React.createRef()} {...element.props} />
-      </div>
-    )
-  }
-
-  // const getCurrentView = children => {
-  //   let allChildren = []
-  //   allChildren = React.Children.map(children, (child, index) => {
-  //     let currentChild = setClass(child, styles.tfHide)
-  //     if (index === current) {
-  //       currentChild = setClass(child, styles.tfShow)
-  //     }
-  //     console.log(`currentChild ---> : ${currentChild}`)
-
-  //     return currentChild
-  //   })
-  //   /** If all elements are shown then conditionally show a review screen */
-  //   if (isLastComponent() && props.showReviewView) {
-  //     React.Children.map(children, child =>
-  //       allChildren.push(setClass(child, styles.tfShow))
-  //     )
-  //     if (props.completionText) {
-  //       allChildren.push(
-  //         <div className='form-completion-text'>{props.completionText}</div>
-  //       )
-  //     }
-  //   }
-  //   return allChildren
-  // }
 
   const goForward = evt => {
     if (current < props.fields.length) {

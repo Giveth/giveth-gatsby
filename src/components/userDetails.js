@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Heading, Text } from 'theme-ui'
+import { Button, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 
 const AccountDetails = styled.main`
@@ -27,12 +27,13 @@ const UserDetails = props => {
   return (
     <AccountDetails>
       <img
+        alt={'user avatar'}
         style={{ width: '60px' }}
         src={user.profileImage}
-        className="avatarimage"
+        className='avatarimage'
       />
       <Text sx={{ variant: 'text.small' }}>{user.publicAddress}</Text>
-      <Text sx={{ variant: 'text.small' }} className="balance">
+      <Text sx={{ variant: 'text.small' }} className='balance'>
         Your balance:
         <Text sx={{ variant: 'headings.h6' }}>{balance}</Text>
       </Text>
@@ -41,7 +42,7 @@ const UserDetails = props => {
         style={{}}
         sx={{ variant: 'buttons.tiny' }}
         onClick={logout}
-        className="logoutbutton"
+        className='logoutbutton'
       >
         logout
       </Button>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Heading, Box, Card, IconButton, Text, Flex } from 'theme-ui'
+import { Heading, Box, Card, IconButton, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 
 import theme from '../gatsby-plugin-theme-ui/index'
@@ -7,8 +7,6 @@ import Donate from '../components/donateForm'
 
 import iconShare from '../images/icon-share.svg'
 import iconHeart from '../images/icon-heart.svg'
-
-const Container = styled.div``
 
 const ProjectCard = styled(Card)`
   background-color: ${theme.colors.background};
@@ -47,9 +45,10 @@ const CardFooter = styled.span`
 `
 
 const ProjectListing = props => (
-  <Box style={{ width: '100%' }}>
-    <ProjectCard>
+  <Box key={props.listingId + '_box'} style={{ width: '100%' }}>
+    <ProjectCard key={props.listingId + '_card'}>
       <div
+        key={props.listingId + '_div'}
         src={props.image}
         style={{
           width: '100%',
@@ -64,6 +63,7 @@ const ProjectListing = props => (
         alt={props.name}
       >
         <Dot
+          key={props.listingId + '_card'}
           style={{
             backgroundColor:
               props.raised === 0
@@ -92,25 +92,12 @@ const ProjectListing = props => (
           overflow: 'hidden',
           textOverflow: 'ellipsis'
         }}
+        key={props.listingId + '_heading'}
       >
         {props.name}
       </Heading>
       <br />
-      {/**
-         * Project Description Text
-         * 
-         * 
-         * 
-         * 
-        <Text
-          sx={{ variant: 'text.default' }}
-          style={{
-            width: '260'
-          }}
-        >
-          Textdescriptions should be included in the data model as a blurb.
-        </Text>
-        */}
+
       <CardFooter>
         <Text
           sx={{ variant: 'text.default' }}

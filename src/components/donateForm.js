@@ -1,19 +1,5 @@
 import React from 'react'
-import {
-  jsx,
-  Box,
-  Label,
-  Input,
-  Checkbox,
-  Select,
-  Textarea,
-  Flex,
-  Radio,
-  Slider,
-  Button,
-  Heading,
-  Grid
-} from 'theme-ui'
+import { Label, Input, Button } from 'theme-ui'
 import { useForm } from 'react-hook-form'
 import styled from '@emotion/styled'
 
@@ -33,7 +19,7 @@ const DonationForm = styled.form`
 `
 
 const Donate = props => {
-  const { handleSubmit, register, errors } = useForm()
+  const { handleSubmit, register } = useForm()
   const onSubmit = values => {
     console.log(`values : ${JSON.stringify(values, null, 2)}`)
     props.doDonate(values)

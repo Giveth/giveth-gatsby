@@ -1,5 +1,3 @@
-import { nominalTypeHack } from 'prop-types'
-
 // Giveth V2 theme
 export default {
   breakpoints: ['700px', '1024px', '1280px'],
