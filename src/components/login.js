@@ -65,7 +65,7 @@ const Login = () => {
       user.privateKey
     )
     try {
-      const loginResonse = await doLogin({
+      const loginResponse = await doLogin({
         variables: {
           walletAddress: user.publicAddress,
           signature: signedMessage.signature,
@@ -74,7 +74,7 @@ const Login = () => {
       })
 
       const token = jwt.verify(
-        loginResonse.data.loginWallet.token,
+        loginResponse.data.loginWallet.token,
         process.env.GATSBY_JWT_SECRET
       )
       // console.log(`token : ${JSON.stringify(token, null, 2)}`)
