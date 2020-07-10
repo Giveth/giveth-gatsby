@@ -6,11 +6,6 @@ import { useForm } from 'react-hook-form'
 const AddProject = props => {
   // reconsider later const { handleSubmit, register } = useForm()
   const { handleSubmit } = useForm()
-  const onSubmit = values => {
-    console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
-
-    props.addProject(values)
-  }
   const TitleComponent = props => (
     <Box>
       <br />
@@ -73,7 +68,7 @@ const AddProject = props => {
       <TypeForm
         addProject={props.addProject}
         submitBtnText={'Start raising funds'}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={props.onSubmit}
         fields={[
           {
             name: 'title',

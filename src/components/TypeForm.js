@@ -9,13 +9,13 @@ const TypeForm = props => {
   const currentRef = useRef(null)
 
   const { handleSubmit, register } = useForm()
-  const onSubmit = values => {
-    console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
+  // const onSubmit = values => {
+  //   console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
 
-    props.addProject(values)
-    console.log('HI FIVE')
-    return false
-  }
+  //   props.addProject(values)
+  //   console.log('HI FIVE')
+  //   return false
+  // }
 
   const goForward = evt => {
     if (current < props.fields.length) {
@@ -94,7 +94,7 @@ const TypeForm = props => {
     //console.log(`data : ${JSON.stringify(data, null, 2)}`)
 
     return (
-      <Box as='form' onSubmit={handleSubmit(onSubmit)}>
+      <Box as='form' onSubmit={handleSubmit(props.onSubmit)}>
         {data.map((o, key) => {
           const { name, type, value, headStyle } = o
           console.log(`o.name ---> : ${name}`)
