@@ -5,7 +5,7 @@ import {
   checkIfLoggedIn,
   getUser,
   handleLogout
-} from '../services/auth'
+} from '../../services/auth'
 import Web3 from 'web3'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'

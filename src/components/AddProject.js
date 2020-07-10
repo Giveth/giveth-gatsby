@@ -7,7 +7,8 @@ const AddProject = props => {
   // reconsider later const { handleSubmit, register } = useForm()
   const { handleSubmit } = useForm()
   const onSubmit = values => {
-    console.log(`form submit values ---> : ${values}`)
+    console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
+
     props.addProject(values)
   }
   const TitleComponent = props => (
@@ -70,6 +71,7 @@ const AddProject = props => {
       <br />
 
       <TypeForm
+        addProject={props.addProject}
         submitBtnText={'Start raising funds'}
         onSubmit={handleSubmit(onSubmit)}
         fields={[

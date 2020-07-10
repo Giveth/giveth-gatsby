@@ -15,6 +15,9 @@ const IndexPage = () => {
     // addProject({
     //   variables: { title: values.title, description: values.description }
     // })
+
+    console.log(`addProject > values : ${JSON.stringify(values, null, 2)}`)
+
     const project = await addProjectQuery({
       variables: {
         title: values.title,

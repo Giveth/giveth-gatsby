@@ -1,11 +1,21 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Button, Heading, Link } from 'theme-ui'
+import { Box, Button, Heading, Link, Input, Textarea } from 'theme-ui'
+import { useForm, errors, setValue } from 'react-hook-form'
 
 const TypeForm = props => {
   const [current, setCurrent] = useState(0)
   const [fields, setFields] = useState([])
   const currentRef = useRef(null)
+
+  const { handleSubmit, register } = useForm()
+  const onSubmit = values => {
+    console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
+
+    props.addProject(values)
+    console.log('HI FIVE')
+    return false
+  }
 
   const goForward = evt => {
     if (current < props.fields.length) {
@@ -40,6 +50,9 @@ const TypeForm = props => {
 
   /** Check if last component */
   const isLastComponent = () => {
+    console.log(`props.showReviewView ---> : ${props.showReviewView}`)
+    console.log(`props.fields.length ---> : ${props.fields.length}`)
+    console.log(`current ---> : ${current}`)
     return props.showReviewView
       ? current === props.fields.length
       : current === props.fields.length - 1
@@ -48,35 +61,94 @@ const TypeForm = props => {
   const editField = name => {
     console.log(`edit name ---> : ${name}`)
   }
+  const handleChange = e => {
+    setValue('AntdInput', e.target.value)
+  }
+  const getFormField = (type, name, value) => {
+    if (type === 'text') {
+      return (
+        <Input
+          name={name}
+          id={name}
+          ref={register}
+          mb={3}
+          value={value}
+          onChange={handleChange}
+        />
+      )
+    } else if (type === 'textarea') {
+      return (
+        <Textarea
+          name={name}
+          id={name}
+          ref={register}
+          rows='6'
+          mb={3}
+          value={value}
+          onChange={handleChange}
+        />
+      )
+    }
+  }
   const showFinalDetails = data => {
     //console.log(`data : ${JSON.stringify(data, null, 2)}`)
 
-    return data.map(o => {
-      console.log(`o.name ---> : ${o.name}`)
-      console.log(`o.type ---> : ${o.type}`)
-      console.log(`o.value ---> : ${o.value}`)
-      console.log(`o.headStyle ---> : ${o.headStyle}`)
+    return (
+      <Box as='form' onSubmit={handleSubmit(onSubmit)}>
+        {data.map((o, key) => {
+          const { name, type, value, headStyle } = o
+          console.log(`o.name ---> : ${name}`)
+          console.log(`o.type ---> : ${type}`)
+          console.log(`o.value ---> : ${value}`)
+          console.log(`o.headStyle ---> : ${headStyle}`)
 
-      return (
-        <>
-          <Heading pb={2} as='h3' color='muted'>
-            {o.label}
-            {'  '}
-            <Link
-              sx={{
-                color: 'primary'
-              }}
-              to={editField(o.name)}
-            >
-              Edit
-            </Link>
-          </Heading>
-          <Heading pb={4} as={o.headStyle} color='secondary'>
-            {o.value}
-          </Heading>
-        </>
-      )
-    })
+          return (
+            <Box key={'box ' + key}>
+              {getFormField(type, name, value)}
+              <Heading key={'heading-' + key} pb={2} as='h3' color='muted'>
+                {o.label}
+                {'  '}
+                <Link
+                  sx={{
+                    color: 'primary'
+                  }}
+                  to={editField(o.name)}
+                >
+                  Edit
+                </Link>
+              </Heading>
+              <Heading
+                key={'heading2-' + key}
+                pb={4}
+                as={o.headStyle}
+                color='secondary'
+              >
+                {o.value}
+              </Heading>
+            </Box>
+          )
+        })}
+        <Button
+          sx={{ variant: 'buttons.default' }}
+          type='submit'
+          className={props.submitBtnClass}
+        >
+          {props.submitBtnText}
+        </Button>
+      </Box>
+    )
+  }
+
+  const updateFormValue = (value, type, name, label, headStyle) => {
+    setFields(
+      fields.concat({
+        value,
+        type,
+        name,
+        label,
+        headStyle
+      })
+    )
   }
 
   const addFormValue = (value, type, name, label, headStyle) => {
@@ -96,12 +168,13 @@ const TypeForm = props => {
 
   /** render the typeform */
   return (
-    <div className='form-container'>
+    <Box>
       {/* {getCurrentView(props.children)} */}
+
       {!isLastComponent() &&
         React.createElement(props.fields[current].component, { currentRef })}
       {isLastComponent() && showFinalDetails(fields)}
-      {!isFirstComponent() && (
+      {/* {!isFirstComponent() && (
         <Button
           sx={{ variant: 'buttons.default' }}
           onClick={goBackward}
@@ -109,26 +182,18 @@ const TypeForm = props => {
         >
           {props.backBtnText}
         </Button>
-      )}
-      {isLastComponent() ? (
+      )} */}
+      {!isLastComponent() && (
         <Button
           sx={{ variant: 'buttons.default' }}
-          type='submit'
-          onClick={props.onSubmit}
-          className={props.submitBtnClass}
-        >
-          {props.submitBtnText}
-        </Button>
-      ) : (
-        <Button
-          sx={{ variant: 'buttons.default' }}
+          type='button'
           onClick={goForward.bind(this)}
           className={props.nextBtnClass}
         >
           {props.nextBtnText}
         </Button>
       )}
-    </div>
+    </Box>
   )
 }
 

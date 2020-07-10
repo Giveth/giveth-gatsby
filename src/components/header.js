@@ -70,7 +70,7 @@ const CreateLink = styled(Link)`
   }
 `
 
-const Login = Loadable(() => import('../components/login'))
+const Login = Loadable(() => import('./torus/login'))
 
 const Header = ({ siteTitle }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
