@@ -6,10 +6,6 @@ import { useForm } from 'react-hook-form'
 const AddProject = props => {
   // reconsider later const { handleSubmit, register } = useForm()
   const { handleSubmit } = useForm()
-  const onSubmit = values => {
-    console.log(`form submit values ---> : ${values}`)
-    props.addProject(values)
-  }
   const TitleComponent = props => (
     <Box>
       <br />
@@ -52,9 +48,12 @@ const AddProject = props => {
         name='description'
         rows='6'
         mb={3}
-        // ref={register({
-        //   validate: value => value !== 'admin' || 'Nice try!'
-        // })}
+        sx={{
+          variant: 'borderless',
+          '&.active': {
+            color: 'primary'
+          }
+        }}
         ref={props.currentRef}
       />
     </Box>
@@ -70,8 +69,9 @@ const AddProject = props => {
       <br />
 
       <TypeForm
+        addProject={props.addProject}
         submitBtnText={'Start raising funds'}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={props.onSubmit}
         fields={[
           {
             name: 'title',
