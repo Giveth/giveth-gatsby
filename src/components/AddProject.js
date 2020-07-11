@@ -48,9 +48,12 @@ const AddProject = props => {
         name='description'
         rows='6'
         mb={3}
-        // ref={register({
-        //   validate: value => value !== 'admin' || 'Nice try!'
-        // })}
+        sx={{
+          variant: 'borderless',
+          '&.active': {
+            color: 'primary'
+          }
+        }}
         ref={props.currentRef}
       />
     </Box>
