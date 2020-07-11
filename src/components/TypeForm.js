@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Button, Heading, Link, Input, Textarea } from 'theme-ui'
-import { useForm, errors, setValue } from 'react-hook-form'
+import { useForm, setValue } from 'react-hook-form'
 
 const TypeForm = props => {
   const [current, setCurrent] = useState(0)
@@ -32,21 +32,21 @@ const TypeForm = props => {
   }
 
   /** Decrement State counter */
-  const goBackward = () => {
-    if (current > 0) {
-      console.log(
-        `goBackward current : ${JSON.stringify(current - 1, null, 2)}`
-      )
+  // const goBackward = () => {
+  //   if (current > 0) {
+  //     console.log(
+  //       `goBackward current : ${JSON.stringify(current - 1, null, 2)}`
+  //     )
 
-      setCurrent(current - 1)
-    }
-    props.backBtnOnClick()
-  }
+  //     setCurrent(current - 1)
+  //   }
+  //   props.backBtnOnClick()
+  // }
 
   /** Check if last component */
-  const isFirstComponent = () => {
-    return current === 0
-  }
+  // const isFirstComponent = () => {
+  //   return current === 0
+  // }
 
   /** Check if last component */
   const isLastComponent = () => {
