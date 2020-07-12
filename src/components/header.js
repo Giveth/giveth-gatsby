@@ -74,36 +74,8 @@ const Login = Loadable(() => import('../components/login'))
 
 const Header = ({ siteTitle }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
-  const [doLogin] = useMutation(DO_LOGIN)
   // const [doRegister] = useMutation(DO_REGISTER)
-  const [balance, setBalance] = useState(0)
 
-  const onLogin = async (signedMessage, userAddress, userEmail) => {
-    console.log('onLogin > doinglogin')
-    try {
-      const loginResponse = await doLogin({
-        variables: {
-          walletAddress: userAddress,
-          signature: signedMessage.signature,
-          email: userEmail
-        }
-      })
-
-      console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
-
-      // const token = jwt.verify(
-      //   loginResponse.data.loginWallet.token,
-      //   process.env.GATSBY_JWT_SECRET
-      // )
-      // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      //web3.eth.getBalance(user.publicAddress).then(setBalance)
-      console.log(`setting balance to zero`)
-      setBalance(0)
-      window.location = process.env.GATSBY_BASE_URL
-    } catch (error) {
-      console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
-    }
-  }
 
   return (
     <header
@@ -142,7 +114,7 @@ const Header = ({ siteTitle }) => {
             <img src={iconSearch} alt={''} />
           </IconButton>
           <img src={iconVerticalLine} alt={''} />
-          <Login onLogin={onLogin} balance={balance} />
+          <Login/>
         </UserSpan>
       </HeaderSpan>
     </header>

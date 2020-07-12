@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from "react"
+import {TorusContext} from "../contextProvider/torusProvider"
 import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
 import {
   setUser,
@@ -10,7 +11,7 @@ import Web3 from 'web3'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
 
-var web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
 
 const torus = new DirectWebSdk({
   baseUrl: process.env.GATSBY_BASE_URL + '/serviceworker/',
@@ -25,42 +26,11 @@ async function initTorus () {
 }
 
 const Login = props => {
-  let user = getUser()
-
-  const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
-
-  // const [user, setUser] = useState({})
-
-  function logout () {
-    handleLogout()
-    setIsLoggedIn(false)
-    window.location = process.env.GATSBY_BASE_URL
-  }
-
-  async function login () {
-    await initTorus()
-
-    const verifierName = process.env.GATSBY_VERIFIER_NAME
-      ? process.env.GATSBY_VERIFIER_NAME
-      : 'google-giveth2'
-
-    if (!isLoggedIn) {
-      user = await torus.triggerLogin('google', verifierName)
-      setUser(user)
-      setIsLoggedIn(true)
-    }
-
-    const signedMessage = await web3.eth.accounts.sign(
-      'our_secret',
-      user.privateKey
-    )
-    await props.onLogin(signedMessage, user.publicAddress, user.email)
-  }
-
+  const {isLoggedIn, login, logout, user, balance} = useContext(TorusContext);
   if (!isLoggedIn) {
     return <LoginButton login={login} />
   } else {
-    return <UserDetails logout={logout} user={user} balance={props.balance} />
+    return <UserDetails logout={logout} user={user} balance={balance} />
   }
 }
 export default Login
