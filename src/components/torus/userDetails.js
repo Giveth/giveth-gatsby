@@ -14,7 +14,7 @@ const AccountDetails = styled.div`
   box-sizing: border-box;
   box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
   border-radius: 6px;
-  z-index: 105;
+  z-index: 205;
   right: 0px;
   top: 60px;
   display: grid;
