@@ -1,43 +1,23 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 
-import React from 'react'
 import { Link } from 'gatsby'
+import { useQuery } from '@apollo/react-hooks'
+import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import { useMediaQuery } from 'react-responsive'
+
 import Layout from '../components/layout'
+import Hero from '../components/hero'
 import ProjectListing from '../components/projectListing'
-import { useQuery } from '@apollo/react-hooks'
 
 // import decorative graphics
-import imgPeopleHeader from '../images/people-header.png'
 import decoratorLeaf from '../images/decorator-leaf.png'
 
 import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
 // placeholder image
 import NoImage from '../images/no-image-available.jpg'
-
-const HeroSection = styled(Grid)`
-  grid-template-columns: 1fr auto;
-  @media (max-width: '850px') {
-    grid-template-columns: 1fr;
-  }
-`
-
-const HeroImage = styled.div`
-  width: 50vw;
-  height: 80vh;
-  background: url(${imgPeopleHeader});
-  background-position: left top;
-  background-repeat: no-repeat;
-`
-
-const HeroText = styled(Box)`
-  position: absolute;
-  padding-left: 80px;
-`
 
 const ProjectSection = styled(Box)``
 
@@ -52,84 +32,7 @@ const IndexPage = () => {
         alt=""
         sx={{ position: 'absolute', top: '60vh', left: '-70px' }}
       />
-      <HeroSection>
-        <div id="placeholder"></div>
-        <HeroText>
-          {' '}
-          <Heading
-            sx={{
-              variant: 'headings.h1',
-              fontWeight: 'regular',
-              color: 'secondaryDark'
-            }}
-          >
-            Sustainable fundraising for
-          </Heading>
-          <Heading
-            sx={{
-              variant: 'headings.h1',
-              fontWeight: 'bold',
-              color: 'secondaryDark'
-            }}
-          >
-            social impact
-          </Heading>
-          <Text
-            pt={4}
-            pb={2}
-            sx={{
-              variant: 'text.large',
-              width: ['100%', null, '45%'],
-              color: 'secondary',
-              lineHeight: 'taller'
-            }}
-          >
-            Our mission is to connect people, ideas, and resources to facilitate
-            and incentivize social impact with a transparent framework for
-            distributing funds.
-          </Text>
-          <Grid
-            rows={2}
-            sx={{
-              width: '290px'
-            }}
-          >
-            <Link to="/donate">
-              <Button
-                mt={4}
-                p={4}
-                sx={{
-                  width: '290px',
-                  variant: 'buttons.default'
-                }}
-              >
-                Donate
-              </Button>
-            </Link>
-            <Link
-              to="/create"
-              sx={{
-                variant: 'links.nav',
-                justifySelf: 'center'
-              }}
-            >
-              <Text
-                sx={{
-                  justifySelf: 'center'
-                }}
-              >
-                Start raising funds for your project
-              </Text>
-            </Link>
-          </Grid>
-        </HeroText>
-        {isMobile ? null : (
-          <Box>
-            <HeroImage alt={''} />
-          </Box>
-        )}
-      </HeroSection>
-
+      <Hero />
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
           style={{

@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Fragment } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import { useMutation } from '@apollo/react-hooks'
@@ -25,6 +25,9 @@ const HeaderContainer = styled.header`
 
   &.HeaderPlaceholderNotScrolled {
     height: 240px;
+    @media (max-width: 850px) {
+      height: 160px;
+    }
   }
 
   &.HeaderPlaceholderScrolled {
@@ -162,21 +165,30 @@ const Header = ({ siteTitle }) => {
         marginBottom: `1.45rem`
       }}
     >
-      <img
-        src={decoratorCloud1}
-        alt=""
-        sx={{
-          position: 'absolute',
-          top: '20px',
-          left: '300px',
-          zIndex: '200'
-        }}
-      />
-      <img
-        src={decoratorCloud2}
-        alt=""
-        sx={{ position: 'absolute', top: '20px', right: '-5px', zIndex: '200' }}
-      />
+      {!isMobile ? (
+        <Fragment>
+          <img
+            src={decoratorCloud1}
+            alt=""
+            sx={{
+              position: 'absolute',
+              top: '20px',
+              left: '300px',
+              zIndex: '200'
+            }}
+          />
+          <img
+            src={decoratorCloud2}
+            alt=""
+            sx={{
+              position: 'absolute',
+              top: '20px',
+              right: '-5px',
+              zIndex: '200'
+            }}
+          />
+        </Fragment>
+      ) : null}
 
       <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
         <Link
