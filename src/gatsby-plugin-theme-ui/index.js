@@ -4,6 +4,7 @@ export default {
   colors: {
     text: '#2C0B3F',
     background: '#fff',
+    headerbackground: '#ffffffcc',
     primary: '#C2449F',
     hover: '#DB5CB8',
     muted: '#DFDAE8',
@@ -11,7 +12,9 @@ export default {
     secondaryDark: '#29325E',
     accent: '#109CF1',
     attention: '#E01C6B',
-    bodyDark: '#6B7087'
+    bodyDark: '#6B7087',
+    anotherGrey: '#C9D0E8',
+    lightestBlue: '#EDF0FA'
   },
   fonts: {
     body: '"Red Hat Text", sans serif',
@@ -34,6 +37,7 @@ export default {
     narrower: '-1px',
     narrow: '-0.5px',
     normal: '0px',
+    more: '1px',
     wide: '3px',
     widest: '5px'
   },
@@ -62,6 +66,10 @@ export default {
     },
     medium: {
       fontSize: 2,
+      fontFamily: 'body'
+    },
+    paragraph: {
+      fontSize: 3,
       fontFamily: 'body'
     },
     large: {
@@ -112,11 +120,13 @@ export default {
   },
   headings: {
     display: {
+      fontFamily: 'heading',
       fontSize: 10,
       fontWeight: 'bold',
       letterSpacing: 'tightest'
     },
     h1: {
+      fontFamily: 'heading',
       fontSize: 11,
       fontWeight: 'medium',
       lineHeight: 'tall',
@@ -124,26 +134,31 @@ export default {
       overflowWrap: 'normal'
     },
     h2: {
+      fontFamily: 'heading',
       fontSize: 9,
       fontWeight: 'medium',
       letterSpacing: 'narrowest'
     },
     h3: {
+      fontFamily: 'heading',
       fontSize: 8,
       fontWeight: 'regular',
       letterSpacing: 'normal'
     },
     h4: {
+      fontFamily: 'heading',
       fontSize: 7,
       fontWeight: 'medium',
       letterSpacing: 'narrower'
     },
     h5: {
+      fontFamily: 'heading',
       fontSize: 6,
       fontWeight: 'medium',
       letterSpacing: 'narrow'
     },
     h6: {
+      fontFamily: 'heading',
       fontSize: 4,
       fontWeight: 'bold',
       letterSpacing: 'narrow'
@@ -174,6 +189,16 @@ export default {
     small: {
       cursor: 'pointer',
       fontFamily: 'body',
+      fontSize: 2,
+      textTransform: 'capitalize',
+      borderRadius: '48px'
+    },
+    nofill: {
+      cursor: 'pointer',
+      background: 'unset',
+      border: ['2px', 'solid', 'colors.anotherGray'],
+      fontFamily: 'body',
+      fontWeight: 'medium',
       fontSize: 2,
       textTransform: 'capitalize',
       borderRadius: '48px'
