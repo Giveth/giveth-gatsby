@@ -6,10 +6,13 @@ import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 
+// import decorative graphics
+import decoratorLeaf from '../images/decorator-leaf.png'
 import imgPeopleHeader from '../images/people-header.png'
 
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
+  position: relative;
   @media (max-width: '850px') {
     grid-template-columns: 1fr;
     min-height: 100vh;
@@ -35,6 +38,11 @@ const Hero = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
   return (
     <HeroSection>
+      <img
+        src={decoratorLeaf}
+        alt=""
+        sx={{ position: 'absolute', bottom: '10vh', left: '-70px' }}
+      />
       <div id="placeholder"></div>
       <HeroText p={['10px', null, '80px']}>
         {' '}
@@ -65,7 +73,7 @@ const Hero = () => {
           pb={2}
           sx={{
             variant: 'text.large',
-            width: ['100%', null, '45%'],
+            width: ['95%', '50%', '45%'],
             color: 'secondary',
             lineHeight: 'taller'
           }}
@@ -109,7 +117,7 @@ const Hero = () => {
           </Link>
         </Grid>
       </HeroText>
-      <Box sx={{ minHeight: ['100vh', '50vh', '80vh'] }}>
+      <Box sx={{ minHeight: '80vh' }}>
         {isMobile ? null : <HeroImage alt={''} />}
       </Box>
     </HeroSection>
