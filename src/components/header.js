@@ -1,4 +1,7 @@
-import React, { useState } from 'react'
+/** @jsx jsx */
+import { jsx } from 'theme-ui'
+
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import { useMutation } from '@apollo/react-hooks'
@@ -8,19 +11,45 @@ import { IconButton, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
+
+// import graphics
 import logo from '../images/giveth-logo-blue.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
+import decoratorCloud1 from '../images/decorator-cloud1.png'
+import decoratorCloud2 from '../images/decorator-cloud2.png'
+import decoratorClouds from '../images/decorator-clouds.png'
+
+const HeaderContainer = styled.header`
+  transition: 0.8s;
+
+  &.HeaderPlaceholderNotScrolled {
+    height: 240px;
+  }
+
+  &.HeaderPlaceholderScrolled {
+    height: 112px;
+  }
+`
 
 const HeaderSpan = styled.nav`
+  position: fixed;
   margin: 0 auto;
   padding: 80px;
+  top: 0;
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
   background-color: ${theme.colors.background};
   width: 100%;
-  z-index: 50;
+  transition: 0.8s;
+  z-index: 100;
+
+  &.HeaderScrolled {
+    padding: 1rem 80px;
+    backdrop-filter: blur(100px);
+  }
+
   @media (max-width: 850px) {
     padding: 25px;
     grid-template-columns: 1fr;
@@ -31,7 +60,6 @@ const HeaderSpan = styled.nav`
 const LogoSpan = styled.span`
   display: grid;
   grid-template-columns: repeat(2, auto);
-  max-width: 290px;
   align-items: center;
 `
 
@@ -44,6 +72,7 @@ const MiddleSpan = styled.span`
 `
 
 const UserSpan = styled.span`
+  position: relative;
   display: grid;
   grid-template-columns: repeat(4, auto);
   align-items: center;
@@ -74,9 +103,26 @@ const Login = Loadable(() => import('./torus/login'))
 
 const Header = ({ siteTitle }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
+  const [hasScrolled, setScrollState] = useState(false)
   const [doLogin] = useMutation(DO_LOGIN)
   // const [doRegister] = useMutation(DO_REGISTER)
   const [balance, setBalance] = useState(0)
+
+  useEffect(() => {
+    function handleScroll() {
+      const scrollTop = window.pageYOffset
+
+      if (scrollTop > 50) {
+        setScrollState(true)
+      } else {
+        setScrollState(false)
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return function cleanup() {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  })
 
   const onLogin = async (signedMessage, userAddress, userEmail) => {
     console.log('onLogin > doinglogin')
@@ -106,38 +152,68 @@ const Header = ({ siteTitle }) => {
   }
 
   return (
-    <header
+    <HeaderContainer
+      className={
+        hasScrolled
+          ? 'HeaderPlaceholderScrolled'
+          : 'HeaderPlaceholderNotScrolled'
+      }
       style={{
         marginBottom: `1.45rem`
       }}
     >
-      <HeaderSpan>
-        <LogoSpan>
-          {isMobile ? (
-            <img src={logo} alt='logo' width='40px' height='40px' />
-          ) : (
-            <>
-              <img src={logo} alt='logo' width='80px' height='80px' />
-              <Text
-                pl={4}
-                sx={{
-                  variant: 'text.large',
-                  color: 'secondary',
-                  fontSize: 4
-                }}
-              >
-                THE FUTURE OF GIVING
-              </Text>
-            </>
-          )}
-        </LogoSpan>
+      <img
+        src={decoratorCloud1}
+        alt=""
+        sx={{
+          position: 'absolute',
+          top: '20px',
+          left: '300px',
+          zIndex: '200'
+        }}
+      />
+      <img
+        src={decoratorCloud2}
+        alt=""
+        sx={{ position: 'absolute', top: '20px', right: '-5px', zIndex: '200' }}
+      />
+
+      <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
+        <Link
+          to="/"
+          sx={{
+            textDecoration: 'none'
+          }}
+        >
+          <LogoSpan>
+            {isMobile ? (
+              <img src={logo} alt="logo" width="40px" height="40px" />
+            ) : (
+              <>
+                <img src={logo} alt="logo" width="80px" height="80px" />
+                <Text
+                  pl={3}
+                  sx={{
+                    variant: 'text.default',
+                    color: 'secondary',
+                    fontSize: 3,
+                    fontWeight: 'medium',
+                    textDecoration: 'none'
+                  }}
+                >
+                  THE FUTURE OF GIVING
+                </Text>
+              </>
+            )}
+          </LogoSpan>
+        </Link>
         <MiddleSpan>
-          <NavLink to='/'>Home</NavLink>
-          <NavLink to='/causes'>Causes</NavLink>
-          <NavLink to='/projects'>Projects</NavLink>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/causes">Causes</NavLink>
+          <NavLink to="/projects">Projects</NavLink>
         </MiddleSpan>
         <UserSpan>
-          <CreateLink to='/create'>Create a project</CreateLink>
+          <CreateLink to="/create">Create a project</CreateLink>
           <IconButton>
             <img src={iconSearch} alt={''} />
           </IconButton>
@@ -145,7 +221,7 @@ const Header = ({ siteTitle }) => {
           <Login onLogin={onLogin} balance={balance} />
         </UserSpan>
       </HeaderSpan>
-    </header>
+    </HeaderContainer>
   )
 }
 
