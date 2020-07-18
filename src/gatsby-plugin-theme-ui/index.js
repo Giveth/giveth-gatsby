@@ -51,7 +51,7 @@ export default {
     tallest: 1.5
   },
   grayBox: {
-    background: '#E5E5E5'
+    background: '#EDF0FA'
   },
   text: {
     default: {
