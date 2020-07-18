@@ -8,11 +8,9 @@ import { Grid, Box, Button, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 
 import Layout from '../components/layout'
-import Hero from '../components/hero'
+import Hero from '../components/HeroSection'
 import ProjectListing from '../components/projectListing'
-
-// import decorative graphics
-import decoratorLeaf from '../images/decorator-leaf.png'
+import InfoSection from '../components/InfoSection'
 
 import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
@@ -27,11 +25,6 @@ const IndexPage = () => {
 
   return (
     <Layout>
-      <img
-        src={decoratorLeaf}
-        alt=""
-        sx={{ position: 'absolute', top: '60vh', left: '-70px' }}
-      />
       <Hero />
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
@@ -88,6 +81,7 @@ const IndexPage = () => {
           </Grid>
         </div>
       </ProjectSection>
+      <InfoSection />
     </Layout>
   )
 }
