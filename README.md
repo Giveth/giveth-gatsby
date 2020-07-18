@@ -2,8 +2,10 @@
   Giveth v2
 </h1>
 
+## 🚀 Quick start
 Giveth-2 is a reimagined version of the ["Giveth donation application"](https://github.com/Giveth/giveth-dapp). Users leverage the Ethereum blockchain to distribute and track their donations or enable unstoppable funding for their campaign.
 
+1.  **Create a Gatsby site.**
 The projects aims to simplify the application's options to enable new users without blockchain experience a frictionless experience.
 
 The project is currently in heavy development and does not offer all functionality that is needed for an MVP state (first release goal).
