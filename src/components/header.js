@@ -25,7 +25,7 @@ const HeaderContainer = styled.header`
 
   &.HeaderPlaceholderNotScrolled {
     height: 240px;
-    @media (max-width: 850px) {
+    @media (max-width: 700) {
       height: 160px;
     }
   }
@@ -46,17 +46,31 @@ const HeaderSpan = styled.nav`
   background-color: ${theme.colors.background};
   width: 100%;
   transition: 0.8s;
-  z-index: 100;
-
-  &.HeaderScrolled {
-    padding: 1rem 80px;
-    backdrop-filter: blur(100px);
+  z-index: 200;
+  backdrop-filter: blur(30px);
+  .hide {
+    transition: 0.8s;
+    opacity: 1;
   }
 
-  @media (max-width: 850px) {
+  &.HeaderScrolled {
+    background: ${theme.colors.headerbackground};
+    padding: 1rem 80px;
+
+    .hide {
+      opacity: 0;
+    }
+  }
+
+  @media (max-width: 1030px) {
     padding: 25px;
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, auto);
+    grid-template-rows: auto auto;
+  }
+
+  @media (max-width: 700px) {
+    padding: 25px;
+    grid-template-columns: auto 1fr;
   }
 `
 
@@ -64,6 +78,11 @@ const LogoSpan = styled.span`
   display: grid;
   grid-template-columns: repeat(2, auto);
   align-items: center;
+  justify-content: start;
+  @media (max-width: 1030px) {
+    grid-column: 1;
+    grid-row: 1;
+  }
 `
 
 const MiddleSpan = styled.span`
@@ -72,6 +91,10 @@ const MiddleSpan = styled.span`
   grid-gap: 1em;
   justify-self: center;
   max-width: 290px;
+  @media (max-width: 1030px) {
+    grid-column: 2;
+    grid-row: 2;
+  }
 `
 
 const UserSpan = styled.span`
@@ -79,6 +102,11 @@ const UserSpan = styled.span`
   display: grid;
   grid-template-columns: repeat(4, auto);
   align-items: center;
+  justify-self: end;
+  @media (max-width: 1030px) {
+    grid-row: 1;
+    grid-column: 3;
+  }
 `
 
 const NavLink = styled(Link)`
@@ -105,7 +133,7 @@ const CreateLink = styled(Link)`
 const Login = Loadable(() => import('./torus/login'))
 
 const Header = ({ siteTitle }) => {
-  const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [doLogin] = useMutation(DO_LOGIN)
   // const [doRegister] = useMutation(DO_REGISTER)
@@ -165,70 +193,73 @@ const Header = ({ siteTitle }) => {
         marginBottom: `1.45rem`
       }}
     >
-      {!isMobile ? (
-        <Fragment>
-          <img
-            src={decoratorCloud1}
-            alt=""
-            sx={{
-              position: 'absolute',
-              top: '20px',
-              left: '300px',
-              zIndex: '200'
-            }}
-          />
-          <img
-            src={decoratorCloud2}
-            alt=""
-            sx={{
-              position: 'absolute',
-              top: '20px',
-              right: '-5px',
-              zIndex: '200'
-            }}
-          />
-        </Fragment>
-      ) : null}
-
       <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
+        {!isMobile ? (
+          <Fragment>
+            <img
+              src={decoratorCloud1}
+              alt=""
+              sx={{
+                position: 'absolute',
+                top: '20px',
+                left: '300px'
+              }}
+              className="hide"
+            />
+            <img
+              src={decoratorCloud2}
+              alt=""
+              sx={{
+                position: 'absolute',
+                top: '20px',
+                right: '-5px'
+              }}
+              className="hide"
+            />
+          </Fragment>
+        ) : null}
         <Link
           to="/"
           sx={{
             textDecoration: 'none'
           }}
         >
-          <LogoSpan>
-            {isMobile ? (
-              <img src={logo} alt="logo" width="40px" height="40px" />
-            ) : (
-              <>
-                <img src={logo} alt="logo" width="80px" height="80px" />
-                <Text
-                  pl={3}
-                  sx={{
-                    variant: 'text.default',
-                    color: 'secondary',
-                    fontSize: 3,
-                    fontWeight: 'medium',
-                    textDecoration: 'none'
-                  }}
-                >
-                  THE FUTURE OF GIVING
-                </Text>
-              </>
-            )}
-          </LogoSpan>
+          {isMobile ? (
+            <img src={logo} alt="logo" width="40px" height="40px" />
+          ) : (
+            <LogoSpan>
+              <img src={logo} alt="logo" width="80px" height="80px" />
+              <Text
+                pl={3}
+                sx={{
+                  variant: 'text.default',
+                  color: 'secondary',
+                  fontSize: 3,
+                  fontWeight: 'medium',
+                  textDecoration: 'none'
+                }}
+              >
+                THE FUTURE OF GIVING
+              </Text>
+            </LogoSpan>
+          )}
         </Link>
+
         <MiddleSpan>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/causes">Causes</NavLink>
           <NavLink to="/projects">Projects</NavLink>
         </MiddleSpan>
+
         <UserSpan>
-          <CreateLink to="/create">Create a project</CreateLink>
-          <IconButton>
-            <img src={iconSearch} alt={''} />
-          </IconButton>
+          {isMobile ? null : (
+            <Fragment>
+              <CreateLink to="/create">Create a project</CreateLink>
+              <IconButton>
+                <img src={iconSearch} alt={''} />
+              </IconButton>
+            </Fragment>
+          )}
           <img src={iconVerticalLine} alt={''} />
           <Login onLogin={onLogin} balance={balance} />
         </UserSpan>
