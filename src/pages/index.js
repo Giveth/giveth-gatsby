@@ -1,3 +1,6 @@
+/** @jsx jsx */
+import { jsx } from 'theme-ui'
+
 import React from 'react'
 import { Link } from 'gatsby'
 import { Grid, Box, Button, Heading, Text } from 'theme-ui'
@@ -6,7 +9,10 @@ import { useMediaQuery } from 'react-responsive'
 import Layout from '../components/layout'
 import ProjectListing from '../components/projectListing'
 import { useQuery } from '@apollo/react-hooks'
+
+// import decorative graphics
 import imgPeopleHeader from '../images/people-header.png'
+import decoratorLeaf from '../images/decorator-leaf.png'
 
 import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
@@ -21,12 +27,19 @@ const HeroSection = styled(Grid)`
 `
 
 const HeroImage = styled.div`
-  width: 35vw;
-  height: 63vh;
+  width: 50vw;
+  height: 80vh;
   background: url(${imgPeopleHeader});
   background-position: left top;
   background-repeat: no-repeat;
 `
+
+const HeroText = styled(Box)`
+  position: absolute;
+  padding-left: 80px;
+`
+
+const ProjectSection = styled(Box)``
 
 const IndexPage = () => {
   const { data } = useQuery(FETCH_PROJECTS)
@@ -34,26 +47,82 @@ const IndexPage = () => {
 
   return (
     <Layout>
+      <img
+        src={decoratorLeaf}
+        alt=""
+        sx={{ position: 'absolute', top: '60vh', left: '-70px' }}
+      />
       <HeroSection>
-        <Box p={6}>
+        <div id="placeholder"></div>
+        <HeroText>
           {' '}
-          <Heading sx={{ variant: ['headings.h3'] }}>
+          <Heading
+            sx={{
+              variant: 'headings.h1',
+              fontWeight: 'regular',
+              color: 'secondaryDark'
+            }}
+          >
             Sustainable fundraising for
           </Heading>
-          <Heading sx={{ variant: ['headings.h3', 'fontWeights.bold'] }}>
-            <b>social impact</b>
+          <Heading
+            sx={{
+              variant: 'headings.h1',
+              fontWeight: 'bold',
+              color: 'secondaryDark'
+            }}
+          >
+            social impact
           </Heading>
-          <Text sx={{ variant: ['text.default'] }}>
+          <Text
+            pt={4}
+            pb={2}
+            sx={{
+              variant: 'text.large',
+              width: ['100%', null, '45%'],
+              color: 'secondary',
+              lineHeight: 'taller'
+            }}
+          >
             Our mission is to connect people, ideas, and resources to facilitate
-            and incentivize social resources with a transparent framework for
+            and incentivize social impact with a transparent framework for
             distributing funds.
           </Text>
-          <Link to="/create">
-            <Button mt={4} p={4} sx={{ variant: 'buttons.default' }}>
-              Start raising funds
-            </Button>
-          </Link>
-        </Box>
+          <Grid
+            rows={2}
+            sx={{
+              width: '290px'
+            }}
+          >
+            <Link to="/donate">
+              <Button
+                mt={4}
+                p={4}
+                sx={{
+                  width: '290px',
+                  variant: 'buttons.default'
+                }}
+              >
+                Donate
+              </Button>
+            </Link>
+            <Link
+              to="/create"
+              sx={{
+                variant: 'links.nav',
+                justifySelf: 'center'
+              }}
+            >
+              <Text
+                sx={{
+                  justifySelf: 'center'
+                }}
+              >
+                Start raising funds for your project
+              </Text>
+            </Link>
+          </Grid>
+        </HeroText>
         {isMobile ? null : (
           <Box>
             <HeroImage alt={''} />
@@ -61,7 +130,7 @@ const IndexPage = () => {
         )}
       </HeroSection>
 
-      <Box pt={4} sx={{ variant: 'grayBox' }}>
+      <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
           style={{
             margin: `0 auto`,
@@ -115,7 +184,7 @@ const IndexPage = () => {
               ))}
           </Grid>
         </div>
-      </Box>
+      </ProjectSection>
     </Layout>
   )
 }
