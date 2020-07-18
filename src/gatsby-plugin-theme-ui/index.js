@@ -8,8 +8,10 @@ export default {
     hover: '#DB5CB8',
     muted: '#DFDAE8',
     secondary: '#303B72',
+    secondaryDark: '#29325E',
     accent: '#109CF1',
-    attention: '#E01C6B'
+    attention: '#E01C6B',
+    bodyDark: '#6B7087'
   },
   fonts: {
     body: '"Red Hat Text", sans serif',
@@ -39,7 +41,9 @@ export default {
     body: 1.5,
     heading: 1,
     short: 0.5,
+    button: 1.12,
     tall: 1.3,
+    taller: 1.4,
     tallest: 1.5
   },
   grayBox: {
@@ -91,6 +95,7 @@ export default {
     },
     microbold: {
       fontSize: 0,
+      fontFamily: 'heading',
       fontWeight: 'bold',
       letterSpacing: 'narrow'
     },
@@ -115,7 +120,8 @@ export default {
       fontSize: 11,
       fontWeight: 'medium',
       lineHeight: 'tall',
-      letterSpacing: 'tight'
+      letterSpacing: 'tight',
+      overflowWrap: 'normal'
     },
     h2: {
       fontSize: 9,
@@ -151,26 +157,30 @@ export default {
   },
   buttons: {
     cursor: 'pointer',
-    fontSize: 3,
-    letterSpacing: 'wide',
+    fontFamily: 'body',
+    fontSize: 2,
     textTransform: 'capitalize',
     borderRadius: '48px',
 
     default: {
       cursor: 'pointer',
+      fontFamily: 'body',
       fontSize: 3,
-      letterSpacing: 'wide',
-      textTransform: 'capitalize',
-      borderRadius: '48px'
+      fontWeight: 'bold',
+      lineHeight: 'button',
+      textTransform: ['capitalize', 'uppercase'],
+      borderRadius: '88px'
     },
     small: {
       cursor: 'pointer',
+      fontFamily: 'body',
       fontSize: 2,
       textTransform: 'capitalize',
       borderRadius: '48px'
     },
     tiny: {
       cursor: 'pointer',
+      fontFamily: 'body',
       fontSize: 1,
       textTransform: 'capitalize',
       borderRadius: '48px'
