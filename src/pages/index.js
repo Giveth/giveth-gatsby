@@ -1,32 +1,23 @@
-import React from 'react'
+/** @jsx jsx */
+import { jsx } from 'theme-ui'
+
 import { Link } from 'gatsby'
+import { useQuery } from '@apollo/react-hooks'
+import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Heading, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import { useMediaQuery } from 'react-responsive'
+
 import Layout from '../components/layout'
+import Hero from '../components/HeroSection'
 import ProjectListing from '../components/projectListing'
-import { useQuery } from '@apollo/react-hooks'
-import imgPeopleHeader from '../images/people-header.png'
+import InfoSection from '../components/InfoSection'
 
 import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
 // placeholder image
 import NoImage from '../images/no-image-available.jpg'
 
-const HeroSection = styled(Grid)`
-  grid-template-columns: 1fr auto;
-  @media (max-width: '850px') {
-    grid-template-columns: 1fr;
-  }
-`
-
-const HeroImage = styled.div`
-  width: 35vw;
-  height: 63vh;
-  background: url(${imgPeopleHeader});
-  background-position: left top;
-  background-repeat: no-repeat;
-`
+const ProjectSection = styled(Box)``
 
 const IndexPage = () => {
   const { data } = useQuery(FETCH_PROJECTS)
@@ -34,34 +25,8 @@ const IndexPage = () => {
 
   return (
     <Layout>
-      <HeroSection>
-        <Box p={6}>
-          {' '}
-          <Heading sx={{ variant: ['headings.h3'] }}>
-            Sustainable fundraising for
-          </Heading>
-          <Heading sx={{ variant: ['headings.h3', 'fontWeights.bold'] }}>
-            <b>social impact</b>
-          </Heading>
-          <Text sx={{ variant: ['text.default'] }}>
-            Our mission is to connect people, ideas, and resources to facilitate
-            and incentivize social resources with a transparent framework for
-            distributing funds.
-          </Text>
-          <Link to="/create">
-            <Button mt={4} p={4} sx={{ variant: 'buttons.default' }}>
-              Start raising funds
-            </Button>
-          </Link>
-        </Box>
-        {isMobile ? null : (
-          <Box>
-            <HeroImage alt={''} />
-          </Box>
-        )}
-      </HeroSection>
-
-      <Box pt={4} sx={{ variant: 'grayBox' }}>
+      <Hero />
+      <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
           style={{
             margin: `0 auto`,
@@ -115,7 +80,8 @@ const IndexPage = () => {
               ))}
           </Grid>
         </div>
-      </Box>
+      </ProjectSection>
+      <InfoSection />
     </Layout>
   )
 }
