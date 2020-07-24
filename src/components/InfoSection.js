@@ -17,8 +17,6 @@ import decoratorPuzzleguy from '../images/people-puzzle.png'
 
 const Main = styled(Grid)`
   position: relative;
-  @media (max-width: '850px') {
-  }
   .intextlink {
     color: ${theme.colors.background};
     font-weight: 700;

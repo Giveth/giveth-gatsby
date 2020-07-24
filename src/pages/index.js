@@ -7,6 +7,7 @@ import Layout from '../components/layout'
 import Hero from '../components/HeroSection'
 import ProjectListing from '../components/projectListing'
 import InfoSection from '../components/InfoSection'
+import UpdatesSection from '../components/UpdatesSection'
 
 import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
@@ -77,6 +78,7 @@ const IndexPage = () => {
         </div>
       </ProjectSection>
       <InfoSection />
+      <UpdatesSection />
     </Layout>
   )
 }
