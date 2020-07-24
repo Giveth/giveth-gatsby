@@ -70,7 +70,7 @@ const AddProject = props => {
 
       <TypeForm
         addProject={props.addProject}
-        submitBtnText={'Start raising funds'}
+        submitBtnText='Start raising funds'
         onSubmit={props.onSubmit}
         fields={[
           {

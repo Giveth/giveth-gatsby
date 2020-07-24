@@ -1,13 +1,11 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
-
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import { useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN } from '../apollo/gql/auth'
 import Loadable from '@loadable/component'
-import { IconButton, Text } from 'theme-ui'
+import { IconButton, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
@@ -18,7 +16,6 @@ import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
 import decoratorCloud1 from '../images/decorator-cloud1.png'
 import decoratorCloud2 from '../images/decorator-cloud2.png'
-import decoratorClouds from '../images/decorator-clouds.png'
 
 const HeaderContainer = styled.header`
   transition: 0.8s;
@@ -140,7 +137,7 @@ const Header = ({ siteTitle }) => {
   const [balance, setBalance] = useState(0)
 
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
 
       if (scrollTop > 50) {
@@ -150,7 +147,7 @@ const Header = ({ siteTitle }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   })
@@ -173,8 +170,8 @@ const Header = ({ siteTitle }) => {
       //   process.env.GATSBY_JWT_SECRET
       // )
       // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      //web3.eth.getBalance(user.publicAddress).then(setBalance)
-      console.log(`setting balance to zero`)
+      // web3.eth.getBalance(user.publicAddress).then(setBalance)
+      console.log('setting balance to zero')
       setBalance(0)
       window.location = process.env.GATSBY_BASE_URL
     } catch (error) {
@@ -190,45 +187,45 @@ const Header = ({ siteTitle }) => {
           : 'HeaderPlaceholderNotScrolled'
       }
       style={{
-        marginBottom: `1.45rem`
+        marginBottom: '1.45rem'
       }}
     >
       <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
         {!isMobile ? (
-          <Fragment>
+          <>
             <img
               src={decoratorCloud1}
-              alt=""
+              alt=''
               sx={{
                 position: 'absolute',
                 top: '20px',
                 left: '300px'
               }}
-              className="hide"
+              className='hide'
             />
             <img
               src={decoratorCloud2}
-              alt=""
+              alt=''
               sx={{
                 position: 'absolute',
                 top: '20px',
                 right: '-5px'
               }}
-              className="hide"
+              className='hide'
             />
-          </Fragment>
+          </>
         ) : null}
         <Link
-          to="/"
+          to='/'
           sx={{
             textDecoration: 'none'
           }}
         >
           {isMobile ? (
-            <img src={logo} alt="logo" width="40px" height="40px" />
+            <img src={logo} alt='logo' width='40px' height='40px' />
           ) : (
             <LogoSpan>
-              <img src={logo} alt="logo" width="80px" height="80px" />
+              <img src={logo} alt='logo' width='80px' height='80px' />
               <Text
                 pl={3}
                 sx={{
@@ -246,21 +243,21 @@ const Header = ({ siteTitle }) => {
         </Link>
 
         <MiddleSpan>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/causes">Causes</NavLink>
-          <NavLink to="/projects">Projects</NavLink>
+          <NavLink to='/'>Home</NavLink>
+          <NavLink to='/causes'>Causes</NavLink>
+          <NavLink to='/projects'>Projects</NavLink>
         </MiddleSpan>
 
         <UserSpan>
           {isMobile ? null : (
-            <Fragment>
-              <CreateLink to="/create">Create a project</CreateLink>
+            <>
+              <CreateLink to='/create'>Create a project</CreateLink>
               <IconButton>
-                <img src={iconSearch} alt={''} />
+                <img src={iconSearch} alt='' />
               </IconButton>
-            </Fragment>
+            </>
           )}
-          <img src={iconVerticalLine} alt={''} />
+          <img src={iconVerticalLine} alt='' />
           <Login onLogin={onLogin} balance={balance} />
         </UserSpan>
       </HeaderSpan>
@@ -273,7 +270,7 @@ Header.propTypes = {
 }
 
 Header.defaultProps = {
-  siteTitle: ``
+  siteTitle: ''
 }
 
 export default Header

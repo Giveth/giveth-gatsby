@@ -31,7 +31,7 @@ const Donate = props => {
       gap={1}
       columns={['0px 1fr 1fr']}
     >
-      <Label htmlFor='title'></Label>
+      <Label htmlFor='title' />
       <Input
         ref={register({
           validate: value => value !== 'admin' || 'Nice try!'

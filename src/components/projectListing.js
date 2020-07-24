@@ -106,10 +106,10 @@ const ProjectListing = props => (
           {props.category}
         </Text>
         <IconButton>
-          <img src={iconHeart} alt={''} />
+          <img src={iconHeart} alt='' />
         </IconButton>
         <IconButton>
-          <img src={iconShare} alt={''} />
+          <img src={iconShare} alt='' />
         </IconButton>
       </CardFooter>
     </ProjectCard>

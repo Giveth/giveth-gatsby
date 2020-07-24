@@ -1,10 +1,9 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui/index'
-
-import React, { useState, useEffect, Fragment } from 'react'
-import { Button, Text } from 'theme-ui'
+import { Text, jsx } from 'theme-ui'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
+
+import theme from '../../gatsby-plugin-theme-ui/index'
 
 const AccountDetails = styled.div`
   width: 200px;
@@ -28,10 +27,13 @@ const AccountDetails = styled.div`
 const MenuItem = styled(Text)`
   padding: 0.2rem 16px;
   cursor: pointer;
+  :hover {
+    color: ${theme.colors.primary};
+  }
 `
-const Divider = styled.div`
-  height: 1px;
-  background-color: ${theme.colors.secondary};
+
+const MenuLink = styled.a`
+  text-decoration: none;
 `
 
 const Balance = styled.div`
@@ -49,7 +51,7 @@ const UserDetails = props => {
     address.length
   )}`
 
-  function handleMenu() {
+  function handleMenu () {
     if (active) {
       setActive(false)
     } else {
@@ -58,7 +60,7 @@ const UserDetails = props => {
   }
 
   return (
-    <Fragment>
+    <>
       <div
         style={{
           display: 'flex',
@@ -71,10 +73,10 @@ const UserDetails = props => {
         }}
       >
         <img
-          alt={'user avatar'}
+          alt='user avatar'
           style={{ width: '30px', borderRadius: '15px' }}
           src={user.profileImage}
-          className="avatarimage"
+          className='avatarimage'
         />
         <Text p={1} sx={{ variant: 'text.default' }}>
           {user.name}
@@ -88,39 +90,30 @@ const UserDetails = props => {
           <MenuItem sx={{ variant: 'text.microbold', color: 'bodyDark' }}>
             {truncAddress}
           </MenuItem>
-          <Balance className="balance">
-            <MenuItem sx={{ variant: 'text.small' }} className="balance">
+          <Balance className='balance'>
+            <MenuItem sx={{ variant: 'text.small' }} className='balance'>
               Balance: {balance}
             </MenuItem>
           </Balance>
-          <MenuItem
-            sx={{ variant: 'text.medium', color: 'secondary' }}
-            onClick={logout}
-          >
+          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
             My Account
           </MenuItem>
-          <MenuItem
-            sx={{ variant: 'text.medium', color: 'secondary' }}
-            onClick={logout}
-          >
+          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
             Settings
           </MenuItem>
-          <MenuItem
-            sx={{ variant: 'text.medium', color: 'secondary' }}
-            onClick={logout}
-          >
+          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
             My Projects
           </MenuItem>
-          <MenuItem
-            sx={{ variant: 'text.medium', color: 'secondary' }}
-            onClick={logout}
+          <MenuLink
+            href='https://github.com/Giveth/giveth-2/issues/new/choose'
+            target='_blank'
+            rel='noopener noreferrer'
           >
-            Report a bug
-          </MenuItem>
-          <MenuItem
-            sx={{ variant: 'text.medium', color: 'secondary' }}
-            onClick={logout}
-          >
+            <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
+              Report a bug
+            </MenuItem>
+          </MenuLink>
+          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
             Support
           </MenuItem>
           <MenuItem
@@ -131,7 +124,7 @@ const UserDetails = props => {
           </MenuItem>
         </AccountDetails>
       ) : null}
-    </Fragment>
+    </>
   )
 }
 

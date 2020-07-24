@@ -91,7 +91,7 @@ const TypeForm = props => {
     }
   }
   const showFinalDetails = data => {
-    //console.log(`data : ${JSON.stringify(data, null, 2)}`)
+    // console.log(`data : ${JSON.stringify(data, null, 2)}`)
 
     return (
       <Box as='form' onSubmit={handleSubmit(props.onSubmit)}>
@@ -162,7 +162,7 @@ const TypeForm = props => {
       })
     )
   }
-  //const Component = React.createElement(props.fields[current].component)
+  // const Component = React.createElement(props.fields[current].component)
 
   console.log(`fields : ${JSON.stringify(fields, null, 2)}`)
 

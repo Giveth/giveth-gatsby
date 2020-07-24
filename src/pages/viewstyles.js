@@ -42,8 +42,8 @@ const ViewStyles = () => {
   return (
     <div
       style={{
-        margin: `0 auto`,
-        padding: `0 1.0875rem 1.45rem`
+        margin: '0 auto',
+        padding: '0 1.0875rem 1.45rem'
       }}
     >
       <div
@@ -166,21 +166,21 @@ const ViewStyles = () => {
             <Text sx={{ variant: 'text.styleGuide' }}>Icons</Text>
             <Container>
               <IconButton>
-                <img src={iconHeart} alt={''} />
+                <img src={iconHeart} alt='' />
               </IconButton>
               <br />
               <IconButton>
-                <img src={iconShare} alt={''} />
+                <img src={iconShare} alt='' />
               </IconButton>
               <br />
               <IconButton>
-                <img src={iconUser} alt={''} />
+                <img src={iconUser} alt='' />
               </IconButton>
               <br />
-              <img src={iconVerticalLine} alt={''} />
+              <img src={iconVerticalLine} alt='' />
               <br />
               <IconButton>
-                <img src={iconSearch} alt={''} />
+                <img src={iconSearch} alt='' />
               </IconButton>
             </Container>
           </StyleGuide>
@@ -190,13 +190,13 @@ const ViewStyles = () => {
               Illustrations - People
             </Text>
             <Container>
-              <img src={imgPeopleHeader} alt={''} width='400px' />
+              <img src={imgPeopleHeader} alt='' width='400px' />
               <br />
-              <img src={imgPeopleAnnounce} alt={''} />
+              <img src={imgPeopleAnnounce} alt='' />
               <br />
-              <img src={imgPeoplePuzzle} alt={''} />
+              <img src={imgPeoplePuzzle} alt='' />
               <br />
-              <img src={imgPeopleStretching} alt={''} />
+              <img src={imgPeopleStretching} alt='' />
             </Container>
           </StyleGuide>
 
@@ -205,24 +205,24 @@ const ViewStyles = () => {
               Illustrations - Elements
             </Text>
             <Container>
-              <img src={imgDecoratorCloud1} alt={''} />
+              <img src={imgDecoratorCloud1} alt='' />
               <br />
-              <img src={imgDecoratorCloud2} alt={''} />
+              <img src={imgDecoratorCloud2} alt='' />
               <br />
-              <img src={imgDecoratorElements} alt={''} />
+              <img src={imgDecoratorElements} alt='' />
               <br />
-              <img src={imgDecoratorFizzyRot} alt={''} />
+              <img src={imgDecoratorFizzyRot} alt='' />
               <br />
-              <img src={imgDecoratorFizzy} alt={''} />
+              <img src={imgDecoratorFizzy} alt='' />
               <br />
-              <img src={imgDecoratorLeaf} alt={''} />
+              <img src={imgDecoratorLeaf} alt='' />
             </Container>
           </StyleGuide>
 
           <StyleGuide>
             <Text sx={{ variant: 'text.styleGuide' }}>Other Assets</Text>
             <Container>
-              <img src={noImage} alt={''} />
+              <img src={noImage} alt='' />
             </Container>
           </StyleGuide>
         </Grid>
