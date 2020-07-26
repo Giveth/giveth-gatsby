@@ -2,9 +2,8 @@ import React, { useState } from "react"
 import DirectWebSdk from "@toruslabs/torus-direct-web-sdk"
 import Web3 from "web3"
 import { checkIfLoggedIn, getUser, handleLogout, setUser } from "../services/auth"
-import LoginButton from "../components/loginButton"
-import UserDetails from "../components/userDetails"
-import TorusEmbed from "@toruslabs/torus-embed"
+// import LoginButton from "../components/torus/loginButton"
+// import UserDetails from "../components/torus/userDetails"
 
 const torus = new DirectWebSdk({
   baseUrl: process.env.GATSBY_BASE_URL + "/serviceworker/",
@@ -14,39 +13,28 @@ const torus = new DirectWebSdk({
   enableLogging: process.env.TORUS_DEBUG_LOGGING
 })
 
-const torusEmbed = new TorusEmbed({})
-
 // TODO: use torus builtin provider
-// const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
 
 const torusContext = React.createContext({})
 
-let web3;
 async function initTorus() {
   await torus.init()
 }
 
-let flag = false;
 
 const TorusProvider = props => {
   let user = getUser()
 
+  const { publicAddress, email } = user
+
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
   const [balance, setBalance] = useState(0)
 
-  if (!flag) {
-    flag = true;
-    torusEmbed.init({
-
-      network: {
-        host: "ropsten"
-      }
-    }).then(() => {
-      web3 = new Web3(torusEmbed.provider);
-      web3.eth.getBalance(user.publicAddress).then(result => setBalance(Number(web3.utils.fromWei(result))))
-    })
-
+  if (user && publicAddress) {
+    web3.eth.getBalance(publicAddress).then(result => setBalance(Number(Web3.utils.fromWei(result))))
   }
+
   // const [user, setUser] = useState({})
 
   function logout() {
@@ -66,14 +54,13 @@ const TorusProvider = props => {
       user = await torus.triggerLogin("google", verifierName)
       setUser(user)
       setIsLoggedIn(true)
-      console.log("setIsLoggedIn(true)")
     }
 
     const signedMessage = await web3.eth.accounts.sign(
       "our_secret",
       user.privateKey
     )
-    await props.onLogin(signedMessage, user.publicAddress, user.email)
+    await props.onLogin(signedMessage, publicAddress, email)
   }
 
   // if (isLoggedIn) {

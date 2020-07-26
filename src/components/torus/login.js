@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import {TorusContext} from "../contextProvider/torusProvider"
+import {TorusContext} from "../../contextProvider/torusProvider"
 import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
 import {
   setUser,
