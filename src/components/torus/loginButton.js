@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 
-import iconUser from '../images/icon-user.svg'
+import iconUser from '../../images/icon-user.svg'
 
 const Container = styled.div`
   width: 48px;

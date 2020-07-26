@@ -23,7 +23,7 @@ import imgDecoratorElements from '../images/decorator-elements.png'
 import imgDecoratorFizzy from '../images/decorator-fizzy-square.png'
 import imgDecoratorFizzyRot from '../images/decorator-fizzy-square-rotated.png'
 import imgDecoratorLeaf from '../images/decorator-leaf.png'
-import UserDetails from '../components/userDetails'
+import UserDetails from '../components/torus/userDetails'
 
 const StyleGuide = styled.div`
   border: 1px solid lightgray;

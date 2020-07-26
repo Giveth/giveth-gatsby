@@ -9,7 +9,7 @@ const FETCH_PROJECTS = gql`
 `
 const ADD_PROJECT = gql`
   mutation($title: String!, $description: String!) {
-    addProject(title: $title, description: $description) {
+    addProjectSimple(title: $title, description: $description) {
       title
       description
     }
