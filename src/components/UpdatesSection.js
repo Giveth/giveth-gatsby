@@ -1,12 +1,7 @@
 /** @jsx jsx */
-import React from 'react'
-import { Link } from 'gatsby'
-import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Button, Input, Heading, Text, jsx } from 'theme-ui'
-import theme from '../gatsby-plugin-theme-ui/index'
+import { Grid, Box, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediumFeed } from './MediumFeed'
-import addToMailchimp from 'gatsby-plugin-mailchimp'
 import MailchimpSignup from './MailchimpSignup'
 
 const Main = styled(Grid)`
@@ -23,13 +18,15 @@ const UpdatesSection = () => {
           Always get the latest updates by subscribing to our newsletter.
         </Heading>
         <MailchimpSignup />
-        <Box>{mediumPosts.allMediumPost.edges.map(({node}) => {
-          const {id, title} = node
-          return (
-            <Grid>
-              <Text key={id}>{title}</Text>
-            </Grid>
-            )})}
+        <Box>
+          {mediumPosts.allMediumPost.edges.map(({ node }) => {
+            const { id, title } = node
+            return (
+              <Grid key={id}>
+                <Text>{title}</Text>
+              </Grid>
+            )
+          })}
         </Box>
       </Box>
     </Main>
