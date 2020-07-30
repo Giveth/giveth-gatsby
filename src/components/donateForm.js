@@ -1,10 +1,10 @@
-import React from "react"
-import { Button, Input, Label } from "theme-ui"
-import { useForm } from "react-hook-form"
-import styled from "@emotion/styled"
-import BigNumber from "bignumber.js"
+import React from 'react'
+import { Button, Input, Label } from 'theme-ui'
+import { useForm } from 'react-hook-form'
+import styled from '@emotion/styled'
+import BigNumber from 'bignumber.js'
 
-import theme from "../gatsby-plugin-theme-ui/index"
+import theme from '../gatsby-plugin-theme-ui/index'
 
 const DonationForm = styled.form`
   display: grid;
@@ -27,7 +27,7 @@ const Donate = props => {
     doDonate(values)
   }
 
-  const maxAmount = new BigNumber(props.maxAmount || 0);
+  const maxAmount = new BigNumber(props.maxAmount || 0)
 
   return (
     <DonationForm
@@ -35,17 +35,18 @@ const Donate = props => {
       gap={1}
       columns={['0px 1fr 1fr']}
     >
-      <Label htmlFor='title'/>
+      <Label htmlFor="title" />
       <Input
         ref={register({
-          validate: value => maxAmount.gte(value) || 'Donation amount is more than your balance',
+          validate: value =>
+            maxAmount.gte(value) || 'Donation amount is more than your balance'
         })}
-        name='amount'
+        name="amount"
         mb={3}
-        placeholder='Amount'
+        placeholder="Amount"
       />
 
-      <Button sx={{ variant: 'buttons.tiny' }} className='donatebutton'>
+      <Button sx={{ variant: 'buttons.tiny' }} className="donatebutton">
         Donate
       </Button>
     </DonationForm>

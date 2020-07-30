@@ -1,12 +1,6 @@
-import React, { useContext, useState } from "react"
-import {TorusContext} from "../../contextProvider/torusProvider"
+import React, { useContext, useState } from 'react'
+import { TorusContext } from '../../contextProvider/torusProvider'
 import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
-import {
-  setUser,
-  checkIfLoggedIn,
-  getUser,
-  handleLogout
-} from '../../services/auth'
 import Web3 from 'web3'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
@@ -21,12 +15,12 @@ const torus = new DirectWebSdk({
   enableLogging: process.env.TORUS_DEBUG_LOGGING
 })
 
-async function initTorus () {
+async function initTorus() {
   await torus.init()
 }
 
 const Login = props => {
-  const {isLoggedIn, login, logout, user, balance} = useContext(TorusContext);
+  const { isLoggedIn, login, logout, user, balance } = useContext(TorusContext)
   if (!isLoggedIn) {
     return <LoginButton login={login} />
   } else {

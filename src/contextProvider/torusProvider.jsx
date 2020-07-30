@@ -1,12 +1,17 @@
-import React, { useState } from "react"
-import DirectWebSdk from "@toruslabs/torus-direct-web-sdk"
-import Web3 from "web3"
-import { checkIfLoggedIn, getUser, handleLogout, setUser } from "../services/auth"
+import React, { useState } from 'react'
+import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
+import Web3 from 'web3'
+import {
+  checkIfLoggedIn,
+  getUser,
+  handleLogout,
+  setUser
+} from '../services/auth'
 // import LoginButton from "../components/torus/loginButton"
 // import UserDetails from "../components/torus/userDetails"
 
 const torus = new DirectWebSdk({
-  baseUrl: process.env.GATSBY_BASE_URL + "/serviceworker/",
+  baseUrl: process.env.GATSBY_BASE_URL + '/serviceworker/',
   GOOGLE_CLIENT_ID: process.env.GATSBY_GOOGLE_CLIENT_ID,
   proxyContractAddress: process.env.GATSBY_PROXY_CONTRACT_ADDRESS,
   network: process.env.GATSBY_NETWORK,
@@ -22,7 +27,6 @@ async function initTorus() {
   await torus.init()
 }
 
-
 const TorusProvider = props => {
   let user = getUser()
 
@@ -32,7 +36,9 @@ const TorusProvider = props => {
   const [balance, setBalance] = useState(0)
 
   if (user && publicAddress) {
-    web3.eth.getBalance(publicAddress).then(result => setBalance(Number(Web3.utils.fromWei(result))))
+    web3.eth
+      .getBalance(publicAddress)
+      .then(result => setBalance(Number(Web3.utils.fromWei(result))))
   }
 
   // const [user, setUser] = useState({})
@@ -48,16 +54,16 @@ const TorusProvider = props => {
 
     const verifierName = process.env.GATSBY_VERIFIER_NAME
       ? process.env.GATSBY_VERIFIER_NAME
-      : "google-giveth2"
+      : 'google-giveth2'
 
     if (!isLoggedIn) {
-      user = await torus.triggerLogin("google", verifierName)
+      user = await torus.triggerLogin('google', verifierName)
       setUser(user)
       setIsLoggedIn(true)
     }
 
     const signedMessage = await web3.eth.accounts.sign(
-      "our_secret",
+      'our_secret',
       user.privateKey
     )
     await props.onLogin(signedMessage, publicAddress, email)
@@ -69,13 +75,15 @@ const TorusProvider = props => {
   //   })
   // }
   return (
-    <torusContext.Provider value={{
-      isLoggedIn,
-      login,
-      logout,
-      balance,
-      user
-    }}>
+    <torusContext.Provider
+      value={{
+        isLoggedIn,
+        login,
+        logout,
+        balance,
+        user
+      }}
+    >
       {props.children}
     </torusContext.Provider>
   )

@@ -5,15 +5,15 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
-import PropTypes from "prop-types"
-import { useStaticQuery, graphql } from "gatsby"
-import { ThemeProvider } from "theme-ui"
-import theme from "../gatsby-plugin-theme-ui/index"
-import Header from "./header"
-import TorusProvider from "../contextProvider/torusProvider"
-import { useMutation } from "@apollo/react-hooks"
-import { DO_LOGIN } from "../apollo/gql/auth"
+import React from 'react'
+import PropTypes from 'prop-types'
+import { useStaticQuery, graphql } from 'gatsby'
+import { ThemeProvider } from 'theme-ui'
+import theme from '../gatsby-plugin-theme-ui/index'
+import Header from './header'
+import TorusProvider from '../contextProvider/torusProvider'
+import { useMutation } from '@apollo/react-hooks'
+import { DO_LOGIN } from '../apollo/gql/auth'
 // import './layout.css'
 
 const Layout = ({ children }) => {
@@ -58,17 +58,17 @@ const Layout = ({ children }) => {
   return (
     <TorusProvider onLogin={onLogin}>
       <ThemeProvider theme={theme}>
-        <Header siteTitle={data.site.siteMetadata.title}/>
+        <Header siteTitle={data.site.siteMetadata.title} />
         <div
           sx={{
             // applies width 100% to all viewport widths,
             // width 50% above the first breakpoint,
             // and 25% above the next breakpoint
-            width: ["100%", "50%", "25%"]
+            width: ['100%', '50%', '25%']
           }}
         >
           <main>{children}</main>
-          <footer/>
+          <footer />
         </div>
       </ThemeProvider>
     </TorusProvider>
