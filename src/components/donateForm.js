@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Input, Label } from 'theme-ui'
+import { Label, Input, Button } from 'theme-ui'
 import { useForm } from 'react-hook-form'
 import styled from '@emotion/styled'
 import BigNumber from 'bignumber.js'
