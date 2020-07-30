@@ -35,18 +35,18 @@ const Donate = props => {
       gap={1}
       columns={['0px 1fr 1fr']}
     >
-      <Label htmlFor="title" />
+      <Label htmlFor='title' />
       <Input
         ref={register({
           validate: value =>
             maxAmount.gte(value) || 'Donation amount is more than your balance'
         })}
-        name="amount"
+        name='amount'
         mb={3}
-        placeholder="Amount"
+        placeholder='Amount'
       />
 
-      <Button sx={{ variant: 'buttons.tiny' }} className="donatebutton">
+      <Button sx={{ variant: 'buttons.tiny' }} className='donatebutton'>
         Donate
       </Button>
     </DonationForm>
