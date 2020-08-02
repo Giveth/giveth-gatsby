@@ -75,6 +75,3 @@ yarn-error.log
 
 #Dolphin directory listing
 .directory
-
-#VScode
-.vscode
