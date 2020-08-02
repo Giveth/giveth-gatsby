@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Button, Heading, Link, Input, Textarea } from 'theme-ui'
-import { useForm, setValue } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
-const TypeForm = props => {
+const TypeForm = (props) => {
   const [current, setCurrent] = useState(0)
   const [fields, setFields] = useState([])
   const currentRef = useRef(null)
 
-  const { handleSubmit, register } = useForm()
+  const { handleSubmit, register, setValue } = useForm()
   // const onSubmit = values => {
   //   console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
 
