@@ -61,20 +61,15 @@ module.exports = {
       }
     },
     {
-      resolve: 'gatsby-plugin-prefetch-google-fonts',
+      resolve: 'gatsby-plugin-google-fonts',
       options: {
         fonts: [
-          {
-            family: 'Red Hat Display',
-            variants: ['400', '500', '700']
-          },
-          {
-            family: 'Red Hat Text',
-            variants: ['400', '500', '700']
-          }
+          'red hat display',
+          'red hat text' // you can also specify font weights and styles
         ]
       }
     }
+
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
