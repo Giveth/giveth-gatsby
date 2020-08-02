@@ -75,6 +75,7 @@ const IndexPage = () => {
                   listingId={project.title + '-' + index}
                   key={project.title + '-' + index}
                   name={project.title}
+                  donateAddress={project.donateAddress}
                   image={NoImage}
                 />
               ))}
