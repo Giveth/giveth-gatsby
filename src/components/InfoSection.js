@@ -1,5 +1,4 @@
 /** @jsx jsx */
-import React from 'react'
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Text, jsx } from 'theme-ui'
@@ -31,6 +30,10 @@ const Main = styled(Grid)`
   }
 `
 
+const Decorator = styled.div`
+  position: absolute;
+`
+
 const InfoSection = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
@@ -42,11 +45,7 @@ const InfoSection = () => {
         backgroundColor: 'secondary'
       }}
     >
-      <Box
-        pt='100px'
-        pb='60px'
-        sx={{ justifySelf: 'center', textAlign: 'center' }}
-      >
+      <Box pt='100px' sx={{ justifySelf: 'center', textAlign: 'center' }}>
         <Text pb={3} sx={{ variant: 'headings.h2' }}>
           What is Giveth?
         </Text>
@@ -129,7 +128,8 @@ const InfoSection = () => {
             justifySelf: 'end',
             alignContent: 'start',
             textAlign: 'center',
-            maxWidth: '360px'
+            maxWidth: '360px',
+            maxHeight: '400px'
           }}
         >
           <Text sx={{ variant: 'headings.h4' }}>For Makers</Text>
@@ -146,8 +146,12 @@ const InfoSection = () => {
             </Button>
           </Link>
         </Grid>
-        <Box pb={5}>
-          <img src={decoratorPuzzleguy} alt='' />
+        <Box sx={{ position: 'relative', bottom: '-12px' }}>
+          {isMobile ? (
+            <div sx={{ height: '20px' }} />
+          ) : (
+            <img src={decoratorPuzzleguy} alt='' />
+          )}
         </Box>
         <Grid
           p={2}
@@ -176,7 +180,7 @@ const InfoSection = () => {
         </Grid>
       </Grid>
       {!isMobile ? (
-        <>
+        <Decorator>
           <img
             src={decoratorCloud1}
             alt=''
@@ -211,12 +215,12 @@ const InfoSection = () => {
             src={decoratorFizzysquare}
             alt=''
             sx={{
-              position: 'absolute',
-              top: '70vh',
-              right: '40px'
+              position: 'relative',
+              top: '710px',
+              right: '-90vw'
             }}
           />
-        </>
+        </Decorator>
       ) : null}
     </Main>
   )

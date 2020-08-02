@@ -1,8 +1,7 @@
 /** @jsx jsx */
-import { Text, jsx } from 'theme-ui'
-import React, { useState } from 'react'
+import { Button, Text, jsx } from 'theme-ui'
+import { useState } from 'react'
 import styled from '@emotion/styled'
-
 import theme from '../../gatsby-plugin-theme-ui/index'
 
 const AccountDetails = styled.div`
@@ -41,7 +40,7 @@ const Balance = styled.div`
   padding: 0 0.5rem;
 `
 
-const UserDetails = props => {
+const UserDetails = (props) => {
   const { user, balance, logout } = props
   const [active, setActive] = useState(false)
 
@@ -51,7 +50,7 @@ const UserDetails = props => {
     address.length
   )}`
 
-  function handleMenu () {
+  const handleMenu = (e) => {
     if (active) {
       setActive(false)
     } else {
@@ -60,28 +59,31 @@ const UserDetails = props => {
   }
 
   return (
-    <>
-      <div
+    <div>
+      <Button
+        sx={{ variant: 'buttons.nofill' }}
         style={{
           display: 'flex',
           cursor: 'pointer',
           alignItems: 'center',
-          padding: '0.5rem'
+          padding: '0.5rem',
+          border: '0'
         }}
         onClick={() => {
           handleMenu()
         }}
       >
         <img
-          alt='user avatar'
+          alt=''
           style={{ width: '30px', borderRadius: '15px' }}
           src={user.profileImage}
           className='avatarimage'
         />
-        <Text p={1} sx={{ variant: 'text.default' }}>
+
+        <Text p={1} sx={{ variant: 'text.default', fontWeight: 'normal' }}>
           {user.name}
         </Text>
-      </div>
+      </Button>
       {active ? (
         <AccountDetails>
           <MenuItem sx={{ variant: 'text.overlineSmall', color: 'bodyDark' }}>
@@ -124,7 +126,7 @@ const UserDetails = props => {
           </MenuItem>
         </AccountDetails>
       ) : null}
-    </>
+    </div>
   )
 }
 

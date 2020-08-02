@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import { useMutation } from '@apollo/react-hooks'
@@ -57,6 +57,10 @@ const HeaderSpan = styled.nav`
     .hide {
       opacity: 0;
     }
+
+    @media (max-width: 700px) {
+      padding: 25px;
+    }
   }
 
   @media (max-width: 1030px) {
@@ -76,6 +80,7 @@ const LogoSpan = styled.span`
   grid-template-columns: repeat(2, auto);
   align-items: center;
   justify-content: start;
+
   @media (max-width: 1030px) {
     grid-column: 1;
     grid-row: 1;
@@ -125,6 +130,10 @@ const CreateLink = styled(Link)`
   :hover {
     color: ${theme.colors.accent};
   }
+`
+
+const Decorator = styled.div`
+  position: absolute;
 `
 
 const Login = Loadable(() => import('./torus/login'))
@@ -192,7 +201,7 @@ const Header = ({ siteTitle }) => {
     >
       <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
         {!isMobile ? (
-          <>
+          <Decorator>
             <img
               src={decoratorCloud1}
               alt=''
@@ -213,7 +222,7 @@ const Header = ({ siteTitle }) => {
               }}
               className='hide'
             />
-          </>
+          </Decorator>
         ) : null}
         <Link
           to='/'
@@ -225,7 +234,11 @@ const Header = ({ siteTitle }) => {
             <img src={logo} alt='logo' width='40px' height='40px' />
           ) : (
             <LogoSpan>
-              <img src={logo} alt='logo' width='80px' height='80px' />
+              {hasScrolled ? (
+                <img src={logo} alt='logo' width='50px' height='50px' />
+              ) : (
+                <img src={logo} alt='logo' width='80px' height='80px' />
+              )}
               <Text
                 pl={3}
                 sx={{
@@ -250,12 +263,12 @@ const Header = ({ siteTitle }) => {
 
         <UserSpan>
           {isMobile ? null : (
-            <>
+            <span>
               <CreateLink to='/create'>Create a project</CreateLink>
               <IconButton>
                 <img src={iconSearch} alt='' />
               </IconButton>
-            </>
+            </span>
           )}
           <img src={iconVerticalLine} alt='' />
           <Login onLogin={onLogin} balance={balance} />
