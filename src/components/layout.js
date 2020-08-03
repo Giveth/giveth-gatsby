@@ -65,18 +65,20 @@ const Layout = ({ children }) => {
   return (
     <TorusProvider onLogin={onLogin}>
       <ThemeProvider theme={theme}>
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <div
-          sx={{
-            // applies width 100% to all viewport widths,
-            // width 50% above the first breakpoint,
-            // and 25% above the next breakpoint
-            width: ['100%', '50%', '25%']
-          }}
-        >
-          <main>{children}</main>
-          <footer />
-        </div>
+        <Provider template={AlertTemplate} {...AlertOptions}>
+          <Header siteTitle={data.site.siteMetadata.title} />
+          <div
+            sx={{
+              // applies width 100% to all viewport widths,
+              // width 50% above the first breakpoint,
+              // and 25% above the next breakpoint
+              width: ['100%', '50%', '25%']
+            }}
+          >
+            <main>{children}</main>
+            <footer />
+          </div>
+        </Provider>
       </ThemeProvider>
     </TorusProvider>
   )
