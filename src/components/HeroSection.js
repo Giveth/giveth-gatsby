@@ -1,9 +1,7 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
-
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Button, Heading, Text } from 'theme-ui'
+import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 
 // import decorative graphics
@@ -40,10 +38,10 @@ const Hero = () => {
     <HeroSection>
       <img
         src={decoratorLeaf}
-        alt=""
+        alt=''
         sx={{ position: 'absolute', bottom: '10vh', left: '-70px' }}
       />
-      <div id="placeholder"></div>
+      <div id='placeholder' />
       <HeroText p={['10px', null, '80px']}>
         {' '}
         <Heading
@@ -88,7 +86,7 @@ const Hero = () => {
             width: '290px'
           }}
         >
-          <Link to="/donate">
+          <Link to='/donate'>
             <Button
               mt={4}
               p={4}
@@ -101,7 +99,7 @@ const Hero = () => {
             </Button>
           </Link>
           <Link
-            to="/create"
+            to='/create'
             sx={{
               variant: 'links.nav',
               justifySelf: 'center'
@@ -118,7 +116,7 @@ const Hero = () => {
         </Grid>
       </HeroText>
       <Box sx={{ minHeight: '80vh' }}>
-        {isMobile ? null : <HeroImage alt={''} />}
+        {isMobile ? null : <HeroImage alt='' />}
       </Box>
     </HeroSection>
   )

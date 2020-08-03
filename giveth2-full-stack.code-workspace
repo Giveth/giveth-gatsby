@@ -1,0 +1,21 @@
+{
+	"extensions": {
+		"recommendations": [
+			//Prettier is needed to conveniently format on save
+			"esbenp.prettier-vscode",
+			//And even better correctly lint everything according to standardJS
+			"numso.prettier-standard-vscode",
+			//To see our status with StandardJS we can use problem highlighting - in hindsight, properly configured this could be all we need
+			"chenxsan.vscode-standardjs"
+		]
+	},
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../impact-graph"
+		}
+	],
+	"settings": {}
+}

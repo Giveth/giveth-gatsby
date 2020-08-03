@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Button, Heading, Link, Input, Textarea } from 'theme-ui'
-import { useForm, setValue } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
-const TypeForm = props => {
+const TypeForm = (props) => {
   const [current, setCurrent] = useState(0)
   const [fields, setFields] = useState([])
   const currentRef = useRef(null)
 
-  const { handleSubmit, register } = useForm()
+  const { handleSubmit, register, setValue } = useForm()
   // const onSubmit = values => {
   //   console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
 
@@ -91,7 +91,7 @@ const TypeForm = props => {
     }
   }
   const showFinalDetails = data => {
-    //console.log(`data : ${JSON.stringify(data, null, 2)}`)
+    // console.log(`data : ${JSON.stringify(data, null, 2)}`)
 
     return (
       <Box as='form' onSubmit={handleSubmit(props.onSubmit)}>
@@ -162,7 +162,7 @@ const TypeForm = props => {
       })
     )
   }
-  //const Component = React.createElement(props.fields[current].component)
+  // const Component = React.createElement(props.fields[current].component)
 
   console.log(`fields : ${JSON.stringify(fields, null, 2)}`)
 

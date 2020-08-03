@@ -9,12 +9,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
 import { ThemeProvider } from 'theme-ui'
+import { positions, Provider } from 'react-alert'
+import AlertTemplate from 'react-alert-template-mui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 import TorusProvider from '../contextProvider/torusProvider'
 import { useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN } from '../apollo/gql/auth'
 // import './layout.css'
+
+const AlertOptions = {
+  timeout: 5000,
+  position: positions.BOTTOM_CENTER
+}
 
 const Layout = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -58,18 +65,20 @@ const Layout = ({ children }) => {
   return (
     <TorusProvider onLogin={onLogin}>
       <ThemeProvider theme={theme}>
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <div
-          sx={{
-            // applies width 100% to all viewport widths,
-            // width 50% above the first breakpoint,
-            // and 25% above the next breakpoint
-            width: ['100%', '50%', '25%']
-          }}
-        >
-          <main>{children}</main>
-          <footer />
-        </div>
+        <Provider template={AlertTemplate} {...AlertOptions}>
+          <Header siteTitle={data.site.siteMetadata.title} />
+          <div
+            sx={{
+              // applies width 100% to all viewport widths,
+              // width 50% above the first breakpoint,
+              // and 25% above the next breakpoint
+              width: ['100%', '50%', '25%']
+            }}
+          >
+            <main>{children}</main>
+            <footer />
+          </div>
+        </Provider>
       </ThemeProvider>
     </TorusProvider>
   )

@@ -18,50 +18,58 @@ if (typeof atob === 'undefined') {
 
 module.exports = {
   siteMetadata: {
-    title: `Giveth Tor.us`,
-    description: `The future of giving`,
-    author: `@giveth`
+    title: 'Giveth Simple Donation Application',
+    description: 'The future of giving',
+    author: '@giveth'
   },
   plugins: [
-    `gatsby-plugin-theme-ui`,
-    `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-emotion`,
+    'gatsby-plugin-theme-ui',
+    'gatsby-plugin-react-helmet',
+    'gatsby-plugin-emotion',
     {
-      resolve: `gatsby-source-filesystem`,
+      resolve: 'gatsby-source-filesystem',
       options: {
-        name: `images`,
+        name: 'images',
         path: `${__dirname}/src/images`
       }
     },
-    `gatsby-transformer-sharp`,
-    `gatsby-plugin-sharp`,
     {
-      resolve: `gatsby-plugin-manifest`,
+      resolve: 'gatsby-source-medium',
       options: {
-        name: `gatsby-starter-default`,
-        short_name: `starter`,
-        start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
-        display: `minimal-ui`,
-        icon: `src/images/gatsby-icon.png` // This path is relative to the root of the site.
+        username: 'giveth'
       }
     },
     {
-      resolve: `gatsby-plugin-prefetch-google-fonts`,
+      resolve: 'gatsby-plugin-mailchimp',
+      options: {
+        endpoint: process.env.GATSBY_MAILCHIMP_APILINK, // string; add your MC list endpoint here; see instructions below
+        timeout: 3500 // number; the amount of time, in milliseconds, that you want to allow mailchimp to respond to your request before timing out. defaults to 3500
+      }
+    },
+    'gatsby-transformer-sharp',
+    'gatsby-plugin-sharp',
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        name: 'gatsby-starter-default',
+        short_name: 'starter',
+        start_url: '/',
+        background_color: '#663399',
+        theme_color: '#663399',
+        display: 'minimal-ui',
+        icon: 'src/images/gatsby-icon.png' // This path is relative to the root of the site.
+      }
+    },
+    {
+      resolve: 'gatsby-plugin-google-fonts',
       options: {
         fonts: [
-          {
-            family: `Red Hat Display`,
-            variants: [`400`, `500`, `700`]
-          },
-          {
-            family: `Red Hat Text`,
-            variants: [`400`, `500`, `700`]
-          }
+          'red hat display',
+          'red hat text' // you can also specify font weights and styles
         ]
       }
     }
+
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,

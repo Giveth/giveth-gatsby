@@ -1,10 +1,7 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
-
-import React, { Fragment } from 'react'
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Button, Heading, Text } from 'theme-ui'
+import { Grid, Box, Button, Text, jsx } from 'theme-ui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import styled from '@emotion/styled'
 
@@ -19,8 +16,6 @@ import decoratorPuzzleguy from '../images/people-puzzle.png'
 
 const Main = styled(Grid)`
   position: relative;
-  @media (max-width: '850px') {
-  }
   .intextlink {
     color: ${theme.colors.background};
     font-weight: 700;
@@ -35,6 +30,10 @@ const Main = styled(Grid)`
   }
 `
 
+const Decorator = styled.div`
+  position: absolute;
+`
+
 const InfoSection = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
@@ -46,11 +45,7 @@ const InfoSection = () => {
         backgroundColor: 'secondary'
       }}
     >
-      <Box
-        pt={'100px'}
-        pb={'60px'}
-        sx={{ justifySelf: 'center', textAlign: 'center' }}
-      >
+      <Box pt='100px' sx={{ justifySelf: 'center', textAlign: 'center' }}>
         <Text pb={3} sx={{ variant: 'headings.h2' }}>
           What is Giveth?
         </Text>
@@ -59,8 +54,9 @@ const InfoSection = () => {
           world a better place.
         </Text>
         <a
-          href="https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8"
-          target="_blank"
+          href='https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8'
+          target='_blank'
+          rel='noopener noreferrer'
         >
           <Button sx={{ variant: 'buttons.nofill', background: 'unset' }}>
             Read our story on the future of giving
@@ -72,7 +68,7 @@ const InfoSection = () => {
         sx={{ justifyItems: 'center', textAlign: 'center' }}
       >
         <Box sx={{ maxWidth: '320px' }}>
-          <img src={decoratorAltruistic} alt="" heigth="70px" />
+          <img src={decoratorAltruistic} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Altruistic</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
             We’re building a completely free, open-source platform for
@@ -81,7 +77,7 @@ const InfoSection = () => {
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
-          <img src={decoratorDecentralized} alt="" heigth="70px" />
+          <img src={decoratorDecentralized} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Decentralized</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
             We experiment with decentralized Communication initiatives for
@@ -89,7 +85,7 @@ const InfoSection = () => {
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
-          <img src={decoratorCommunity} alt="" heigth="70px" />
+          <img src={decoratorCommunity} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Community</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
             Giving should be all about connecting the Givers with the Makers,
@@ -99,7 +95,11 @@ const InfoSection = () => {
         </Box>
       </Grid>
       <Box pt={4} pb={6} sx={{ justifySelf: 'center', textAlign: 'center' }}>
-        <a href="https://giveth.io/join" target="_blank">
+        <a
+          href='https://giveth.io/join'
+          target='_blank'
+          rel='noopener noreferrer'
+        >
           <Button
             sx={{
               variant: 'buttons.default',
@@ -128,25 +128,30 @@ const InfoSection = () => {
             justifySelf: 'end',
             alignContent: 'start',
             textAlign: 'center',
-            maxWidth: '360px'
+            maxWidth: '360px',
+            maxHeight: '400px'
           }}
         >
           <Text sx={{ variant: 'headings.h4' }}>For Makers</Text>
           <Text pb={3} sx={{ variant: 'text.paragraph' }}>
             Create a Projct and get donations out of the Giveth system.{' '}
-            <Link to="/create" className="intextlink">
+            <Link to='/create' className='intextlink'>
               Create your project
             </Link>{' '}
             and start raising funds.
           </Text>
-          <Link to="/create">
+          <Link to='/create'>
             <Button sx={{ variant: 'buttons.default' }}>
               Create a project
             </Button>
           </Link>
         </Grid>
-        <Box pb={5}>
-          <img src={decoratorPuzzleguy} alt="" />
+        <Box sx={{ position: 'relative', bottom: '-12px' }}>
+          {isMobile ? (
+            <div sx={{ height: '20px' }} />
+          ) : (
+            <img src={decoratorPuzzleguy} alt='' />
+          )}
         </Box>
         <Grid
           p={2}
@@ -162,12 +167,12 @@ const InfoSection = () => {
           <Text sx={{ variant: 'text.paragraph' }}>
             Use our platform to give donations to a cause or a project. Easily
             donate to the{' '}
-            <Link to="/causes" className="intextlink">
+            <Link to='/causes' className='intextlink'>
               Cause
             </Link>{' '}
             or Project you most care about.
           </Text>
-          <Link to="/donate">
+          <Link to='/donate'>
             <Button sx={{ variant: 'buttons.default' }}>
               Donate to a project
             </Button>
@@ -175,47 +180,47 @@ const InfoSection = () => {
         </Grid>
       </Grid>
       {!isMobile ? (
-        <Fragment>
+        <Decorator>
           <img
             src={decoratorCloud1}
-            alt=""
+            alt=''
             sx={{
               position: 'absolute',
               top: '150px',
               left: '70px'
             }}
-            className="semitransparent"
+            className='semitransparent'
           />
           <img
             src={decoratorCloud2}
-            alt=""
+            alt=''
             sx={{
               position: 'absolute',
               top: '60px',
               left: '260px'
             }}
-            className="semitransparent"
+            className='semitransparent'
           />
           <img
             src={decoratorCloud2}
-            alt=""
+            alt=''
             sx={{
               position: 'absolute',
               top: '130px',
               right: '40px'
             }}
-            className="semitransparent"
+            className='semitransparent'
           />
           <img
             src={decoratorFizzysquare}
-            alt=""
+            alt=''
             sx={{
-              position: 'absolute',
-              top: '70vh',
-              right: '40px'
+              position: 'relative',
+              top: '710px',
+              right: '-90vw'
             }}
           />
-        </Fragment>
+        </Decorator>
       ) : null}
     </Main>
   )

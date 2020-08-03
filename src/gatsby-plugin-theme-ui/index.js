@@ -14,12 +14,13 @@ export default {
     attention: '#E01C6B',
     bodyDark: '#6B7087',
     anotherGrey: '#C9D0E8',
-    lightestBlue: '#EDF0FA'
+    lightestBlue: '#EDF0FA',
+    lightestGrey: '#AAAFCA'
   },
   fonts: {
-    body: '"Red Hat Text", sans serif',
-    heading: '"Red Hat Display", sans serif',
-    monospace: '"Inconsolata", monospace'
+    body: 'Red Hat Text, sans serif',
+    heading: 'Red Hat Display, sans serif',
+    monospace: 'Inconsolata, monospace'
   },
   fontSizes: [10, 12, 14, 16, 18, 20, 25, 32, 41, 52, 64, 66],
   fontWeights: {
@@ -72,6 +73,10 @@ export default {
       fontSize: 3,
       fontFamily: 'body'
     },
+    larger: {
+      fontSize: 4,
+      fontFamily: 'body'
+    },
     large: {
       fontSize: 5,
       fontFamily: 'body'
@@ -86,13 +91,15 @@ export default {
       fontSize: 2,
       fontFamily: 'heading',
       fontWeight: 'medium',
-      letterSpacing: 'widest',
-      textTransform: 'uppercase'
+      letterSpacing: 'more',
+      textTransform: 'uppercase',
+      color: 'bodyDark'
     },
     overlineSmall: {
       fontSize: 0,
       fontFamily: 'heading',
       fontWeight: 'medium',
+      lineHeight: 'tallest',
       textTransform: 'uppercase'
     },
     caption: {
@@ -166,17 +173,18 @@ export default {
   },
   forms: {
     input: {
-      border: '0',
-      padding: '20px'
+      border: '2px solid',
+      borderRadius: '56px',
+      borderColor: 'lightestGrey',
+      padding: '20px',
+      '&:focus': {
+        outline: 'none',
+        borderRadius: '56px',
+        borderColor: 'primary'
+      }
     }
   },
   buttons: {
-    cursor: 'pointer',
-    fontFamily: 'body',
-    fontSize: 2,
-    textTransform: 'capitalize',
-    borderRadius: '48px',
-
     default: {
       cursor: 'pointer',
       fontFamily: 'body',
@@ -184,7 +192,13 @@ export default {
       fontWeight: 'bold',
       lineHeight: 'button',
       textTransform: ['capitalize', 'uppercase'],
-      borderRadius: '88px'
+      borderRadius: '88px',
+      '&:focus': {
+        outline: 'none'
+      },
+      '&:hover': {
+        scale: '1.1'
+      }
     },
     small: {
       cursor: 'pointer',
@@ -220,6 +234,17 @@ export default {
       textDecoration: 'none',
       color: 'primary',
       cursor: 'pointer'
+    },
+    readmore: {
+      fontFamily: 'heading',
+      textDecoration: 'none',
+      color: 'primary',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      letterSpacing: 'more',
+      textTransform: 'uppercase',
+      fontSize: '2',
+      lineHeight: '18px'
     }
   }
 }
