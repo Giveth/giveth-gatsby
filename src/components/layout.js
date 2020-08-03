@@ -13,6 +13,10 @@ import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
+import TorusProvider from '../contextProvider/torusProvider'
+import { useMutation } from '@apollo/react-hooks'
+import { DO_LOGIN } from '../apollo/gql/auth'
+// import './layout.css'
 
 const AlertOptions = {
   timeout: 5000,
@@ -30,9 +34,37 @@ const Layout = ({ children }) => {
     }
   `)
 
+  const [doLogin] = useMutation(DO_LOGIN)
+
+  const onLogin = async (signedMessage, userAddress, userEmail) => {
+    console.log('onLogin > doinglogin')
+    try {
+      const loginResponse = await doLogin({
+        variables: {
+          walletAddress: userAddress,
+          signature: signedMessage.signature,
+          email: userEmail
+        }
+      })
+
+      console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
+
+      // const token = jwt.verify(
+      //   loginResponse.data.loginWallet.token,
+      //   process.env.GATSBY_JWT_SECRET
+      // )
+      // console.log(`token : ${JSON.stringify(token, null, 2)}`)
+      //web3.eth.getBalance(user.publicAddress).then(setBalance)
+      // console.log(`setting balance to zero`)
+      // setBalance(0)
+      window.location = process.env.GATSBY_BASE_URL
+    } catch (error) {
+      console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
+    }
+  }
   return (
-    <ThemeProvider theme={theme}>
-      <Provider template={AlertTemplate} {...AlertOptions}>
+    <TorusProvider onLogin={onLogin}>
+      <ThemeProvider theme={theme}>
         <Header siteTitle={data.site.siteMetadata.title} />
         <div
           sx={{
@@ -45,8 +77,8 @@ const Layout = ({ children }) => {
           <main>{children}</main>
           <footer />
         </div>
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </TorusProvider>
   )
 }
 
