@@ -18,14 +18,25 @@ const AccountDetails = styled.div`
   display: grid;
   grid-template-rows: repeat(7, auto);
   grid-gap: 0px 1rem;
+  .shadow {
+    box-shadow: 0px 1px 0px #f5f5f5;
+  }
+  .boxheight {
+    display: flex;
+    align-self: center;
+    padding-top: 11px;
+    padding-bottom: 11px;
+  }
   & :hover .balance {
     opacity: 1;
   }
 `
 
 const MenuItem = styled(Text)`
-  padding: 0.2rem 16px;
+  align-self: center;
+  padding-left: 16px;
   cursor: pointer;
+  align-content: center;
   :hover {
     color: ${theme.colors.primary};
   }
@@ -40,7 +51,7 @@ const Balance = styled.div`
   padding: 0 0.5rem;
 `
 
-const UserDetails = (props) => {
+const UserDetails = props => {
   const { user, balance, logout } = props
   const [active, setActive] = useState(false)
 
@@ -50,7 +61,7 @@ const UserDetails = (props) => {
     address.length
   )}`
 
-  const handleMenu = (e) => {
+  const handleMenu = e => {
     if (active) {
       setActive(false)
     } else {
@@ -97,13 +108,34 @@ const UserDetails = (props) => {
               Balance: {balance}
             </MenuItem>
           </Balance>
-          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
+          <MenuItem
+            sx={{
+              variant: 'text.medium',
+              color: 'secondary',
+              fontWeight: 'bold'
+            }}
+            className='shadow boxheight'
+          >
             My Account
           </MenuItem>
-          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
+          <MenuItem
+            sx={{
+              variant: 'text.medium',
+              color: 'secondary',
+              fontWeight: 'bold'
+            }}
+            className='shadow boxheight'
+          >
             Settings
           </MenuItem>
-          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
+          <MenuItem
+            sx={{
+              variant: 'text.medium',
+              color: 'secondary',
+              fontWeight: 'bold'
+            }}
+            className='shadow boxheight'
+          >
             My Projects
           </MenuItem>
           <MenuLink
@@ -111,16 +143,35 @@ const UserDetails = (props) => {
             target='_blank'
             rel='noopener noreferrer'
           >
-            <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
+            <MenuItem
+              sx={{
+                variant: 'text.medium',
+                color: 'secondary',
+                fontWeight: 'bold'
+              }}
+              className='shadow boxheight'
+            >
               Report a bug
             </MenuItem>
           </MenuLink>
-          <MenuItem sx={{ variant: 'text.medium', color: 'secondary' }}>
+          <MenuItem
+            sx={{
+              variant: 'text.medium',
+              color: 'secondary',
+              fontWeight: 'bold'
+            }}
+            className='shadow boxheight'
+          >
             Support
           </MenuItem>
           <MenuItem
-            sx={{ variant: 'text.medium', color: 'secondary' }}
+            sx={{
+              variant: 'text.medium',
+              color: 'secondary',
+              fontWeight: 'bold'
+            }}
             onClick={logout}
+            className='boxheight'
           >
             Sign out
           </MenuItem>
