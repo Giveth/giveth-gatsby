@@ -71,16 +71,16 @@ const InfoSection = () => {
           <img src={decoratorAltruistic} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Altruistic</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
-            We build tools for the common good and support others towards in
-            doing so as well, on the Giveth DApp, 100% of the funds donated go
-            to the cause the donor intended.
+            We build tools for the common good and support others in doing so as
+            well. On the Giveth DApp, 100% of the funds donated go to the cause
+            the donor intended to support.
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
           <img src={decoratorDecentralized} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Decentralized</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
-            We are an open, non-hierarchical global initiative empowering
+            We are an open, non-hierarchical global initiative - empowering
             communities with novel decentralized technologies to address their
             collective needs.{' '}
           </Text>
