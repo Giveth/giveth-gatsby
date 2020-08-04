@@ -50,8 +50,8 @@ const InfoSection = () => {
           What is Giveth?
         </Text>
         <Text pb={5} sx={{ variant: 'text.large', maxWidth: '580px' }}>
-          A Decentralized Altruistic Community using technology to make the
-          world a better place.
+          A Decentralized Altruistic Community using blockchain technology to
+          make the world a better place.
         </Text>
         <a
           href='https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8'
@@ -71,26 +71,27 @@ const InfoSection = () => {
           <img src={decoratorAltruistic} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Altruistic</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
-            We’re building a completely free, open-source platform for
-            communities, a disrupting force that can decentralize and facilitate
-            altruism.
+            We build tools for the common good and support others in doing so as
+            well. On the Giveth DApp, 100% of the funds donated go to the cause
+            the donor intended to support.
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
           <img src={decoratorDecentralized} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Decentralized</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
-            We experiment with decentralized Communication initiatives for
-            future of the Communities.{' '}
+            We are an open, non-hierarchical global initiative - empowering
+            communities with novel decentralized technologies to address their
+            collective needs.{' '}
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
           <img src={decoratorCommunity} alt='' heigth='70px' />
           <Text sx={{ variant: 'headings.h4' }}>Community</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
-            Giving should be all about connecting the Givers with the Makers,
-            the people who are making the change, and creating true and lasting
-            connections between both.
+            We build tools that can create strong bonds and alignment for people
+            and the planet. We see donations as an opportunity to connect Givers
+            to the people on the ground doing the good work.
           </Text>
         </Box>
       </Grid>
@@ -116,8 +117,9 @@ const InfoSection = () => {
           How it works
         </Text>
         <Text pb={5} sx={{ variant: 'text.large', maxWidth: '580px' }}>
-          Our system cuts out bureaucracy and enables makers to create a high
-          level of transparency and accountability towards Givers.
+          Our system connects the people on the ground directly to the Givers,
+          and provides a level of transparency and accountability no other
+          platform can offer.
         </Text>
       </Box>
       <Grid gap={1} columns={[1, 3, 3]} sx={{ justifyItems: 'center' }}>
@@ -134,7 +136,7 @@ const InfoSection = () => {
         >
           <Text sx={{ variant: 'headings.h4' }}>For Makers</Text>
           <Text pb={3} sx={{ variant: 'text.paragraph' }}>
-            Create a Projct and get donations out of the Giveth system.{' '}
+            Create a Project and get donations in crypto.{' '}
             <Link to='/create' className='intextlink'>
               Create your project
             </Link>{' '}
@@ -165,8 +167,7 @@ const InfoSection = () => {
         >
           <Text sx={{ variant: 'headings.h4' }}>For Givers</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
-            Use our platform to give donations to a cause or a project. Easily
-            donate to the{' '}
+            Send donations to the{' '}
             <Link to='/causes' className='intextlink'>
               Cause
             </Link>{' '}

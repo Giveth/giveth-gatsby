@@ -1,6 +1,6 @@
 // Giveth V2 theme
 export default {
-  breakpoints: ['700px', '1024px', '1280px'],
+  breakpoints: ['850px', '1024px', '1280px'],
   colors: {
     text: '#2C0B3F',
     background: '#fff',
@@ -13,9 +13,9 @@ export default {
     accent: '#109CF1',
     attention: '#E01C6B',
     bodyDark: '#6B7087',
+    bodyLight: '#AAAFCA',
     anotherGrey: '#C9D0E8',
-    lightestBlue: '#EDF0FA',
-    lightestGrey: '#AAAFCA'
+    lightestBlue: '#EDF0FA'
   },
   fonts: {
     body: 'Red Hat Text, sans serif',
@@ -67,7 +67,9 @@ export default {
     },
     medium: {
       fontSize: 2,
-      fontFamily: 'body'
+      fontFamily: 'body',
+      fontWeight: 'medium',
+      lineHeight: 'tallest'
     },
     paragraph: {
       fontSize: 3,
@@ -175,7 +177,7 @@ export default {
     input: {
       border: '2px solid',
       borderRadius: '56px',
-      borderColor: 'lightestGrey',
+      borderColor: 'bodyLight',
       padding: '20px',
       '&:focus': {
         outline: 'none',
@@ -245,6 +247,13 @@ export default {
       textTransform: 'uppercase',
       fontSize: '2',
       lineHeight: '18px'
+    },
+    light: {
+      fontFamily: 'body',
+      textDecoration: 'none',
+      color: 'bodyLight',
+      cursor: 'pointer',
+      fontWeight: 'medium'
     }
   }
 }

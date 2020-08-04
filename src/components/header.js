@@ -36,6 +36,7 @@ const HeaderSpan = styled.nav`
   position: fixed;
   margin: 0 auto;
   padding: 80px;
+  max-width: 100vw;
   top: 0;
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -207,7 +208,7 @@ const Header = ({ siteTitle }) => {
               alt=''
               sx={{
                 position: 'absolute',
-                top: '20px',
+                top: '-70px',
                 left: '300px'
               }}
               className='hide'
@@ -217,8 +218,8 @@ const Header = ({ siteTitle }) => {
               alt=''
               sx={{
                 position: 'absolute',
-                top: '20px',
-                right: '-5px'
+                top: '-80px',
+                left: '92vw'
               }}
               className='hide'
             />

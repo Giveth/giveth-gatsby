@@ -41,8 +41,14 @@ If you want to contribute, pls say hello to us in chat -  [https://giveth.io/joi
 	To get the necessary information for local development, please [ask in giveth-2 developer chat](https://riot.im/app/#/room/!zFyfjCfKHawjZJcueK:matrix.org?via=matrix.org)
 
 1.  **Start developing.**
-	Make sure that the backend server is running (Step1)
-    Navigate into the giveth-2 directory and start up the local development server.
+	- Make sure that the backend server is running (Step1)
+    - To take advantage of linting presets, please use **VSCODE**:
+		* Select *File -> Open Workspace*
+		* Navigate into the giveth-2 directory
+		* Open the workspace file`giveth2-full-stack.code-workspace`
+		* Install recommended extensions (Prettier and StandardJS plugins)
+
+	- Start up the local development server.
 
     ```shell
     gatsby develop

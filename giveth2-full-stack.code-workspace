@@ -17,5 +17,19 @@
 			"path": "../impact-graph"
 		}
 	],
-	"settings": {}
+	"settings": {
+		// Differentiate our giveth2 workspace from other open VSCode windows
+		"workbench.colorCustomizations": {
+			"statusBar.background": "#c2449f",
+			"statusBar.border": "#c2449f",
+			"statusBarItem.hoverBackground": "#cf6ab3",
+			"titleBar.activeBackground": "#c2449f",
+			"titleBar.border": "#c2449f",
+			"titleBar.inactiveBackground": "#c2449f99",
+			"statusBar.foreground": "#e7e7e7",
+			"titleBar.activeForeground": "#e7e7e7",
+			"titleBar.inactiveForeground": "#e7e7e799"
+		},
+		"peacock.color": "#C2449F"
+	}
 }

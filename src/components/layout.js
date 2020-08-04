@@ -16,7 +16,8 @@ import Header from './header'
 import TorusProvider from '../contextProvider/torusProvider'
 import { useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN } from '../apollo/gql/auth'
-// import './layout.css'
+
+import Footer from './footer'
 
 const AlertOptions = {
   timeout: 5000,
@@ -76,7 +77,7 @@ const Layout = ({ children }) => {
             }}
           >
             <main>{children}</main>
-            <footer />
+            <Footer />
           </div>
         </Provider>
       </ThemeProvider>
