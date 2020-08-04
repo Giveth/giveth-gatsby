@@ -68,7 +68,8 @@ export default {
     medium: {
       fontSize: 2,
       fontFamily: 'body',
-      lineHeight: 'lineHeights.tallest'
+      fontWeight: 'medium',
+      lineHeight: 'tallest'
     },
     paragraph: {
       fontSize: 3,
