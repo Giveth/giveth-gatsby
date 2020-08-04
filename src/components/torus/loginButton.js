@@ -1,8 +1,6 @@
 /** @jsx jsx */
-import React from 'react'
 import styled from '@emotion/styled'
 import { Text, jsx } from 'theme-ui'
-
 
 const Container = styled.div`
   width: 70px;
