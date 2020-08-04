@@ -18,6 +18,7 @@
 		}
 	],
 	"settings": {
+		// Differentiate our giveth2 workspace from other open VSCode windows
 		"workbench.colorCustomizations": {
 			"statusBar.background": "#c2449f",
 			"statusBar.border": "#c2449f",
