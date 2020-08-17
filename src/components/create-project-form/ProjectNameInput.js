@@ -10,7 +10,7 @@ const ProjectNameInput = ({ register, currentValue, animationStyle }) => {
     setCharacterLength(e.target.value.length)
   }
   return (
-    <animated.section style={animationStyle}>
+    <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
       <Label
         sx={{
           fontSize: 9,
@@ -33,6 +33,14 @@ const ProjectNameInput = ({ register, currentValue, animationStyle }) => {
         onChange={e => getLength(e)}
       />
       <span css={{ float: 'right', width: '35%' }}>{characterLength}/55</span>
+      <Button
+        sx={{
+          mt: '70px'
+        }}
+        type='submit'
+      >
+        NEXT
+      </Button>
     </animated.section>
   )
 }

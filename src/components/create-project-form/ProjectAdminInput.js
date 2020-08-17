@@ -1,12 +1,8 @@
 import React, { useState } from 'react'
-import { Label, Textarea, Button } from 'theme-ui'
+import { Label, Input, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
-const ProjectDescriptionTextArea = ({
-  register,
-  currentValue,
-  animationStyle
-}) => {
+const ProjectAdminInput = ({ register, currentValue, animationStyle }) => {
   const [characterLength, setCharacterLength] = useState(
     currentValue ? currentValue.length : 0
   )
@@ -14,30 +10,29 @@ const ProjectDescriptionTextArea = ({
     setCharacterLength(e.target.value.length)
   }
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
       <Label
         sx={{
           fontSize: 9,
           fontFamily: 'heading'
         }}
-        htmlFor='projectDescription'
+        htmlFor='projectAdmin'
       >
-        What is your project about?
+        What's the name of the organization or administrator the project?
       </Label>
-      <Textarea
+      <Input
         sx={{
-          width: '120%',
-          mt: '40px',
-          resize: 'none'
+          width: '50%',
+          mt: '40px'
         }}
-        id='projectDescription'
-        name='projectDescription'
+        type='text'
+        id='projectAdmin'
+        name='projectAdmin'
         ref={register}
         defaultValue={currentValue}
-        rows={12}
         onChange={e => getLength(e)}
       />
-      <span css={{ float: 'right' }}>{characterLength}/2000</span>
+      <span css={{ float: 'right', width: '45%' }}>{characterLength}/55</span>
       <Button
         sx={{
           mt: '70px'
@@ -50,4 +45,4 @@ const ProjectDescriptionTextArea = ({
   )
 }
 
-export default ProjectDescriptionTextArea
+export default ProjectAdminInput

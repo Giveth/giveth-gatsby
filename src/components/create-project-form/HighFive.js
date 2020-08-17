@@ -10,7 +10,8 @@ const HighFive = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignContent: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        mt: '150px'
       }}
     >
       <Text

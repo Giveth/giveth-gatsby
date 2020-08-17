@@ -7,80 +7,14 @@ import { useTransition } from 'react-spring'
 
 import ProjectDescriptionTextArea from './ProjectDescription'
 import ProjectNameInput from './ProjectNameInput'
+import ProjectAdminInput from './ProjectAdminInput'
 import ProjectCategoryInput from './ProjectCategoryInput'
 import ProjectLocationInput from './ProjectLocationInput'
 import ProjectImageInput from './ProjectImageInput'
 import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import HighFive from './HighFive'
-
-const CloseModal = ({ showModal, setShowModal }) => (
-  <div
-    css={{
-      //   opacity: showModal ? 1 : 0,
-      display: showModal ? 'flex' : 'none',
-      position: 'absolute',
-      right: '15%',
-      top: '40%',
-      flexDirection: 'column',
-      alignItems: 'center',
-      width: '600px',
-      height: '358px',
-      backgroundColor: 'white',
-      boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)',
-      borderRadius: '2px'
-    }}
-  >
-    <Button
-      type='button'
-      onClick={() => setShowModal(false)}
-      sx={{
-        position: 'absolute',
-        top: '32px',
-        right: '32px',
-        fontSize: '3',
-        fontFamily: 'body',
-        color: 'secondary',
-        background: 'unset',
-        cursor: 'pointer'
-      }}
-    >
-      Close
-    </Button>
-    <Text
-      sx={{ mt: '80px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}
-    >
-      Are you sure?
-    </Text>
-    <Text
-      sx={{ mt: '45px', fontSize: 4, textAlign: 'center', fontFamily: 'body' }}
-    >
-      All data will be permanently deleted.
-    </Text>
-    <Flex
-      sx={{
-        width: '304px',
-        justifyContent: 'space-between',
-        mt: '32px',
-        fontFamily: 'body'
-      }}
-    >
-      <Button type='button' variant='nofill' sx={{ color: 'secondary' }}>
-        <Link to='/' sx={{ textDecoration: 'none' }}>
-          Yes
-        </Link>
-      </Button>
-      <Button
-        type='button'
-        onClick={() => setShowModal(false)}
-        variant='nofill'
-        sx={{ color: 'secondary' }}
-      >
-        No
-      </Button>
-    </Flex>
-  </div>
-)
+import CloseModal from './modals/CloseModal'
 
 const CreateProjectForm = props => {
   // figure out how to plugin in the props.onSubmit
@@ -99,7 +33,7 @@ const CreateProjectForm = props => {
 
   const onSubmit = data => {
     let category = formData.category ? formData.category : {}
-    if (step === 3) {
+    if (step === 4) {
       category = {
         ...data
       }
@@ -113,142 +47,123 @@ const CreateProjectForm = props => {
         ...data
       })
     }
-    if (step === 6) {
+    console.log(data)
+    console.log(formData)
+    if (step === 7) {
       // workout how to run the props.onSubmit on here
+      console.log(formData)
       setSubmitted(true)
     } else {
       nextStep()
     }
-    // if not move to the next step
   }
+  const steps = [
+    ({ animationStyle }) => (
+      <ProjectNameInput
+        register={register}
+        currentValue={formData.projectName}
+        animationStyle={animationStyle}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectAdminInput
+        register={register}
+        currentValue={formData.projectAdmin}
+        animationStyle={animationStyle}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectDescriptionTextArea
+        register={register}
+        currentValue={formData.projectDescription}
+        animationStyle={animationStyle}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectCategoryInput
+        register={register}
+        currentValue={formData.category}
+        categoryList={categoryList}
+        animationStyle={animationStyle}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectLocationInput
+        register={register}
+        currentValue={formData.projectLocation}
+        animationStyle={animationStyle}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectImageInput
+        register={register}
+        currentValue={formData.projectImage}
+        animationStyle={animationStyle}
+      />
+    ),
+    ({ animationStyle }) => (
+      <FinalVerificationStep
+        formData={formData}
+        setStep={setStep}
+        animationStyle={animationStyle}
+      />
+    )
+  ]
 
-  const renderCurrentStep = (step, props) => {
-    switch (step) {
-      case 1:
-        return (
-          <ProjectNameInput
-            style={props}
-            register={register}
-            currentValue={formData.projectName}
-            animationStyle={props}
-          />
-        )
-      case 2:
-        return (
-          <ProjectDescriptionTextArea
-            style={props}
-            register={register}
-            currentValue={formData.projectDescription}
-            animationStyle={props}
-          />
-        )
-      case 3:
-        return (
-          <ProjectCategoryInput
-            style={props}
-            register={register}
-            currentValue={formData.category}
-            categoryList={categoryList}
-            animationStyle={props}
-          />
-        )
-      case 4:
-        return (
-          <ProjectLocationInput
-            style={props}
-            register={register}
-            currentValue={formData.projectLocation}
-            animationStyle={props}
-          />
-        )
-      case 5:
-        return (
-          <ProjectImageInput
-            style={props}
-            register={register}
-            currentValue={formData.projectImage}
-            animationStyle={props}
-          />
-        )
-      case 6:
-        return (
-          <FinalVerificationStep
-            formData={formData}
-            setStep={setStep}
-            animationStyle={props}
-          />
-        )
-      default:
-        return null
-    }
-  }
-  const transition = useTransition(
-    step,
-    ['one', 'two', 'three', 'four', 'five', 'six'],
-    {
-      from: {
-        opacity: 0,
-        transform: 'translate3d(100%,0,0)'
-      },
-      enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
-      leave: { opacity: 0, transform: 'translate3d(-50%,0,0)' }
-    }
-  )
+  const stepTransitions = useTransition(step, null, {
+    from: {
+      opacity: 0,
+      transform: 'translate3d(100%,0,0)',
+      position: 'absolute'
+    },
+    enter: { opacity: 1, transform: 'translate3d(0%,0,0)' },
+    leave: { opacity: 0, transform: 'translate3d(-50%,0,0)' }
+  })
+
   return (
     <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
-      <Flex
-        sx={{
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-        <Heading as='h5'>CREATE A NEW PROJECT</Heading>
-        <Button
-          type='button'
-          onClick={() => setShowModal(!showModal)}
-          sx={{
-            fontSize: '3',
-            fontFamily: 'body',
-            color: 'secondary',
-            background: 'unset',
-            cursor: 'pointer'
-          }}
-        >
-          Cancel
-        </Button>
-      </Flex>
-      <CloseModal showModal={showModal} setShowModal={setShowModal} />
-
-      <br />
-      <br />
-      <br />
       {submitted ? (
         <HighFive />
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <>
-            {step < 6 ? (
-              <EditButtonSection formData={formData} setStep={setStep} />
-            ) : null}
-
-            {transition.map(({ item, props }) => {
-              console.log('transistion time------------')
-              console.log(item)
-              console.log(props)
-              return renderCurrentStep(item, props)
-            })}
-            {/* {renderCurrentStep(step)} */}
+        <>
+          <Flex
+            sx={{
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
+            <Heading as='h5'>CREATE A NEW PROJECT</Heading>
             <Button
+              type='button'
+              onClick={() => setShowModal(!showModal)}
               sx={{
-                mt: '70px'
+                fontSize: '3',
+                fontFamily: 'body',
+                color: 'secondary',
+                background: 'unset',
+                cursor: 'pointer'
               }}
-              type='submit'
             >
-              NEXT
+              Cancel
             </Button>
-          </>
-        </form>
+          </Flex>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <>
+              {step < 7 ? (
+                <EditButtonSection formData={formData} setStep={setStep} />
+              ) : null}
+
+              {stepTransitions.map(({ item, props, key }) => {
+                const Step = steps[item - 1]
+                return <Step key={key} animationStyle={props} />
+              })}
+            </>
+          </form>
+        </>
       )}
+      {showModal ? (
+        <CloseModal showModal={showModal} setShowModal={setShowModal} />
+      ) : null}
     </Box>
   )
 }

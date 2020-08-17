@@ -39,6 +39,35 @@ const EditButtonSection = ({ formData, setStep }) => {
       ) : (
         <div />
       )}
+      {formData.projectAdmin ? (
+        <>
+          <Text
+            sx={{
+              fontSize: 0,
+              textTransform: 'uppercase',
+              fontFamily: 'heading',
+              color: 'bodyLight'
+            }}
+          >
+            Admin
+          </Text>
+          <Button
+            type='button'
+            sx={{
+              color: 'primary',
+              border: 0,
+              background: 'unset',
+              fontSize: 1,
+              p: 0
+            }}
+            onClick={() => setStep(2)}
+          >
+            <Text>Edit</Text>
+          </Button>
+        </>
+      ) : (
+        <div />
+      )}
       {formData.projectDescription ? (
         <>
           <Text
@@ -60,7 +89,7 @@ const EditButtonSection = ({ formData, setStep }) => {
               fontSize: 1,
               p: 0
             }}
-            onClick={() => setStep(2)}
+            onClick={() => setStep(3)}
           >
             Edit
           </Button>
@@ -89,7 +118,7 @@ const EditButtonSection = ({ formData, setStep }) => {
               fontSize: 1,
               p: 0
             }}
-            onClick={() => setStep(3)}
+            onClick={() => setStep(4)}
           >
             Edit
           </Button>
@@ -118,7 +147,7 @@ const EditButtonSection = ({ formData, setStep }) => {
               fontSize: 1,
               p: 0
             }}
-            onClick={() => setStep(4)}
+            onClick={() => setStep(5)}
           >
             Edit
           </Button>

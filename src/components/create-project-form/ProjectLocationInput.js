@@ -1,10 +1,10 @@
 import React from 'react'
-import { Flex, Label, Input, Checkbox } from 'theme-ui'
+import { Flex, Label, Input, Checkbox, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
-const ProjectLocationInput = ({ register, currentValue, style }) => {
+const ProjectLocationInput = ({ register, currentValue, animationStyle }) => {
   return (
-    <section css={{ ...style }}>
+    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 9,
@@ -36,7 +36,15 @@ const ProjectLocationInput = ({ register, currentValue, style }) => {
           This project has a global impact
         </Label>
       </Flex>
-    </section>
+      <Button
+        sx={{
+          mt: '70px'
+        }}
+        type='submit'
+      >
+        NEXT
+      </Button>
+    </animated.section>
   )
 }
 

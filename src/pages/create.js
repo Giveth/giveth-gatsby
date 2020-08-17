@@ -10,6 +10,8 @@ import Layout from '../components/layout'
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import HighFive from '../components/create-project-form/HighFive'
+import decoratorClouds from '../images/decorator-clouds.png'
+import peoplePuzzle from '../images/people-puzzle.png'
 
 const IndexPage = () => {
   const [isLoggedIn] = useState(checkIfLoggedIn())
@@ -45,8 +47,27 @@ const IndexPage = () => {
       if (!projectAdded) {
         return (
           <>
+            <img
+              src={decoratorClouds}
+              alt=''
+              css={{
+                position: 'absolute',
+                top: '57px',
+                right: '434px'
+              }}
+              className='hide'
+            />
+            <img
+              src={peoplePuzzle}
+              alt=''
+              css={{
+                position: 'absolute',
+                top: '417px',
+                right: '81px'
+              }}
+              className='hide'
+            />
             <CreateProjectForm onSubmit={onSubmit} />
-            <br />
           </>
         )
       } else {

@@ -1,12 +1,11 @@
 import React from 'react'
-import { Label, Flex, Grid, Image, Text } from 'theme-ui'
+import { Label, Flex, Button, Grid, Image, Text } from 'theme-ui'
 import decoratorCloud1 from '../../images/decorator-cloud1.png'
 import { animated } from 'react-spring'
 
-const ProjectImageInput = ({ register, currentValue, style }) => {
-  //   const { action, state } = useStateMachine(updateAction)
+const ProjectImageInput = ({ register, currentValue, animationStyle }) => {
   return (
-    <section css={{ ...style }}>
+    <animated.section style={{ ...animationStyle, marginTop: '20px' }}>
       <Label
         sx={{
           fontSize: 9,
@@ -26,7 +25,7 @@ const ProjectImageInput = ({ register, currentValue, style }) => {
           gap: '20px'
         }}
       >
-        <Image src={decoratorCloud1} />
+        <Image src='https://via.placeholder.com/500x200' />
         <Text>
           Drag & drop an image here or{' '}
           <Text sx={{ display: 'inline-block' }}>Upload from computer</Text>
@@ -50,7 +49,15 @@ const ProjectImageInput = ({ register, currentValue, style }) => {
         <Image src={decoratorCloud1} />
         <Image src={decoratorCloud1} />
       </Grid>
-    </section>
+      <Button
+        sx={{
+          mt: '70px'
+        }}
+        type='submit'
+      >
+        NEXT
+      </Button>
+    </animated.section>
   )
 }
 

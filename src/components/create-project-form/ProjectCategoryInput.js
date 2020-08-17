@@ -1,10 +1,15 @@
 import React from 'react'
-import { Checkbox, Label, Box } from 'theme-ui'
+import { Checkbox, Label, Box, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
-const ProjectCategoryInput = ({ register, currentValue, categoryList }) => {
+const ProjectCategoryInput = ({
+  register,
+  currentValue,
+  categoryList,
+  animationStyle
+}) => {
   return (
-    <section>
+    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
       <Label
         sx={{
           fontSize: 9,
@@ -32,7 +37,15 @@ const ProjectCategoryInput = ({ register, currentValue, categoryList }) => {
           )
         })}
       </Box>
-    </section>
+      <Button
+        sx={{
+          mt: '70px'
+        }}
+        type='submit'
+      >
+        NEXT
+      </Button>
+    </animated.section>
   )
 }
 
