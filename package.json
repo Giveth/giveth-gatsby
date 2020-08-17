@@ -41,9 +41,10 @@
     "react-alert-template-mui": "^1.0.7",
     "react-dom": "^16.12.0",
     "react-helmet": "^6.0.0",
-    "react-hook-form": "^5.7.2",
+    "react-hook-form": "^6.4.1",
     "react-icons": "^3.10.0",
     "react-responsive": "^8.1.0",
+    "react-spring": "^8.0.27",
     "theme-ui": "^0.3.1",
     "web3": "^1.2.11"
   },

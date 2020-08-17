@@ -1,0 +1,1 @@
+export { CloseModal } from './CloseModal'
