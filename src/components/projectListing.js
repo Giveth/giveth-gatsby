@@ -95,13 +95,12 @@ const Categories = () => {
 
 const ProjectListing = props => {
   const { balance } = useContext(TorusContext)
-
   return (
     <Box
       key={props.listingId + '_box'}
-      style={{ width: '100%', cursor: 'pointer' }}
+      style={{ width: '100%', cursor: props.disabled ? 'default' : 'pointer' }}
       onClick={() => {
-        navigate('/donate')
+        !props.disabled && navigate('/donate/dac')
       }}
     >
       <ProjectCard key={props.listingId + '_card'}>
@@ -157,7 +156,8 @@ const ProjectListing = props => {
             height: '100%',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
+            color: theme.colors.secondary
           }}
           key={props.listingId + '_heading'}
         >
@@ -183,7 +183,11 @@ const ProjectListing = props => {
               lineHeight: '150%'
             }}
           >
-            This is a description
+            {
+              /* Description String */
+
+              props.description
+            }
           </Text>
         </CardContent>
         <CardFooter>
