@@ -9,11 +9,7 @@ import { Heading, Box, Text } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 import { Link } from 'gatsby'
 import decoratorClouds from '../images/decorator-clouds.png'
-<<<<<<< HEAD
 import peoplePuzzle2 from '../images/people-puzzle2.png'
-=======
-import peoplePuzzle from '../images/people-puzzle.png'
->>>>>>> feat - Create a new CreateProjectForm component for the new flow
 
 const IndexPage = () => {
   const [isLoggedIn] = useState(checkIfLoggedIn())
@@ -60,20 +56,12 @@ const IndexPage = () => {
               className='hide'
             />
             <img
-<<<<<<< HEAD
               src={peoplePuzzle2}
-=======
-              src={peoplePuzzle}
->>>>>>> feat - Create a new CreateProjectForm component for the new flow
               alt=''
               css={{
                 position: 'absolute',
                 top: '417px',
-<<<<<<< HEAD
                 right: '0px'
-=======
-                right: '81px'
->>>>>>> feat - Create a new CreateProjectForm component for the new flow
               }}
               className='hide'
             />
