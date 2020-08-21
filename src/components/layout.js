@@ -17,6 +17,7 @@ import TorusProvider from '../contextProvider/torusProvider'
 import { useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN } from '../apollo/gql/auth'
 
+import Dialog from './dialog'
 import Footer from './footer'
 
 const AlertOptions = {
@@ -24,7 +25,7 @@ const AlertOptions = {
   position: positions.BOTTOM_CENTER
 }
 
-const Layout = ({ children }) => {
+const Layout = ({ children, asDialog }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -55,7 +56,7 @@ const Layout = ({ children }) => {
       //   process.env.GATSBY_JWT_SECRET
       // )
       // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      //web3.eth.getBalance(user.publicAddress).then(setBalance)
+      // web3.eth.getBalance(user.publicAddress).then(setBalance)
       // console.log(`setting balance to zero`)
       // setBalance(0)
       window.location = process.env.GATSBY_BASE_URL
@@ -63,10 +64,13 @@ const Layout = ({ children }) => {
       console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
     }
   }
-  return (
-    <TorusProvider onLogin={onLogin}>
-      <ThemeProvider theme={theme}>
-        <Provider template={AlertTemplate} {...AlertOptions}>
+
+  const Template = () => {
+    if (asDialog) {
+      return <Dialog>{children}</Dialog>
+    } else {
+      return (
+        <>
           <Header siteTitle={data.site.siteMetadata.title} />
           <div
             sx={{
@@ -79,6 +83,16 @@ const Layout = ({ children }) => {
             <main>{children}</main>
             <Footer />
           </div>
+        </>
+      )
+    }
+  }
+
+  return (
+    <TorusProvider onLogin={onLogin}>
+      <ThemeProvider theme={theme}>
+        <Provider template={AlertTemplate} {...AlertOptions}>
+          <Template />
         </Provider>
       </ThemeProvider>
     </TorusProvider>
