@@ -1,22 +1,29 @@
 /** @jsx jsx */
 import { useState, useEffect } from 'react'
-import { Box, Button, Grid, Text, jsx } from 'theme-ui'
+import { Box, Button, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import QRCode from 'qrcode.react'
 
-const Content = styled(Grid)`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+const Content = styled.div`
+  max-width: 41.25rem;
+  word-wrap: break-word;
+`
+
+const QRSection = styled.div`
+  margin: 3rem 0 0 0;
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
 `
 
 const QRContainer = styled(Box)`
-  align-self: flex-start;
+  max-width: 13rem;
   border-radius: 12px;
-  margin: 3rem 0 0 0;
-  @media (max-width: 800px) {
-    align-self: center;
-  }
+  margin: 1rem 0 0 0;
 `
 
 const AddressContainer = styled.div`
@@ -53,17 +60,19 @@ const OnlyCrypto = props => {
 
   return (
     <Content>
-      <Text sx={{ variant: 'headings.h2' }}>Be a Giver</Text>
-      <Text sx={{ variant: 'headings.h6' }}>
-        Donate to support {project.toUpperCase()} Project
-      </Text>
-      <QRContainer p={4} color='white' bg='white'>
-        <QRCode value={address} size={120} />
-      </QRContainer>
-      <AddressContainer>
-        <Text sx={{ variant: 'text.medium', mt: 2 }}>
-          Ethereum and all ERC20 tokens supported.
+      <Text sx={{ variant: 'headings.h4' }}>Donate With</Text>
+      <QRSection>
+        <Text sx={{ variant: 'text.medium' }}>
+          Send ETH or any ERC20 to this address.
         </Text>
+        <Text sx={{ variant: 'text.medium' }}>
+          100% of donations go directly to the project.
+        </Text>
+        <QRContainer p={4} color='white' bg='white'>
+          <QRCode value={address} size={140} />
+        </QRContainer>
+      </QRSection>
+      <AddressContainer>
         <Text
           sx={{ variant: 'text.overlineSmall' }}
           style={{ fontSize: '16px' }}
