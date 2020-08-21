@@ -5,7 +5,11 @@ import { Box, Heading, Flex, Button, Text } from 'theme-ui'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
-import { ProjectNameInput, ProjectAdminInput } from './inputs'
+import {
+  ProjectNameInput,
+  ProjectAdminInput,
+  ProjectDescriptionInput
+} from './inputs'
 import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
 
@@ -32,6 +36,13 @@ const CreateProjectForm = props => {
       <ProjectAdminInput
         animationStyle={animationStyle}
         currentValue={formData.projectAdmin}
+        register={register}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectDescriptionInput
+        animationStyle={animationStyle}
+        currentValue={formData.projectDescription}
         register={register}
       />
     )
