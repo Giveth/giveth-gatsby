@@ -54,7 +54,7 @@ const EditButtonSection = ({ formData, setStep }) => {
           </Text>
           <Button
             type='button'
-            aria-label='edit project name'
+            aria-label='edit project administrator'
             sx={{
               color: 'primary',
               border: 0,
@@ -63,6 +63,36 @@ const EditButtonSection = ({ formData, setStep }) => {
               p: 0
             }}
             onClick={() => setStep(1)}
+          >
+            <Text>Edit</Text>
+          </Button>
+        </>
+      ) : (
+        <div />
+      )}
+      {formData.projectDescription ? (
+        <>
+          <Text
+            sx={{
+              fontSize: 0,
+              textTransform: 'uppercase',
+              fontFamily: 'heading',
+              color: 'bodyLight'
+            }}
+          >
+            Description
+          </Text>
+          <Button
+            type='button'
+            aria-label='edit project description'
+            sx={{
+              color: 'primary',
+              border: 0,
+              background: 'unset',
+              fontSize: 1,
+              p: 0
+            }}
+            onClick={() => setStep(2)}
           >
             <Text>Edit</Text>
           </Button>
