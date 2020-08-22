@@ -25,8 +25,8 @@ import {
 const CRYPTO = 'Cryptocurrency'
 const CREDIT = 'Credit Card'
 
-const LEFT_BOX_STYLE = { 'border-top-left-radius': '0.2rem', 'border-bottom-left-radius': '0.2rem' }
-const RIGHT_BOX_STYLE = { 'border-top-right-radius': '0.2rem', 'border-bottom-right-radius': '0.2rem' }
+const LEFT_BOX_STYLE = { borderTopLeftRadius: '0.2rem', borderBottomLeftRadius: '0.2rem' }
+const RIGHT_BOX_STYLE = { borderTopRightRadius: '0.2rem', borderBottomRightRadius: '0.2rem' }
 
 const Content = styled(Grid)`
   display: flex;

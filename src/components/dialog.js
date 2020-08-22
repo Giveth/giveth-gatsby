@@ -16,7 +16,7 @@ const Main = styled.main`
   }
 
   @media (max-width: 800px) {
-    padding: 4.063rem 1rem 0 1rem;
+    padding: 7.063rem 1rem 0 1rem;
   }
 `
 
