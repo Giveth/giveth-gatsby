@@ -20,8 +20,13 @@ import {
   TwitterIcon
 } from 'react-share'
 
+// CONSTANTS
+
 const CRYPTO = 'Cryptocurrency'
 const CREDIT = 'Credit Card'
+
+const LEFT_BOX_STYLE = { 'border-top-left-radius': '0.2rem', 'border-bottom-left-radius': '0.2rem' }
+const RIGHT_BOX_STYLE = { 'border-top-right-radius': '0.2rem', 'border-bottom-right-radius': '0.2rem' }
 
 const Content = styled(Grid)`
   display: flex;
@@ -65,13 +70,19 @@ const SocialIcons = styled.div`
 
 const Options = styled.div`
   display: flex;
-  min-width: 20rem;
+  width: 100%;
+  min-width: 29.25rem;
   flex-direction: row;
-  border: 2px solid white;
+  border: 0.125rem solid white;
   box-sizing: border-box;
-  border-radius: 6px;
+  border-radius: 0.375rem;
   margin: 2.063rem 0 0 0;
+  box-sizing: border-box;
 
+  @media (max-width: 1100px) {
+    min-width: 20rem;
+  }
+  
   @media (max-width: 800px) {
     width: 100%;
     align-self: center;
@@ -81,7 +92,7 @@ const Options = styled.div`
 
 const OptionTypesBox = styled(Box)`
   cursor: pointer;
-  width: 10rem;
+  width: 50%;
   align-items: center;
   text-align: center;
   padding: 0.875rem 1.938rem;
@@ -114,12 +125,13 @@ const ShowProject = (props) => {
       )
     }
 
-    const OptionType = ({ title, subtitle }) => {
+    const OptionType = ({ title, subtitle, style }) => {
       const isSelected = title === paymentType
       const textColor = isSelected ? theme.colors.secondary : 'white'
       return (
         <OptionTypesBox
-          onClick={() => setPaymentType(title)} style={{ backgroundColor: isSelected ? 'white' : theme.colors.secondary }}
+          onClick={() => setPaymentType(title)}
+          style={{ backgroundColor: isSelected ? 'white' : theme.colors.secondary, ...style }}
         >
           <Text sx={{ variant: 'text.medium', color: textColor, fontWeight: 'bold' }}>{title}</Text>
           <Text sx={{ variant: 'text.small', color: textColor }}>{subtitle}</Text>
@@ -131,8 +143,14 @@ const ShowProject = (props) => {
       <>
         <Text sx={{ variant: 'headings.h5' }}>Donate With</Text>
         <Options>
-          <OptionType title={CRYPTO} subtitle='Zero Fee' />
-          <OptionType title={CREDIT} subtitle='3.5% Fee' />
+          <OptionType
+            title={CRYPTO} subtitle='Zero Fee'
+            style={LEFT_BOX_STYLE}
+          />
+          <OptionType
+            title={CREDIT} subtitle='3.5% Fee'
+            style={RIGHT_BOX_STYLE}
+          />
         </Options>
         <ShowPaymentOption />
       </>

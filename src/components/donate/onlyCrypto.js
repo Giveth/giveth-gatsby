@@ -36,6 +36,7 @@ const AddressContainer = styled.div`
 
 const CopyButton = styled(Button)`
   width: 100%;
+  max-width: 20rem;
   @media (max-width: 800px) {
     width: 70%;
   }
