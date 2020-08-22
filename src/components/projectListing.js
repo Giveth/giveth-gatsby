@@ -100,7 +100,7 @@ const ProjectListing = props => {
       key={props.listingId + '_box'}
       style={{ width: '100%', cursor: props.disabled ? 'default' : 'pointer' }}
       onClick={() => {
-        !props.disabled && navigate('/donate/dac')
+        !props.disabled && navigate('/donate/1')
       }}
     >
       <ProjectCard key={props.listingId + '_card'}>

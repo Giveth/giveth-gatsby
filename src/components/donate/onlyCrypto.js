@@ -10,7 +10,7 @@ const Content = styled.div`
 `
 
 const QRSection = styled.div`
-  margin: 3rem 0 0 0;
+  margin: 1.3rem 0 0 0;
   @media (max-width: 800px) {
     display: flex;
     flex-direction: column;
@@ -43,7 +43,7 @@ const CopyButton = styled(Button)`
 
 const OnlyCrypto = props => {
   const { project, address } = props
-  const [copyMsg, setCopyMsg] = useState('Copy Address')
+  const [copyMsg, setCopyMsg] = useState('COPY ADDRESS')
 
   function copyAddress () {
     navigator.clipboard.writeText(address)
@@ -52,7 +52,7 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setCopyMsg('Copy Address')
+      setCopyMsg('COPY ADDRESS')
     }, 5000)
     // Clear timeout if the component is unmounted
     return () => timer
@@ -60,7 +60,6 @@ const OnlyCrypto = props => {
 
   return (
     <Content>
-      <Text sx={{ variant: 'headings.h4' }}>Donate With</Text>
       <QRSection>
         <Text sx={{ variant: 'text.medium' }}>
           Send ETH or any ERC20 to this address.

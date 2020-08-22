@@ -35,6 +35,7 @@
       "titleBar.inactiveBackground": "#c2449f99",
       "titleBar.inactiveForeground": "#e7e7e799"
     },
-    "peacock.color": "#C2449F"
+    "peacock.color": "#C2449F",
+    "standard.autoFixOnSave": true
 	}
 }

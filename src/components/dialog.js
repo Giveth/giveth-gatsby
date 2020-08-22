@@ -9,14 +9,14 @@ import Confetti from '../assets/donation/confetti.svg'
 import decoratorClouds from '../images/donate-clouds.png'
 
 const Main = styled.main`
-  padding: 4.063rem 8.75rem;
+  padding: 4.063rem 8.75rem 0 8.75rem;
 
   @media (max-width: 1100px) {
-    padding: 4.063rem 2rem;
+    padding: 4.063rem 2rem 0 2rem;
   }
 
   @media (max-width: 800px) {
-    padding: 4.063rem 1rem;
+    padding: 4.063rem 1rem 0 1rem;
   }
 `
 
@@ -32,10 +32,10 @@ const LeftConfetti = styled(Confetti)`
   position: absolute;
   left: 3.875rem;
   top: 8.875rem;
-  @media (max-width: 800px) {
+  @media (max-width: 1100px) {
     left: auto;
     top: 9rem;
-    right: 0.875rem;
+    right: 0.99rem;
   }
 `
 
@@ -47,7 +47,7 @@ const BackButton = styled(NavLink)`
 `
 
 const DialogContent = styled.div`
-  margin: 61px 0 0 0;
+  margin: 3.813rem 0 0 0;
 `
 
 export default function Dialog ({ children }) {
