@@ -8,7 +8,8 @@ import { useTransition } from 'react-spring'
 import {
   ProjectNameInput,
   ProjectAdminInput,
-  ProjectDescriptionInput
+  ProjectDescriptionInput,
+  ProjectCategoryInput
 } from './inputs'
 import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
@@ -17,6 +18,12 @@ const CreateProjectForm = props => {
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const categoryList = [
+    { name: 'nonprofit', value: 'Non-profit' },
+    { name: 'covid19', value: 'COVID-19' },
+    { name: 'technology', value: 'Technology' },
+    { name: 'other', value: 'Other' }
+  ]
 
   useEffect(() => {
     props.onSubmit(formData)
@@ -45,14 +52,34 @@ const CreateProjectForm = props => {
         currentValue={formData.projectDescription}
         register={register}
       />
+    ),
+    ({ animationStyle }) => (
+      <ProjectCategoryInput
+        animationStyle={animationStyle}
+        categoryList={categoryList}
+        currentValue={formData.projectCategory}
+        register={register}
+      />
     )
   ]
 
   const onSubmit = data => {
-    setFormData({
-      ...formData,
-      ...data
-    })
+    let category = formData.category ? formData.category : {}
+    if (currentStep === 3) {
+      category = {
+        ...data
+      }
+      setFormData({
+        ...formData,
+        category
+      })
+    } else {
+      setFormData({
+        ...formData,
+        ...data
+      })
+    }
+
     if (currentStep === steps.length - 1) setSubmitted(true)
     nextStep()
   }
