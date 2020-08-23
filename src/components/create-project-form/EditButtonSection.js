@@ -100,6 +100,36 @@ const EditButtonSection = ({ formData, setStep }) => {
       ) : (
         <div />
       )}
+      {formData.projectCategory ? (
+        <>
+          <Text
+            sx={{
+              fontSize: 0,
+              textTransform: 'uppercase',
+              fontFamily: 'heading',
+              color: 'bodyLight'
+            }}
+          >
+            Category
+          </Text>
+          <Button
+            type='button'
+            aria-label='edit project description'
+            sx={{
+              color: 'primary',
+              border: 0,
+              background: 'unset',
+              fontSize: 1,
+              p: 0
+            }}
+            onClick={() => setStep(3)}
+          >
+            <Text>Edit</Text>
+          </Button>
+        </>
+      ) : (
+        <div />
+      )}
     </Grid>
   )
 }
