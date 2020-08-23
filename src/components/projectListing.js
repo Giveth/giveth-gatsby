@@ -76,7 +76,7 @@ const CardFooter = styled.span`
 `
 
 const Categories = () => {
-  const categories = ['covid-19', 'covid-19']
+  const categories = ['covid-19', 'non-profit']
   return categories.map((category, index) => (
     <Badge key={index}>
       <Text
@@ -99,9 +99,9 @@ const ProjectListing = props => {
   return (
     <Box
       key={props.listingId + '_box'}
-      style={{ width: '100%', cursor: 'pointer' }}
+      style={{ width: '100%', cursor: props.disabled ? 'default' : 'pointer' }}
       onClick={() => {
-        navigate('/donate')
+        !props.disabled && navigate('/donate/1')
       }}
     >
       <ProjectCard key={props.listingId + '_card'}>
@@ -142,10 +142,10 @@ const ProjectListing = props => {
           </Dot>
           <Options>
             <IconButton>
-              <img src={iconHeart} alt={''} />
+              <img src={iconHeart} alt='' />
             </IconButton>
             <IconButton>
-              <img src={iconShare} alt={''} />
+              <img src={iconShare} alt='' />
             </IconButton>
           </Options>
         </div>
@@ -155,23 +155,24 @@ const ProjectListing = props => {
             padding: '2.5rem 1rem 0 1rem',
             width: '260',
             height: '100%',
-            whiteSpace: 'nowrap',
             overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
+            color: theme.colors.secondary
           }}
           key={props.listingId + '_heading'}
         >
           {props.name}
           <Text
+            sx={{ variant: 'text.default' }}
             style={{
-              fontSize: '16px',
               color: theme.colors.primary,
               alignSelf: 'center',
+              minHeight: '28px',
               lineHeight: '150%',
               paddingTop: '4px'
             }}
           >
-            {props.category}
+            This is a description
           </Text>
         </Heading>
         <CardContent>
@@ -183,7 +184,11 @@ const ProjectListing = props => {
               lineHeight: '150%'
             }}
           >
-            This is a description
+            {
+              /* Description String */
+
+              props.description
+            }
           </Text>
         </CardContent>
         <CardFooter>

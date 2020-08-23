@@ -9,10 +9,14 @@ import Confetti from '../assets/donation/confetti.svg'
 import decoratorClouds from '../images/donate-clouds.png'
 
 const Main = styled.main`
-  padding: 4.5rem 8.813rem;
+  padding: 4.063rem 8.75rem 0 8.75rem;
+
+  @media (max-width: 1100px) {
+    padding: 4.063rem 2rem 0 2rem;
+  }
 
   @media (max-width: 800px) {
-    padding: 4.5rem 0;
+    padding: 7.063rem 1rem 0 1rem;
   }
 `
 
@@ -26,17 +30,24 @@ const Clouds = styled.img`
 `
 const LeftConfetti = styled(Confetti)`
   position: absolute;
-  left: 62px;
-  top: 142px;
+  left: 3.875rem;
+  top: 8.875rem;
+  @media (max-width: 1100px) {
+    left: auto;
+    top: 9rem;
+    right: 0.99rem;
+  }
 `
 
 const BackButton = styled(NavLink)`
   display: flex;
   flex-direction: row;
+  width: 100%;
+  max-width: 7rem;
 `
 
 const DialogContent = styled.div`
-  margin: 61px 0 0 0;
+  margin: 3.813rem 0 0 0;
 `
 
 export default function Dialog ({ children }) {
@@ -45,7 +56,7 @@ export default function Dialog ({ children }) {
       <LeftConfetti />
       <Clouds src={decoratorClouds} alt='' className='hide' />
       <Main>
-        <BackButton href='/'>
+        <BackButton onClick={() => window.history.back()}>
           <LeftArrow />
           <Text
             sx={{ variant: 'text.default' }}
