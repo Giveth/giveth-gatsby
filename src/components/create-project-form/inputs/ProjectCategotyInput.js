@@ -37,7 +37,6 @@ export const ProjectCategoryInput = ({
               sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
               key={`${category.name}-label`}
             >
-              {console.log(currentValue)}
               <Checkbox
                 key={`${category.name}-checkbox`}
                 id={category.name}

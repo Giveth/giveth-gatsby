@@ -9,10 +9,12 @@ import {
   ProjectNameInput,
   ProjectAdminInput,
   ProjectDescriptionInput,
-  ProjectCategoryInput
+  ProjectCategoryInput,
+  ProjectImageInput
 } from './inputs'
 import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
+import FinalVerificationStep from './FinalVerificationStep'
 
 const CreateProjectForm = props => {
   const { register, handleSubmit } = useForm()
@@ -60,18 +62,36 @@ const CreateProjectForm = props => {
         currentValue={formData.projectCategory}
         register={register}
       />
+    ),
+    ({ animationStyle }) => (
+      <ProjectImageInput
+        animationStyle={animationStyle}
+        currentValue={formData.projectImage}
+        register={register}
+      />
+    ),
+    ({ animationStyle }) => (
+      <FinalVerificationStep
+        animationStyle={animationStyle}
+        formData={formData}
+        setStep={setCurrentStep}
+        categoryList={categoryList}
+      />
     )
   ]
 
   const onSubmit = data => {
-    let category = formData.category ? formData.category : {}
+    console.log('data---', data)
+    let projectCategory = formData.projectCategory
+      ? formData.projectCategory
+      : {}
     if (currentStep === 3) {
-      category = {
+      projectCategory = {
         ...data
       }
       setFormData({
         ...formData,
-        category
+        projectCategory
       })
     } else {
       setFormData({
@@ -126,7 +146,12 @@ const CreateProjectForm = props => {
           </Flex>
           <form onSubmit={handleSubmit(onSubmit)}>
             <>
-              <EditButtonSection formData={formData} setStep={setCurrentStep} />
+              {currentStep !== steps.length - 1 ? (
+                <EditButtonSection
+                  formData={formData}
+                  setStep={setCurrentStep}
+                />
+              ) : null}
               {stepTransitions.map(({ item, props, key }) => {
                 const Step = steps[item]
                 return <Step key={key} animationStyle={props} />
@@ -134,7 +159,7 @@ const CreateProjectForm = props => {
               <Button
                 aria-label='Next'
                 sx={{
-                  mt: '470px',
+                  mt: '575px',
                   width: '180px',
                   height: '52px',
                   borderRadius: '48px'
