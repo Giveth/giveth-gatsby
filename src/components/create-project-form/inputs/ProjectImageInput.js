@@ -3,8 +3,6 @@ import { Label, Grid, Image, Text, Flex, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
 
-import { storageAvailable } from './index'
-
 import decoratorCloud from '../../../images/decorator-cloud1.png'
 import decoratorLeaf from '../../../images/decorator-leaf.png'
 import gatsbyIcon from '../../../images/gatsby-icon.png'
@@ -20,7 +18,6 @@ export const ProjectImageInput = ({
   currentValue = window.localStorage.getItem('projectImage')
     ? window.localStorage.getItem('projectImage')
     : {}
-  console.log('first-----', currentValue)
   const [image, setImage] = useState(currentValue)
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -30,7 +27,6 @@ export const ProjectImageInput = ({
     }
   })
   useEffect(() => {
-    console.log('storing new image', image)
     if (Object.keys(image).length === 0 && image.constructor === Object) {
       console.log('empty')
     } else {
@@ -39,7 +35,7 @@ export const ProjectImageInput = ({
     }
   }, [image])
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '20px' }}>
+    <animated.section style={{ ...animationStyle, marginTop: '10px' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -55,9 +51,9 @@ export const ProjectImageInput = ({
           alignContent: 'center',
           border: '2px dashed #DFDAE8',
           width: '650px',
-          minHeight: '310px',
-          maxHeight: '310px',
-          mt: '32px',
+          minHeight: '270px',
+          maxHeight: '270px',
+          mt: '12px',
           p: '2.5%',
           gap: '20px'
         }}
@@ -86,7 +82,7 @@ export const ProjectImageInput = ({
                 ? placeHolder
                 : image
             }
-            sx={{ objectFit: 'cover', maxHeight: '200px' }}
+            sx={{ objectFit: 'cover', maxHeight: '150px' }}
           />
           <Text sx={{ marginTop: '30px' }}>
             Drag & drop an image here or{' '}
@@ -139,6 +135,27 @@ export const ProjectImageInput = ({
           }
         )}
       </Grid>
+      <Button
+        aria-label='Next'
+        sx={{
+          mt: '50px',
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px'
+        }}
+        type='submit'
+      >
+        <Text
+          sx={{
+            fontFamily: 'body',
+            fontWeight: 'bold',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          NEXT
+        </Text>
+      </Button>
     </animated.section>
   )
 }

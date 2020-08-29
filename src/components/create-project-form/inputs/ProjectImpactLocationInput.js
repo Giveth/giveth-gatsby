@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Flex, Label, Input, Button, Checkbox, Text } from 'theme-ui'
+import { Flex, Label, Button, Checkbox, Text } from 'theme-ui'
 import { animated } from 'react-spring'
 
 import { LocationInputModal } from '../modals'
@@ -79,6 +79,27 @@ export const ProjectImpactLocationInput = ({
           </Text>
         </Label>
       </Flex>
+      <Button
+        aria-label='Next'
+        sx={{
+          mt: '200px',
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px'
+        }}
+        type='submit'
+      >
+        <Text
+          sx={{
+            fontFamily: 'body',
+            fontWeight: 'bold',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          NEXT
+        </Text>
+      </Button>
       {showLocationInput ? (
         <LocationInputModal
           showModal={showLocationInput}

@@ -6,7 +6,7 @@ const EditButtonSection = ({ formData, setStep }) => {
     <Grid
       sx={{
         width: '120px',
-        mt: '49px'
+        mt: '29px'
       }}
       columns={[2, '3fr 1fr']}
     >

@@ -262,6 +262,30 @@ const FinalVerificationStep = ({
         >
           Replace
         </Button>
+        <br />
+        <Button
+          aria-label='Next'
+          sx={{
+            mt: '39px',
+            width: '240px',
+            height: '52px',
+            borderRadius: '48px'
+          }}
+          type='submit'
+        >
+          <Text
+            sx={{
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%',
+              textTransform: 'uppercase',
+              textAlign: 'center'
+            }}
+          >
+            Start raising funds
+          </Text>
+        </Button>
       </>
     </animated.section>
   )

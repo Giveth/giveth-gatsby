@@ -214,7 +214,7 @@ const CreateProjectForm = props => {
                 const Step = steps[item]
                 return <Step key={key} animationStyle={props} />
               })}
-              <Button
+              {/* <Button
                 aria-label='Next'
                 sx={{
                   mt: '575px',
@@ -234,7 +234,7 @@ const CreateProjectForm = props => {
                 >
                   NEXT
                 </Text>
-              </Button>
+              </Button> */}
               <CloseModal
                 showModal={showCloseModal}
                 setShowModal={setShowCloseModal}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Label, Input, Text } from 'theme-ui'
+import { Label, Input, Text, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
 export const ProjectNameInput = ({
@@ -38,6 +38,27 @@ export const ProjectNameInput = ({
       <Text sx={{ float: 'right', fontFamily: 'body', color: 'muted' }}>
         {characterLength}/55
       </Text>
+      <Button
+        aria-label='Next'
+        sx={{
+          mt: '200px',
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px'
+        }}
+        type='submit'
+      >
+        <Text
+          sx={{
+            fontFamily: 'body',
+            fontWeight: 'bold',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          NEXT
+        </Text>
+      </Button>
     </animated.section>
   )
 }
