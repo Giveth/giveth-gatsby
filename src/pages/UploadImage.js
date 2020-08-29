@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import { Button, Input, Text } from 'theme-ui'
 import { pinFile } from '../services/pinata'
 
