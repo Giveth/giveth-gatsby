@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 import { Helmet } from 'react-helmet'
 
+import { pinFile } from '../../services/Pinata'
+
 import {
   ProjectNameInput,
   ProjectAdminInput,
@@ -90,7 +92,8 @@ const CreateProjectForm = props => {
     )
   ]
 
-  const onSubmit = data => {
+  const onSubmit = async data => {
+    console.log(data)
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
@@ -108,8 +111,26 @@ const CreateProjectForm = props => {
         ...data
       })
     }
-
-    if (currentStep === steps.length - 1) setSubmitted(true)
+    if (currentStep === steps.length - 1) {
+      // if the image is not from Gallery pin it, otherwise just link to gallery image
+      if (formData.projectImage.startsWith('blob')) {
+        const imageBlob = await fetch(formData.projectImage).then(r => r.blob())
+        const imageToUpload = new File([imageBlob], formData.imageName)
+        pinFile(imageToUpload)
+          .then(response => {
+            setFormData({
+              ...formData,
+              projectImage:
+                'https://gateway.pinata.cloud/ipfs/' + response.data.IpfsHash
+            })
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
+      window.localStorage.removeItem('projectImage')
+      setSubmitted(true)
+    }
     nextStep()
   }
 
