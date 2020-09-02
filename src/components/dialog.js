@@ -3,8 +3,8 @@ import { Container, NavLink, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 
-import LeftArrow from '../assets/left-arrow.svg'
-import Confetti from '../assets/donation/confetti.svg'
+import LeftArrow from '../images/svg/general/left-arrow.svg'
+import Confetti from '../images/svg/donation/confetti.svg'
 
 import decoratorClouds from '../images/donate-clouds.png'
 
