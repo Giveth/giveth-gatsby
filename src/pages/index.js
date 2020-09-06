@@ -18,7 +18,6 @@ const ProjectSection = styled(Box)``
 
 const IndexPage = () => {
   const { data } = useQuery(FETCH_PROJECTS)
-
   return (
     <Layout>
       <Hero />
@@ -68,6 +67,7 @@ const IndexPage = () => {
               data.projects &&
               data.projects.map((project, index) => (
                 <ProjectListing
+                  id={project.id}
                   listingId={project.title + '-' + index}
                   key={project.title + '-' + index}
                   name={project.title}

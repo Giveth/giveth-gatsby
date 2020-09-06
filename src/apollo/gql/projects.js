@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 const FETCH_PROJECTS = gql`
   {
     projects {
+      id
       title
     }
   }

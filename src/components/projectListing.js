@@ -25,7 +25,6 @@ const CardContent = styled.span`
 `
 
 const Badge = styled.span`
-  max-width: 25%;
   padding: 3px 11.76px;
   margin: 1rem 0.2rem;
   align-items: center;
@@ -95,13 +94,12 @@ const Categories = () => {
 
 const ProjectListing = props => {
   const { balance } = useContext(TorusContext)
-
   return (
     <Box
       key={props.listingId + '_box'}
       style={{ width: '100%', cursor: props.disabled ? 'default' : 'pointer' }}
       onClick={() => {
-        !props.disabled && navigate('/donate/1')
+        !props.disabled && navigate(`/donate/${props?.id || '1'}`)
       }}
     >
       <ProjectCard key={props.listingId + '_card'}>
