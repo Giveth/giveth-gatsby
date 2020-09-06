@@ -19,7 +19,7 @@ If you want to contribute, pls say hello to us in chat -  [https://giveth.io/joi
 - Tor.us
 - Theme UI
 
-## Contributor's guide
+## Setup
 
 1.  **Clone and install the backend server**
 
@@ -62,4 +62,24 @@ If you want to contribute, pls say hello to us in chat -  [https://giveth.io/joi
     
     Save your changes and the browser will update in real time!
 
-1. **TODO Gitflow and contributor guidelines**
+### Contributor Guide
+
+1. Like, star and fork the repo if you want to help with visibility
+1. Have a look at the issue board and choose something to work on
+1. Before starting any work, please at least say "Hi" on the **giveth2-dev**/**Giveth2 construction office** channel (see chat links here: https://giveth.io/join)
+3. Even better, after introducing yourself pls join the next **DEV Call** (usually Sunday 17:30 CEST, but watch announcements in the discord channel)
+4. Please ask somebody
+5. If you found the project via a Gitcoin bounty, please make sure to check the issue every few days until completion (Gitcoin requires some proof of life checks)
+6. Please start a new branch on your fork named with the feature/fix you want to attempt and make a **pull request** when you are confident everything is ready to publish
+
+### Gitflow
+
+**master** only for PR's and noncritical hotfixes like typo's after merging - deploys to https://v2.giveth.io
+
+**New features** should be pushed to a new branch named **$featurename** (No **develop** or **release** branches currently, but at least **develop** will be added in the future to have a proper staging environment)
+
+### Styling
+
+Styling should be done in cooperation with senior contributors so a minimum of new styles is introduced locally. As a rule of thumb: all styles that are used more than once or are not very specific to one component should be added in the **Theme UI definition**`src/gatsby-plugin-theme-ui/index.js` whenever possible and additionally to a gatsby page we use to collect all defined styles `src/pages/viewstyles.js` to quickly check consistency.
+
+Please refer to some examples in the code to see how we deal with styles. Local overrides and extensions should be done via `sx prop` or `emotionJS`.
