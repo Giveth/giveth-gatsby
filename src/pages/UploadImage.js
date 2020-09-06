@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Input, Text } from 'theme-ui'
-import { pinFile } from '../services/pinata'
+import { pinFile } from '../services/Pinata'
 
 const containerStyles = {
   margin: 'auto',
