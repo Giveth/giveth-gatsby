@@ -1,11 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
-import Web3 from 'web3'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
-
-const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
 
 const torus = new DirectWebSdk({
   baseUrl: process.env.GATSBY_BASE_URL + '/serviceworker/',

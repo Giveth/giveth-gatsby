@@ -1,9 +1,14 @@
 import gql from 'graphql-tag'
 
 const FETCH_PROJECTS = gql`
+ query FetchProjects($limit: Int, $skip: Int)
   {
-    projects {
-      title
+  topProjects(take: $limit, skip: $skip){
+      projects {
+        title
+        balance
+      }
+      totalCount
     }
   }
 `
