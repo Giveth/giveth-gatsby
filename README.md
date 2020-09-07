@@ -84,5 +84,5 @@ Styling should be done in cooperation with senior contributors so a minimum of n
 Please refer to some examples in the code to see how we deal with styles. Local overrides and extensions should be done via `sx prop` or `emotionJS`.
 
 ### Code conventions
-- as mentioned above contributor code should be listed with StandardJS
+- as mentioned above contributor code should be linted with StandardJS
 - React components for into the folder `/src/components` and component filenames should be written in Camel case.
