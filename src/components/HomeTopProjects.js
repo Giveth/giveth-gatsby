@@ -1,26 +1,33 @@
 /** @jsx jsx */
 
-import { jsx, Box } from 'theme-ui'
+import { jsx } from 'theme-ui'
 import { useQuery } from '@apollo/react-hooks'
 import { FETCH_PROJECTS } from '../apollo/gql/projects'
 import { navigate } from 'gatsby'
-import styled from '@emotion/styled'
-import ProjectsList from './ProjectsList'
+import ProjectsList, { OrderByDirection, OrderByField } from './ProjectsList'
+import { useState } from 'react'
 
-const ProjectSection = styled(Box)``
+
 const HomeTopProjects = () => {
+  const [orderByField, setOrderByField] = useState(OrderByField.Balance);
+  const orderBy = {
+    field: orderByField,
+    direction: OrderByDirection.DESC
+  }
+
   const { data } = useQuery(FETCH_PROJECTS, {
-    variables: { limit: 2 }
+    variables: { limit: 2, orderBy }
   })
 
   const { topProjects } = data || {}
-  const { projects, totalCount } = topProjects || {}
+  const { projects = [], totalCount = 0 } = topProjects || {}
   return (
     <ProjectsList
       projects={projects}
       totalCount={totalCount}
       loadMore={() => navigate('/projects')}
       hasMore={true}
+      selectOrderByField={setOrderByField}
     />
   )
 }

@@ -1,13 +1,25 @@
 /** @jsx jsx */
-import { Grid, Text, jsx, Button, Box } from 'theme-ui'
+import { Box, Button, Grid, jsx, Select, Text, Input } from 'theme-ui'
 import ProjectCard from './projectCard'
 import NoImage from '../images/no-image-available.jpg'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import theme from '../gatsby-plugin-theme-ui'
+import React from 'react'
 
 const ProjectSection = styled(Box)``
+
+
+export const OrderByField = {
+  Balance: 'Balance',
+  CreationDate: 'CreationDate',
+}
+
+export const OrderByDirection = {
+  ASC: 'ASC',
+  DESC: 'DESC',
+}
 
 const CreateLink = styled(Link)`
   text-decoration: none;
@@ -21,8 +33,50 @@ const CreateLink = styled(Link)`
   }
 `
 
-const ProjectsList = (props) => {
-  const { projects, totalCount, loadMore, hasMore } = props
+const SelectMenu = props => {
+  const { caption, options = {}, onChange = () => {}, defaultValue } = props
+  return (
+    <div style={{
+      flexGrow: 1,
+      margin: '10px'
+    }}>
+      <Text
+        pl={3}
+        sx={{
+          variant: 'text.default',
+          color: 'secondary',
+          fontSize: 3,
+          fontWeight: 'medium',
+          textDecoration: 'none',
+          textTransform: 'uppercase'
+        }}
+      >{caption}
+      </Text>
+      <Select
+        pl={3}
+        sx={{
+          variant: 'text.default',
+          color: 'secondary',
+          fontSize: 3,
+          fontWeight: 'medium',
+          textDecoration: 'none',
+          width: '100%'
+        }}
+        defaultValue={defaultValue}
+        onChange={e => onChange(e.target.value)}
+        mb={3} name="cars" id="cars">
+        {Object.entries(options).map(([key, value]) => <option key={key} value={key}>{value}</option>)}
+      </Select>
+    </div>
+  )
+}
+
+const orderBySelectOptions = {};
+orderBySelectOptions[OrderByField.Balance] = 'Amount Raised';
+orderBySelectOptions[OrderByField.CreationDate] = 'Recent';
+
+const ProjectsList = props => {
+  const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
   return (
     <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
       <div
@@ -38,7 +92,7 @@ const ProjectsList = (props) => {
           justifyContent: 'space-between'
         }}>
           <Text style={{
-            width: '50%',
+            width: '50%'
           }}>
         <span
           sx={{
@@ -57,6 +111,45 @@ const ProjectsList = (props) => {
           </Text>
           <CreateLink to='/create'>Create a project</CreateLink>
         </div>
+
+        <div style={{
+          width: '100%',
+          display: 'flex'
+        }}>
+          <SelectMenu
+            caption='impact'
+            options={{
+              covid19: 'COVID-19',
+            }}
+            onChange={console.log}
+          />
+          <SelectMenu
+            caption='location'
+            options={{
+              worldWide: 'World Wide',
+            }}
+            onChange={console.log}
+          />
+          <SelectMenu
+            caption='sort by'
+            options={orderBySelectOptions}
+            onChange={selectOrderByField}
+          />
+          <div style={{
+            flexGrow: 3,
+            display: 'flex',
+          }}>
+            <Input
+              placeholder='search'
+              style={{
+                width: '100%',
+                margin: 'auto'
+              }}
+            />
+          </div>
+        </div>
+
+
         <div style={{
           width: '100%'
         }}>
@@ -129,9 +222,10 @@ const ProjectsList = (props) => {
 }
 
 ProjectsList.propTypes = {
-  projects: PropTypes.object,
-  totalCount: PropTypes.number,
-  loadMore: PropTypes.func,
-  hasMore: PropTypes.number
+  projects: PropTypes.array.isRequired,
+  totalCount: PropTypes.number.isRequired,
+  loadMore: PropTypes.func.isRequired,
+  hasMore: PropTypes.bool.isRequired,
+  selectOrderByField: PropTypes.func.isRequired,
 }
 export default ProjectsList
