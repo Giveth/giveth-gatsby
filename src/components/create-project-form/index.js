@@ -22,6 +22,12 @@ import FinalVerificationStep from './FinalVerificationStep'
 
 const CreateProjectForm = props => {
   const APIKEY = 'AIzaSyBEHB5JWEyBUNF4F8mrSxtiVCLOyUPOBL4'
+  ProjectCategoryInput
+} from './inputs'
+import { CloseModal } from './modals'
+import EditButtonSection from './EditButtonSection'
+
+const CreateProjectForm = props => {
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [submitted, setSubmitted] = useState(false)
@@ -99,11 +105,19 @@ const CreateProjectForm = props => {
       : {}
     if (currentStep === 3) {
       projectCategory = {
+    )
+  ]
+
+  const onSubmit = data => {
+    let category = formData.category ? formData.category : {}
+    if (currentStep === 3) {
+      category = {
         ...data
       }
       setFormData({
         ...formData,
         projectCategory
+        category
       })
     } else {
       setFormData({
@@ -131,6 +145,8 @@ const CreateProjectForm = props => {
       window.localStorage.removeItem('projectImage')
       setSubmitted(true)
     }
+
+    if (currentStep === steps.length - 1) setSubmitted(true)
     nextStep()
   }
 
@@ -231,6 +247,7 @@ const CreateProjectForm = props => {
                   setStep={setCurrentStep}
                 />
               ) : null}
+              <EditButtonSection formData={formData} setStep={setCurrentStep} />
               {stepTransitions.map(({ item, props, key }) => {
                 const Step = steps[item]
                 return <Step key={key} animationStyle={props} />
@@ -255,6 +272,7 @@ const CreateProjectForm = props => {
                 >
                   NEXT
                 </Text>
+
               </Button> */}
               <CloseModal
                 showModal={showCloseModal}
