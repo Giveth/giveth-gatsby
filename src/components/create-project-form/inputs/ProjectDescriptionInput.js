@@ -75,6 +75,27 @@ export const ProjectDescriptionInput = ({
           {characterLength}/2000
         </Text>
       </Flex>
+      <Button
+        aria-label='Next'
+        sx={{
+          mt: '100px',
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px'
+        }}
+        type='submit'
+      >
+        <Text
+          sx={{
+            fontFamily: 'body',
+            fontWeight: 'bold',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          NEXT
+        </Text>
+      </Button>
       {showInstructions ? (
         <DescriptionInstructionModal
           showModal={showInstructions}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox, Label, Box, Text } from 'theme-ui'
+import { Checkbox, Label, Box, Text, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
 export const ProjectCategoryInput = ({
@@ -37,7 +37,6 @@ export const ProjectCategoryInput = ({
               sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
               key={`${category.name}-label`}
             >
-              {console.log(currentValue)}
               <Checkbox
                 key={`${category.name}-checkbox`}
                 id={category.name}
@@ -56,6 +55,27 @@ export const ProjectCategoryInput = ({
           )
         })}
       </Box>
+      <Button
+        aria-label='Next'
+        sx={{
+          mt: '200px',
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px'
+        }}
+        type='submit'
+      >
+        <Text
+          sx={{
+            fontFamily: 'body',
+            fontWeight: 'bold',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          NEXT
+        </Text>
+      </Button>
     </animated.section>
   )
 }

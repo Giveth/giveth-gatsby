@@ -4,11 +4,24 @@ import { Box, Heading, Flex, Button, Text } from 'theme-ui'
 
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
+import { Helmet } from 'react-helmet'
+
+import { pinFile } from '../../services/Pinata'
 
 import {
   ProjectNameInput,
   ProjectAdminInput,
   ProjectDescriptionInput,
+  ProjectCategoryInput,
+  ProjectImpactLocationInput,
+  ProjectImageInput
+} from './inputs'
+import { CloseModal } from './modals'
+import EditButtonSection from './EditButtonSection'
+import FinalVerificationStep from './FinalVerificationStep'
+
+const CreateProjectForm = props => {
+  const APIKEY = 'AIzaSyBEHB5JWEyBUNF4F8mrSxtiVCLOyUPOBL4'
   ProjectCategoryInput
 } from './inputs'
 import { CloseModal } from './modals'
@@ -60,6 +73,38 @@ const CreateProjectForm = props => {
         currentValue={formData.projectCategory}
         register={register}
       />
+    ),
+    ({ animationStyle }) => (
+      <ProjectImpactLocationInput
+        animationStyle={animationStyle}
+        currentValue={formData.projectImpactLocation}
+        register={register}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectImageInput
+        animationStyle={animationStyle}
+        currentValue={formData.projectImage}
+        register={register}
+      />
+    ),
+    ({ animationStyle }) => (
+      <FinalVerificationStep
+        animationStyle={animationStyle}
+        formData={formData}
+        setStep={setCurrentStep}
+        categoryList={categoryList}
+      />
+    )
+  ]
+
+  const onSubmit = async data => {
+    console.log(data)
+    let projectCategory = formData.projectCategory
+      ? formData.projectCategory
+      : {}
+    if (currentStep === 3) {
+      projectCategory = {
     )
   ]
 
@@ -71,6 +116,7 @@ const CreateProjectForm = props => {
       }
       setFormData({
         ...formData,
+        projectCategory
         category
       })
     } else {
@@ -78,6 +124,26 @@ const CreateProjectForm = props => {
         ...formData,
         ...data
       })
+    }
+    if (currentStep === steps.length - 1) {
+      // if the image is not from Gallery pin it, otherwise just link to gallery image
+      if (formData.projectImage.startsWith('blob')) {
+        const imageBlob = await fetch(formData.projectImage).then(r => r.blob())
+        const imageToUpload = new File([imageBlob], formData.imageName)
+        pinFile(imageToUpload)
+          .then(response => {
+            setFormData({
+              ...formData,
+              projectImage:
+                'https://gateway.pinata.cloud/ipfs/' + response.data.IpfsHash
+            })
+          })
+          .catch(e => {
+            console.log(e)
+          })
+      }
+      window.localStorage.removeItem('projectImage')
+      setSubmitted(true)
     }
 
     if (currentStep === steps.length - 1) setSubmitted(true)
@@ -102,6 +168,55 @@ const CreateProjectForm = props => {
         <pre>{JSON.stringify(formData, null, 2)}</pre>
       ) : (
         <>
+          <Helmet>
+            <script
+              src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
+              defer
+            />
+            <script type='text/javascript'>
+              {`
+          let map;
+          function initMap(setLocation) {
+              map = new google.maps.Map(document.getElementById('map'), {
+                  center: {lat: 0, lng: 0 },
+                  zoom: 1,
+                  mapTypeControl: false,
+                  panControl: false,
+                  zoomControl: false,
+                  streetViewControl: false
+              });
+              // Create the autocomplete object and associate it with the UI input control.
+              autocomplete = new google.maps.places.Autocomplete(
+                document.getElementById("autocomplete"),
+                {
+                  types: ["geocode"],
+                }  
+              );
+              places = new google.maps.places.PlacesService(map);
+              autocomplete.addListener("place_changed",function(e){
+                onPlaceChanged(setLocation);
+              });
+          }
+          function onPlaceChanged(setLocation) {
+            const place = autocomplete.getPlace();
+            if (place) {
+              if (place.geometry) {
+                map.panTo(place.geometry.location);
+                var marker = new google.maps.Marker({
+                  position: place.geometry.location,
+                  map: map,
+                  title: place.formatted_address
+                });
+                map.setZoom(13);
+                setLocation(place.formatted_address)
+              } else {
+                document.getElementById("autocomplete").placeholder = "Search a Location";
+              }
+            }
+          }
+        `}
+            </script>
+          </Helmet>
           <Flex
             sx={{
               alignItems: 'center',
@@ -126,15 +241,21 @@ const CreateProjectForm = props => {
           </Flex>
           <form onSubmit={handleSubmit(onSubmit)}>
             <>
+              {currentStep !== steps.length - 1 ? (
+                <EditButtonSection
+                  formData={formData}
+                  setStep={setCurrentStep}
+                />
+              ) : null}
               <EditButtonSection formData={formData} setStep={setCurrentStep} />
               {stepTransitions.map(({ item, props, key }) => {
                 const Step = steps[item]
                 return <Step key={key} animationStyle={props} />
               })}
-              <Button
+              {/* <Button
                 aria-label='Next'
                 sx={{
-                  mt: '470px',
+                  mt: '575px',
                   width: '180px',
                   height: '52px',
                   borderRadius: '48px'
@@ -151,7 +272,8 @@ const CreateProjectForm = props => {
                 >
                   NEXT
                 </Text>
-              </Button>
+
+              </Button> */}
               <CloseModal
                 showModal={showCloseModal}
                 setShowModal={setShowCloseModal}
