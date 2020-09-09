@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Button, Heading, Text, IconButton } from 'theme-ui'
 import styled from '@emotion/styled'
 
-import ProjectListing from '../components/projectListing'
+import ProjectCard from '../components/projectCard'
 
 // import placeholder image
 import noImage from '../images/no-image-available.jpg'
@@ -145,7 +145,7 @@ const ViewStyles = () => {
             <Text sx={{ variant: 'text.styleGuide' }}>Components</Text>
             <Container>
               <Grid width={[128, null, 192]}>
-                <ProjectListing
+                <ProjectCard
                   name='Giveth DAC'
                   image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
                   raised={1223}
