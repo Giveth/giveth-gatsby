@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Heading, Flex, Button, Text } from 'theme-ui'
+import { Box, Heading, Flex, Button } from 'theme-ui'
 
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
@@ -24,17 +24,12 @@ const CreateProjectForm = props => {
   const APIKEY = 'AIzaSyBEHB5JWEyBUNF4F8mrSxtiVCLOyUPOBL4'
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
-  const [submitted, setSubmitted] = useState(false)
   const categoryList = [
     { name: 'nonprofit', value: 'Non-profit' },
     { name: 'covid19', value: 'COVID-19' },
     { name: 'technology', value: 'Technology' },
     { name: 'other', value: 'Other' }
   ]
-
-  useEffect(() => {
-    props.onSubmit(formData)
-  }, [submitted])
 
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
@@ -118,18 +113,19 @@ const CreateProjectForm = props => {
         const imageToUpload = new File([imageBlob], formData.imageName)
         pinFile(imageToUpload)
           .then(response => {
-            setFormData({
-              ...formData,
-              projectImage:
-                'https://gateway.pinata.cloud/ipfs/' + response.data.IpfsHash
-            })
+            window.localStorage.removeItem('projectImage')
+            props.onSubmit(
+              formData,
+              `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`
+            )
           })
           .catch(e => {
             console.log(e)
           })
+      } else {
+        window.localStorage.removeItem('projectImage')
+        props.onSubmit(formData)
       }
-      window.localStorage.removeItem('projectImage')
-      setSubmitted(true)
     }
     nextStep()
   }
@@ -148,17 +144,15 @@ const CreateProjectForm = props => {
 
   return (
     <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
-      {submitted ? (
-        <pre>{JSON.stringify(formData, null, 2)}</pre>
-      ) : (
-        <>
-          <Helmet>
-            <script
-              src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
-              defer
-            />
-            <script type='text/javascript'>
-              {`
+      <>
+        {}
+        <Helmet>
+          <script
+            src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
+            defer
+          />
+          <script type='text/javascript'>
+            {`
           let map;
           function initMap(setLocation) {
               map = new google.maps.Map(document.getElementById('map'), {
@@ -199,30 +193,31 @@ const CreateProjectForm = props => {
             }
           }
         `}
-            </script>
-          </Helmet>
-          <Flex
+          </script>
+        </Helmet>
+        <Flex
+          sx={{
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Heading as='h5'>CREATE A NEW PROJECT</Heading>
+          <Button
+            type='button'
+            aria-label='Cancel'
+            onClick={() => setShowCloseModal(!showCloseModal)}
             sx={{
-              alignItems: 'center',
-              justifyContent: 'space-between'
+              fontSize: '3',
+              fontFamily: 'body',
+              color: 'secondary',
+              background: 'unset',
+              cursor: 'pointer'
             }}
           >
-            <Heading as='h5'>CREATE A NEW PROJECT</Heading>
-            <Button
-              type='button'
-              aria-label='Cancel'
-              onClick={() => setShowCloseModal(!showCloseModal)}
-              sx={{
-                fontSize: '3',
-                fontFamily: 'body',
-                color: 'secondary',
-                background: 'unset',
-                cursor: 'pointer'
-              }}
-            >
-              Cancel
-            </Button>
-          </Flex>
+            Cancel
+          </Button>
+        </Flex>
+        {currentStep === steps.length ? null : (
           <form onSubmit={handleSubmit(onSubmit)}>
             <>
               {currentStep !== steps.length - 1 ? (
@@ -235,35 +230,14 @@ const CreateProjectForm = props => {
                 const Step = steps[item]
                 return <Step key={key} animationStyle={props} />
               })}
-              {/* <Button
-                aria-label='Next'
-                sx={{
-                  mt: '575px',
-                  width: '180px',
-                  height: '52px',
-                  borderRadius: '48px'
-                }}
-                type='submit'
-              >
-                <Text
-                  sx={{
-                    fontFamily: 'body',
-                    fontWeight: 'bold',
-                    fontSize: 2,
-                    letterSpacing: '4%'
-                  }}
-                >
-                  NEXT
-                </Text>
-              </Button> */}
               <CloseModal
                 showModal={showCloseModal}
                 setShowModal={setShowCloseModal}
               />
             </>
           </form>
-        </>
-      )}
+        )}
+      </>
     </Box>
   )
 }
