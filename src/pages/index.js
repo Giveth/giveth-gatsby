@@ -1,13 +1,20 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
+import { Grid, Box, jsx } from 'theme-ui'
 
+import { useQuery } from '@apollo/react-hooks'
+import styled from '@emotion/styled'
 import Layout from '../components/layout'
 import Hero from '../components/HeroSection'
 import InfoSection from '../components/InfoSection'
 import UpdatesSection from '../components/UpdatesSection'
-import HomeTopProjects from '../components/HomeTopProjects'
+import ProjectListing from '../components/projectListing'
+
+import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
 // placeholder image
+import NoImage from '../images/no-image-available.jpg'
+
+const ProjectSection = styled(Box)``
 
 const IndexPage = () => {
   const { data } = useQuery(FETCH_PROJECTS)

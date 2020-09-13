@@ -1,11 +1,10 @@
 import gql from 'graphql-tag'
 
 const FETCH_PROJECTS = gql`
- 
- query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy)
-  {
-  topProjects(take: $limit, skip: $skip, orderBy: $orderBy){
+  query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy) {
+    topProjects(take: $limit, skip: $skip, orderBy: $orderBy) {
       projects {
+        id
         title
         balance
       }
@@ -27,6 +26,7 @@ const FETCH_PROJECT = gql`
 const ADD_PROJECT = gql`
   mutation($title: String!, $description: String!) {
     addProjectSimple(title: $title, description: $description) {
+      id
       title
       description
     }

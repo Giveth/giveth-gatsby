@@ -10,15 +10,14 @@ import React from 'react'
 
 const ProjectSection = styled(Box)``
 
-
 export const OrderByField = {
   Balance: 'Balance',
-  CreationDate: 'CreationDate',
+  CreationDate: 'CreationDate'
 }
 
 export const OrderByDirection = {
   ASC: 'ASC',
-  DESC: 'DESC',
+  DESC: 'DESC'
 }
 
 const CreateLink = styled(Link)`
@@ -36,10 +35,12 @@ const CreateLink = styled(Link)`
 const SelectMenu = props => {
   const { caption, options = {}, onChange = () => {}, defaultValue } = props
   return (
-    <div style={{
-      flexGrow: 1,
-      margin: '10px'
-    }}>
+    <div
+      style={{
+        flexGrow: 1,
+        margin: '10px'
+      }}
+    >
       <Text
         pl={3}
         sx={{
@@ -50,7 +51,8 @@ const SelectMenu = props => {
           textDecoration: 'none',
           textTransform: 'uppercase'
         }}
-      >{caption}
+      >
+        {caption}
       </Text>
       <Select
         pl={3}
@@ -64,16 +66,23 @@ const SelectMenu = props => {
         }}
         defaultValue={defaultValue}
         onChange={e => onChange(e.target.value)}
-        mb={3} name="cars" id="cars">
-        {Object.entries(options).map(([key, value]) => <option key={key} value={key}>{value}</option>)}
+        mb={3}
+        name='cars'
+        id='cars'
+      >
+        {Object.entries(options).map(([key, value]) => (
+          <option key={key} value={key}>
+            {value}
+          </option>
+        ))}
       </Select>
     </div>
   )
 }
 
-const orderBySelectOptions = {};
-orderBySelectOptions[OrderByField.Balance] = 'Amount Raised';
-orderBySelectOptions[OrderByField.CreationDate] = 'Recent';
+const orderBySelectOptions = {}
+orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
+orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
   const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
@@ -86,47 +95,56 @@ const ProjectsList = props => {
           padding: '0 1.0875rem 1.45rem'
         }}
       >
-        <div style={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between'
-        }}>
-          <Text style={{
-            width: '50%'
-          }}>
-        <span
-          sx={{
-            variant: 'headings.h1',
-            width: ['100%', null, null],
-            fontWeight: 'regular',
-            fontSize: ['8', '11', '11'],
-            color: 'secondaryDark'
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between'
           }}
-        >Projects</span> <span
-            sx={{
-              variant: 'headings.h4',
-              color: 'bodyDark'
+        >
+          <Text
+            style={{
+              width: '50%'
             }}
-          >{`(${totalCount})`}</span>
+          >
+            <span
+              sx={{
+                variant: 'headings.h1',
+                width: ['100%', null, null],
+                fontWeight: 'regular',
+                fontSize: ['8', '11', '11'],
+                color: 'secondaryDark'
+              }}
+            >
+              Projects
+            </span>{' '}
+            <span
+              sx={{
+                variant: 'headings.h4',
+                color: 'bodyDark'
+              }}
+            >{`(${totalCount})`}</span>
           </Text>
           <CreateLink to='/create'>Create a project</CreateLink>
         </div>
 
-        <div style={{
-          width: '100%',
-          display: 'flex'
-        }}>
+        <div
+          style={{
+            width: '100%',
+            display: 'flex'
+          }}
+        >
           <SelectMenu
             caption='impact'
             options={{
-              covid19: 'COVID-19',
+              covid19: 'COVID-19'
             }}
             onChange={console.log}
           />
           <SelectMenu
             caption='location'
             options={{
-              worldWide: 'World Wide',
+              worldWide: 'World Wide'
             }}
             onChange={console.log}
           />
@@ -135,10 +153,12 @@ const ProjectsList = props => {
             options={orderBySelectOptions}
             onChange={selectOrderByField}
           />
-          <div style={{
-            flexGrow: 3,
-            display: 'flex',
-          }}>
+          <div
+            style={{
+              flexGrow: 3,
+              display: 'flex'
+            }}
+          >
             <Input
               placeholder='search'
               style={{
@@ -149,10 +169,11 @@ const ProjectsList = props => {
           </div>
         </div>
 
-
-        <div style={{
-          width: '100%'
-        }}>
+        <div
+          style={{
+            width: '100%'
+          }}
+        >
           <Grid p={4} columns={[1, 2, 3]} style={{ justifyItems: 'center' }}>
             <ProjectCard
               name='Giveth DAC'
@@ -187,8 +208,7 @@ const ProjectsList = props => {
               key='key4'
             />
             {projects &&
-            projects.map((project, index) =>
-              (
+              projects.map((project, index) => (
                 <ProjectCard
                   listingId={project.title + '-' + index}
                   key={project.title + '-' + index}
@@ -201,21 +221,17 @@ const ProjectsList = props => {
           </Grid>
         </div>
         {hasMore && (
-          <div
-            sx={{ justifySelf: 'center', textAlign: 'center' }}
-          >
+          <div sx={{ justifySelf: 'center', textAlign: 'center' }}>
             <Button
               sx={{
                 variant: 'buttons.tiny'
               }}
-
               onClick={() => loadMore()}
             >
               Show more Projects
             </Button>
           </div>
-        )
-        }
+        )}
       </div>
     </ProjectSection>
   )
@@ -226,6 +242,6 @@ ProjectsList.propTypes = {
   totalCount: PropTypes.number.isRequired,
   loadMore: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
-  selectOrderByField: PropTypes.func.isRequired,
+  selectOrderByField: PropTypes.func.isRequired
 }
 export default ProjectsList
