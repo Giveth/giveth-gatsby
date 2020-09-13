@@ -1,13 +1,13 @@
 /** @jsx jsx */
 import { Grid, Box, jsx } from 'theme-ui'
+
 import { useQuery } from '@apollo/react-hooks'
 import styled from '@emotion/styled'
-
 import Layout from '../components/layout'
 import Hero from '../components/HeroSection'
-import ProjectListing from '../components/projectListing'
 import InfoSection from '../components/InfoSection'
 import UpdatesSection from '../components/UpdatesSection'
+import ProjectListing from '../components/projectListing'
 
 import { FETCH_PROJECTS } from '../apollo/gql/projects'
 
@@ -18,7 +18,6 @@ const ProjectSection = styled(Box)``
 
 const IndexPage = () => {
   const { data } = useQuery(FETCH_PROJECTS)
-
   return (
     <Layout>
       <Hero />
@@ -68,6 +67,7 @@ const IndexPage = () => {
               data.projects &&
               data.projects.map((project, index) => (
                 <ProjectListing
+                  id={project.id}
                   listingId={project.title + '-' + index}
                   key={project.title + '-' + index}
                   name={project.title}

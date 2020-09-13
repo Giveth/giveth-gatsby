@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import { Heading, Box, Card, IconButton, Text } from 'theme-ui'
+import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
 import theme from '../gatsby-plugin-theme-ui/index'
@@ -12,8 +13,24 @@ import { TorusContext } from '../contextProvider/torusProvider'
 const ProjectCard = styled(Card)`
   background-color: ${theme.colors.background};
   margin-bottom: 30px;
-  border-radius: 6px;
+  border-radius: 12px;
   width: 100%;
+`
+
+const CardContent = styled.span`
+  display: flex;
+  flex: 1;
+  word-wrap: break-word;
+  padding: 0.5rem 1rem;
+`
+
+const Badge = styled.span`
+  padding: 3px 11.76px;
+  margin: 1rem 0.2rem;
+  align-items: center;
+  border: 1px solid ${theme.colors.bodyLight};
+  border-radius: 48px;
+  color: ${theme.colors.bodyLight};
 `
 
 const Dot = styled.span`
@@ -37,18 +54,54 @@ const DotInner = styled.span`
   align-self: center;
   position: relative;
 `
-const CardFooter = styled.span`
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  justify-content: flex-end;
+
+const Options = styled.span`
+  font-family: 'Red Hat Text', sans-serif;
+  color: ${theme.colors.background};
+  display: flex;
+  position: absolute;
   align-items: center;
+  bottom: -54px;
+  right: 24px;
+  z-index: 1;
+`
+
+const CardFooter = styled.span`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 1rem 0;
   padding: 0rem 1rem;
 `
+
+const Categories = () => {
+  const categories = ['covid-19', 'non-profit']
+  return categories.map((category, index) => (
+    <Badge key={index}>
+      <Text
+        sx={{ variant: 'text.default' }}
+        style={{
+          fontSize: '10px',
+          color: theme.colors.bodyLight,
+          fontWeight: '500'
+        }}
+      >
+        {category.toUpperCase()}
+      </Text>
+    </Badge>
+  ))
+}
 
 const ProjectListing = props => {
   const { balance } = useContext(TorusContext)
   return (
-    <Box key={props.listingId + '_box'} style={{ width: '100%' }}>
+    <Box
+      key={props.listingId + '_box'}
+      style={{ width: '100%', cursor: props.disabled ? 'default' : 'pointer' }}
+      onClick={() => {
+        !props.disabled && navigate(`/donate/${props?.id || '1'}`)
+      }}
+    >
       <ProjectCard key={props.listingId + '_card'}>
         <div
           key={props.listingId + '_div'}
@@ -57,7 +110,7 @@ const ProjectListing = props => {
             width: '100%',
             height: '186px',
             margin: '0 auto',
-            borderRadius: '6px 6px 0px 0px',
+            borderRadius: '12px 12px 0px 0px',
             backgroundImage: `url(${props.image})`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
@@ -85,41 +138,67 @@ const ProjectListing = props => {
               </DotInner>
             )}
           </Dot>
+          <Options>
+            <IconButton>
+              <img src={iconHeart} alt='' />
+            </IconButton>
+            <IconButton>
+              <img src={iconShare} alt='' />
+            </IconButton>
+          </Options>
         </div>
         <Heading
           sx={{ variant: 'headings.h6' }}
           style={{
-            padding: '2.5rem 1rem 1rem 1rem',
+            padding: '2.5rem 1rem 0 1rem',
             width: '260',
-            whiteSpace: 'nowrap',
+            height: '100%',
             overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
+            color: theme.colors.secondary
           }}
           key={props.listingId + '_heading'}
         >
           {props.name}
-        </Heading>
-        <br />
-
-        <CardFooter>
           <Text
             sx={{ variant: 'text.default' }}
-            style={{ color: theme.colors.muted, alignSelf: 'center' }}
+            style={{
+              color: theme.colors.primary,
+              alignSelf: 'center',
+              minHeight: '28px',
+              lineHeight: '150%',
+              paddingTop: '4px'
+            }}
           >
-            {props.category}
+            This is a description
           </Text>
-          <IconButton>
-            <img src={iconHeart} alt={''} />
-          </IconButton>
-          <IconButton>
-            <img src={iconShare} alt={''} />
-          </IconButton>
+        </Heading>
+        <CardContent>
+          <Text
+            sx={{ variant: 'text.default' }}
+            style={{
+              fontSize: '16px',
+              color: theme.colors.bodyDark,
+              lineHeight: '150%'
+            }}
+          >
+            {
+              /* Description String */
+
+              props.description
+            }
+          </Text>
+        </CardContent>
+        <CardFooter>
+          <Categories />
         </CardFooter>
       </ProjectCard>
-      <Donate
-        maxAmount={balance}
-        doDonate={values => alert('donating' + values.amount)}
-      />
+      {
+        // <Donate
+        //   maxAmount={balance}
+        //   doDonate={values => alert('donating' + values.amount)}
+        // />
+      }
     </Box>
   )
 }

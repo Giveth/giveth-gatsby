@@ -1,19 +1,36 @@
 import gql from 'graphql-tag'
 
 const FETCH_PROJECTS = gql`
-  {
-    projects {
-      title
+  query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy) {
+    topProjects(take: $limit, skip: $skip, orderBy: $orderBy) {
+      projects {
+        id
+        title
+        balance
+      }
+      totalCount
     }
   }
 `
-const ADD_PROJECT = gql`
-  mutation($title: String!, $description: String!) {
-    addProjectSimple(title: $title, description: $description) {
+
+const FETCH_PROJECT = gql`
+  query Project($id: ID!) {
+    project(id: $id) {
+      id
       title
       description
     }
   }
 `
 
-export { FETCH_PROJECTS, ADD_PROJECT }
+const ADD_PROJECT = gql`
+  mutation($title: String!, $description: String!) {
+    addProjectSimple(title: $title, description: $description) {
+      id
+      title
+      description
+    }
+  }
+`
+
+export { FETCH_PROJECTS, FETCH_PROJECT, ADD_PROJECT }

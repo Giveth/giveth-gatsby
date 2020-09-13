@@ -9,9 +9,9 @@ import styled from '@emotion/styled'
 import decoratorCloud1 from '../images/decorator-cloud1.png'
 import decoratorCloud2 from '../images/decorator-cloud2.png'
 import decoratorFizzysquare from '../images/decorator-fizzy-square-rotated.png'
-import decoratorAltruistic from '../images/decorator-a.png'
-import decoratorDecentralized from '../images/decorator-b.png'
-import decoratorCommunity from '../images/decorator-c.png'
+import DecoratorAltruistic from '../images/svg/general/decorators/a.svg'
+import DecoratorDecentralized from '../images/svg/general/decorators/b.svg'
+import DecoratorCommunity from '../images/svg/general/decorators/c.svg'
 import decoratorPuzzleguy from '../images/people-puzzle.png'
 
 const Main = styled(Grid)`
@@ -68,7 +68,7 @@ const InfoSection = () => {
         sx={{ justifyItems: 'center', textAlign: 'center' }}
       >
         <Box sx={{ maxWidth: '320px' }}>
-          <img src={decoratorAltruistic} alt='' heigth='70px' />
+          <DecoratorAltruistic />
           <Text sx={{ variant: 'headings.h4' }}>Altruistic</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
             We build tools for the common good and support others in doing so as
@@ -77,7 +77,7 @@ const InfoSection = () => {
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
-          <img src={decoratorDecentralized} alt='' heigth='70px' />
+          <DecoratorDecentralized />
           <Text sx={{ variant: 'headings.h4' }}>Decentralized</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
             We are an open, non-hierarchical global initiative - empowering
@@ -86,7 +86,7 @@ const InfoSection = () => {
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
-          <img src={decoratorCommunity} alt='' heigth='70px' />
+          <DecoratorCommunity />
           <Text sx={{ variant: 'headings.h4' }}>Community</Text>
           <Text sx={{ variant: 'text.paragraph' }}>
             We build tools that can create strong bonds and alignment for people
