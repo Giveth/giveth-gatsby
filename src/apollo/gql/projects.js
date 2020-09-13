@@ -13,6 +13,17 @@ const FETCH_PROJECTS = gql`
     }
   }
 `
+
+const FETCH_PROJECT = gql`
+  query Project($id: ID!) {
+    project(id: $id) {
+      id
+      title
+      description
+    }
+  }
+`
+
 const ADD_PROJECT = gql`
   mutation($title: String!, $description: String!) {
     addProjectSimple(title: $title, description: $description) {
@@ -22,4 +33,4 @@ const ADD_PROJECT = gql`
   }
 `
 
-export { FETCH_PROJECTS, ADD_PROJECT }
+export { FETCH_PROJECTS, FETCH_PROJECT, ADD_PROJECT }

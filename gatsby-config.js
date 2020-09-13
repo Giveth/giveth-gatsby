@@ -68,6 +68,14 @@ module.exports = {
           'red hat text' // you can also specify font weights and styles
         ]
       }
+    },
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /images\/svg\/.*\.svg/
+        }
+      }
     }
 
     // this (optional) plugin enables Progressive Web App + Offline functionality
