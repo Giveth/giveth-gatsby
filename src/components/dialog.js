@@ -18,6 +18,11 @@ const Main = styled.main`
   @media (max-width: 800px) {
     padding: 7.063rem 1rem 0 1rem;
   }
+
+  @media (min-width: 1300px) {
+    display: flex;
+    justify-content: center;
+  }
 `
 
 const DialogContainer = styled(Container)`
