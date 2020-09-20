@@ -6,6 +6,7 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import { useQuery } from '@apollo/react-hooks'
 
 import OnlyCrypto from '../components/donate/onlyCrypto'
+import OnlyFiat from '../components/donate/onlyFiat'
 import Layout from '../components/layout'
 import ProjectListing from '../components/projectListing'
 
@@ -121,7 +122,7 @@ const ShowProject = (props) => {
       return paymentType === CRYPTO ? (
         <OnlyCrypto project={project} address={address} />
       ) : (
-        <Text sx={{ variant: 'text.large', mt: 4 }}>We are working on it :)</Text>
+        <OnlyFiat project={project}/>
       )
     }
 

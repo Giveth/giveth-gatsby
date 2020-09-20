@@ -1,5 +1,5 @@
 {// Set the default
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     // Enable per-language linting for standardJS (typescript still missing here)
     "[javascript]": {
         "editor.formatOnSave": true,
