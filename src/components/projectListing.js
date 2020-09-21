@@ -186,8 +186,8 @@ const ProjectListing = props => {
               maxHeight: '6rem',
               lineHeight: '1.2rem',
               display: '-webkit-box',
-              '-webkit-line-clamp': '3',
-              '-webkit-box-orient': 'vertical'
+              WebkitLineClamp: '3',
+              WebkitBoxOrient: 'vertical'
             }}
           >
             {
