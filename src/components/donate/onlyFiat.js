@@ -26,6 +26,15 @@ const AmountSection = styled.div`
   }
 `
 
+const AmountContainer = styled.div`
+  margin: 2rem 0;
+  @media (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`
+
 const OpenAmount = styled.div`
   display: flex;
   flex-direction: row;
@@ -37,6 +46,10 @@ const AmountItems = styled.div`
   flex-direction: row;
   width: 100%;
   justify-content: space-around;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
 `
 
 const AmountItem = styled.div`
@@ -46,6 +59,9 @@ const AmountItem = styled.div`
   cursor: pointer;
   border: 1px white solid;
   border-radius: 6px;
+  @media (max-width: 800px) {
+    margin: 0.5rem 0;
+  }
 `
 
 const Input = styled.input`
@@ -54,6 +70,14 @@ const Input = styled.input`
   padding: 1rem 0.4rem;
   outline: none;
   color: white;
+`
+
+const CheckboxLabel = styled(Label)`
+  @media (max-width: 800px) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 `
 
 const OnlyFiat = props => {
@@ -113,7 +137,7 @@ const OnlyFiat = props => {
     <Content>
       <AmountSection>
         <AmountSelection />
-        <div style={{ margin: '2rem 0' }}>
+        <AmountContainer>
           <Text sx={{ variant: 'text.medium' }}>Or enter your amount:</Text>
           <OpenAmount>
             <Text sx={{ variant: 'text.large' }}>$</Text>
@@ -125,23 +149,31 @@ const OnlyFiat = props => {
                 }
               }}
               placeholder='Amount'
-              type='text'
+              type='number'
             />
           </OpenAmount>
-        </div>
+        </AmountContainer>
         <div>
-          <Label sx={{ mb: '10px', alignItems: 'center' }}>
-            <Checkbox defaultChecked={false} />
-            <Text sx={{ variant: 'text.medium' }}>
-              Be a hero, add <strong> $5</strong> to help sustain Giveth
-            </Text>
+          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Checkbox defaultChecked={false} />
+              <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
+                Be a hero, add <strong> $5</strong> to help sustain Giveth
+              </Text>
+            </div>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
-          </Label>
-          <Label sx={{ mb: '10px', alignItems: 'center', color: 'white' }}>
-            <Checkbox defaultChecked={false} sx={{ color: 'white' }} />
-            <Text sx={{ variant: 'text.medium' }}>Donate anonymously</Text>
+          </CheckboxLabel>
+          <CheckboxLabel
+            sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Checkbox defaultChecked={false} />
+              <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
+                Donate anonymously
+              </Text>
+            </div>
             <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
-          </Label>
+          </CheckboxLabel>
           {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
             <Checkbox defaultChecked={false} />
             <Text sx={{ variant: 'text.medium' }}>Dedicate this donation</Text>
