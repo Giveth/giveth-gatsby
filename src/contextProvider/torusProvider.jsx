@@ -23,35 +23,32 @@ const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
 
 const torusContext = React.createContext({})
 
-async function initTorus() {
+async function initTorus () {
   await torus.init()
 }
 
 const TorusProvider = props => {
   let user = getUser()
 
-  const { publicAddress, email } = user
-
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
   const [balance, setBalance] = useState(0)
 
-  if (user && publicAddress) {
+  if (user?.publicAddress) {
     web3.eth
-      .getBalance(publicAddress)
+      .getBalance(user?.publicAddress)
       .then(result => setBalance(Number(Web3.utils.fromWei(result))))
   }
 
   // const [user, setUser] = useState({})
 
-  function logout() {
+  function logout () {
     handleLogout()
     setIsLoggedIn(false)
     window.location = process.env.GATSBY_BASE_URL
   }
 
-  async function login() {
+  async function login () {
     await initTorus()
-
     const verifierName = process.env.GATSBY_VERIFIER_NAME
       ? process.env.GATSBY_VERIFIER_NAME
       : 'google-giveth2'
@@ -66,7 +63,7 @@ const TorusProvider = props => {
       'our_secret',
       user.privateKey
     )
-    await props.onLogin(signedMessage, publicAddress, email)
+    await props.onLogin(signedMessage, user?.publicAddress, user?.email)
   }
 
   // if (isLoggedIn) {
