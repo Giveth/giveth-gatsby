@@ -14,7 +14,8 @@ import {
   ProjectDescriptionInput,
   ProjectCategoryInput,
   ProjectImpactLocationInput,
-  ProjectImageInput
+  ProjectImageInput,
+  ProjectBankAccountInput
 } from './inputs'
 import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
@@ -79,6 +80,13 @@ const CreateProjectForm = props => {
       <ProjectImageInput
         animationStyle={animationStyle}
         currentValue={formData.projectImage}
+        register={register}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectBankAccountInput
+        animationStyle={animationStyle}
+        currentValue={formData.projectBankAccount}
         register={register}
       />
     ),
