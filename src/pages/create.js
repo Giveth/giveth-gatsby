@@ -141,8 +141,7 @@ const IndexPage = () => {
         width: ['100%', '50%', '25%']
       }}
       style={{
-        maxWidth: '1440px',
-        margin: '0 auto'
+        maxWidth: '1440px'
       }}
     >
       <SEO title='Home' />
