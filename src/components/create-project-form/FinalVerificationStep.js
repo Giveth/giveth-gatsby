@@ -132,10 +132,14 @@ const FinalVerificationStep = ({
             fontSize: 3,
             fontFamily: 'body',
             color: 'secondary',
-            mt: '9px'
+            mt: '9px',
+            width: '500px',
+            wordWrap: 'break-word'
           }}
         >
-          {formData.projectDescription}
+          {formData.projectDescription.length > 200
+            ? formData.projectDescription.slice(0, 200) + '...'
+            : formData.projectDescription}
         </Text>
       </>
       <>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, Flex, Image, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 
-const HighFive = ({ projectImage }) => {
+const HighFive = ({ projectImage, projectTitle, projectDescription }) => {
   return (
     <Flex
       sx={{
@@ -39,8 +39,8 @@ const HighFive = ({ projectImage }) => {
         <Box sx={{ mt: '100px', width: '60%' }}>
           <ProjectListing
             disabled
-            name='testproject'
-            description='testproject'
+            name={projectTitle}
+            description={projectDescription}
             image={projectImage}
             raised={0}
             category='Blockchain 4 Good'

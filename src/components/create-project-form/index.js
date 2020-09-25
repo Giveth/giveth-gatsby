@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Heading, Flex, Button } from 'theme-ui'
+import { Box, Heading, Flex, Button, Progress, Text } from 'theme-ui'
 
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
@@ -151,16 +151,19 @@ const CreateProjectForm = props => {
   const [showCloseModal, setShowCloseModal] = useState(false)
 
   return (
-    <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
-      <>
-        {}
-        <Helmet>
-          <script
-            src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
-            defer
-          />
-          <script type='text/javascript'>
-            {`
+    <>
+      <Progress max={steps.length} value={currentStep}>
+        <Text>Progress bar test text</Text>
+      </Progress>
+      <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
+        <>
+          <Helmet>
+            <script
+              src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
+              defer
+            />
+            <script type='text/javascript'>
+              {`
           let map;
           function initMap(setLocation) {
               map = new google.maps.Map(document.getElementById('map'), {
@@ -201,52 +204,53 @@ const CreateProjectForm = props => {
             }
           }
         `}
-          </script>
-        </Helmet>
-        <Flex
-          sx={{
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}
-        >
-          <Heading as='h5'>CREATE A NEW PROJECT</Heading>
-          <Button
-            type='button'
-            aria-label='Cancel'
-            onClick={() => setShowCloseModal(!showCloseModal)}
+            </script>
+          </Helmet>
+          <Flex
             sx={{
-              fontSize: '3',
-              fontFamily: 'body',
-              color: 'secondary',
-              background: 'unset',
-              cursor: 'pointer'
+              alignItems: 'center',
+              justifyContent: 'space-between'
             }}
           >
-            Cancel
-          </Button>
-        </Flex>
-        {currentStep === steps.length ? null : (
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <>
-              {currentStep !== steps.length - 1 ? (
-                <EditButtonSection
-                  formData={formData}
-                  setStep={setCurrentStep}
+            <Heading as='h5'>CREATE A NEW PROJECT</Heading>
+            <Button
+              type='button'
+              aria-label='Cancel'
+              onClick={() => setShowCloseModal(!showCloseModal)}
+              sx={{
+                fontSize: '3',
+                fontFamily: 'body',
+                color: 'secondary',
+                background: 'unset',
+                cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </Button>
+          </Flex>
+          {currentStep === steps.length ? null : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <>
+                {currentStep !== steps.length - 1 ? (
+                  <EditButtonSection
+                    formData={formData}
+                    setStep={setCurrentStep}
+                  />
+                ) : null}
+                {stepTransitions.map(({ item, props, key }) => {
+                  const Step = steps[item]
+                  return <Step key={key} animationStyle={props} />
+                })}
+                <CloseModal
+                  showModal={showCloseModal}
+                  setShowModal={setShowCloseModal}
                 />
-              ) : null}
-              {stepTransitions.map(({ item, props, key }) => {
-                const Step = steps[item]
-                return <Step key={key} animationStyle={props} />
-              })}
-              <CloseModal
-                showModal={showCloseModal}
-                setShowModal={setShowCloseModal}
-              />
-            </>
-          </form>
-        )}
-      </>
-    </Box>
+              </>
+            </form>
+          )}
+        </>
+      </Box>
+    </>
   )
 }
 
