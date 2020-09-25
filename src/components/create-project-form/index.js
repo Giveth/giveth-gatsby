@@ -153,7 +153,6 @@ const CreateProjectForm = props => {
   return (
     <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
       <>
-        {}
         <Helmet>
           <script
             src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}

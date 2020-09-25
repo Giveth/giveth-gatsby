@@ -107,7 +107,11 @@ const IndexPage = () => {
               }}
               className='hide'
             />
-            <HighFive projectImage={formValues.projectImage} />
+            <HighFive
+              projectImage={formValues.projectImage}
+              projectTitle='test'
+              projectDescription='Testtesttest'
+            />
           </>
         )
       }
