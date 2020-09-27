@@ -7,9 +7,8 @@ import { navigate } from 'gatsby'
 import ProjectsList, { OrderByDirection, OrderByField } from './ProjectsList'
 import { useState } from 'react'
 
-
 const HomeTopProjects = () => {
-  const [orderByField, setOrderByField] = useState(OrderByField.Balance);
+  const [orderByField, setOrderByField] = useState(OrderByField.Balance)
   const orderBy = {
     field: orderByField,
     direction: OrderByDirection.DESC
@@ -26,7 +25,7 @@ const HomeTopProjects = () => {
       projects={projects}
       totalCount={totalCount}
       loadMore={() => navigate('/projects')}
-      hasMore={true}
+      hasMore
       selectOrderByField={setOrderByField}
     />
   )
