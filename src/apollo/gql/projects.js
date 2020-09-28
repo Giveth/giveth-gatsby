@@ -33,4 +33,50 @@ const ADD_PROJECT = gql`
   }
 `
 
-export { FETCH_PROJECTS, FETCH_PROJECT, ADD_PROJECT }
+const ADD_BANK_ACCOUNT = gql`
+  mutation AddBankAccount($id: ID!) {
+    addBankAccount(projectId: $id, source: "") {
+      id
+      projectId
+    }
+  }
+`
+
+const GET_LINK_BANK_CREATION = gql`
+  query SetProjectBankAccount($projectId: Float!) {
+    setProjectBankAccount(
+      projectId: $projectId
+      returnUrl: "http://localhost:8000/create"
+      refreshUrl: "http://localhost:8000/create"
+    )
+  }
+`
+const GET_DONATION_SESSION = gql`
+  query GetStripeProjectDonationSession(
+    $projectId: Float!
+    $amount: Float!
+    $anonymous: Boolean!
+    $donateToGiveth: Boolean!
+  ) {
+    getStripeProjectDonationSession(
+      projectId: $projectId
+      amount: $amount
+      anonymous: $anonymous
+      donateToGiveth: $donateToGiveth
+      successUrl: "http://localhost:8000/donate?success=true"
+      cancelUrl: "http://localhost:8000/donate?success=false"
+    ) {
+      sessionId
+      accountId
+    }
+  }
+`
+
+export {
+  FETCH_PROJECTS,
+  FETCH_PROJECT,
+  ADD_PROJECT,
+  ADD_BANK_ACCOUNT,
+  GET_LINK_BANK_CREATION,
+  GET_DONATION_SESSION
+}

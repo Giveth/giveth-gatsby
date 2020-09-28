@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { Label, Input, Text, Button } from 'theme-ui'
+import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
+import { useQuery } from '@apollo/react-hooks'
 import { animated } from 'react-spring'
 
 export const ProjectBankAccountInput = ({
@@ -7,6 +9,20 @@ export const ProjectBankAccountInput = ({
   currentValue,
   animationStyle
 }) => {
+  const { data, loading, error } = useQuery(GET_LINK_BANK_CREATION, {
+    variables: { projectId: 16 }
+  })
+
+  const setBankAccount = async () => {
+    try {
+      window.location.replace(data?.setProjectBankAccount)
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  console.log({ data, error })
+
   return (
     <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
       <Label
@@ -50,7 +66,7 @@ export const ProjectBankAccountInput = ({
         }}
         onClick={e => {
           e.preventDefault()
-          alert('This will redirect to stripe')
+          setBankAccount()
         }}
       >
         <Text

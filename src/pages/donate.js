@@ -116,7 +116,7 @@ const ProjectNotFound = () => {
 
 const ShowProject = props => {
   const { location, project } = props
-  const [paymentType, setPaymentType] = React.useState(CRYPTO)
+  const [paymentType, setPaymentType] = React.useState(CREDIT)
   const [isAfterPayment, setIsAterPayment] = React.useState(null)
 
   const url =
@@ -173,14 +173,14 @@ const ShowProject = props => {
         <Text sx={{ variant: 'headings.h5' }}>Donate With</Text>
         <Options>
           <OptionType
-            title={CRYPTO}
-            subtitle='Zero Fee'
-            style={LEFT_BOX_STYLE}
-          />
-          <OptionType
             title={CREDIT}
             subtitle='3.5% Fee'
             style={RIGHT_BOX_STYLE}
+          />
+          <OptionType
+            title={CRYPTO}
+            subtitle='Zero Fee'
+            style={LEFT_BOX_STYLE}
           />
         </Options>
         <ShowPaymentOption />

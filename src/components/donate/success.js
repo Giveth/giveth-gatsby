@@ -4,9 +4,31 @@ import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 
+import BillIcon from '../../images/svg/donation/bill-icon.svg'
+
 const Content = styled.div`
   max-width: 41.25rem;
   word-wrap: break-word;
+`
+
+const Receipt = styled.div`
+  display: flex;
+  max-width: 31.25rem;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+`
+
+const DownloadReceipt = styled(Box)`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: white;
+  flex: 0.4;
+  border-radius: 6px;
+  padding: 20px 14px;
+  align-items: center;
+  cursor: pointer;
 `
 
 const Success = props => {
@@ -20,12 +42,33 @@ const Success = props => {
       <Text sx={{ variant: 'headings.h3', my: 3, textAlign: 'left' }}>
         You're a giver now
       </Text>
-      <Text sx={{ variant: 'text.large', fontWeight: '700' }}>
+      <Text sx={{ variant: 'headings.h5' }}>
         Thank you for supporting <strong> xxx </strong>.
       </Text>
-      <Text sx={{ variant: 'text.large', fontWeight: '700' }}>
+      <Text sx={{ variant: 'headings.h5', pt: -1 }}>
         Your <strong> $$$ </strong> contribution goes a long way!
       </Text>
+      <Receipt sx={{ my: 4 }}>
+        <DownloadReceipt>
+          <Text
+            sx={{ variant: 'text.paragraph', pt: -1, color: 'text', flex: 0.9 }}
+          >
+            Download Receipt
+          </Text>
+          <BillIcon />
+        </DownloadReceipt>
+        <div style={{ flex: 0.4 }}>
+          <Text
+            sx={{
+              variant: 'text.paragraph',
+              color: 'yellow',
+              cursor: 'pointer'
+            }}
+          >
+            View transaction details
+          </Text>
+        </div>
+      </Receipt>
     </Content>
   )
 }

@@ -1,14 +1,11 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
+import { useLazyQuery } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { loadStripe } from '@stripe/stripe-js'
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  'pk_test_51HEyBOEqxdqUJJCY7s5q5WPcEQKsC0w5FStn48BVFiIPiLGHoP7Oh6kojZSES8MZXYoEfQSu1LXY749LHMRF03Hy00X8SvZA8B'
-)
+import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
 const Content = styled.div`
   max-width: 41.25rem;
@@ -83,23 +80,38 @@ const CheckboxLabel = styled(Label)`
 const OnlyFiat = props => {
   const { project } = props
   const [amountSelect, setAmountSelect] = useState(null)
-
+  const [getDonationSession, { called, loading, data, error }] = useLazyQuery(
+    GET_DONATION_SESSION,
+    {
+      variables: {
+        projectId: 16,
+        amount: 5000,
+        anonymous: true,
+        donateToGiveth: true
+      }
+    }
+  )
   const amounts = [500, 100, 50, 30]
 
   useEffect(() => {}, [])
+  console.log({ data, error })
 
   const goCheckout = async event => {
+    try {
+      await getDonationSession()
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  const goStripe = async () => {
     // Get Stripe.js instance
-    const stripe = await stripePromise
-
-    // Call your backend to create the Checkout Session
-    // const response = await fetch('/create-checkout-session', { method: 'POST' })
-
-    // const session = await response.json()
-
+    const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY, {
+      stripeAccount: data?.getStripeProjectDonationSession?.accountId
+    })
     // When the customer clicks on the button, redirect them to Checkout.
     const result = await stripe.redirectToCheckout({
-      // sessionId: session.id
+      sessionId: data?.getStripeProjectDonationSession?.sessionId
     })
 
     if (result.error) {
@@ -107,6 +119,10 @@ const OnlyFiat = props => {
       // error, display the localized error message to your customer
       // using `result.error.message`.
     }
+  }
+
+  if (called && !loading) {
+    goStripe()
   }
 
   const AmountSelection = () => {
