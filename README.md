@@ -81,5 +81,8 @@ If you want to contribute, pls say hello to us in chat -  [https://giveth.io/joi
 ### Styling
 
 Styling should be done in cooperation with senior contributors so a minimum of new styles is introduced locally. As a rule of thumb: all styles that are used more than once or are not very specific to one component should be added in the **Theme UI definition**`src/gatsby-plugin-theme-ui/index.js` whenever possible and additionally to a gatsby page we use to collect all defined styles `src/pages/viewstyles.js` to quickly check consistency.
-
 Please refer to some examples in the code to see how we deal with styles. Local overrides and extensions should be done via `sx prop` or `emotionJS`.
+
+### Code conventions
+- as mentioned above contributor code should be linted with StandardJS
+- React components for into the folder `/src/components` and component filenames should be written in Camel case.
