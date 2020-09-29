@@ -4,4 +4,4 @@ export { ProjectDescriptionInput } from './ProjectDescriptionInput'
 export { ProjectCategoryInput } from './ProjectCategotyInput'
 export { ProjectImageInput } from './ProjectImageInput'
 export { ProjectImpactLocationInput } from './ProjectImpactLocationInput'
-
+export { ProjectBankAccountInput } from './ProjectBankAccountInput'

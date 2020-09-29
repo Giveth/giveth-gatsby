@@ -179,7 +179,15 @@ const ProjectListing = props => {
             style={{
               fontSize: '16px',
               color: theme.colors.bodyDark,
-              lineHeight: '150%'
+              // textOverflow: 'ellipsis',
+              // wordWrap: 'break-word',
+              // whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              maxHeight: '6rem',
+              lineHeight: '1.2rem',
+              display: '-webkit-box',
+              WebkitLineClamp: '3',
+              WebkitBoxOrient: 'vertical'
             }}
           >
             {

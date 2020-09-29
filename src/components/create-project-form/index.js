@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Heading, Flex, Button, Text } from 'theme-ui'
+import { Box, Heading, Flex, Button, Progress, Text } from 'theme-ui'
 
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
@@ -14,7 +14,8 @@ import {
   ProjectDescriptionInput,
   ProjectCategoryInput,
   ProjectImpactLocationInput,
-  ProjectImageInput
+  ProjectImageInput,
+  ProjectBankAccountInput
 } from './inputs'
 import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
@@ -24,17 +25,12 @@ const CreateProjectForm = props => {
   const APIKEY = 'AIzaSyBEHB5JWEyBUNF4F8mrSxtiVCLOyUPOBL4'
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
-  const [submitted, setSubmitted] = useState(false)
   const categoryList = [
     { name: 'nonprofit', value: 'Non-profit' },
     { name: 'covid19', value: 'COVID-19' },
     { name: 'technology', value: 'Technology' },
     { name: 'other', value: 'Other' }
   ]
-
-  useEffect(() => {
-    props.onSubmit(formData)
-  }, [submitted])
 
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
@@ -83,6 +79,13 @@ const CreateProjectForm = props => {
       />
     ),
     ({ animationStyle }) => (
+      <ProjectBankAccountInput
+        animationStyle={animationStyle}
+        currentValue={formData.projectBankAccount}
+        register={register}
+      />
+    ),
+    ({ animationStyle }) => (
       <FinalVerificationStep
         animationStyle={animationStyle}
         formData={formData}
@@ -118,18 +121,19 @@ const CreateProjectForm = props => {
         const imageToUpload = new File([imageBlob], formData.imageName)
         pinFile(imageToUpload)
           .then(response => {
-            setFormData({
-              ...formData,
-              projectImage:
-                'https://gateway.pinata.cloud/ipfs/' + response.data.IpfsHash
-            })
+            window.localStorage.removeItem('projectImage')
+            props.onSubmit(
+              formData,
+              `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`
+            )
           })
           .catch(e => {
             console.log(e)
           })
+      } else {
+        window.localStorage.removeItem('projectImage')
+        props.onSubmit(formData)
       }
-      window.localStorage.removeItem('projectImage')
-      setSubmitted(true)
     }
     nextStep()
   }
@@ -147,10 +151,11 @@ const CreateProjectForm = props => {
   const [showCloseModal, setShowCloseModal] = useState(false)
 
   return (
-    <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
-      {submitted ? (
-        <pre>{JSON.stringify(formData, null, 2)}</pre>
-      ) : (
+    <>
+      <Progress max={steps.length} value={currentStep}>
+        <Text>Progress bar test text</Text>
+      </Progress>
+      <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
         <>
           <Helmet>
             <script
@@ -223,48 +228,29 @@ const CreateProjectForm = props => {
               Cancel
             </Button>
           </Flex>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <>
-              {currentStep !== steps.length - 1 ? (
-                <EditButtonSection
-                  formData={formData}
-                  setStep={setCurrentStep}
+          {currentStep === steps.length ? null : (
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <>
+                {currentStep !== steps.length - 1 ? (
+                  <EditButtonSection
+                    formData={formData}
+                    setStep={setCurrentStep}
+                  />
+                ) : null}
+                {stepTransitions.map(({ item, props, key }) => {
+                  const Step = steps[item]
+                  return <Step key={key} animationStyle={props} />
+                })}
+                <CloseModal
+                  showModal={showCloseModal}
+                  setShowModal={setShowCloseModal}
                 />
-              ) : null}
-              {stepTransitions.map(({ item, props, key }) => {
-                const Step = steps[item]
-                return <Step key={key} animationStyle={props} />
-              })}
-              {/* <Button
-                aria-label='Next'
-                sx={{
-                  mt: '575px',
-                  width: '180px',
-                  height: '52px',
-                  borderRadius: '48px'
-                }}
-                type='submit'
-              >
-                <Text
-                  sx={{
-                    fontFamily: 'body',
-                    fontWeight: 'bold',
-                    fontSize: 2,
-                    letterSpacing: '4%'
-                  }}
-                >
-                  NEXT
-                </Text>
-              </Button> */}
-              <CloseModal
-                showModal={showCloseModal}
-                setShowModal={setShowCloseModal}
-              />
-            </>
-          </form>
+              </>
+            </form>
+          )}
         </>
-      )}
-    </Box>
+      </Box>
+    </>
   )
 }
 

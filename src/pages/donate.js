@@ -6,6 +6,8 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import { useQuery } from '@apollo/react-hooks'
 
 import OnlyCrypto from '../components/donate/onlyCrypto'
+import OnlyFiat from '../components/donate/onlyFiat'
+import Success from '../components/donate/success'
 import Layout from '../components/layout'
 import ProjectListing from '../components/projectListing'
 
@@ -25,8 +27,14 @@ import {
 const CRYPTO = 'Cryptocurrency'
 const CREDIT = 'Credit Card'
 
-const LEFT_BOX_STYLE = { borderTopLeftRadius: '0.2rem', borderBottomLeftRadius: '0.2rem' }
-const RIGHT_BOX_STYLE = { borderTopRightRadius: '0.2rem', borderBottomRightRadius: '0.2rem' }
+const LEFT_BOX_STYLE = {
+  borderTopLeftRadius: '0.2rem',
+  borderBottomLeftRadius: '0.2rem'
+}
+const RIGHT_BOX_STYLE = {
+  borderTopRightRadius: '0.2rem',
+  borderBottomRightRadius: '0.2rem'
+}
 
 const Content = styled(Grid)`
   display: flex;
@@ -82,7 +90,7 @@ const Options = styled.div`
   @media (max-width: 1100px) {
     min-width: 20rem;
   }
-  
+
   @media (max-width: 800px) {
     width: 100%;
     align-self: center;
@@ -106,9 +114,11 @@ const ProjectNotFound = () => {
   return <Text>Project Not Found</Text>
 }
 
-const ShowProject = (props) => {
+const ShowProject = props => {
   const { location, project } = props
   const [paymentType, setPaymentType] = React.useState(CRYPTO)
+  const [isAfterPayment, setIsAterPayment] = React.useState(null)
+
   const url =
     location.href && location.href && location.protocol === 'https:'
       ? location.href
@@ -116,12 +126,18 @@ const ShowProject = (props) => {
   const shareTitle = 'Make a donation today!'
   const address = '0x000000000000000000000000000'
 
-  function PaymentOptions () {
+  React.useEffect(() => {
+    // Check type
+    const search = props?.location?.search
+    setIsAterPayment(search)
+  }, [])
+
+  function PaymentOptions() {
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO ? (
         <OnlyCrypto project={project} address={address} />
       ) : (
-        <Text sx={{ variant: 'text.large', mt: 4 }}>We are working on it :)</Text>
+        <OnlyFiat project={project} />
       )
     }
 
@@ -131,10 +147,23 @@ const ShowProject = (props) => {
       return (
         <OptionTypesBox
           onClick={() => setPaymentType(title)}
-          style={{ backgroundColor: isSelected ? 'white' : theme.colors.secondary, ...style }}
+          style={{
+            backgroundColor: isSelected ? 'white' : theme.colors.secondary,
+            ...style
+          }}
         >
-          <Text sx={{ variant: 'text.medium', color: textColor, fontWeight: 'bold' }}>{title}</Text>
-          <Text sx={{ variant: 'text.small', color: textColor }}>{subtitle}</Text>
+          <Text
+            sx={{
+              variant: 'text.medium',
+              color: textColor,
+              fontWeight: 'bold'
+            }}
+          >
+            {title}
+          </Text>
+          <Text sx={{ variant: 'text.small', color: textColor }}>
+            {subtitle}
+          </Text>
         </OptionTypesBox>
       )
     }
@@ -144,15 +173,69 @@ const ShowProject = (props) => {
         <Text sx={{ variant: 'headings.h5' }}>Donate With</Text>
         <Options>
           <OptionType
-            title={CRYPTO} subtitle='Zero Fee'
+            title={CRYPTO}
+            subtitle='Zero Fee'
             style={LEFT_BOX_STYLE}
           />
           <OptionType
-            title={CREDIT} subtitle='3.5% Fee'
+            title={CREDIT}
+            subtitle='3.5% Fee'
             style={RIGHT_BOX_STYLE}
           />
         </Options>
         <ShowPaymentOption />
+      </>
+    )
+  }
+
+  const ShareIcons = ({ message }) => {
+    return (
+      <Share>
+        <Text sx={{ variant: 'text.medium' }}>{message}</Text>
+        <SocialIcons>
+          <TwitterShareButton
+            title={shareTitle}
+            url={url}
+            hashtags={['giveth']}
+          >
+            <TwitterIcon size={40} round />
+          </TwitterShareButton>
+          <LinkedinShareButton
+            title={shareTitle}
+            summary='this is the summary'
+            url={url}
+          >
+            <LinkedinIcon size={40} round />
+          </LinkedinShareButton>
+          <FacebookShareButton quote={shareTitle} url={url}>
+            <FacebookIcon size={40} round />
+          </FacebookShareButton>
+        </SocialIcons>
+      </Share>
+    )
+  }
+
+  if (isAfterPayment) {
+    return (
+      <>
+        <ProjectContainer>
+          <ProjectListing
+            disabled
+            name={project?.title}
+            description={project?.description}
+            image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
+            raised={1223}
+            category='Blockchain 4 Good'
+            listingId='key1'
+            key='key1'
+          />
+        </ProjectContainer>
+        <Payment>
+          <Success />
+          <div style={{ margin: '3rem 0' }}>
+            <ShareIcons message='Share this with your friends:' />
+          </div>
+        </Payment>
       </>
     )
   }
@@ -170,30 +253,7 @@ const ShowProject = (props) => {
           listingId='key1'
           key='key1'
         />
-        <Share>
-          <Text sx={{ variant: 'text.medium' }}>
-            Can't donate? Share this page instead.
-          </Text>
-          <SocialIcons>
-            <TwitterShareButton
-              title={shareTitle}
-              url={url}
-              hashtags={['giveth']}
-            >
-              <TwitterIcon size={40} round />
-            </TwitterShareButton>
-            <LinkedinShareButton
-              title={shareTitle}
-              summary='this is the summary'
-              url={url}
-            >
-              <LinkedinIcon size={40} round />
-            </LinkedinShareButton>
-            <FacebookShareButton quote={shareTitle} url={url}>
-              <FacebookIcon size={40} round />
-            </FacebookShareButton>
-          </SocialIcons>
-        </Share>
+        <ShareIcons message="Can't donate? Share this page instead." />
       </ProjectContainer>
       <Payment>
         <PaymentOptions />
@@ -212,10 +272,15 @@ const Donate = props => {
   return (
     <Layout asDialog>
       <Content style={{ justifyItems: 'center' }}>
-        {
-          error ? <Text>Error</Text> : loading ? <Text>loading</Text>
-            : data?.project?.length > 0 ? <ShowProject {...props} project={data.project[0]} /> : <ProjectNotFound />
-        }
+        {error ? (
+          <Text>Error</Text>
+        ) : loading ? (
+          <Text>loading</Text>
+        ) : data?.project?.length > 0 ? (
+          <ShowProject {...props} project={data.project[0]} />
+        ) : (
+          <ProjectNotFound />
+        )}
       </Content>
     </Layout>
   )
