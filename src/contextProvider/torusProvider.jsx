@@ -29,7 +29,7 @@ async function initTorus () {
 
 const TorusProvider = props => {
   let user = getUser()
-
+  console.log({ user })
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
   const [balance, setBalance] = useState(0)
 

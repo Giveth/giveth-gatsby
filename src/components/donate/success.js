@@ -7,15 +7,14 @@ import styled from '@emotion/styled'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
 const Content = styled.div`
-  max-width: 41.25rem;
+  min-width: 32vw;
   word-wrap: break-word;
 `
 
 const Receipt = styled.div`
   display: flex;
-  max-width: 31.25rem;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 `
 
@@ -23,8 +22,8 @@ const DownloadReceipt = styled(Box)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: white;
-  flex: 0.4;
+  flex: 0.5;
+  border: 2px solid #aaafca;
   border-radius: 6px;
   padding: 20px 14px;
   align-items: center;
@@ -40,7 +39,7 @@ const Success = props => {
   return (
     <Content>
       <Text sx={{ variant: 'headings.h3', my: 3, textAlign: 'left' }}>
-        You're a giver now
+        You're a giver now!
       </Text>
       <Text sx={{ variant: 'headings.h5' }}>
         Thank you for supporting <strong> xxx </strong>.
@@ -51,9 +50,13 @@ const Success = props => {
       <Receipt sx={{ my: 4 }}>
         <DownloadReceipt>
           <Text
-            sx={{ variant: 'text.paragraph', pt: -1, color: 'text', flex: 0.9 }}
+            sx={{
+              variant: 'text.paragraph',
+              pt: -1,
+              color: 'bodyLight'
+            }}
           >
-            Download Receipt
+            Download receipt
           </Text>
           <BillIcon />
         </DownloadReceipt>
@@ -69,6 +72,13 @@ const Success = props => {
           </Text>
         </div>
       </Receipt>
+      <Text
+        sx={{ variant: 'headings.h5', pt: 4 }}
+        style={{ display: 'flex', flexDirection: 'row' }}
+      >
+        Stay a Giver?{' '}
+        <Text sx={{ color: 'yellow', ml: 2 }}> Register an account.</Text>
+      </Text>
     </Content>
   )
 }

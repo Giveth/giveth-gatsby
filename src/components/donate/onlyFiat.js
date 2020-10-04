@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
-import { useLazyQuery } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { loadStripe } from '@stripe/stripe-js'
@@ -80,31 +80,47 @@ const CheckboxLabel = styled(Label)`
 const OnlyFiat = props => {
   const { project } = props
   const [amountSelect, setAmountSelect] = useState(null)
-  const [getDonationSession, { called, loading, data, error }] = useLazyQuery(
-    GET_DONATION_SESSION,
-    {
-      variables: {
-        projectId: 16,
-        amount: 5000,
-        anonymous: true,
-        donateToGiveth: true
-      }
-    }
-  )
+  const client = useApolloClient()
+  // const [getDonationSession, { called, loading, data, error }] = useLazyQuery(
+  //   GET_DONATION_SESSION,
+  //   {
+  //     variables: {
+  //       projectId: 1,
+  //       amount: data.amount,
+  //       anonymous: true,
+  //       donateToGiveth: true,
+  //       successUrl: `http://localhost:8000/donate/${1}?success=true`,
+  //       cancelUrl: `http://localhost:8000/donate/${1}?success=false`
+  //     }
+  //   }
+  // )
   const amounts = [500, 100, 50, 30]
 
   useEffect(() => {}, [])
-  console.log({ data, error })
 
   const goCheckout = async event => {
     try {
-      await getDonationSession()
+      if (!amountSelect) return alert('Please set an amount before donating')
+      // await getDonationSession({ variables: { amount: amountSelect } })
+      const { data } = await client.query({
+        query: GET_DONATION_SESSION,
+        variables: {
+          projectId: 1,
+          amount: parseInt(amountSelect),
+          anonymous: true,
+          donateToGiveth: true,
+          successUrl: `http://localhost:8000/donate/${1}?success=true`,
+          cancelUrl: `http://localhost:8000/donate/${1}?success=false`
+        }
+      })
+      console.log({ data })
+      goStripe(data)
     } catch (error) {
       console.log({ error })
     }
   }
 
-  const goStripe = async () => {
+  const goStripe = async data => {
     // Get Stripe.js instance
     const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY, {
       stripeAccount: data?.getStripeProjectDonationSession?.accountId
@@ -121,9 +137,9 @@ const OnlyFiat = props => {
     }
   }
 
-  if (called && !loading) {
-    goStripe()
-  }
+  // if (called && !loading) {
+  //   goStripe()
+  // }
 
   const AmountSelection = () => {
     return (
@@ -166,6 +182,10 @@ const OnlyFiat = props => {
               }}
               placeholder='Amount'
               type='number'
+              onChange={e => {
+                e.preventDefault()
+                setAmountSelect(e.target.value)
+              }}
             />
           </OpenAmount>
         </AmountContainer>

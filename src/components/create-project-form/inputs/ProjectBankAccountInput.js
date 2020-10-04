@@ -10,7 +10,7 @@ export const ProjectBankAccountInput = ({
   animationStyle
 }) => {
   const { data, loading, error } = useQuery(GET_LINK_BANK_CREATION, {
-    variables: { projectId: 16 }
+    variables: { projectId: 1 }
   })
 
   const setBankAccount = async () => {

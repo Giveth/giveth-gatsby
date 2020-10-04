@@ -57,14 +57,16 @@ const GET_DONATION_SESSION = gql`
     $amount: Float!
     $anonymous: Boolean!
     $donateToGiveth: Boolean!
+    $successUrl: String!
+    $cancelUrl: String!
   ) {
     getStripeProjectDonationSession(
       projectId: $projectId
       amount: $amount
       anonymous: $anonymous
       donateToGiveth: $donateToGiveth
-      successUrl: "http://localhost:8000/donate?success=true"
-      cancelUrl: "http://localhost:8000/donate?success=false"
+      successUrl: $successUrl
+      cancelUrl: $cancelUrl
     ) {
       sessionId
       accountId

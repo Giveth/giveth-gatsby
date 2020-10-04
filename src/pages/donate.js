@@ -63,16 +63,13 @@ const Payment = styled.div`
   }
 `
 
-const Share = styled.div`
-  text-align: center;
-`
+const Share = styled.div``
 
 const SocialIcons = styled.div`
   display: flex;
-  justify-content: center;
   margin: 1rem 0;
   * {
-    margin: 0 0.7rem;
+    margin: 0 0.3rem;
   }
 `
 
@@ -128,11 +125,21 @@ const ShowProject = props => {
 
   React.useEffect(() => {
     // Check type
-    const search = props?.location?.search
-    setIsAterPayment(search)
+    const search = getUrlParams(props?.location?.search)
+    console.log({ search }, props.location)
+    setIsAterPayment(search?.success == 'true')
   }, [])
 
-  function PaymentOptions() {
+  // TODO: Implement this on a utils file
+  function getUrlParams (search) {
+    let hashes = search.slice(search.indexOf('?') + 1).split('&')
+    return hashes.reduce((params, hash) => {
+      let [key, val] = hash.split('=')
+      return Object.assign(params, { [key]: decodeURIComponent(val) })
+    }, {})
+  }
+
+  function PaymentOptions () {
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO ? (
         <OnlyCrypto project={project} address={address} />
@@ -188,11 +195,19 @@ const ShowProject = props => {
     )
   }
 
-  const ShareIcons = ({ message }) => {
+  const ShareIcons = ({ message, centered }) => {
     return (
-      <Share>
+      <Share
+        style={{
+          textAlign: centered && 'center'
+        }}
+      >
         <Text sx={{ variant: 'text.medium' }}>{message}</Text>
-        <SocialIcons>
+        <SocialIcons
+          style={{
+            justifyContent: centered ? 'center' : 'flex-start'
+          }}
+        >
           <TwitterShareButton
             title={shareTitle}
             url={url}
@@ -233,7 +248,7 @@ const ShowProject = props => {
         <Payment>
           <Success />
           <div style={{ margin: '3rem 0' }}>
-            <ShareIcons message='Share this with your friends:' />
+            <ShareIcons message='Share this with your friends!' />
           </div>
         </Payment>
       </>
@@ -253,7 +268,7 @@ const ShowProject = props => {
           listingId='key1'
           key='key1'
         />
-        <ShareIcons message="Can't donate? Share this page instead." />
+        <ShareIcons message="Can't donate? Share this page instead." centered />
       </ProjectContainer>
       <Payment>
         <PaymentOptions />
