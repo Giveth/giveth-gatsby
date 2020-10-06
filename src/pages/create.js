@@ -103,7 +103,7 @@ const IndexPage = () => {
               css={{
                 position: 'absolute',
                 top: '260px',
-                left: '380px'
+                left: '300px'
               }}
               className='hide'
             />
