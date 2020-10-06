@@ -44,7 +44,7 @@ const Layout = ({ children, asDialog }) => {
       const loginResponse = await doLogin({
         variables: {
           walletAddress: userAddress,
-          signature: signedMessage.signature,
+          signature: signedMessage,
           email: userEmail
         }
       })
