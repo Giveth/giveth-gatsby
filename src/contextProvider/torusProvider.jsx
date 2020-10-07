@@ -62,12 +62,12 @@ const TorusProvider = props => {
         setUser(user)
         setIsLoggedIn(true)
         updateBalance()
-        // const signedMessage = await web3.eth.personal.sign(
-        //   'our_secret',
-        //   user.addresses[0],
-        //   ''
-        // )
-        const signedMessage = ''
+        const signedMessage = await web3.eth.personal.sign(
+          'our_secret',
+          user.addresses[0],
+          ''
+        )
+        // const signedMessage = ''
         await props.onLogin(signedMessage, user?.addresses[0], user?.email)
       }
     }
