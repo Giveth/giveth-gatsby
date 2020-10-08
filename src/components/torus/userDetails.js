@@ -55,7 +55,7 @@ const UserDetails = props => {
   const { user, balance, logout } = props
   const [active, setActive] = useState(false)
 
-  const address = user.publicAddress
+  const address = user.addresses && user.addresses[0]
   const truncAddress = `${address.substring(0, 5)} ... ${address.substring(
     address.length - 5,
     address.length

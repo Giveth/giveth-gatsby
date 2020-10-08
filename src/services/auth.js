@@ -29,7 +29,7 @@ export function handleLogout () {
 export const checkIfLoggedIn = () => {
   const user = getUser()
 
-  return !!user.publicAddress
+  return !!user.addresses
 }
 
 export const logout = callback => {

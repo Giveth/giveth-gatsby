@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import DirectWebSdk from '@toruslabs/torus-direct-web-sdk'
+import Torus from '@toruslabs/torus-embed'
 import Web3 from 'web3'
 import {
   checkIfLoggedIn,
@@ -7,70 +7,72 @@ import {
   handleLogout,
   setUser
 } from '../services/auth'
-// import LoginButton from "../components/torus/loginButton"
-// import UserDetails from "../components/torus/userDetails"
 
-const torus = new DirectWebSdk({
-  baseUrl: process.env.GATSBY_BASE_URL + '/serviceworker/',
-  GOOGLE_CLIENT_ID: process.env.GATSBY_GOOGLE_CLIENT_ID,
-  proxyContractAddress: process.env.GATSBY_PROXY_CONTRACT_ADDRESS,
-  network: process.env.GATSBY_NETWORK,
-  enableLogging: process.env.TORUS_DEBUG_LOGGING
-})
+const torus = new Torus()
 
-// TODO: use torus builtin provider
-const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+let web3
+let isInitialized = false
 
 const torusContext = React.createContext({})
 
 async function initTorus () {
-  await torus.init()
+  if (!isInitialized) {
+    await torus.init({
+      network: { host: process.env.GATSBY_NETWORK },
+      // buildEnv: process.env.NODE_ENV,
+      showTorusButton: false,
+      enableLogging: process.env.TORUS_DEBUG_LOGGING
+    })
+    isInitialized = true
+  }
 }
 
 const TorusProvider = props => {
   let user = getUser()
 
+  function updateBalance () {
+    if (web3 && user?.addresses) {
+      web3.eth
+        .getBalance(user?.addresses[0])
+        .then(result => setBalance(Number(Web3.utils.fromWei(result))))
+    }
+  }
+
   const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
   const [balance, setBalance] = useState(0)
 
-  if (user?.publicAddress) {
-    web3.eth
-      .getBalance(user?.publicAddress)
-      .then(result => setBalance(Number(Web3.utils.fromWei(result))))
-  }
+  updateBalance()
 
-  // const [user, setUser] = useState({})
-
-  function logout () {
+  async function logout () {
+    await torus.logout()
     handleLogout()
     setIsLoggedIn(false)
     window.location = process.env.GATSBY_BASE_URL
   }
 
   async function login () {
-    await initTorus()
-    const verifierName = process.env.GATSBY_VERIFIER_NAME
-      ? process.env.GATSBY_VERIFIER_NAME
-      : 'google-giveth2'
-
     if (!isLoggedIn) {
-      user = await torus.triggerLogin('google', verifierName)
-      setUser(user)
-      setIsLoggedIn(true)
+      await initTorus()
+      const addresses = await torus.login()
+      if (addresses.length > 0) {
+        web3 = new Web3(torus.provider)
+        user = await torus.getUserInfo()
+        user.addresses = addresses
+        console.log(JSON.stringify(user, null, 2))
+        setUser(user)
+        setIsLoggedIn(true)
+        updateBalance()
+        const signedMessage = await web3.eth.personal.sign(
+          'our_secret',
+          user.addresses[0],
+          ''
+        )
+        // const signedMessage = ''
+        await props.onLogin(signedMessage, user?.addresses[0], user?.email)
+      }
     }
-
-    const signedMessage = await web3.eth.accounts.sign(
-      'our_secret',
-      user.privateKey
-    )
-    await props.onLogin(signedMessage, user?.publicAddress, user?.email)
   }
 
-  // if (isLoggedIn) {
-  //   initTorus().then(() => {
-  //     web3.eth.getBalance(user.publicAddress).then(result => setBalance(Number(web3.utils.fromWei(result))))
-  //   })
-  // }
   return (
     <torusContext.Provider
       value={{
