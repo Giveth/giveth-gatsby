@@ -3,6 +3,7 @@ import { Button, Text, jsx } from 'theme-ui'
 import { useState } from 'react'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
+import { Link } from 'gatsby'
 
 const AccountDetails = styled.div`
   width: 200px;
@@ -108,16 +109,23 @@ const UserDetails = props => {
               Balance: {balance}
             </MenuItem>
           </Balance>
-          <MenuItem
-            sx={{
-              variant: 'text.medium',
-              color: 'secondary',
-              fontWeight: 'bold'
-            }}
-            className='shadow boxheight'
+          <Link
+            to='/account'
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
-            My Account
-          </MenuItem>
+            <a>
+              <MenuItem
+                sx={{
+                  variant: 'text.medium',
+                  color: 'secondary',
+                  fontWeight: 'bold'
+                }}
+                className='shadow boxheight'
+              >
+                My Account
+              </MenuItem>
+            </a>
+          </Link>
           <MenuItem
             sx={{
               variant: 'text.medium',
