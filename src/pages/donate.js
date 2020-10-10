@@ -114,7 +114,8 @@ const ProjectNotFound = () => {
 const ShowProject = props => {
   const { location, project } = props
   const [paymentType, setPaymentType] = React.useState(CREDIT)
-  const [isAfterPayment, setIsAterPayment] = React.useState(null)
+  const [isAfterPayment, setIsAfterPayment] = React.useState(null)
+  const [paymentSessionId, setPaymentSessionId] = React.useState(null)
 
   const url =
     location.href && location.href && location.protocol === 'https:'
@@ -127,7 +128,8 @@ const ShowProject = props => {
     // Check type
     const search = getUrlParams(props?.location?.search)
     console.log({ search }, props.location)
-    setIsAterPayment(search?.success == 'true')
+    setIsAfterPayment(search?.success === 'true')
+    if (search?.sessionId) setPaymentSessionId(search?.sessionId)
   }, [])
 
   // TODO: Implement this on a utils file
@@ -246,7 +248,7 @@ const ShowProject = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success />
+          <Success sessionId={paymentSessionId} />
           <div style={{ margin: '3rem 0' }}>
             <ShareIcons message='Share this with your friends!' />
           </div>

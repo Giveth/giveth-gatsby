@@ -1,8 +1,10 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
+import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
+import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
 
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
@@ -31,10 +33,30 @@ const DownloadReceipt = styled(Box)`
 `
 
 const Success = props => {
-  const { project } = props
+  const { project, sessionId } = props
   const [amountSelect, setAmountSelect] = useState(null)
 
-  useEffect(() => {}, [])
+  const client = useApolloClient()
+
+  console.log({ sessionId })
+
+  useEffect(() => {
+    const getData = async () => {
+      // get session ID
+      try {
+        const { data, error } = await client.query({
+          query: GET_STRIPE_DONATION_PDF,
+          variables: {
+            sessionId: parseInt(sessionId)
+          }
+        })
+        console.log({ data, error })
+      } catch (error) {
+        console.log({ error })
+      }
+    }
+    getData()
+  }, [])
 
   return (
     <Content>

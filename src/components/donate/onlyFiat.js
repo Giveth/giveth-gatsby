@@ -1,11 +1,13 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
+import { Box, Button, Checkbox, Input, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { loadStripe } from '@stripe/stripe-js'
 import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
+
+const GIVETH_DONATION_AMOUNT = 5
 
 const Content = styled.div`
   max-width: 41.25rem;
@@ -61,7 +63,7 @@ const AmountItem = styled.div`
   }
 `
 
-const Input = styled.input`
+const InputComponent = styled(Input)`
   background: transparent;
   border: none;
   padding: 1rem 0.4rem;
@@ -75,47 +77,47 @@ const CheckboxLabel = styled(Label)`
     justify-content: space-between;
     width: 100%;
   }
+  cursor: pointer;
+}
 `
 
 const OnlyFiat = props => {
   const { project } = props
   const [amountSelect, setAmountSelect] = useState(null)
+  const [amountTyped, setAmountTyped] = useState(null)
+  const [donateToGiveth, setDonateToGiveth] = useState(false)
+  const [anonymous, setAnonymous] = useState(false)
   const client = useApolloClient()
-  // const [getDonationSession, { called, loading, data, error }] = useLazyQuery(
-  //   GET_DONATION_SESSION,
-  //   {
-  //     variables: {
-  //       projectId: 1,
-  //       amount: data.amount,
-  //       anonymous: true,
-  //       donateToGiveth: true,
-  //       successUrl: `http://localhost:8000/donate/${1}?success=true`,
-  //       cancelUrl: `http://localhost:8000/donate/${1}?success=false`
-  //     }
-  //   }
-  // )
   const amounts = [500, 100, 50, 30]
 
   useEffect(() => {}, [])
 
   const goCheckout = async event => {
     try {
-      if (!amountSelect) return alert('Please set an amount before donating')
+      if (!amountSelect && !amountTyped) {
+        return alert('Please set an amount before donating')
+      }
+      const amount = amountTyped || amountSelect
+      if (amount <= 0) return alert('Please set a valid amount')
       // await getDonationSession({ variables: { amount: amountSelect } })
+      const projId = project?.id
+      let givethDonation = 0
+      donateToGiveth === true && (givethDonation = 5)
       const { data } = await client.query({
         query: GET_DONATION_SESSION,
         variables: {
-          projectId: 1,
-          amount: parseInt(amountSelect),
-          anonymous: true,
-          donateToGiveth: true,
-          successUrl: `http://localhost:8000/donate/${1}?success=true`,
-          cancelUrl: `http://localhost:8000/donate/${1}?success=false`
+          projectId: parseInt(projId),
+          amount: parseInt(amount + givethDonation),
+          anonymous: anonymous,
+          donateToGiveth: donateToGiveth,
+          successUrl: `${window.location.origin}/donate/${projId}?success=true`,
+          cancelUrl: `${window.location.origin}/donate/${projId}?success=false`
         }
       })
       console.log({ data })
       goStripe(data)
     } catch (error) {
+      alert(error?.message?.split('GraphQL error: ')[1])
       console.log({ error })
     }
   }
@@ -149,7 +151,10 @@ const OnlyFiat = props => {
           return (
             <AmountItem
               key={index}
-              onClick={() => setAmountSelect(i)}
+              onClick={() => {
+                setAmountTyped('')
+                setAmountSelect(i)
+              }}
               sx={{
                 backgroundColor: isSelected ? 'white' : 'transparent',
                 color: isSelected ? 'secondary' : 'white'
@@ -173,7 +178,7 @@ const OnlyFiat = props => {
           <Text sx={{ variant: 'text.medium' }}>Or enter your amount:</Text>
           <OpenAmount>
             <Text sx={{ variant: 'text.large' }}>$</Text>
-            <Input
+            <InputComponent
               sx={{
                 variant: 'text.large',
                 '::placeholder': {
@@ -182,9 +187,11 @@ const OnlyFiat = props => {
               }}
               placeholder='Amount'
               type='number'
+              value={amountTyped}
               onChange={e => {
                 e.preventDefault()
-                setAmountSelect(e.target.value)
+                setAmountSelect(null)
+                setAmountTyped(e.target.value)
               }}
             />
           </OpenAmount>
@@ -192,9 +199,13 @@ const OnlyFiat = props => {
         <div>
           <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox defaultChecked={false} />
+              <Checkbox
+                defaultChecked={donateToGiveth}
+                onClick={() => setDonateToGiveth(!donateToGiveth)}
+              />
               <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
-                Be a hero, add <strong> $5</strong> to help sustain Giveth
+                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
+                help sustain Giveth
               </Text>
             </div>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
@@ -203,7 +214,10 @@ const OnlyFiat = props => {
             sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
           >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox defaultChecked={false} />
+              <Checkbox
+                defaultChecked={anonymous}
+                onClick={() => setAnonymous(!anonymous)}
+              />
               <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
                 Donate anonymously
               </Text>

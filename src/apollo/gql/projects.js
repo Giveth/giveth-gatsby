@@ -74,11 +74,18 @@ const GET_DONATION_SESSION = gql`
   }
 `
 
+const GET_STRIPE_DONATION_PDF = gql`
+  query GetStripeDonationPDF($sessionId: Float!) {
+    getStripeDonationPDF(sessionId: $sessionId)
+  }
+`
+
 export {
   FETCH_PROJECTS,
   FETCH_PROJECT,
   ADD_PROJECT,
   ADD_BANK_ACCOUNT,
   GET_LINK_BANK_CREATION,
-  GET_DONATION_SESSION
+  GET_DONATION_SESSION,
+  GET_STRIPE_DONATION_PDF
 }

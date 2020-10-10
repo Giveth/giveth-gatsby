@@ -12,6 +12,7 @@ import peoplePuzzle2 from '../images/people-puzzle2.png'
 import decoratorFizzySquare from '../images/decorator-fizzy-square.png'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
+import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
 const IndexPage = () => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
@@ -19,6 +20,7 @@ const IndexPage = () => {
   const [projectAdded, setProjectAdded] = useState(false)
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   const [formValues, setFormValues] = useState({})
+  const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const onSubmit = async (values, pinnedImageUrl) => {
     values.projectImage = pinnedImageUrl
@@ -44,7 +46,90 @@ const IndexPage = () => {
     }
   }
 
-  function ProjectForm () {
+  function AfterCreation() {
+    if (!projectAdded) {
+      return <h3>loading</h3>
+    }
+    if (!askedBankAccount) {
+      return (
+        <>
+          <img
+            src={decoratorClouds}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '57px',
+              right: '434px',
+              zIndex: -1
+            }}
+            className='hide'
+          />
+          <img
+            src={peoplePuzzle2}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '417px',
+              right: '0px',
+              zIndex: -1
+            }}
+            className='hide'
+          />
+          <ProjectBankAccountInput
+            projectId={1}
+            finalize={() => setAskedBankAccount(true)}
+          />
+        </>
+      )
+    } else {
+      return (
+        <>
+          <img
+            src={decoratorClouds}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '57px',
+              right: '185px',
+              zIndex: '-1'
+            }}
+            className='hide'
+          />
+          <img
+            src={peopleStretching}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '240px',
+              right: '130px',
+              width: '252px',
+              height: '610px',
+              zIndex: '-1'
+            }}
+            className='hide'
+          />
+          <img
+            src={decoratorFizzySquare}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '260px',
+              left: '380px',
+              zIndex: '-1'
+            }}
+            className='hide'
+          />
+          <HighFive
+            projectImage={formValues.projectImage}
+            projectTitle='test'
+            projectDescription='Testtesttest'
+          />
+        </>
+      )
+    }
+  }
+
+  function ProjectForm() {
     if (isLoggedIn === true) {
       if (!projectAdded) {
         return (
@@ -75,43 +160,7 @@ const IndexPage = () => {
       } else {
         return (
           <>
-            <img
-              src={decoratorClouds}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '57px',
-                right: '185px'
-              }}
-              className='hide'
-            />
-            <img
-              src={peopleStretching}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '240px',
-                right: '130px',
-                width: '252px',
-                height: '610px'
-              }}
-              className='hide'
-            />
-            <img
-              src={decoratorFizzySquare}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '260px',
-                left: '380px'
-              }}
-              className='hide'
-            />
-            <HighFive
-              projectImage={formValues.projectImage}
-              projectTitle='test'
-              projectDescription='Testtesttest'
-            />
+            <AfterCreation />
           </>
         )
       }

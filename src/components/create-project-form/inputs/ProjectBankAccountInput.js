@@ -7,10 +7,12 @@ import { animated } from 'react-spring'
 export const ProjectBankAccountInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  projectId,
+  finalize
 }) => {
   const { data, loading, error } = useQuery(GET_LINK_BANK_CREATION, {
-    variables: { projectId: 1 }
+    variables: { projectId }
   })
 
   const setBankAccount = async () => {
@@ -24,7 +26,7 @@ export const ProjectBankAccountInput = ({
   console.log({ data, error })
 
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
+    <animated.section style={{ ...animationStyle, margin: '8.75rem' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -87,7 +89,10 @@ export const ProjectBankAccountInput = ({
           borderRadius: '48px',
           backgroundColor: 'transparent'
         }}
-        type='submit'
+        onClick={e => {
+          e.preventDefault()
+          finalize()
+        }}
       >
         <Text
           sx={{
