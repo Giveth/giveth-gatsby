@@ -1,10 +1,10 @@
+<p align="center"><a href="https://giveth.io"><img alt="Giveth.io" src="https://github.com/Giveth/giveth-design-assets/blob/master/02-logos/Giveth%20logo/giveth-symbol-logo-purple.png" width="80"/></a></p><h1 align="center">
+  Giveth v2
+</h1>
 `master`
 [![Netlify Status](https://api.netlify.com/api/v1/badges/f914ac7e-ce27-4909-bd3e-14d749731a52/deploy-status)](https://app.netlify.com/sites/giveth2/deploys)
 `staging`
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2f325b5b-e159-443e-bac7-c5e15f3578c0/deploy-status)](https://app.netlify.com/sites/giveth-website-staging/deploys)
-<p align="center"><a href="https://giveth.io"><img alt="Giveth.io" src="https://github.com/Giveth/giveth-design-assets/blob/master/02-logos/Giveth%20logo/giveth-symbol-logo-purple.png" width="80"/></a></p><h1 align="center">
-  Giveth v2
-</h1>
 
 ## 🚀 Quick start
 Giveth-2 is a reimagined version of the ["Giveth donation application"](https://github.com/Giveth/giveth-dapp). Users leverage the Ethereum blockchain to distribute and track their donations or enable unstoppable funding for their campaign.
