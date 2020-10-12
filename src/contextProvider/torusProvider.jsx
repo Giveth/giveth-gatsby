@@ -1,73 +1,146 @@
-import React, { useState } from 'react'
-import Torus from '@toruslabs/torus-embed'
+import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
-import {
-  checkIfLoggedIn,
-  getUser,
-  handleLogout,
-  setUser
-} from '../services/auth'
+import * as Auth from '../services/auth'
 
-const torus = new Torus()
+const TORUS_POLLING_DELAY = 100
+const BALANCE_POLLING_DELAY = 2000
 
+let torus
 let web3
 let isInitialized = false
+let torusLoaded = false
+let torusIsLoading = false
+let torusPolling
+let balancePolling
 
 const torusContext = React.createContext({})
 
 async function initTorus () {
-  if (!isInitialized) {
+  if (torus && !isInitialized) {
     await torus.init({
       network: { host: process.env.GATSBY_NETWORK },
       // buildEnv: process.env.NODE_ENV,
       showTorusButton: false,
       enableLogging: process.env.TORUS_DEBUG_LOGGING
     })
+    web3 = new Web3(torus.provider)
     isInitialized = true
   }
 }
 
 const TorusProvider = props => {
-  let user = getUser()
+  let user = Auth.getUser()
+
+  const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
+  const [balance, setBalance] = useState(0)
 
   function updateBalance () {
-    if (web3 && user?.addresses) {
+    if (web3 && user?.addresses && isLoggedIn) {
       web3.eth
         .getBalance(user?.addresses[0])
         .then(result => setBalance(Number(Web3.utils.fromWei(result))))
     }
   }
 
-  const [isLoggedIn, setIsLoggedIn] = useState(checkIfLoggedIn())
-  const [balance, setBalance] = useState(0)
+  function fetchBalance () {
+    updateBalance()
 
-  updateBalance()
+    if (balancePolling) {
+      clearInterval(balancePolling)
+      balancePolling = 0
+    }
+
+    if (isLoggedIn) {
+      balancePolling = setInterval(() => {
+        updateBalance()
+      }, BALANCE_POLLING_DELAY)
+    }
+  }
+
+  const torusNotLoadedMessage = () => console.log('torus is not loaded')
+
+  function loadTorus () {
+    if (!torusLoaded && !torusIsLoading && window?.Torus) {
+      torusIsLoading = true
+      torus = new window.Torus()
+      torusLoaded = true
+      torusIsLoading = false
+      initTorus()
+    }
+  }
+
+  useEffect(() => {
+    if (window?.Torus) {
+      loadTorus()
+    } else {
+      torusPolling = setInterval(() => {
+        if (!torusLoaded && window?.Torus) {
+          loadTorus()
+        } else if (torusLoaded) {
+          if (torusPolling) {
+            clearInterval(torusPolling)
+            torusPolling = 0
+          }
+        }
+      }, TORUS_POLLING_DELAY)
+
+      fetchBalance()
+    }
+
+    return function cleanUp () {
+      if (torusPolling) {
+        clearInterval(torusPolling)
+      }
+      if (balancePolling) {
+        clearInterval(balancePolling)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchBalance()
+  }, [isLoggedIn])
 
   async function logout () {
-    await torus.logout()
-    handleLogout()
+    if (torusLoaded) {
+      if (isLoggedIn) {
+        try {
+          await torus.logout()
+        } catch (e) {
+          console.error(e)
+        }
+      }
+    } else {
+      torusNotLoadedMessage()
+    }
+    Auth.handleLogout()
+    Auth.logout()
     setIsLoggedIn(false)
-    window.location = process.env.GATSBY_BASE_URL
+    if (balancePolling) {
+      clearInterval(balancePolling)
+      balancePolling = 0
+    }
   }
 
   async function login () {
+    if (!torusLoaded) {
+      torusNotLoadedMessage()
+      return
+    }
+
     if (!isLoggedIn) {
       await initTorus()
       const addresses = await torus.login()
       if (addresses.length > 0) {
-        web3 = new Web3(torus.provider)
         user = await torus.getUserInfo()
         user.addresses = addresses
-        console.log(JSON.stringify(user, null, 2))
-        setUser(user)
+        Auth.setUser(user)
         setIsLoggedIn(true)
-        updateBalance()
         const signedMessage = await web3.eth.personal.sign(
           'our_secret',
           user.addresses[0],
           ''
         )
-        // const signedMessage = ''
         await props.onLogin(signedMessage, user?.addresses[0], user?.email)
       }
     }
