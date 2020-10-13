@@ -187,9 +187,13 @@ const ProjectPageTemplate = ({ pageContext }) => {
         </Box>
         <Flex
           sx={{
+            p: 2,
+            marginTop: '-3rem',
+            borderRadius: '30px',
             width: '30%',
             flexDirection: 'column',
-            alignContent: 'center'
+            alignContent: 'center',
+            backgroundColor: 'white'
           }}
         >
           <Button
@@ -207,7 +211,9 @@ const ProjectPageTemplate = ({ pageContext }) => {
             }}
           >
             <Text>Givers: 24</Text>
-            <Text>Donations: 65</Text>
+            <Text sx={{ pl: 4, borderLeft: '2px solid #edf0fa' }}>
+              Donations: 65
+            </Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly' }}>
             {['Non-Profit', 'SDG Impact'].map(category => {
@@ -250,7 +256,6 @@ const ProjectPageTemplate = ({ pageContext }) => {
           </Flex>
         </Flex>
       </Flex>
-
       {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre> */}
     </Layout>
   )
