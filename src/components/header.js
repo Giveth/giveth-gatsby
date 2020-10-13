@@ -168,7 +168,7 @@ const Header = ({ siteTitle }) => {
       const loginResponse = await doLogin({
         variables: {
           walletAddress: userAddress,
-          signature: signedMessage.signature,
+          signature: signedMessage,
           email: userEmail
         }
       })
