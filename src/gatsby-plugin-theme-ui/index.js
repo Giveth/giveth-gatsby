@@ -87,7 +87,9 @@ export default {
       fontSize: 7,
       lineHeight: 'tallest',
       fontFamily: 'heading',
-      fontWeight: 'regular'
+      fontWeight: 'body',
+      color: 'bodyDark',
+      fontStyle: 'italic'
     },
     overline: {
       fontSize: 2,
