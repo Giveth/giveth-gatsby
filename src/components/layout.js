@@ -25,7 +25,7 @@ const AlertOptions = {
   position: positions.BOTTOM_CENTER
 }
 
-const Layout = ({ children, asDialog }) => {
+const Layout = ({ isHomePage, children, asDialog }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -71,7 +71,10 @@ const Layout = ({ children, asDialog }) => {
     } else {
       return (
         <>
-          <Header siteTitle={data.site.siteMetadata.title} />
+          <Header
+            siteTitle={data.site.siteMetadata.title}
+            isHomePage={isHomePage}
+          />
           <div
             sx={{
               // applies width 100% to all viewport widths,

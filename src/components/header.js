@@ -139,7 +139,7 @@ const Decorator = styled.div`
 
 const Login = Loadable(() => import('./torus/login'))
 
-const Header = ({ siteTitle }) => {
+const Header = ({ siteTitle, isHomePage }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [doLogin] = useMutation(DO_LOGIN)
@@ -192,7 +192,7 @@ const Header = ({ siteTitle }) => {
   return (
     <HeaderContainer
       className={
-        hasScrolled
+        hasScrolled || !isHomePage
           ? 'HeaderPlaceholderScrolled'
           : 'HeaderPlaceholderNotScrolled'
       }
@@ -200,7 +200,9 @@ const Header = ({ siteTitle }) => {
         marginBottom: '1.45rem'
       }}
     >
-      <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
+      <HeaderSpan
+        className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
+      >
         {!isMobile ? (
           <Decorator>
             <img
@@ -235,7 +237,7 @@ const Header = ({ siteTitle }) => {
             <img src={logo} alt='logo' width='40px' height='40px' />
           ) : (
             <LogoSpan>
-              {hasScrolled ? (
+              {hasScrolled || !isHomePage ? (
                 <img src={logo} alt='logo' width='50px' height='50px' />
               ) : (
                 <img src={logo} alt='logo' width='80px' height='80px' />

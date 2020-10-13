@@ -9,7 +9,7 @@ import HomeTopProjects from '../components/HomeTopProjects'
 
 const IndexPage = () => {
   return (
-    <Layout>
+    <Layout isHomePage='true'>
       <Hero />
       <HomeTopProjects />
       <InfoSection />
