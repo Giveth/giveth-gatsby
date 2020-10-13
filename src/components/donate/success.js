@@ -35,10 +35,21 @@ const DownloadReceipt = styled(Box)`
 const Success = props => {
   const { project, sessionId } = props
   const [amountSelect, setAmountSelect] = useState(null)
+  const [pdfBase64, setPdfBase64] = useState(null)
 
   const client = useApolloClient()
 
   console.log({ sessionId })
+
+  const downloadPDF = () => {
+    const linkSource = `data:application/pdf;base64,${pdfBase64}`
+    const downloadLink = document.createElement('a')
+    const fileName = 'giveth_donation.pdf'
+
+    downloadLink.href = linkSource
+    downloadLink.download = fileName
+    downloadLink.click()
+  }
 
   useEffect(() => {
     const getData = async () => {
@@ -51,6 +62,7 @@ const Success = props => {
           }
         })
         console.log({ data, error })
+        setPdfBase64(data?.getStripeDonationPDF)
       } catch (error) {
         console.log({ error })
       }
@@ -70,7 +82,7 @@ const Success = props => {
         Your <strong> $$$ </strong> contribution goes a long way!
       </Text>
       <Receipt sx={{ my: 4 }}>
-        <DownloadReceipt>
+        <DownloadReceipt onClick={()=>downloadPDF()}>
           <Text
             sx={{
               variant: 'text.paragraph',
@@ -96,10 +108,8 @@ const Success = props => {
       </Receipt>
       <Text
         sx={{ variant: 'headings.h5', pt: 4 }}
-        style={{ display: 'flex', flexDirection: 'row' }}
       >
-        Stay a Giver?{' '}
-        <Text sx={{ color: 'yellow', ml: 2 }}> Register an account.</Text>
+        Stay a Giver? <span sx={{ color: 'yellow', ml: 2 }}>Register an account.</span>
       </Text>
     </Content>
   )

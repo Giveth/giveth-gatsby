@@ -39,6 +39,7 @@
     "npm": "^6.14.7",
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.0",
+    "query-string": "^6.13.5",
     "react": "^16.12.0",
     "react-alert": "^7.0.2",
     "react-alert-template-mui": "^1.0.7",

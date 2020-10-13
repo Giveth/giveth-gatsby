@@ -43,11 +43,15 @@ const ADD_BANK_ACCOUNT = gql`
 `
 
 const GET_LINK_BANK_CREATION = gql`
-  query SetProjectBankAccount($projectId: Float!) {
+  query SetProjectBankAccount(
+    $projectId: Float!
+    $returnUrl: String!
+    $refreshUrl: String!
+  ) {
     setProjectBankAccount(
       projectId: $projectId
-      returnUrl: "http://localhost:8000/create"
-      refreshUrl: "http://localhost:8000/create"
+      returnUrl: $returnUrl
+      refreshUrl: $refreshUrl
     )
   }
 `

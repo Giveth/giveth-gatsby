@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Layout from '../components/layout'
+import * as queryString from "query-string";
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
@@ -14,13 +15,15 @@ import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
 import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
-const IndexPage = () => {
+const IndexPage = (props) => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   const [formValues, setFormValues] = useState({})
   const [askedBankAccount, setAskedBankAccount] = useState(false)
+
+  const { projectId } = queryString.parse(props.location.search)
 
   const onSubmit = async (values, pinnedImageUrl) => {
     values.projectImage = pinnedImageUrl
@@ -39,7 +42,7 @@ const IndexPage = () => {
 
       if (project) {
         console.log(`project : ${JSON.stringify(project, null, 2)}`)
-        setProjectAdded(true)
+        setProjectAdded(project)
       }
     } catch (error) {
       console.log(`Error adding project: ---> : ${error}`)
@@ -47,10 +50,12 @@ const IndexPage = () => {
   }
 
   function AfterCreation() {
-    if (!projectAdded) {
+    // TODO: Get project id after creation
+    if (!projectAdded && !projectId) {
       return <h3>loading</h3>
     }
-    if (!askedBankAccount) {
+    if (!askedBankAccount && !projectId) {
+      console.log({projectAdded})
       return (
         <>
           <img
@@ -76,7 +81,7 @@ const IndexPage = () => {
             className='hide'
           />
           <ProjectBankAccountInput
-            projectId={1}
+            projectId={projectAdded?.data?.addProjectSimple?.id}
             finalize={() => setAskedBankAccount(true)}
           />
         </>
@@ -120,6 +125,7 @@ const IndexPage = () => {
             className='hide'
           />
           <HighFive
+            projectId={projectId}
             projectImage={formValues.projectImage}
             projectTitle='test'
             projectDescription='Testtesttest'
@@ -131,7 +137,7 @@ const IndexPage = () => {
 
   function ProjectForm() {
     if (isLoggedIn === true) {
-      if (!projectAdded) {
+      if (!projectAdded && !projectId) {
         return (
           <>
             <img

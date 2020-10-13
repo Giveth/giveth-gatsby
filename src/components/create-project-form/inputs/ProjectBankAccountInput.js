@@ -12,7 +12,11 @@ export const ProjectBankAccountInput = ({
   finalize
 }) => {
   const { data, loading, error } = useQuery(GET_LINK_BANK_CREATION, {
-    variables: { projectId }
+    variables: {
+      projectId: parseInt(projectId),
+      returnUrl: `${window.location.origin}/create?projectId=${projectId}`,
+      refreshUrl: `${window.location.origin}/create?projectId=${projectId}`
+    }
   })
 
   const setBankAccount = async () => {
@@ -66,6 +70,7 @@ export const ProjectBankAccountInput = ({
           height: '52px',
           borderRadius: '48px'
         }}
+        disabled={loading}
         onClick={e => {
           e.preventDefault()
           setBankAccount()
@@ -79,7 +84,7 @@ export const ProjectBankAccountInput = ({
             letterSpacing: '4%'
           }}
         >
-          CONNECT BANK ACCOUNT
+          {loading ? '...' : 'CONNECT BANK ACCOUNT'}
         </Text>
       </Button>
       <Button
