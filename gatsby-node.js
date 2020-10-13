@@ -3,6 +3,7 @@
  *
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
+var slugify = require('slugify')
 
 exports.onCreatePage = async ({ page, actions }) => {
   const { createPage } = actions
@@ -15,4 +16,37 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page.
     createPage(page)
   }
+}
+
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  const projectResults = await graphql(`
+    query {
+      giveth {
+        projects {
+          id
+          title
+          description
+        }
+      }
+    }
+  `)
+  const projectPageTemplate = require.resolve('./src/templates/project.js')
+  projectResults.data.giveth.projects.forEach(project => {
+    console.log(
+      'theproject ====>',
+      project.title,
+      'theslug===>',
+      slugify(project.title)
+    )
+
+    createPage({
+      path: `/projects/${slugify(project.title)}`,
+      component: projectPageTemplate,
+      context: {
+        // entire project is passed down as context
+        project: project
+      }
+    })
+  })
 }

@@ -24,7 +24,7 @@ const IndexPage = (props) => {
   const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(props.location.search)
-
+  console.log({projectId})
   const onSubmit = async (values, pinnedImageUrl) => {
     values.projectImage = pinnedImageUrl
     setFormValues(values)

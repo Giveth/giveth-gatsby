@@ -220,7 +220,9 @@ const CreateProjectForm = props => {
               Cancel
             </Button>
           </Flex>
-          {currentStep === steps.length ? null : (
+          {currentStep === steps.length ? (
+            <p>Creating project, please wait</p>
+          ) : (
             <form onSubmit={handleSubmit(onSubmit)}>
               <>
                 {currentStep !== steps.length - 1 ? (

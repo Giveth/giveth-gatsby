@@ -1,4 +1,9 @@
+
+`master`
 [![Netlify Status](https://api.netlify.com/api/v1/badges/f914ac7e-ce27-4909-bd3e-14d749731a52/deploy-status)](https://app.netlify.com/sites/giveth2/deploys)
+`staging`
+[![Netlify Status](https://api.netlify.com/api/v1/badges/2f325b5b-e159-443e-bac7-c5e15f3578c0/deploy-status)](https://app.netlify.com/sites/giveth-website-staging/deploys)
+<br />
 <p align="center"><a href="https://giveth.io"><img alt="Giveth.io" src="https://github.com/Giveth/giveth-design-assets/blob/master/02-logos/Giveth%20logo/giveth-symbol-logo-purple.png" width="80"/></a></p><h1 align="center">
   Giveth v2
 </h1>
@@ -6,7 +11,6 @@
 ## 🚀 Quick start
 Giveth-2 is a reimagined version of the ["Giveth donation application"](https://github.com/Giveth/giveth-dapp). Users leverage the Ethereum blockchain to distribute and track their donations or enable unstoppable funding for their campaign.
 
-1.  **Create a Gatsby site.**
 The projects aims to simplify the application's options to enable new users without blockchain experience a frictionless experience.
 
 The project is currently in heavy development and does not offer all functionality that is needed for an MVP state (first release goal).
@@ -81,5 +85,8 @@ If you want to contribute, pls say hello to us in chat -  [https://giveth.io/joi
 ### Styling
 
 Styling should be done in cooperation with senior contributors so a minimum of new styles is introduced locally. As a rule of thumb: all styles that are used more than once or are not very specific to one component should be added in the **Theme UI definition**`src/gatsby-plugin-theme-ui/index.js` whenever possible and additionally to a gatsby page we use to collect all defined styles `src/pages/viewstyles.js` to quickly check consistency.
-
 Please refer to some examples in the code to see how we deal with styles. Local overrides and extensions should be done via `sx prop` or `emotionJS`.
+
+### Code conventions
+- as mentioned above contributor code should be linted with StandardJS
+- React components for into the folder `/src/components` and component filenames should be written in Camel case.

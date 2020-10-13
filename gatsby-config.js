@@ -76,6 +76,22 @@ module.exports = {
           include: /images\/svg\/.*\.svg/
         }
       }
+    },
+    {
+      resolve: 'gatsby-source-graphql',
+      options: {
+        typeName: 'GIVETH',
+        fieldName: 'giveth',
+        // url: `${process.env.GATSBY_APOLLO_SERVER}`,
+        url: 'https://graph.topia.us',
+        // HTTP headers
+        headers: {
+          // Learn about environment variables: https://gatsby.dev/env-vars
+          // Authorization: `Bearer ${process.env.APOLLO_AUTH_TOKEN}`
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImZpcnN0TmFtZSI6IkJyeWFuIiwiaWF0IjoxNTk5Mzk5NjcxLCJleHAiOjE2MDE5OTE2NzF9.hIYd483Yvt1bwDXMzzKONjIl5VVMkA4_MiSwriw2CEA'
+        }
+      }
     }
 
     // this (optional) plugin enables Progressive Web App + Offline functionality
