@@ -210,6 +210,7 @@ const ProjectsList = props => {
             {projects &&
               projects.map((project, index) => (
                 <ProjectCard
+                  id={project.id}
                   listingId={project.title + '-' + index}
                   key={project.title + '-' + index}
                   name={project.title}

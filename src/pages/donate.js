@@ -133,7 +133,7 @@ const ShowProject = props => {
   }, [])
 
   // TODO: Implement this on a utils file
-  function getUrlParams (search) {
+  function getUrlParams(search) {
     let hashes = search.slice(search.indexOf('?') + 1).split('&')
     return hashes.reduce((params, hash) => {
       let [key, val] = hash.split('=')
@@ -141,7 +141,7 @@ const ShowProject = props => {
     }, {})
   }
 
-  function PaymentOptions () {
+  function PaymentOptions() {
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO ? (
         <OnlyCrypto project={project} address={address} />
@@ -183,7 +183,7 @@ const ShowProject = props => {
         <Options>
           <OptionType
             title={CREDIT}
-            subtitle='3.5% Fee'
+            subtitle='2.9% + 0.30 USD'
             style={RIGHT_BOX_STYLE}
           />
           <OptionType

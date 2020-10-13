@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Input, Label, Text, jsx } from 'theme-ui'
+import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
@@ -81,6 +81,18 @@ const CheckboxLabel = styled(Label)`
 }
 `
 
+const Summary = styled(Flex)`
+  flex-direction: column;
+  margin: 2rem 0;
+`
+
+const SmRow = styled(Flex)`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.75rem 0;
+`
+
 const OnlyFiat = props => {
   const { project } = props
   const [amountSelect, setAmountSelect] = useState(null)
@@ -91,6 +103,14 @@ const OnlyFiat = props => {
   const amounts = [500, 100, 50, 30]
 
   useEffect(() => {}, [])
+  console.log({ project })
+
+  const donation = parseFloat(amountTyped || amountSelect)
+  const subtotal =
+    donation * 0.029 +
+    0.3 +
+    (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0) +
+    donation
 
   const goCheckout = async event => {
     try {
@@ -106,8 +126,8 @@ const OnlyFiat = props => {
       const { data } = await client.query({
         query: GET_DONATION_SESSION,
         variables: {
-          projectId: parseInt(projId),
-          amount: parseInt(amount + givethDonation),
+          projectId: parseFloat(projId),
+          amount: parseFloat(subtotal),
           anonymous: anonymous,
           donateToGiveth: donateToGiveth,
           successUrl: `${window.location.origin}/donate/${projId}?success=true`,
@@ -170,6 +190,15 @@ const OnlyFiat = props => {
     )
   }
 
+  const SummaryRow = ({ title, amount, style }) => {
+    return (
+      <SmRow style={style}>
+        <Text sx={{ variant: 'text.medium' }}>{title}</Text>
+        <Text sx={{ variant: 'text.medium' }}>${amount}</Text>
+      </SmRow>
+    )
+  }
+
   return (
     <Content>
       <AmountSection>
@@ -228,6 +257,31 @@ const OnlyFiat = props => {
             <Checkbox defaultChecked={false} />
             <Text sx={{ variant: 'text.medium' }}>Dedicate this donation</Text>
           </Label> */}
+          {(amountSelect || amountTyped) && (
+            <Summary>
+              <SummaryRow
+                title={`Support ${project?.title}`}
+                amount={parseFloat(donation).toFixed(2)}
+              />
+              {donateToGiveth && (
+                <SummaryRow
+                  title='Support Giveth'
+                  amount={GIVETH_DONATION_AMOUNT}
+                />
+              )}
+              <SummaryRow
+                title='Processing Fee: 2.9% + 0.30 USD'
+                amount={parseFloat(donation * 0.029 + 0.3).toFixed(2)}
+                style={{
+                  borderBottom: '1px solid #6B7087',
+                  padding: '0 0 18px 0'
+                }}
+              />
+              <Text style={{ variant: 'text.medium', textAlign: 'right' }}>
+                ${parseFloat(subtotal).toFixed(2)}
+              </Text>
+            </Summary>
+          )}
         </div>
         <Button
           onClick={goCheckout}
