@@ -11,12 +11,11 @@ import HomeTopProjects from '../components/HomeTopProjects'
 const IndexPage = () => {
   return (
     <Layout>
-      <SEO title='Home'>
-        <Hero />
-        <HomeTopProjects />
-        <InfoSection />
-        <UpdatesSection />
-      </SEO>
+      <SEO title='Home' />
+      <Hero />
+      <HomeTopProjects />
+      <InfoSection />
+      <UpdatesSection />
     </Layout>
   )
 }
