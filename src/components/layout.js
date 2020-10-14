@@ -77,7 +77,8 @@ const Layout = ({ children, asDialog }) => {
               // applies width 100% to all viewport widths,
               // width 50% above the first breakpoint,
               // and 25% above the next breakpoint
-              width: ['100%', '50%', '25%']
+              width: ['100%', '50%', '25%'],
+              overflow: 'hidden'
             }}
           >
             <main>{children}</main>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import Layout from '../components/layout'
 import { Flex, Image, Text, Box, Button } from 'theme-ui'
+import { DonationsTab } from '../components/project'
 import testImg from '../images/giveth-test-image.png'
 import { GrCircleInformation } from 'react-icons/gr'
 import { IconContext } from 'react-icons'
 import { Link } from 'gatsby'
+import styled from '@emotion/styled'
 
 const ProjectPageTemplate = ({ pageContext }) => {
   const [currentTab, setCurrentTab] = useState('description')
@@ -172,28 +174,23 @@ const ProjectPageTemplate = ({ pageContext }) => {
                 Updates
               </Text>
             ) : (
-              <Text
-                sx={{
-                  fontSize: 3,
-                  fontFamily: 'body',
-                  fontWeight: 'body',
-                  color: 'black'
-                }}
-              >
-                Donations
-              </Text>
+              <DonationsTab />
             )}
           </Box>
         </Box>
         <Flex
           sx={{
+            position: 'fixed',
+            right: '10%',
             p: 2,
+            pb: 4,
             marginTop: '-3rem',
             borderRadius: '30px',
-            width: '30%',
+            width: '20%',
             flexDirection: 'column',
             alignContent: 'center',
-            backgroundColor: 'white'
+            backgroundColor: 'white',
+            zIndex: 100
           }}
         >
           <Button

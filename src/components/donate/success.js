@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
+import { navigate } from 'gatsby'
 import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
@@ -82,7 +83,7 @@ const Success = props => {
         Your <strong> $$$ </strong> contribution goes a long way!
       </Text>
       <Receipt sx={{ my: 4 }}>
-        <DownloadReceipt onClick={()=>downloadPDF()}>
+        <DownloadReceipt onClick={() => downloadPDF()}>
           <Text
             sx={{
               variant: 'text.paragraph',
@@ -94,7 +95,9 @@ const Success = props => {
           </Text>
           <BillIcon />
         </DownloadReceipt>
-        <div style={{ flex: 0.4 }}>
+        {
+          // TODO: Leave this for crypto only
+          /* <div style={{ flex: 0.4 }}>
           <Text
             sx={{
               variant: 'text.paragraph',
@@ -104,12 +107,17 @@ const Success = props => {
           >
             View transaction details
           </Text>
-        </div>
+        </div> */
+        }
       </Receipt>
-      <Text
-        sx={{ variant: 'headings.h5', pt: 4 }}
-      >
-        Stay a Giver? <span sx={{ color: 'yellow', ml: 2 }}>Register an account.</span>
+      <Text sx={{ variant: 'headings.h5', pt: 4 }}>
+        Stay a Giver?{' '}
+        <span
+          sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
+          onClick={() => navigate('/')}
+        >
+          Register an account.
+        </span>
       </Text>
     </Content>
   )
