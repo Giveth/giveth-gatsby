@@ -256,5 +256,17 @@ export default {
       cursor: 'pointer',
       fontWeight: 'medium'
     }
+  },
+  images: {
+    avatar: {
+      width: 30,
+      height: 30
+    }
+  },
+  spinner: {
+    medium: {
+      color: 'primary',
+      size: 30
+    }
   }
 }

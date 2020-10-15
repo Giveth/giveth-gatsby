@@ -84,6 +84,19 @@ const GET_STRIPE_DONATION_PDF = gql`
   }
 `
 
+const GET_STRIPE_PROJECT_DONATIONS = gql`
+  query GetStripeDonations($projectId: Float!) {
+    getStripeProjectDonations(projectId: $projectId) {
+      id
+      amount
+      donor
+      currency
+      status
+      createdAt
+    }
+  }
+`
+
 export {
   FETCH_PROJECTS,
   FETCH_PROJECT,
@@ -91,5 +104,6 @@ export {
   ADD_BANK_ACCOUNT,
   GET_LINK_BANK_CREATION,
   GET_DONATION_SESSION,
-  GET_STRIPE_DONATION_PDF
+  GET_STRIPE_DONATION_PDF,
+  GET_STRIPE_PROJECT_DONATIONS
 }

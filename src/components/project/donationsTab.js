@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { Button, Flex, Text } from 'theme-ui'
-import Table from '../table'
+import Table from './projectDonationsTable'
 
 const Funds = styled.div`
   padding: 2rem;

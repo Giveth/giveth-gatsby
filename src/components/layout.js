@@ -14,6 +14,7 @@ import AlertTemplate from 'react-alert-template-mui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 import TorusProvider from '../contextProvider/torusProvider'
+import GlobalProvider from '../contextProvider/globalProvider'
 import { useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN } from '../apollo/gql/auth'
 
@@ -91,11 +92,13 @@ const Layout = ({ children, asDialog }) => {
 
   return (
     <TorusProvider onLogin={onLogin}>
-      <ThemeProvider theme={theme}>
-        <Provider template={AlertTemplate} {...AlertOptions}>
-          <Template />
-        </Provider>
-      </ThemeProvider>
+      <GlobalProvider>
+        <ThemeProvider theme={theme}>
+          <Provider template={AlertTemplate} {...AlertOptions}>
+            <Template />
+          </Provider>
+        </ThemeProvider>
+      </GlobalProvider>
     </TorusProvider>
   )
 }
