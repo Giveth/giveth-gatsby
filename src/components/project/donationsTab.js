@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { Button, Flex, Text } from 'theme-ui'
+import Table from '../table'
 
 const Funds = styled.div`
   padding: 2rem;
@@ -20,5 +21,6 @@ export const DonationsTab = ({ showModal, setShowModal }) => (
         $100.000,00
       </Text>
     </Funds>
+    <Table />
   </div>
 )
