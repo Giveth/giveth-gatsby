@@ -185,6 +185,20 @@ export default {
         borderRadius: '56px',
         borderColor: 'primary'
       }
+    },
+    search: {
+      background: 'white',
+      borderColor: 'transparent',
+      boxShadow: '0px 4px 20px rgba(212, 218, 238, 0.4)',
+      borderRadius: '12px',
+      padding: '1.125rem 0 1.125rem 1rem',
+
+      '::placeholder': {
+        fontWeight: 500,
+        fontSize: '0.875rem',
+        lineHeight: '1.188rem',
+        color: '#AAAFCA'
+      }
     }
   },
   buttons: {
@@ -267,6 +281,37 @@ export default {
     medium: {
       color: 'primary',
       size: 30
+    }
+  },
+  badges: {
+    primary: {
+      color: 'background',
+      bg: 'primary'
+    },
+    outline: {
+      color: 'primary',
+      bg: 'transparent',
+      boxShadow: 'inset 0 0 0 1px'
+    },
+    green: {
+      background: '#F5FFF6',
+      border: '1px solid #AED6AD',
+      boxSizing: 'border-box',
+      borderRadius: '4.09946px',
+      fontSize: '12px',
+      lineHeight: '150%',
+      textAlign: 'center',
+      color: '#317B2E'
+    },
+    blue: {
+      background: '#EEF9FF',
+      border: '1px solid #9FC9F4',
+      boxSizing: 'border-box',
+      borderRadius: '4.09946px',
+      fontSize: '12px',
+      lineHeight: '150%',
+      textAlign: 'center',
+      color: '#3F91E4'
     }
   }
 }
