@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
+import theme from '../gatsby-plugin-theme-ui'
 import { Box, Flex, Text } from 'theme-ui'
 
 const IconDrop = styled(DropIcon)`
@@ -12,14 +13,10 @@ const IconDrop = styled(DropIcon)`
 const Dropdown = styled(Box)`
   position: relative;
   display: inline-block;
-  :hover div {
-    display: block;
-  }
 `
 
 const DropdownContent = styled.div`
   display: none;
-  padding: 1rem 0 1rem 1rem;
   position: absolute;
   width: 100%;
   background: #ffffff;
@@ -30,14 +27,26 @@ const DropdownContent = styled.div`
   margin: 15px 0 0 -11px;
 `
 
-const DropList = styled(Flex)``
+const DropList = styled(Flex)`
+  flex-direction: column;
+`
 
-const DropdownInput = () => {
+const DropItem = styled.div`
+  padding: 1rem 0 1rem 1rem;
+  :hover {
+    background-color: ${theme.colors.lightestBlue};
+  }
+`
+
+const DropdownInput = ({ current, setCurrent, options }) => {
+  const ListRef = React.useRef(null)
   return (
     <Dropdown
       variant='forms.search'
       style={{ width: '100%', cursor: 'pointer' }}
       sx={{ pr: 4 }}
+      onMouseEnter={() => (ListRef.current.style.display = 'block')}
+      onMouseLeave={() => (ListRef.current.style.display = 'none')}
     >
       <IconDrop />
       <Text
@@ -47,22 +56,29 @@ const DropdownInput = () => {
           color: 'secondary'
         }}
       >
-        All Donations
+        {options[current]}
       </Text>
-      <DropdownContent>
+      <DropdownContent ref={ListRef} id='dropdownContent'>
         <DropList>
-          {['All Donations', 'Fiat', 'Crypto'].map((i, key) => {
+          {options?.map((i, index) => {
             return (
-              <Text
-                key={key}
-                sx={{
-                  variant: 'text.medium',
-                  fontWeight: 'bold',
-                  color: 'secondary'
+              <DropItem
+                key={index}
+                onClick={() => {
+                  setCurrent(index)
+                  ListRef.current.style.display = 'none'
                 }}
               >
-                {i}
-              </Text>
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    fontWeight: 'bold',
+                    color: 'secondary'
+                  }}
+                >
+                  {i}
+                </Text>
+              </DropItem>
             )
           })}
         </DropList>

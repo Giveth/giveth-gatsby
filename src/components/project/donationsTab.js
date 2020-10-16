@@ -1,11 +1,12 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { Button, Flex, Text } from 'theme-ui'
+import theme from '../../gatsby-plugin-theme-ui'
 import Table from './projectDonationsTable'
 
 const Funds = styled.div`
   padding: 2rem;
-  background: #edf0fa;
+  background: ${theme.colors.lightestBlue};
   border: 1px solid #d4daee;
   box-sizing: border-box;
   border-radius: 12px;

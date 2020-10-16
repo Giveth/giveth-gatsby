@@ -1,6 +1,7 @@
 /** @jsx jsx */
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ProjectContext } from '../../contextProvider/projectProvider'
+import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import {
@@ -14,7 +15,6 @@ import {
   Text,
   jsx
 } from 'theme-ui'
-import Dropdown from '../dropdownInput'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
@@ -128,6 +128,8 @@ const FilterBox = styled(Flex)`
 `
 
 const CustomTable = () => {
+  const options = ['All Donations', 'Fiat', 'Crypto']
+  const [filter, setFilter] = React.useState(0)
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
@@ -140,11 +142,161 @@ const CustomTable = () => {
   //   )
   // }
 
+  const filterDonations = items => {
+    switch (options[filter]) {
+      case 'All Donations':
+        return items
+      case 'Fiat':
+        return items?.filter(item => item.currency === 'USD')
+      case 'Crypto':
+        return []
+      default:
+        return items
+    }
+  }
+
+  const filteredDonations = filterDonations(currentProjectView?.donations)
+
+  const [activeItem, setCurrentItem] = React.useState(1)
+
+  const PaginationComponent = ({ PaginationItems = ['a', 'b', 'c', 'd'] }) => {
+    // Data to be rendered using pagination.
+    const itemsPerPage = 3
+
+    // Logic for displaying current items
+    const indexOfLastItem = activeItem * itemsPerPage
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage
+    // const currentItems = PaginationItems?.slice(
+    //   indexOfFirstItem,
+    //   indexOfLastItem
+    // )
+
+    const handlePageChange = pageNumber => {
+      console.log(`active page is ${pageNumber}`)
+      setCurrentItem(pageNumber)
+    }
+    return (
+      <Pagination
+        activePage={activeItem}
+        itemsCountPerPage={3}
+        totalItemsCount={PaginationItems.length}
+        pageRangeDisplayed={3}
+        onChange={handlePageChange}
+      />
+    )
+  }
+
+  const TableToShow = () => {
+    return (
+      <>
+        <Table>
+          <thead>
+            <tr>
+              <th scope='col'>
+                <Text
+                  sx={{
+                    variant: 'text.small',
+                    fontWeight: 'bold',
+                    color: 'secondary'
+                  }}
+                >
+                  Date
+                </Text>
+              </th>
+              <th scope='col'>
+                <Text
+                  sx={{
+                    variant: 'text.small',
+                    fontWeight: 'bold',
+                    color: 'secondary'
+                  }}
+                >
+                  Donor
+                </Text>
+              </th>
+              <th scope='col'>
+                <Text
+                  sx={{
+                    variant: 'text.small',
+                    fontWeight: 'bold',
+                    color: 'secondary'
+                  }}
+                >
+                  Currency
+                </Text>
+              </th>
+              <th scope='col'>
+                <Text
+                  sx={{
+                    variant: 'text.small',
+                    fontWeight: 'bold',
+                    color: 'secondary'
+                  }}
+                >
+                  Amount
+                </Text>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredDonations.map((i, key) => {
+              return (
+                <tr key={key}>
+                  <td
+                    data-label='Account'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                      {dayjs(i.createdAt).format('ll')}
+                    </Text>
+                  </td>
+                  <DonorBox
+                    data-label='Due Date'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
+                    <Text
+                      sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
+                    >
+                      {i.donor}
+                    </Text>
+                  </DonorBox>
+                  <td
+                    data-label='Amount'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Badge variant='green'>{i.currency}</Badge>
+                  </td>
+                  <td
+                    data-label='Period'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                      {i.amount.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                      })}
+                    </Text>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </Table>
+        {/* <PaginationComponent /> */}
+      </>
+    )
+  }
+
   return (
     <>
       <FilterBox sx={{ pt: 4 }}>
         <FilterInput>
-          <DropdownInput />
+          <DropdownInput
+            options={options}
+            current={filter}
+            setCurrent={i => setFilter(i)}
+          />
         </FilterInput>
         <SearchInput>
           <Input
@@ -155,101 +307,15 @@ const CustomTable = () => {
           <IconSearch />
         </SearchInput>
       </FilterBox>
-
-      <Table>
-        <thead>
-          <tr>
-            <th scope='col'>
-              <Text
-                sx={{
-                  variant: 'text.small',
-                  fontWeight: 'bold',
-                  color: 'secondary'
-                }}
-              >
-                Date
-              </Text>
-            </th>
-            <th scope='col'>
-              <Text
-                sx={{
-                  variant: 'text.small',
-                  fontWeight: 'bold',
-                  color: 'secondary'
-                }}
-              >
-                Donor
-              </Text>
-            </th>
-            <th scope='col'>
-              <Text
-                sx={{
-                  variant: 'text.small',
-                  fontWeight: 'bold',
-                  color: 'secondary'
-                }}
-              >
-                Currency
-              </Text>
-            </th>
-            <th scope='col'>
-              <Text
-                sx={{
-                  variant: 'text.small',
-                  fontWeight: 'bold',
-                  color: 'secondary'
-                }}
-              >
-                Amount
-              </Text>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentProjectView?.donations?.map((i, key) => {
-            return (
-              <tr key={key}>
-                <td
-                  data-label='Account'
-                  sx={{ variant: 'text.small', color: 'secondary' }}
-                >
-                  <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                    {dayjs(i.createdAt).format('ll')}
-                  </Text>
-                </td>
-                <DonorBox
-                  data-label='Due Date'
-                  sx={{ variant: 'text.small', color: 'secondary' }}
-                >
-                  <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
-                  <Text
-                    sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
-                  >
-                    {i.donor}
-                  </Text>
-                </DonorBox>
-                <td
-                  data-label='Amount'
-                  sx={{ variant: 'text.small', color: 'secondary' }}
-                >
-                  <Badge variant='green'>{i.currency}</Badge>
-                </td>
-                <td
-                  data-label='Period'
-                  sx={{ variant: 'text.small', color: 'secondary' }}
-                >
-                  <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                    {i.amount.toLocaleString('en-US', {
-                      style: 'currency',
-                      currency: 'USD'
-                    })}
-                  </Text>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </Table>
+      {!filteredDonations || filteredDonations?.length === 0 ? (
+        <Table>
+          <Text sx={{ variant: 'text.large', color: 'secondary' }}>
+            No donations :(
+          </Text>
+        </Table>
+      ) : (
+        <TableToShow />
+      )}
     </>
   )
 }
