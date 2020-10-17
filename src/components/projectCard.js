@@ -117,7 +117,6 @@ const Categories = () => {
   ))
 }
 const ProjectCard = props => {
-  console.log({ props })
   const { balance } = useContext(TorusContext)
   const [altStyle, setAltStyle] = useState(false)
   return (

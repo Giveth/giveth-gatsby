@@ -134,7 +134,6 @@ const OnlyFiat = props => {
           cancelUrl: `${window.location.origin}/donate/${projId}?success=false`
         }
       })
-      console.log({ data })
       goStripe(data)
     } catch (error) {
       alert(error?.message?.split('GraphQL error: ')[1])

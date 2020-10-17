@@ -127,7 +127,6 @@ const ShowProject = props => {
   React.useEffect(() => {
     // Check type
     const search = getUrlParams(props?.location?.search)
-    console.log({ search }, props.location)
     setIsAfterPayment(search?.success === 'true')
     if (search?.sessionId) setPaymentSessionId(search?.sessionId)
   }, [])
