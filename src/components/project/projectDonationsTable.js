@@ -4,6 +4,7 @@ import { ProjectContext } from '../../contextProvider/projectProvider'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
+import theme from '../../gatsby-plugin-theme-ui'
 import {
   Avatar,
   Badge,
@@ -20,8 +21,6 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
 
 dayjs.extend(localizedFormat)
-
-// import Spinner from '../spinner'
 
 const Table = styled.table`
   border-collapse: collapse;
@@ -104,6 +103,36 @@ const Table = styled.table`
     }
   }
 `
+const PagesStyle = styled.div`
+  .inner-pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    list-style-type: none;
+    font-family: ${theme.fonts.body};
+    a {
+      text-decoration: none;
+    }
+  }
+  .item-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    a {
+      color: ${theme.colors.secondary};
+    }
+  }
+  .active-page {
+    padding: 0.4rem 1rem;
+    margin: 0 0.3rem;
+    text-align: center;
+    background-color: ${theme.colors.secondary};
+    border-radius: 4px;
+    a {
+      color: white;
+    }
+  }
+`
+
 const DonorBox = styled.td`
   display: flex;
   flex-direction: row;
@@ -129,18 +158,37 @@ const FilterBox = styled(Flex)`
 
 const CustomTable = () => {
   const options = ['All Donations', 'Fiat', 'Crypto']
+  const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
+  const [loading, setLoading] = React.useState(true)
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
-  // SPINNER EXAMPLEtoo
-  // if (loading) {
-  //   return (
-  //     <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-  //       <Spinner variant='spinner.medium' />
-  //     </Flex>
-  //   )
-  // }
+
+  React.useEffect(() => {
+    const setup = async () => {
+      setCurrentDonations(currentProjectView?.donations)
+      setLoading(false)
+    }
+
+    setup()
+  }, [currentProjectView])
+
+  const searching = search => {
+    const donations = currentProjectView?.donations
+    if (!search || search === '') {
+      return setCurrentDonations(donations)
+    }
+    const some = donations.filter(donation => {
+      return (
+        donation.donor
+          .toString()
+          .toLowerCase()
+          .indexOf(search.toString().toLowerCase()) === 0
+      )
+    })
+    setCurrentDonations(some)
+  }
 
   const filterDonations = items => {
     switch (options[filter]) {
@@ -155,38 +203,28 @@ const CustomTable = () => {
     }
   }
 
-  const filteredDonations = filterDonations(currentProjectView?.donations)
+  const filteredDonations = filterDonations(currentDonations)
 
-  const [activeItem, setCurrentItem] = React.useState(1)
+  const TableToShow = () => {
+    const paginationItems = filteredDonations
 
-  const PaginationComponent = ({ PaginationItems = ['a', 'b', 'c', 'd'] }) => {
+    const [activeItem, setCurrentItem] = React.useState(1)
+
     // Data to be rendered using pagination.
-    const itemsPerPage = 3
+    const itemsPerPage = 6
 
     // Logic for displaying current items
     const indexOfLastItem = activeItem * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    // const currentItems = PaginationItems?.slice(
-    //   indexOfFirstItem,
-    //   indexOfLastItem
-    // )
+    const currentItems = paginationItems?.slice(
+      indexOfFirstItem,
+      indexOfLastItem
+    )
 
     const handlePageChange = pageNumber => {
-      console.log(`active page is ${pageNumber}`)
       setCurrentItem(pageNumber)
     }
-    return (
-      <Pagination
-        activePage={activeItem}
-        itemsCountPerPage={3}
-        totalItemsCount={PaginationItems.length}
-        pageRangeDisplayed={3}
-        onChange={handlePageChange}
-      />
-    )
-  }
 
-  const TableToShow = () => {
     return (
       <>
         <Table>
@@ -239,7 +277,7 @@ const CustomTable = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredDonations.map((i, key) => {
+            {currentItems.map((i, key) => {
               return (
                 <tr key={key}>
                   <td
@@ -283,7 +321,20 @@ const CustomTable = () => {
             })}
           </tbody>
         </Table>
-        {/* <PaginationComponent /> */}
+        <PagesStyle>
+          <Pagination
+            hideNavigation
+            hideFirstLastPages
+            activePage={activeItem}
+            itemsCountPerPage={6}
+            totalItemsCount={paginationItems.length}
+            pageRangeDisplayed={3}
+            onChange={handlePageChange}
+            innerClass='inner-pagination'
+            itemClass='item-page'
+            activeClass='active-page'
+          />
+        </PagesStyle>
       </>
     )
   }
@@ -303,11 +354,16 @@ const CustomTable = () => {
             defaultValue=''
             placeholder='Search Donations'
             variant='forms.search'
+            onChange={e => searching(e.target.value)}
           />
           <IconSearch />
         </SearchInput>
       </FilterBox>
-      {!filteredDonations || filteredDonations?.length === 0 ? (
+      {loading ? (
+        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Spinner variant='spinner.medium' />
+        </Flex>
+      ) : !filteredDonations || filteredDonations?.length === 0 ? (
         <Table>
           <Text sx={{ variant: 'text.large', color: 'secondary' }}>
             No donations :(

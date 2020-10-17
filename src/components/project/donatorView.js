@@ -12,6 +12,7 @@ import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 export const ProjectDonatorView = ({ pageContext }) => {
   const [currentTab, setCurrentTab] = useState('description')
   const [totalDonations, setTotalDonations] = useState(null)
+  const [totalGivers, setTotalGivers] = useState(null)
 
   const { data, loading, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
     variables: { projectId: 1 }
@@ -27,7 +28,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
         ...currentProjectView,
         donations: data?.getStripeProjectDonations
       })
-      setTotalDonations(data?.getStripeProjectDonations?.length)
+      const donations = data?.getStripeProjectDonations
+      setTotalDonations(donations?.length)
+      setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
     }
   }, [data])
 
@@ -69,7 +72,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   mt: '10px'
                 }}
               >
-                Project organisition
+                Project organization
               </Text>
             </Box>
           </Flex>
@@ -228,7 +231,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               my: '20px'
             }}
           >
-            <Text>Givers: 24</Text>
+            <Text>Givers: {totalGivers}</Text>
             <Text sx={{ pl: 4, borderLeft: '2px solid #edf0fa' }}>
               Donations: {totalDonations}
             </Text>
