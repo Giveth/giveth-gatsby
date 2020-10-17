@@ -27,7 +27,12 @@ export const DonationsTab = ({ showModal, setShowModal }) => {
         <Text sx={{ variant: 'text.medium', color: 'secondary' }}>
           TOTAL FUNDS RAISED:
         </Text>
-        <Text sx={{ variant: 'headings.display', color: 'secondary' }}>
+        <Text
+          sx={{
+            variant: ['headings.h3', null, 'headings.display'],
+            color: 'secondary'
+          }}
+        >
           {total?.amount.toLocaleString('en-US', {
             style: 'currency',
             currency: 'USD'

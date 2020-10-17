@@ -77,9 +77,12 @@ const Table = styled.table`
     }
 
     tr {
-      border-bottom: 3px solid #eaebee;
+      border-bottom: 5px solid #eaebee;
       display: block;
-      margin-bottom: 0.625em;
+      margin: 1rem 0 4rem 0;
+    }
+    tr:last-child {
+      margin: 1rem 0 0 0;
     }
 
     td {
@@ -110,6 +113,7 @@ const PagesStyle = styled.div`
     justify-content: flex-start;
     list-style-type: none;
     font-family: ${theme.fonts.body};
+    margin: 0 0 3rem 0;
     a {
       text-decoration: none;
     }
@@ -143,11 +147,9 @@ const IconSearch = styled(SearchIcon)`
   margin-left: -2.5rem;
 `
 const SearchInput = styled(Flex)`
-  width: 65%;
   align-items: center;
 `
 const FilterInput = styled(Flex)`
-  width: 30%;
   align-items: center;
 `
 
@@ -289,7 +291,7 @@ const CustomTable = () => {
                     </Text>
                   </td>
                   <DonorBox
-                    data-label='Due Date'
+                    data-label='Donor'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
@@ -300,13 +302,13 @@ const CustomTable = () => {
                     </Text>
                   </DonorBox>
                   <td
-                    data-label='Amount'
+                    data-label='Currency'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Badge variant='green'>{i.currency}</Badge>
                   </td>
                   <td
-                    data-label='Period'
+                    data-label='Amount'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
@@ -341,15 +343,15 @@ const CustomTable = () => {
 
   return (
     <>
-      <FilterBox sx={{ pt: 4 }}>
-        <FilterInput>
+      <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
+        <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, null, null] }}>
           <DropdownInput
             options={options}
             current={filter}
             setCurrent={i => setFilter(i)}
           />
         </FilterInput>
-        <SearchInput>
+        <SearchInput sx={{ width: ['100%', null, '65%'] }}>
           <Input
             defaultValue=''
             placeholder='Search Donations'

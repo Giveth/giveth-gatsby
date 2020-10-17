@@ -8,6 +8,18 @@ import { IconContext } from 'react-icons'
 import { Link } from 'gatsby'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
+import styled from '@emotion/styled'
+
+const FloatingDonateView = styled(Flex)`
+  position: fixed;
+
+  @media screen and (max-width: 800px) {
+    width: 80%;
+    align-self: center;
+    margin: 0 auto;
+    bottom: 0;
+  }
+`
 
 export const ProjectDonatorView = ({ pageContext }) => {
   const [currentTab, setCurrentTab] = useState('description')
@@ -50,7 +62,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         />
       </Flex>
       <Flex sx={{ width: '80%', margin: 'auto' }}>
-        <Box sx={{ width: '70%' }}>
+        <Box sx={{ width: ['100%', null, '70%'] }}>
           <Flex>
             <Box sx={{ mt: '20px' }}>
               <Text
@@ -106,7 +118,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
           <Flex
             sx={{
-              width: '60%',
+              width: ['100%', null, '60%'],
               justifyContent: 'space-between',
               height: '60px',
               mt: '20px'
@@ -123,7 +135,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               <Text
                 sx={{
                   color: '#303B72',
-                  paddingBottom: '30px',
+                  paddingBottom: '0.5rem',
                   borderBottomColor:
                     currentTab === 'description' ? '#C2449F' : null,
                   borderBottomStyle:
@@ -144,7 +156,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               <Text
                 sx={{
                   color: '#303B72',
-                  paddingBottom: '30px',
+                  paddingBottom: '0.5rem',
                   borderBottomColor:
                     currentTab === 'updates' ? '#C2449F' : null,
                   borderBottomStyle: currentTab === 'updates' ? 'solid' : null
@@ -164,7 +176,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               <Text
                 sx={{
                   color: '#303B72',
-                  paddingBottom: '30px',
+                  paddingBottom: '0.5rem',
                   borderBottomColor:
                     currentTab === 'donation' ? '#C2449F' : null,
                   borderBottomStyle: currentTab === 'donation' ? 'solid' : null
@@ -178,6 +190,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             {currentTab === 'description' ? (
               <Text
                 sx={{
+                  mb: 4,
                   fontSize: 3,
                   fontFamily: 'body',
                   fontWeight: 'body',
@@ -189,6 +202,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             ) : currentTab === 'updates' ? (
               <Text
                 sx={{
+                  mb: 4,
                   fontSize: 3,
                   fontFamily: 'body',
                   fontWeight: 'body',
@@ -202,9 +216,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
             )}
           </Box>
         </Box>
-        <Flex
+        <FloatingDonateView
           sx={{
-            position: 'fixed',
             right: '10%',
             p: 2,
             pb: 4,
@@ -275,7 +288,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               </Text>
             </Link>
           </Flex>
-        </Flex>
+        </FloatingDonateView>
       </Flex>
       {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre> */}
     </>
