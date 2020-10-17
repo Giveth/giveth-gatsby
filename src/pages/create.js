@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import Layout from '../components/layout'
-import * as queryString from "query-string";
+import * as queryString from 'query-string'
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
-import { checkIfLoggedIn } from '../services/auth'
-import { Heading, Box, Text } from 'theme-ui'
+import { Text } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
-import { Link } from 'gatsby'
 import decoratorClouds from '../images/decorator-clouds.png'
 import peoplePuzzle2 from '../images/people-puzzle2.png'
 import decoratorFizzySquare from '../images/decorator-fizzy-square.png'
@@ -15,7 +12,7 @@ import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
 import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
-const IndexPage = (props) => {
+const IndexPage = props => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
@@ -24,7 +21,7 @@ const IndexPage = (props) => {
   const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(props.location.search)
-  console.log({projectId})
+  console.log({ projectId })
   const onSubmit = async (values, pinnedImageUrl) => {
     values.projectImage = pinnedImageUrl
     setFormValues(values)
@@ -55,7 +52,7 @@ const IndexPage = (props) => {
       return <h3>loading</h3>
     }
     if (!askedBankAccount && !projectId) {
-      console.log({projectAdded})
+      console.log({ projectAdded })
       return (
         <>
           <img
@@ -199,7 +196,7 @@ const IndexPage = (props) => {
         maxWidth: '1440px'
       }}
     >
-      <SEO title='Home' />
+      <SEO title='Create Project' />
 
       <ProjectForm />
     </div>

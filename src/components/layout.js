@@ -20,6 +20,7 @@ import { DO_LOGIN } from '../apollo/gql/auth'
 
 import Dialog from './dialog'
 import Footer from './footer'
+import { Helmet } from 'react-helmet'
 
 const AlertOptions = {
   timeout: 5000,
@@ -45,7 +46,7 @@ const Layout = ({ children, asDialog }) => {
       const loginResponse = await doLogin({
         variables: {
           walletAddress: userAddress,
-          signature: signedMessage.signature,
+          signature: signedMessage,
           email: userEmail
         }
       })
@@ -60,7 +61,7 @@ const Layout = ({ children, asDialog }) => {
       // web3.eth.getBalance(user.publicAddress).then(setBalance)
       // console.log(`setting balance to zero`)
       // setBalance(0)
-      window.location = process.env.GATSBY_BASE_URL
+      // window.location = process.env.GATSBY_BASE_URL
     } catch (error) {
       console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
     }
@@ -91,15 +92,23 @@ const Layout = ({ children, asDialog }) => {
   }
 
   return (
-    <TorusProvider onLogin={onLogin}>
-      <GlobalProvider>
-        <ThemeProvider theme={theme}>
-          <Provider template={AlertTemplate} {...AlertOptions}>
-            <Template />
-          </Provider>
-        </ThemeProvider>
-      </GlobalProvider>
-    </TorusProvider>
+    <>
+      <Helmet>
+        <script
+          src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed'
+          crossOrigin='anonymous'
+        />
+      </Helmet>
+      <TorusProvider onLogin={onLogin}>
+        <GlobalProvider>
+          <ThemeProvider theme={theme}>
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <Template />
+            </Provider>
+          </ThemeProvider>
+        </GlobalProvider>
+      </TorusProvider>
+    </>
   )
 }
 
