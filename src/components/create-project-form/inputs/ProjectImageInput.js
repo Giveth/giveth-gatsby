@@ -19,12 +19,10 @@ export const ProjectImageInput = ({
     ? window.localStorage.getItem('projectImage')
     : {}
   const [image, setImage] = useState(currentValue)
-  const [imageName, setImageName] = useState('')
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     onDrop: acceptedFile => {
-      setImageName(acceptedFile[0].name)
       setImage(URL.createObjectURL(acceptedFile[0]))
     }
   })
@@ -75,13 +73,6 @@ export const ProjectImageInput = ({
             name='projectImage'
             type='hidden'
             value={image}
-            ref={register}
-          />
-          <input
-            id='imageName'
-            name='imageName'
-            type='hidden'
-            value={imageName}
             ref={register}
           />
           <Image

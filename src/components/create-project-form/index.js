@@ -31,7 +31,6 @@ const CreateProjectForm = props => {
     { name: 'technology', value: 'Technology' },
     { name: 'other', value: 'Other' }
   ]
-
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
   const steps = [
@@ -96,7 +95,6 @@ const CreateProjectForm = props => {
   ]
 
   const onSubmit = async data => {
-    console.log(data)
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
@@ -114,26 +112,11 @@ const CreateProjectForm = props => {
         ...data
       })
     }
-    if (currentStep === steps.length - 1) {
-      // if the image is not from Gallery pin it, otherwise just link to gallery image
-      if (formData.projectImage.startsWith('blob')) {
-        const imageBlob = await fetch(formData.projectImage).then(r => r.blob())
-        const imageToUpload = new File([imageBlob], formData.imageName)
-        pinFile(imageToUpload)
-          .then(response => {
-            window.localStorage.removeItem('projectImage')
-            props.onSubmit(
-              formData,
-              `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`
-            )
-          })
-          .catch(e => {
-            console.log(e)
-          })
-      } else {
-        window.localStorage.removeItem('projectImage')
-        props.onSubmit(formData)
-      }
+    if (currentStep === steps.length - 2) {
+      formData.projectImage = await fetch(formData.projectImage).then(r =>
+        r.blob()
+      )
+      console.log(formData.projectImage)
     }
     nextStep()
   }
