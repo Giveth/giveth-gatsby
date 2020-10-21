@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { Button, Flex, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui'
-import Table from './projectDonationsTable'
+import Table from './donationsTable'
 
 const Funds = styled.div`
   padding: 2rem;
@@ -18,8 +18,9 @@ export const DonationsTab = ({ showModal, setShowModal }) => {
     ProjectContext
   )
   const donations = currentProjectView?.donations
-  const total = donations?.reduce((a, b) => ({ amount: a.amount + b.amount }))
-  console.log({ donations, total })
+  const total =
+    donations?.length > 0 &&
+    donations.reduce((a, b) => ({ amount: a.amount + b.amount }))
 
   return (
     <div>
@@ -33,7 +34,7 @@ export const DonationsTab = ({ showModal, setShowModal }) => {
             color: 'secondary'
           }}
         >
-          {total?.amount.toLocaleString('en-US', {
+          {(total?.amount / 10)?.toLocaleString('en-US', {
             style: 'currency',
             currency: 'USD'
           })}

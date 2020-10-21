@@ -312,7 +312,7 @@ const CustomTable = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i.amount.toLocaleString('en-US', {
+                      {i?.amount?.toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD'
                       })}
@@ -344,7 +344,9 @@ const CustomTable = () => {
   return (
     <>
       <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
-        <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, null, null] }}>
+        <FilterInput
+          sx={{ width: ['100%', null, '30%'], mt: [null, null, null] }}
+        >
           <DropdownInput
             options={options}
             current={filter}

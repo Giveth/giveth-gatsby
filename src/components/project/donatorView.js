@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Text, Box, Button } from 'theme-ui'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { DonationsTab } from './donationsTab'
+import { DonationsTab, UpdatesTab } from './index'
 import testImg from '../../images/giveth-test-image.png'
 import { GrCircleInformation } from 'react-icons/gr'
 import { IconContext } from 'react-icons'
@@ -33,6 +33,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
     ProjectContext
   )
 
+  console.log({ data })
+
   useEffect(() => {
     if (data) {
       // Add donations to current project store
@@ -40,6 +42,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         ...currentProjectView,
         donations: data?.getStripeProjectDonations
       })
+      console.log('HERE', { data })
       const donations = data?.getStripeProjectDonations
       setTotalDonations(donations?.length)
       setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
@@ -200,17 +203,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 {pageContext?.project?.description}
               </Text>
             ) : currentTab === 'updates' ? (
-              <Text
-                sx={{
-                  mb: 4,
-                  fontSize: 3,
-                  fontFamily: 'body',
-                  fontWeight: 'body',
-                  color: 'black'
-                }}
-              >
-                Updates
-              </Text>
+              <UpdatesTab />
             ) : (
               <DonationsTab />
             )}
@@ -234,7 +227,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             variant='default'
             sx={{ paddingTop: '20px', paddingBottom: '20px' }}
           >
-            <Text>Donate</Text>
+            Donate
           </Button>
           <Flex
             sx={{

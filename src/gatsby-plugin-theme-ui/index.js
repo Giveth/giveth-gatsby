@@ -285,15 +285,28 @@ export default {
   },
   badges: {
     primary: {
+      fontFamily: 'body',
       color: 'background',
       bg: 'primary'
     },
     outline: {
+      fontFamily: 'body',
       color: 'primary',
       bg: 'transparent',
       boxShadow: 'inset 0 0 0 1px'
     },
+    altOutline: {
+      fontFamily: 'body',
+      textTransform: 'uppercase',
+      borderColor: 'bodyLight',
+      borderRadius: '48px',
+      padding: '5px 11px',
+      color: 'bodyLight',
+      bg: 'transparent',
+      boxShadow: 'inset 0 0 0 1px'
+    },
     green: {
+      fontFamily: 'body',
       background: '#F5FFF6',
       border: '1px solid #AED6AD',
       boxSizing: 'border-box',
@@ -304,6 +317,7 @@ export default {
       color: '#317B2E'
     },
     blue: {
+      fontFamily: 'body',
       background: '#EEF9FF',
       border: '1px solid #9FC9F4',
       boxSizing: 'border-box',

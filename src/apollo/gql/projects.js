@@ -84,6 +84,14 @@ const GET_STRIPE_DONATION_PDF = gql`
   }
 `
 
+// const GET_STRIPE_DONATION_PDF = gql`
+//   query GetStripeDonationPDF($sessionId: Float!) {
+//     getStripeDonationPDF(sessionId: $sessionId) {
+//       pdf
+//     }
+//   }
+// `
+
 const GET_STRIPE_PROJECT_DONATIONS = gql`
   query GetStripeDonations($projectId: Float!) {
     getStripeProjectDonations(projectId: $projectId) {
@@ -96,6 +104,22 @@ const GET_STRIPE_PROJECT_DONATIONS = gql`
     }
   }
 `
+
+// const GET_STRIPE_PROJECT_DONATIONS = gql`
+//   query GetStripeDonations($projectId: Float!) {
+//     getStripeProjectDonations(projectId: $projectId) {
+//       donations {
+//         id
+//         amount
+//         donor
+//         currency
+//         status
+//         createdAt
+//       }
+//       totalDonors
+//     }
+//   }
+// `
 
 export {
   FETCH_PROJECTS,
