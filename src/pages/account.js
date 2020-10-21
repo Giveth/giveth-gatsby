@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
+import { MyAccount, MyDonations } from '../components/account'
 import { jsx, Text, Flex, IconButton, Box, Button } from 'theme-ui'
 import styled from '@emotion/styled'
 import Loadable from '@loadable/component'
@@ -41,6 +42,8 @@ const CreateLink = styled(Link)`
 
 const AccountPage = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+  const [selectedView, setSelectedView] = useState('My Account')
+  const options = ['My Account', 'My Projects', 'My Donations']
   // const Login = Loadable(() => import('../components/torus/login'))
   // const [doLogin] = useMutation(DO_LOGIN)
 
@@ -72,6 +75,20 @@ const AccountPage = () => {
   //     console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
   //   }
   // }
+
+  const SetView = () => {
+    switch (selectedView) {
+      case 'My Account':
+        return <MyAccount />
+      case 'My Projects':
+        return <> My Projects </>
+      case 'My Donations':
+        return <MyDonations />
+      default:
+        return null
+    }
+  }
+
   return (
     <div>
       <Flex sx={{ justifyContent: 'space-between', mx: '5%', height: '128px' }}>
@@ -117,23 +134,24 @@ const AccountPage = () => {
             My Account
           </Text>
           <Box>
-            <Link to='/' sx={{ textDecoration: 'none' }}>
-              <a>
-                <Text sx={{ mb: '8px', color: 'secondary' }}>My Account</Text>
-              </a>
-            </Link>
-            <Link to='/' sx={{ textDecoration: 'none' }}>
-              <a>
-                <Text sx={{ mb: '8px', color: 'primary' }}>My Projects(2)</Text>
-              </a>
-            </Link>
-            <Link to='/' sx={{ textDecoration: 'none' }}>
-              <a>
-                <Text sx={{ mb: '8px', color: 'primary' }}>
-                  My Donations(24)
-                </Text>
-              </a>
-            </Link>
+            {options.map((i, index) => {
+              return (
+                <a
+                  key={index}
+                  style={{ textDecoration: 'none', cursor: 'pointer' }}
+                  onClick={() => setSelectedView(i)}
+                >
+                  <Text
+                    sx={{
+                      mb: '8px',
+                      color: selectedView === i ? 'secondary' : 'primary'
+                    }}
+                  >
+                    {i}
+                  </Text>
+                </a>
+              )
+            })}
           </Box>
           <Box sx={{ mt: '70px' }}>
             <Link to='/' sx={{ textDecoration: 'none' }}>
@@ -161,115 +179,7 @@ const AccountPage = () => {
           </Box>
         </Box>
         <Box sx={{ width: '70%', mt: '140px' }}>
-          <Flex>
-            <Text>Profile image</Text>
-            <Box sx={{ ml: '27px' }}>
-              <Text sx={{ color: 'secondary', fontSize: 7 }}>Marko</Text>
-              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>account@email</Text>
-            </Box>
-          </Flex>
-          <Flex sx={{ mt: '40px', alignItems: 'center' }}>
-            <Text sx={{ textTransform: 'uppercase', fontSize: 0 }}>
-              Wallet Address
-            </Text>
-            <Button
-              type='button'
-              sx={{
-                color: 'primary',
-                border: 0,
-                background: 'unset',
-                fontSize: 1
-              }}
-            >
-              Change
-            </Button>
-          </Flex>
-          <Text sx={{ mt: '14px' }}>
-            0x712852005C0423db1511c59D20283092E4aB3a2A
-          </Text>
-          <Flex sx={{ mt: '40px' }}>
-            <Box
-              sx={{
-                width: '30%',
-                height: '100px',
-                paddingTop: '20px',
-                paddingLeft: '24px',
-                backgroundColor: '#F4F6FC',
-                borderRadius: '12px'
-              }}
-            >
-              <Text
-                sx={{
-                  fontSize: 0,
-                  color: 'secondary',
-                  textTransform: 'uppercase'
-                }}
-              >
-                My donations
-              </Text>
-              <Text sx={{ color: 'primary', fontSize: 7 }}>24</Text>
-            </Box>
-            <Box
-              sx={{
-                width: '30%',
-                height: '100px',
-                paddingTop: '20px',
-                paddingLeft: '24px',
-                backgroundColor: '#F4F6FC',
-                borderRadius: '12px',
-                ml: '5%'
-              }}
-            >
-              <Text
-                sx={{
-                  fontSize: 0,
-                  color: 'secondary',
-                  textTransform: 'uppercase'
-                }}
-              >
-                My projects
-              </Text>
-              <Text sx={{ color: 'primary', fontSize: 7 }}>3</Text>
-            </Box>
-          </Flex>
-          <Box
-            sx={{
-              width: '65%',
-              height: '100px',
-              paddingTop: '20px',
-              paddingLeft: '24px',
-              backgroundColor: '#F4F6FC',
-              borderRadius: '12px',
-              mt: '24px'
-            }}
-          >
-            <Text
-              sx={{
-                fontSize: 0,
-                color: 'secondary',
-                textTransform: 'uppercase'
-              }}
-            >
-              Total value of assets in wallet
-            </Text>
-            <Flex sx={{ alignItems: 'baseline', paddingTop: '10px' }}>
-              <Text
-                sx={{ fontFamily: 'heading', color: 'secondary', fontSize: 7 }}
-              >
-                $128.640,40
-              </Text>
-              <Text
-                sx={{
-                  fontFamily: 'heading',
-                  color: 'secondary',
-                  fontSize: 3,
-                  ml: '10%'
-                }}
-              >
-                376.85 ETH
-              </Text>
-            </Flex>
-          </Box>
+          <SetView />
         </Box>
       </Flex>
       <Footer />

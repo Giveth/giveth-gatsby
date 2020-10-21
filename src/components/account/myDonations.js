@@ -158,11 +158,12 @@ const FilterBox = styled(Flex)`
   justify-content: space-between;
 `
 
-const CustomTable = () => {
+export const MyDonations = () => {
   const options = ['All Donations', 'Fiat', 'Crypto']
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
+  // TODO: Set this context for the user
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
@@ -232,21 +233,23 @@ const CustomTable = () => {
         <Table>
           <thead>
             <tr>
-              {['Date', 'Donor', 'Currency', 'Amount'].map((i, index) => {
-                return (
-                  <th scope='col' key={index}>
-                    <Text
-                      sx={{
-                        variant: 'text.small',
-                        fontWeight: 'bold',
-                        color: 'secondary'
-                      }}
-                    >
-                      {i}
-                    </Text>
-                  </th>
-                )
-              })}
+              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map(
+                (i, index) => {
+                  return (
+                    <th scope='col' key={index}>
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          fontWeight: 'bold',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i}
+                      </Text>
+                    </th>
+                  )
+                }
+              )}
             </tr>
           </thead>
           <tbody>
@@ -287,6 +290,14 @@ const CustomTable = () => {
                         style: 'currency',
                         currency: 'USD'
                       })}
+                    </Text>
+                  </td>
+                  <td
+                    data-label='Transaction'
+                    sx={{ variant: 'text.small', color: 'secondary' }}
+                  >
+                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                      Tx
                     </Text>
                   </td>
                 </tr>
@@ -348,5 +359,3 @@ const CustomTable = () => {
     </>
   )
 }
-
-export default CustomTable

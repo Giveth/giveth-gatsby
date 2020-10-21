@@ -7,8 +7,10 @@ import {
   Button,
   Card,
   IconButton,
+  Input,
   Flex,
-  Text
+  Text,
+  Textarea
 } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
@@ -29,7 +31,6 @@ const CardContainer = styled(Card)`
   margin: 0.5rem 0;
   width: 100%;
 `
-
 const SpecialCardContainer = styled(Flex)`
   width: 100%;
   min-height: 240px;
@@ -67,9 +68,81 @@ const Creator = styled(Flex)`
   text-align: center;
   align-items: center;
   margin: 1rem 0;
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`
+const CreatorName = styled(Flex)`
+  align-items: center;
+  flex-direction: row;
+`
+
+const RaisedHandsImg = styled.img`
+  position: absolute;
+  bottom: 0;
+  right: 24px;
+  @media (max-width: 800px) {
+    display: none;
+    align-items: flex-start;
+  }
 `
 
 const TimelineCard = props => {
+  const [newTitle, setNewTitle] = useState(null)
+  const [newInput, setNewInput] = useState(null)
+  if (props.newUpdateOption) {
+    return (
+      <Box style={{ width: '100%' }}>
+        <CardContainer>
+          <Input
+            variant='longInput'
+            sx={{
+              width: '100%',
+              variant: 'headings.h3',
+              color: 'secondary',
+              padding: '1.125rem 0 0 1rem',
+              '&::placeholder': {
+                variant: 'headings.h3',
+                color: 'bodyLight'
+              }
+            }}
+            type='text'
+            placeholder='Title'
+            onChange={e => setNewTitle(e.target.value)}
+          />
+          <Textarea
+            variant='longInput'
+            rows={4}
+            sx={{
+              width: '100%',
+              fontFamily: 'body',
+              padding: '1.125rem 1rem',
+              resize: 'none',
+              '&::placeholder': {
+                variant: 'body',
+                color: 'bodyLight'
+              }
+            }}
+            type='text'
+            placeholder='Write your update...'
+            onChange={e => setNewInput(e.target.value)}
+          />
+          <Flex sx={{ my: 2, mx: 3, justifyContent: 'flex-end' }}>
+            <Button
+              sx={{
+                variant: 'buttons.small',
+                background: 'none',
+                color: 'primary'
+              }}
+            >
+              <Text variant='text.bold'>SUBMIT</Text>
+            </Button>
+          </Flex>
+        </CardContainer>
+      </Box>
+    )
+  }
   if (props.specialContent) {
     return (
       <Box style={{ width: '100%' }}>
@@ -82,7 +155,6 @@ const TimelineCard = props => {
               width: '60%',
               pb: 2,
               pt: 4,
-              zIndex: 2,
               textAlign: 'center',
               alignSelf: 'center'
             }}
@@ -92,13 +164,16 @@ const TimelineCard = props => {
             </Text>
           </Box>
 
-          <Text sx={{ variant: 'text.default', pb: 4, color: 'bodyLight' }}>
+          <Text
+            sx={{
+              variant: 'text.default',
+              pb: 4,
+              color: 'bodyLight'
+            }}
+          >
             Feb 26, 2020
           </Text>
-          <img
-            src={RaisedHands}
-            style={{ position: 'absolute', bottom: 0, right: '24px' }}
-          />
+          <RaisedHandsImg src={RaisedHands} />
         </SpecialCardContainer>
       </Box>
     )
@@ -130,11 +205,21 @@ const TimelineCard = props => {
         </Heading>
         <CardContent>
           <Creator>
-            <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
-            <Text sx={{ variant: 'text.paragraph', color: 'secondary', mx: 2 }}>
-              Description
-            </Text>
-            <Badge variant='altOutline'>Creator</Badge>
+            <CreatorName>
+              <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
+              <Text
+                sx={{
+                  variant: 'text.paragraph',
+                  color: 'secondary',
+                  mx: 2
+                }}
+              >
+                User Name
+              </Text>
+            </CreatorName>
+            <Badge variant='altOutline' sx={{ mt: [2, 0, 0] }}>
+              Creator
+            </Badge>
           </Creator>
           <Text sx={{ variant: 'text.default' }}>Some content in here</Text>
         </CardContent>

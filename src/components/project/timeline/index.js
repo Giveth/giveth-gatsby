@@ -7,7 +7,7 @@ import theme from '../../../gatsby-plugin-theme-ui'
 
 const VerticalTimeline = styled.div`
   position: relative;
-  margin: 0 auto;
+  margin: 1rem auto;
   &:after {
     content: '';
     position: absolute;
@@ -33,18 +33,29 @@ const LeftInfo = styled(Flex)`
   padding: 0.5rem 0;
   background-color: ${theme.colors.background};
   position: absolute;
-  left: -13px;
   top: 15px;
   z-index: 1;
 `
 
 const Timeline = () => {
   const content = [1, 2, 3]
+  const newUpdateOption = true
   return (
     <VerticalTimeline>
+      {newUpdateOption && (
+        <Container>
+          <LeftInfo sx={{ left: '-23px' }}>
+            <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>NEW</Text>
+            <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>
+              UPDATE
+            </Text>
+          </LeftInfo>
+          <Card newUpdateOption />
+        </Container>
+      )}
       {content.map((i, index) => (
         <Container key={index}>
-          <LeftInfo>
+          <LeftInfo sx={{ left: '-13px' }}>
             <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>WED</Text>
             <Text sx={{ variant: 'headings.h4' }}>2</Text>
           </LeftInfo>
@@ -54,7 +65,6 @@ const Timeline = () => {
                 ? { title: 'Project Launched' }
                 : false
             }
-            addNewUpdate
           />
         </Container>
       ))}

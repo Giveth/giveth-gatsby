@@ -117,6 +117,13 @@ export default {
       fontWeight: 'bold',
       letterSpacing: 'narrow'
     },
+    bold: {
+      fontSize: 4,
+      fontFamily: 'body',
+      fontWeight: 'bold',
+      letterSpacing: 'narrow',
+      lineHeight: '18px'
+    },
     styleGuide: {
       fontSize: 6,
       color: '#fff',
@@ -192,13 +199,17 @@ export default {
       boxShadow: '0px 4px 20px rgba(212, 218, 238, 0.4)',
       borderRadius: '12px',
       padding: '1.125rem 0 1.125rem 1rem',
-
       '::placeholder': {
         fontWeight: 500,
         fontSize: '0.875rem',
         lineHeight: '1.188rem',
         color: '#AAAFCA'
       }
+    },
+    longInput: {
+      background: 'white',
+      borderColor: 'transparent',
+      borderRadius: '12px'
     }
   },
   buttons: {
