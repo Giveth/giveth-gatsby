@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
-import { MyAccount, MyDonations } from '../components/account'
+import { MyAccount, MyDonations, MyProjects } from '../components/account'
 import { jsx, Text, Flex, IconButton, Box, Button } from 'theme-ui'
 import styled from '@emotion/styled'
 import Loadable from '@loadable/component'
@@ -81,7 +81,7 @@ const AccountPage = () => {
       case 'My Account':
         return <MyAccount />
       case 'My Projects':
-        return <> My Projects </>
+        return <MyProjects />
       case 'My Donations':
         return <MyDonations />
       default:
