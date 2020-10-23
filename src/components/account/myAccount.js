@@ -42,13 +42,13 @@ export const MyAccount = () => {
           Change
         </Button>
       </Flex>
-      <Text sx={{ mt: '14px' }}>
+      <Text sx={{ mt: '14px', variant: 'text.medium' }}>
         0x712852005C0423db1511c59D20283092E4aB3a2A
       </Text>
       <Flex sx={{ mt: '40px' }}>
         <Box
           sx={{
-            width: '30%',
+            width: ['50%', '30%', '30%'],
             height: '100px',
             paddingTop: '20px',
             paddingLeft: '24px',
@@ -69,7 +69,7 @@ export const MyAccount = () => {
         </Box>
         <Box
           sx={{
-            width: '30%',
+            width: ['50%', '30%', '30%'],
             height: '100px',
             paddingTop: '20px',
             paddingLeft: '24px',
@@ -92,13 +92,14 @@ export const MyAccount = () => {
       </Flex>
       <Box
         sx={{
-          width: '65%',
+          width: ['100%', '65%', '65%'],
           height: '100px',
           paddingTop: '20px',
           paddingLeft: '24px',
           backgroundColor: '#F4F6FC',
           borderRadius: '12px',
-          mt: '24px'
+          mt: '24px',
+          mb: ['24px', 0, 0]
         }}
       >
         <Text

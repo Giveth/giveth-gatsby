@@ -16,9 +16,12 @@ import {
   Text,
   jsx
 } from 'theme-ui'
+import { useQuery } from '@apollo/react-hooks'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
+
+import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 
 dayjs.extend(localizedFormat)
 
@@ -168,14 +171,26 @@ export const MyDonations = () => {
     ProjectContext
   )
 
+  const { data, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
+    variables: { projectId: 1 }
+  })
+
   React.useEffect(() => {
     const setup = async () => {
       setCurrentDonations(currentProjectView?.donations)
       setLoading(false)
     }
 
+    if (data) {
+      // Add donations to current project store
+      setCurrentProjectView({
+        ...currentProjectView,
+        donations: data?.getStripeProjectDonations
+      })
+    }
+
     setup()
-  }, [currentProjectView])
+  }, [currentProjectView, data])
 
   const searching = search => {
     const donations = currentProjectView?.donations

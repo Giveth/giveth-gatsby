@@ -4,6 +4,7 @@ import { Link } from 'gatsby'
 import { MyAccount, MyDonations, MyProjects } from '../components/account'
 import { jsx, Text, Flex, IconButton, Box, Button } from 'theme-ui'
 import styled from '@emotion/styled'
+import Layout from '../components/layout'
 import Loadable from '@loadable/component'
 import { useMediaQuery } from 'react-responsive'
 import { useMutation } from '@apollo/react-hooks'
@@ -90,7 +91,7 @@ const AccountPage = () => {
   }
 
   return (
-    <div>
+    <Layout noHeader>
       <Flex sx={{ justifyContent: 'space-between', mx: '5%', height: '128px' }}>
         <Link
           to='/'
@@ -120,8 +121,14 @@ const AccountPage = () => {
           </UserSpan>
         </Flex>
       </Flex>
-      <Flex sx={{ mx: '5%', fontFamily: 'heading' }}>
-        <Box sx={{ width: '30%' }}>
+      <Flex
+        sx={{
+          mx: '5%',
+          fontFamily: 'heading',
+          flexDirection: ['column', 'row', 'row']
+        }}
+      >
+        <Box sx={{ width: ['100%', null, '30%'] }}>
           <Text
             sx={{
               fontFamily: 'heading',
@@ -153,7 +160,7 @@ const AccountPage = () => {
               )
             })}
           </Box>
-          <Box sx={{ mt: '70px' }}>
+          <Box sx={{ mt: ['35px', '70px', '70px'] }}>
             <Link to='/' sx={{ textDecoration: 'none' }}>
               <a>
                 <Text sx={{ mb: '8px', color: 'bodyDark' }}>
@@ -178,12 +185,13 @@ const AccountPage = () => {
             </Link>
           </Box>
         </Box>
-        <Box sx={{ width: '70%', mt: '140px' }}>
+        <Box
+          sx={{ width: ['100%', null, '70%'], mt: ['100px', '140px', '140px'] }}
+        >
           <SetView />
         </Box>
       </Flex>
-      <Footer />
-    </div>
+    </Layout>
   )
 }
 
