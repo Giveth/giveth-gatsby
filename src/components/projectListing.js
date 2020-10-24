@@ -100,7 +100,7 @@ const ProjectListing = props => {
       style={{
         width: '100%',
         cursor: props.disabled ? 'default' : 'pointer',
-        border: `1px solid ${theme.colors.muted}`,
+        border: props.disabled ? null : `1px solid ${theme.colors.muted}`,
         borderRadius: '12px'
       }}
       onClick={() => {

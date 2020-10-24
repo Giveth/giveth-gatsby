@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { useApolloClient } from '@apollo/react-hooks'
+import { base64ToBlob } from '../../utils'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
@@ -43,13 +44,14 @@ const Success = props => {
   console.log({ sessionId })
 
   const downloadPDF = () => {
-    const linkSource = `data:application/pdf;base64,${pdfBase64}`
-    const downloadLink = document.createElement('a')
-    const fileName = 'giveth_donation.pdf'
-
-    downloadLink.href = linkSource
-    downloadLink.download = fileName
-    downloadLink.click()
+    const blob = base64ToBlob(pdfBase64)
+    const filename = 'donation_invoice.pdf'
+    const uriContent = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.setAttribute('href', uriContent)
+    link.setAttribute('download', filename)
+    const event = new MouseEvent('click')
+    link.dispatchEvent(event)
   }
 
   useEffect(() => {
@@ -62,8 +64,8 @@ const Success = props => {
             sessionId: parseInt(sessionId)
           }
         })
-        console.log({ data, error })
-        setPdfBase64(data?.getStripeDonationPDF)
+        console.log({ data, error }, data?.getStripeDonationPDF?.pdf?.length)
+        setPdfBase64(data?.getStripeDonationPDF?.pdf)
       } catch (error) {
         console.log({ error })
       }

@@ -78,19 +78,19 @@ const GET_DONATION_SESSION = gql`
   }
 `
 
-const GET_STRIPE_DONATION_PDF = gql`
-  query GetStripeDonationPDF($sessionId: Float!) {
-    getStripeDonationPDF(sessionId: $sessionId)
-  }
-`
-
 // const GET_STRIPE_DONATION_PDF = gql`
 //   query GetStripeDonationPDF($sessionId: Float!) {
-//     getStripeDonationPDF(sessionId: $sessionId) {
-//       pdf
-//     }
+//     getStripeDonationPDF(sessionId: $sessionId)
 //   }
 // `
+
+const GET_STRIPE_DONATION_PDF = gql`
+  query GetStripeDonationPDF($sessionId: Float!) {
+    getStripeDonationPDF(sessionId: $sessionId) {
+      pdf
+    }
+  }
+`
 
 const GET_STRIPE_PROJECT_DONATIONS = gql`
   query GetStripeDonations($projectId: Float!) {
