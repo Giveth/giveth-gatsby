@@ -106,11 +106,9 @@ const OnlyFiat = props => {
   console.log({ project })
 
   const donation = parseFloat(amountTyped || amountSelect)
-  const subtotal =
-    donation * 0.029 +
-    0.3 +
-    (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0) +
-    donation
+  const donationPlusFee =
+    donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
+  const subtotal = (donationPlusFee + 0.3) / 0.971
 
   const goCheckout = async event => {
     try {

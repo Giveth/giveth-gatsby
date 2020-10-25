@@ -88,6 +88,20 @@ const GET_STRIPE_DONATION_PDF = gql`
   query GetStripeDonationPDF($sessionId: Float!) {
     getStripeDonationPDF(sessionId: $sessionId) {
       pdf
+      data {
+        id
+        createdAt
+        donor
+        projectName
+        status
+        amount
+        currency
+        donorName
+        donorEmail
+        projectDonation
+        givethDonation
+        processingFee
+      }
     }
   }
 `
