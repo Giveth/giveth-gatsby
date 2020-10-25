@@ -6,8 +6,6 @@ import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 import { Helmet } from 'react-helmet'
 
-import { pinFile } from '../../services/Pinata'
-
 import {
   ProjectNameInput,
   ProjectAdminInput,
@@ -116,7 +114,11 @@ const CreateProjectForm = props => {
       formData.projectImage = await fetch(formData.projectImage).then(r =>
         r.blob()
       )
-      console.log(formData.projectImage)
+      const reader = new FileReader()
+      reader.readAsDataURL(formData.projectImage)
+      reader.onloadend = function () {
+        formData.projectImage = reader.result
+      }
     }
     nextStep()
   }
