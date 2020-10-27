@@ -63,7 +63,6 @@ const Options = styled.span`
   align-items: center;
   bottom: -54px;
   right: 24px;
-  z-index: 1;
 `
 
 const CardFooter = styled.span`

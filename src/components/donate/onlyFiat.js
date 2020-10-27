@@ -274,7 +274,7 @@ const OnlyFiat = props => {
                   padding: '0 0 18px 0'
                 }}
               />
-              <Text style={{ variant: 'text.medium', textAlign: 'right' }}>
+              <Text sx={{ variant: 'text.medium', textAlign: 'right' }}>
                 ${parseFloat(subtotal).toFixed(2)}
               </Text>
             </Summary>

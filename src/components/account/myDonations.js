@@ -175,6 +175,8 @@ export const MyDonations = () => {
     variables: { projectId: 1 }
   })
 
+  console.log({ data })
+
   React.useEffect(() => {
     const setup = async () => {
       setCurrentDonations(currentProjectView?.donations)

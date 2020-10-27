@@ -7,7 +7,7 @@ export const client = new ApolloClient({
   request: operation => {
     // const token = localStorage.getItem('token')
     const token = true
-    // NOTE: this token serves for testing while backend is updated
+    // NOTE: this token serves for testing while backend is updated, while we build the auth flow
     operation.setContext({
       headers: {
         authorization: token
