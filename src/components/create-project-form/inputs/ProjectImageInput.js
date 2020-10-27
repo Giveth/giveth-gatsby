@@ -10,6 +10,14 @@ import avatar from '../../../images/avatar.jpg'
 import peoplePuzzle from '../../../images/people-puzzle2.png'
 import placeHolder from '../../../images/placeholder.png'
 
+const toBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
+
 export const ProjectImageInput = ({
   register,
   currentValue,
@@ -22,8 +30,8 @@ export const ProjectImageInput = ({
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
-    onDrop: acceptedFile => {
-      setImage(URL.createObjectURL(acceptedFile[0]))
+    onDrop: async acceptedFile => {
+      setImage(await toBase64(acceptedFile[0]))
     }
   })
   useEffect(() => {

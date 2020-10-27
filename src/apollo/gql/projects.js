@@ -36,11 +36,11 @@ const ADD_PROJECT_SIMPLE = gql`
 const ADD_PROJECT = gql`
   mutation($project: ProjectInput!) {
     addProject(project: $project) {
-      id
       title
       description
       admin
       image
+      impactLocation
     }
   }
 `
