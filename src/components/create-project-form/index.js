@@ -120,6 +120,9 @@ const CreateProjectForm = props => {
         formData.projectImage = reader.result
       }
     }
+    if (currentStep === steps.length - 1) {
+      props.onSubmit(formData)
+    }
     nextStep()
   }
 

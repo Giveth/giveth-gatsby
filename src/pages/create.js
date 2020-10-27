@@ -17,8 +17,7 @@ const IndexPage = () => {
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   const [formValues, setFormValues] = useState({})
 
-  const onSubmit = async (values, pinnedImageUrl) => {
-    values.projectImage = pinnedImageUrl
+  const onSubmit = async values => {
     setFormValues(values)
     console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
     setProjectAdded(true)
@@ -26,8 +25,13 @@ const IndexPage = () => {
     try {
       const project = await addProjectQuery({
         variables: {
-          title: values.projectName,
-          description: values.projectDescription
+          project: {
+            title: values.projectName,
+            description: values.projectDescription,
+            admin: values.projectAdmin,
+            image: values.projectImage,
+            impactLocation: values.projectImpactLocation
+          }
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]
       })
