@@ -41,6 +41,9 @@ const ADD_PROJECT = gql`
       admin
       image
       impactLocation
+      categories {
+        name
+      }
     }
   }
 `

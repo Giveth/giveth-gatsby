@@ -22,6 +22,13 @@ const IndexPage = () => {
     setFormValues(values)
     setProjectAdded(true)
 
+    const projectCategories = []
+    for (const category in values.projectCategory) {
+      if (values.projectCategory[category].length !== 0) {
+        projectCategories.push(category)
+      }
+    }
+
     try {
       const project = await addProjectQuery({
         variables: {
@@ -30,7 +37,8 @@ const IndexPage = () => {
             description: values.projectDescription,
             admin: values.projectAdmin,
             image: values.projectImage,
-            impactLocation: values.projectImpactLocation
+            impactLocation: values.projectImpactLocation,
+            categories: projectCategories
           }
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]

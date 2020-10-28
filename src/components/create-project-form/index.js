@@ -110,16 +110,6 @@ const CreateProjectForm = props => {
         ...data
       })
     }
-    if (currentStep === steps.length - 2) {
-      formData.projectImage = await fetch(formData.projectImage).then(r =>
-        r.blob()
-      )
-      const reader = new FileReader()
-      reader.readAsDataURL(formData.projectImage)
-      reader.onloadend = function () {
-        formData.projectImage = reader.result
-      }
-    }
     if (currentStep === steps.length - 1) {
       props.onSubmit(formData)
     }
