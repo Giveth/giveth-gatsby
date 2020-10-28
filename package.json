@@ -7,6 +7,8 @@
   "dependencies": {
     "@apollo/client": "^3.1.1",
     "@apollo/react-hooks": "^3.1.5",
+    "@contentful/rich-text-react-renderer": "^14.1.1",
+    "@contentful/rich-text-types": "^14.1.1",
     "@emotion/core": "^10.0.28",
     "@emotion/styled": "^10.0.27",
     "@loadable/component": "^5.13.1",
@@ -43,6 +45,7 @@
     "react": "^16.12.0",
     "react-alert": "^7.0.2",
     "react-alert-template-mui": "^1.0.7",
+    "react-collapsible": "^2.8.1",
     "react-dom": "^16.12.0",
     "react-dropzone": "^11.0.3",
     "react-helmet": "^6.0.0",
