@@ -185,6 +185,17 @@ export default {
         outline: 'none',
         borderRadius: '56px',
         borderColor: 'primary'
+      },
+      textarea: {
+        border: '2px solid',
+        borderRadius: '56px',
+        borderColor: 'bodyLight',
+        padding: '20px',
+        '&:focus': {
+          outline: 'none',
+          borderRadius: '56px',
+          borderColor: 'primary'
+        }
       }
     }
   },
