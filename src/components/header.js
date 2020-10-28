@@ -14,8 +14,8 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import logo from '../images/giveth-logo-blue.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
-import decoratorCloud1 from '../images/decorator-cloud1.png'
-import decoratorCloud2 from '../images/decorator-cloud2.png'
+import decoratorCloud1 from '../images/decorator-cloud1.svg'
+import decoratorCloud2 from '../images/decorator-cloud2.svg'
 
 const HeaderContainer = styled.header`
   transition: 0.8s;

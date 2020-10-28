@@ -5,8 +5,8 @@ import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 
 // import decorative graphics
-import decoratorLeaf from '../images/decorator-leaf.png'
-import imgPeopleHeader from '../images/people-header.png'
+import decoratorLeaf from '../images/decorator-leaf.svg'
+import imgPeopleHeader from '../images/people-header.svg'
 
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
