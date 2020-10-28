@@ -114,7 +114,7 @@ const OnlyCrypto = props => {
       )
       setNotify(initNotify())
     }
-
+    console.log(ethers.utils.parseEther('1.0'))
     init()
   }, [])
 
@@ -177,10 +177,10 @@ const OnlyCrypto = props => {
     try {
       await setProvider()
       const signer = getSigner(provider)
-
+      console.log(ethers.utils.parseEther(subtotal.toString()))
       const { hash } = await signer.sendTransaction({
         to: '0x3Db054B9a0D6A76db171542bb049999dC191B817',
-        value: 1000000000000000
+        value: ethers.utils.parseEther(subtotal.toString())
       })
       notify.config({ desktopPosition: 'topRight' })
       const { emitter } = notify.hash(hash)

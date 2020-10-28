@@ -23,6 +23,7 @@ const IndexPage = props => {
   const { projectId } = queryString.parse(props.location.search)
   console.log({ projectId })
   const onSubmit = async (values, pinnedImageUrl) => {
+    console.log({ values, pinnedImageUrl })
     values.projectImage = pinnedImageUrl
     setFormValues(values)
     console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
