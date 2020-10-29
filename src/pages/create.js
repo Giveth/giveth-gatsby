@@ -16,31 +16,42 @@ const IndexPage = props => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
-  const [addProjectQuery] = useMutation(ADD_PROJECT)
+  const [addedProject, setAddedProject] = useState({})
+  const [addProjectQuery, { data }] = useMutation(ADD_PROJECT)
   const [formValues, setFormValues] = useState({})
   const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(props.location.search)
-  console.log({ projectId })
-  const onSubmit = async (values, pinnedImageUrl) => {
-    console.log({ values, pinnedImageUrl })
-    values.projectImage = pinnedImageUrl
+  const onSubmit = async values => {
     setFormValues(values)
-    console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
     setProjectAdded(true)
+
+    const projectCategories = []
+    for (const category in values.projectCategory) {
+      if (values.projectCategory[category].length !== 0) {
+        projectCategories.push(category)
+      }
+    }
 
     try {
       const project = await addProjectQuery({
         variables: {
-          title: values.projectName,
-          description: values.projectDescription
+          project: {
+            title: values.projectName,
+            description: values.projectDescription,
+            admin: values.projectAdmin,
+            image: values.projectImage,
+            impactLocation: values.projectImpactLocation,
+            categories: projectCategories
+          }
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]
       })
 
       if (project) {
         console.log(`project : ${JSON.stringify(project, null, 2)}`)
-        setProjectAdded(project)
+        setAddedProject(project.data.addProject)
+        setProjectAdded(true)
       }
     } catch (error) {
       console.log(`Error adding project: ---> : ${error}`)
@@ -53,7 +64,6 @@ const IndexPage = props => {
       return <h3>loading</h3>
     }
     if (!askedBankAccount && !projectId) {
-      console.log({ projectAdded })
       return (
         <>
           <img
@@ -79,7 +89,7 @@ const IndexPage = props => {
             className='hide'
           />
           <ProjectBankAccountInput
-            projectId={projectAdded?.data?.addProjectSimple?.id}
+            projectId={addedProject?.id}
             finalize={() => setAskedBankAccount(true)}
           />
         </>
@@ -122,12 +132,7 @@ const IndexPage = props => {
             }}
             className='hide'
           />
-          <HighFive
-            projectId={projectId}
-            projectImage={formValues.projectImage}
-            projectTitle='test'
-            projectDescription='Testtesttest'
-          />
+          <HighFive projectId={addedProject?.id || projectId} />
         </>
       )
     }

@@ -23,7 +23,7 @@ const FETCH_PROJECT = gql`
   }
 `
 
-const ADD_PROJECT = gql`
+const ADD_PROJECT_SIMPLE = gql`
   mutation($title: String!, $description: String!) {
     addProjectSimple(title: $title, description: $description) {
       id
@@ -131,6 +131,21 @@ const GET_STRIPE_PROJECT_DONATIONS = gql`
         createdAt
       }
       totalDonors
+    }
+  }
+`
+const ADD_PROJECT = gql`
+  mutation($project: ProjectInput!) {
+    addProject(project: $project) {
+      id
+      title
+      description
+      admin
+      image
+      impactLocation
+      categories {
+        name
+      }
     }
   }
 `
