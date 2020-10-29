@@ -6,8 +6,12 @@ import { FETCH_PROJECT } from '../../apollo/gql/projects'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 
-const HighFive = ({ projectId, projectImage, projectTitle, projectDescription }) => {
-
+const HighFive = ({
+  projectId,
+  projectImage,
+  projectTitle,
+  projectDescription
+}) => {
   const { loading, error, data } = useQuery(FETCH_PROJECT, {
     variables: { id: projectId }
   })
@@ -52,6 +56,7 @@ const HighFive = ({ projectId, projectImage, projectTitle, projectDescription })
         <Box sx={{ mt: '100px', width: '50%' }}>
           <ProjectListing
             disabled
+            shadowed
             name={project[0].title || projectTitle}
             description={project[0].description || projectDescription}
             image={projectImage}

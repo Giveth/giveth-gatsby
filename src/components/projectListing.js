@@ -100,7 +100,8 @@ const ProjectListing = props => {
         width: '100%',
         cursor: props.disabled ? 'default' : 'pointer',
         border: props.disabled ? null : `1px solid ${theme.colors.muted}`,
-        borderRadius: '12px'
+        borderRadius: '12px',
+        boxShadow: props.shadowed ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
       }}
       onClick={() => {
         !props.disabled && navigate(`/donate/${props?.id || '1'}`)
