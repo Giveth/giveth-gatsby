@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
-import Layout from '../components/layout'
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
-import { checkIfLoggedIn } from '../services/auth'
-import { Heading, Box, Text } from 'theme-ui'
+import { Text } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 import { Link } from 'gatsby'
 import decoratorClouds from '../images/decorator-clouds.svg'
@@ -144,7 +142,7 @@ const IndexPage = () => {
         maxWidth: '1440px'
       }}
     >
-      <SEO title='Home' />
+      <SEO title='Create Project' />
 
       <ProjectForm />
     </div>
