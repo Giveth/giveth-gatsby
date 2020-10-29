@@ -10,8 +10,7 @@ import HomeTopProjects from '../components/HomeTopProjects'
 
 const IndexPage = () => {
   return (
-    <Layout>
-      <SEO title='Home' />
+    <Layout isHomePage='true'>
       <Hero />
       <HomeTopProjects />
       <InfoSection />

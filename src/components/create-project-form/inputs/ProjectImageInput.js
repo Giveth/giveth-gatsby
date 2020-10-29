@@ -3,11 +3,11 @@ import { Label, Grid, Image, Text, Flex, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
 
-import decoratorCloud from '../../../images/decorator-cloud1.png'
-import decoratorLeaf from '../../../images/decorator-leaf.png'
+import decoratorCloud from '../../../images/decorator-cloud1.svg'
+import decoratorLeaf from '../../../images/decorator-leaf.svg'
 import gatsbyIcon from '../../../images/gatsby-icon.png'
 import avatar from '../../../images/avatar.jpg'
-import peoplePuzzle from '../../../images/people-puzzle2.png'
+import peoplePuzzle from '../../../images/people-puzzle2.svg'
 import placeHolder from '../../../images/placeholder.png'
 
 export const ProjectImageInput = ({

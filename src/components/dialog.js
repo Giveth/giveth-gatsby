@@ -6,7 +6,7 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import LeftArrow from '../images/svg/general/left-arrow.svg'
 import Confetti from '../images/svg/donation/confetti.svg'
 
-import decoratorClouds from '../images/donate-clouds.png'
+import decoratorClouds from '../images/decorator-clouds.svg'
 
 const Main = styled.main`
   padding: 4.063rem 8.75rem 0 8.75rem;
