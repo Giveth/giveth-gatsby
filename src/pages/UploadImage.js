@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Input, Text } from 'theme-ui'
-import { pinFile } from '../services/Pinata'
+import { UPLOAD_FILE } from '../apollo/gql/upload'
+import { useMutation } from '@apollo/react-hooks'
 
 const containerStyles = {
   margin: 'auto',
@@ -17,6 +18,8 @@ const UploadImage = () => {
   const [file, setFile] = useState()
   const [image, setImage] = useState()
 
+  const [uploadImage] = useMutation(UPLOAD_FILE)
+
   const showError = error => {
     setError(error)
     setLink('')
@@ -25,8 +28,8 @@ const UploadImage = () => {
   }
 
   const onFileChange = event => {
-    const { files } = event.target
-    if (files.length > 0) {
+    const { files, validity } = event.target
+    if (validity.valid && files.length > 0) {
       const [file] = files
       if (!allowedFileTypes.includes(file.type)) {
         showError('File type is not supported')
@@ -34,21 +37,22 @@ const UploadImage = () => {
       }
       setError(undefined)
       setFile(file)
-      const reader = new FileReader()
-      reader.onload = e => {
-        const { result } = e.target
-        setImage(result)
-      }
-      reader.readAsDataURL(file)
+      // const reader = new FileReader()
+      // reader.onload = e => {
+      //   const { result } = e.target
+      //   setImage(result)
+      // }
+      // reader.readAsDataURL(file)
     }
   }
 
   const uploadFile = () => {
-    if (file && image) {
-      pinFile(file)
+    console.log(typeof file)
+    if (file) {
+      uploadImage({ variables: { image: file } })
         .then(response => {
           setError('')
-          setLink('https://gateway.pinata.cloud/ipfs/' + response.data.IpfsHash)
+          setLink(response)
         })
         .catch(e => {
           showError(e)
@@ -63,12 +67,12 @@ const UploadImage = () => {
           <img
             src={image}
             style={{ margin: 'auto', display: 'block', maxWidth: '800px' }}
-            alt={'no alt :('}
+            alt='no alt :('
           />
         </div>
       )}
 
-      {/*upload image*/}
+      {/* upload image */}
       <div style={containerStyles}>
         <Input
           sx={{
