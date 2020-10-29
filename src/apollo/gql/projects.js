@@ -23,7 +23,7 @@ const FETCH_PROJECT = gql`
   }
 `
 
-const ADD_PROJECT = gql`
+const ADD_PROJECT_SIMPLE = gql`
   mutation($title: String!, $description: String!) {
     addProjectSimple(title: $title, description: $description) {
       id
@@ -33,4 +33,19 @@ const ADD_PROJECT = gql`
   }
 `
 
-export { FETCH_PROJECTS, FETCH_PROJECT, ADD_PROJECT }
+const ADD_PROJECT = gql`
+  mutation($project: ProjectInput!) {
+    addProject(project: $project) {
+      title
+      description
+      admin
+      image
+      impactLocation
+      categories {
+        name
+      }
+    }
+  }
+`
+
+export { FETCH_PROJECTS, FETCH_PROJECT, ADD_PROJECT, ADD_PROJECT_SIMPLE }
