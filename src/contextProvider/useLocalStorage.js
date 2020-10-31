@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { window } from 'browser-monads'
 
 export default function useLocalStorage(key, initialValue) {
   // State to store our value

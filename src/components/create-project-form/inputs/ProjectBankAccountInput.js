@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Label, Input, Text, Button } from 'theme-ui'
+import { window } from 'browser-monads'
 import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
 import { useQuery } from '@apollo/react-hooks'
 import { animated } from 'react-spring'

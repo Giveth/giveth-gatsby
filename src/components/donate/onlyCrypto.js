@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
+import { window } from 'browser-monads'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
@@ -333,7 +334,7 @@ const OnlyCrypto = props => {
             sx={{
               variant: 'buttons.default',
               padding: '1.063rem 7.375rem',
-              marginTop: '2rem'
+              mt: 2
             }}
           >
             Donate

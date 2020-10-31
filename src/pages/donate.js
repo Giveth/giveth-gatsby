@@ -113,7 +113,7 @@ const ProjectNotFound = () => {
 
 const ShowProject = props => {
   const { location, project } = props
-  const [paymentType, setPaymentType] = React.useState(CREDIT)
+  const [paymentType, setPaymentType] = React.useState(CRYPTO)
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
 
@@ -181,12 +181,12 @@ const ShowProject = props => {
         <Text sx={{ variant: 'headings.h5' }}>Donate With</Text>
         <Options>
           <OptionType
-            title={CREDIT}
+            title={CRYPTO}
             subtitle='2.9% + 0.30 USD'
             style={RIGHT_BOX_STYLE}
           />
           <OptionType
-            title={CRYPTO}
+            title={CREDIT}
             subtitle='Zero Fee'
             style={LEFT_BOX_STYLE}
           />
