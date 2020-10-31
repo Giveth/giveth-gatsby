@@ -5,12 +5,10 @@ import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 import { useQuery } from '@apollo/react-hooks'
 
-import OnlyCrypto from '../components/donate/onlyCrypto'
 import OnlyFiat from '../components/donate/onlyFiat'
 import Success from '../components/donate/success'
 import Layout from '../components/layout'
 import ProjectListing from '../components/projectListing'
-
 import { FETCH_PROJECT } from '../apollo/gql/projects'
 
 import {
@@ -21,6 +19,8 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+
+const OnlyCrypto = React.lazy(() => import('../components/donate/onlyCrypto'))
 
 // CONSTANTS
 
@@ -141,9 +141,13 @@ const ShowProject = props => {
   }
 
   function PaymentOptions() {
+    const isSSR = typeof window === 'undefined'
+
     const ShowPaymentOption = () => {
-      return paymentType === CRYPTO ? (
-        <OnlyCrypto project={project} address={address} />
+      return paymentType === CRYPTO && !isSSR ? (
+        <React.Suspense fallback={<div />}>
+          <OnlyCrypto project={project} address={address} />
+        </React.Suspense>
       ) : (
         <OnlyFiat project={project} />
       )

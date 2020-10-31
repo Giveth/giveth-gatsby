@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
-import { document } from 'browser-monads'
 import { navigate } from 'gatsby'
 import { useApolloClient } from '@apollo/react-hooks'
 import { base64ToBlob } from '../../utils'

@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
-import { window } from 'browser-monads'
 import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'

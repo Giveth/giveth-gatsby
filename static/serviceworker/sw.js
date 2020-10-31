@@ -1,5 +1,5 @@
 /* eslint-disable */
-function getScope () {
+function getScope() {
   return self.registration.scope
 }
 

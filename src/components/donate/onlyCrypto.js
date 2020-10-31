@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
-import { window } from 'browser-monads'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'

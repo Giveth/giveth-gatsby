@@ -1,5 +1,3 @@
-import { window } from 'browser-monads'
-
 export function base64ToBlob(base64) {
   const binaryString = window.atob(base64)
   const len = binaryString.length
