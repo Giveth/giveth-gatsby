@@ -1,14 +1,36 @@
 import React, { useState } from 'react'
 import { Label, Input, Text, Button } from 'theme-ui'
+import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
+import { useQuery } from '@apollo/react-hooks'
 import { animated } from 'react-spring'
 
 export const ProjectBankAccountInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  projectId,
+  finalize
 }) => {
+  const { data, loading, error } = useQuery(GET_LINK_BANK_CREATION, {
+    variables: {
+      projectId: parseInt(projectId),
+      returnUrl: `${window.location.origin}/create?projectId=${projectId}`,
+      refreshUrl: `${window.location.origin}/create?projectId=${projectId}`
+    }
+  })
+
+  const setBankAccount = async () => {
+    try {
+      window.location.replace(data?.setProjectBankAccount)
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  console.log({ data, error })
+
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '50px' }}>
+    <animated.section style={{ ...animationStyle, margin: '8.75rem' }}>
       <Label
         sx={{
           fontSize: 8,
@@ -48,9 +70,10 @@ export const ProjectBankAccountInput = ({
           height: '52px',
           borderRadius: '48px'
         }}
+        disabled={loading}
         onClick={e => {
           e.preventDefault()
-          alert('This will redirect to stripe')
+          setBankAccount()
         }}
       >
         <Text
@@ -61,7 +84,7 @@ export const ProjectBankAccountInput = ({
             letterSpacing: '4%'
           }}
         >
-          CONNECT BANK ACCOUNT
+          {loading ? '...' : 'CONNECT BANK ACCOUNT'}
         </Text>
       </Button>
       <Button
@@ -71,7 +94,10 @@ export const ProjectBankAccountInput = ({
           borderRadius: '48px',
           backgroundColor: 'transparent'
         }}
-        type='submit'
+        onClick={e => {
+          e.preventDefault()
+          finalize()
+        }}
       >
         <Text
           sx={{
