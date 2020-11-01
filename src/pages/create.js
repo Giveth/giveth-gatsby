@@ -15,26 +15,39 @@ const IndexPage = () => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
-  const [addProjectQuery] = useMutation(ADD_PROJECT)
+  const [addedProject, setAddedProject] = useState({})
+  const [addProjectQuery, { data }] = useMutation(ADD_PROJECT)
   const [formValues, setFormValues] = useState({})
 
-  const onSubmit = async (values, pinnedImageUrl) => {
-    values.projectImage = pinnedImageUrl
+  const onSubmit = async values => {
     setFormValues(values)
-    console.log(`form submit values ---> : ${JSON.stringify(values, null, 2)}`)
     setProjectAdded(true)
+
+    const projectCategories = []
+    for (const category in values.projectCategory) {
+      if (values.projectCategory[category].length !== 0) {
+        projectCategories.push(category)
+      }
+    }
 
     try {
       const project = await addProjectQuery({
         variables: {
-          title: values.projectName,
-          description: values.projectDescription
+          project: {
+            title: values.projectName,
+            description: values.projectDescription,
+            admin: values.projectAdmin,
+            image: values.projectImage,
+            impactLocation: values.projectImpactLocation,
+            categories: projectCategories
+          }
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]
       })
 
       if (project) {
         console.log(`project : ${JSON.stringify(project, null, 2)}`)
+        setAddedProject(project.data.addProject)
         setProjectAdded(true)
       }
     } catch (error) {
@@ -106,9 +119,9 @@ const IndexPage = () => {
               className='hide'
             />
             <HighFive
-              projectImage={formValues.projectImage}
-              projectTitle='test'
-              projectDescription='Testtesttest'
+              projectImage={addedProject.image}
+              projectTitle={addedProject.title}
+              projectDescription={addedProject.description}
             />
           </>
         )
