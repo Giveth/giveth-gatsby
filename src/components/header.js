@@ -147,7 +147,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [balance, setBalance] = useState(0)
 
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
 
       if (scrollTop > 50) {
@@ -157,7 +157,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   })

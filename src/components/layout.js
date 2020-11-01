@@ -14,6 +14,7 @@ import AlertTemplate from 'react-alert-template-mui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 import TorusProvider from '../contextProvider/torusProvider'
+import GlobalProvider from '../contextProvider/globalProvider'
 import { useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN } from '../apollo/gql/auth'
 
@@ -27,6 +28,7 @@ const AlertOptions = {
 }
 
 const Layout = ({ isHomePage, children, asDialog }) => {
+const Layout = ({ children, asDialog, noHeader }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -76,12 +78,16 @@ const Layout = ({ isHomePage, children, asDialog }) => {
             siteTitle={data.site.siteMetadata.title}
             isHomePage={isHomePage}
           />
+          {!noHeader ? (
+            <Header siteTitle={data.site.siteMetadata.title} />
+          ) : null}
           <div
             sx={{
               // applies width 100% to all viewport widths,
               // width 50% above the first breakpoint,
               // and 25% above the next breakpoint
-              width: ['100%', '50%', '25%']
+              width: ['100%', '50%', '25%'],
+              overflow: 'hidden'
             }}
           >
             <main>{children}</main>
@@ -95,14 +101,19 @@ const Layout = ({ isHomePage, children, asDialog }) => {
   return (
     <>
       <Helmet>
-        <script src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed' crossOrigin='anonymous' />
+        <script
+          src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed'
+          crossOrigin='anonymous'
+        />
       </Helmet>
       <TorusProvider onLogin={onLogin}>
-        <ThemeProvider theme={theme}>
-          <Provider template={AlertTemplate} {...AlertOptions}>
-            <Template />
-          </Provider>
-        </ThemeProvider>
+        <GlobalProvider>
+          <ThemeProvider theme={theme}>
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <Template />
+            </Provider>
+          </ThemeProvider>
+        </GlobalProvider>
       </TorusProvider>
     </>
   )

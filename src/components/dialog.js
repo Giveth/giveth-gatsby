@@ -9,7 +9,7 @@ import Confetti from '../images/svg/donation/confetti.svg'
 import decoratorClouds from '../images/decorator-clouds.svg'
 
 const Main = styled.main`
-  padding: 4.063rem 8.75rem 0 8.75rem;
+  padding: 4.063rem 4.5rem 0 4.5rem;
 
   @media (max-width: 1100px) {
     padding: 4.063rem 2rem 0 2rem;
@@ -55,7 +55,7 @@ const DialogContent = styled.div`
   margin: 3.813rem 0 0 0;
 `
 
-export default function Dialog ({ children }) {
+export default function Dialog({ children }) {
   return (
     <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
       <LeftConfetti />

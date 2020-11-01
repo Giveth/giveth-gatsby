@@ -1,14 +1,13 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
+import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
+import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { loadStripe } from '@stripe/stripe-js'
-// Make sure to call `loadStripe` outside of a component’s render to avoid
-// recreating the `Stripe` object on every render.
-const stripePromise = loadStripe(
-  'pk_test_51HEyBOEqxdqUJJCY7s5q5WPcEQKsC0w5FStn48BVFiIPiLGHoP7Oh6kojZSES8MZXYoEfQSu1LXY749LHMRF03Hy00X8SvZA8B'
-)
+import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
+
+const GIVETH_DONATION_AMOUNT = 5
 
 const Content = styled.div`
   max-width: 41.25rem;
@@ -64,7 +63,7 @@ const AmountItem = styled.div`
   }
 `
 
-const Input = styled.input`
+const InputComponent = styled(Input)`
   background: transparent;
   border: none;
   padding: 1rem 0.4rem;
@@ -78,28 +77,76 @@ const CheckboxLabel = styled(Label)`
     justify-content: space-between;
     width: 100%;
   }
+  cursor: pointer;
+}
+`
+
+const Summary = styled(Flex)`
+  flex-direction: column;
+  margin: 2rem 0;
+`
+
+const SmRow = styled(Flex)`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.75rem 0;
 `
 
 const OnlyFiat = props => {
   const { project } = props
   const [amountSelect, setAmountSelect] = useState(null)
-
+  const [amountTyped, setAmountTyped] = useState(null)
+  const [donateToGiveth, setDonateToGiveth] = useState(false)
+  const [anonymous, setAnonymous] = useState(false)
+  const client = useApolloClient()
   const amounts = [500, 100, 50, 30]
 
   useEffect(() => {}, [])
+  console.log({ project })
+
+  const donation = parseFloat(amountTyped || amountSelect)
+  const donationPlusFee =
+    donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
+  const subtotal = (donationPlusFee + 0.3) / 0.971
 
   const goCheckout = async event => {
+    try {
+      if (!amountSelect && !amountTyped) {
+        return alert('Please set an amount before donating')
+      }
+      const amount = amountTyped || amountSelect
+      if (amount <= 0) return alert('Please set a valid amount')
+      // await getDonationSession({ variables: { amount: amountSelect } })
+      const projId = project?.id
+      let givethDonation = 0
+      donateToGiveth === true && (givethDonation = 5)
+      const { data } = await client.query({
+        query: GET_DONATION_SESSION,
+        variables: {
+          projectId: parseFloat(projId),
+          amount: parseFloat(subtotal),
+          anonymous: anonymous,
+          donateToGiveth: donateToGiveth,
+          successUrl: `${window.location.origin}/donate/${projId}?success=true`,
+          cancelUrl: `${window.location.origin}/donate/${projId}?success=false`
+        }
+      })
+      goStripe(data)
+    } catch (error) {
+      alert(error?.message?.split('GraphQL error: ')[1])
+      console.log({ error })
+    }
+  }
+
+  const goStripe = async data => {
     // Get Stripe.js instance
-    const stripe = await stripePromise
-
-    // Call your backend to create the Checkout Session
-    // const response = await fetch('/create-checkout-session', { method: 'POST' })
-
-    // const session = await response.json()
-
+    const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY, {
+      stripeAccount: data?.getStripeProjectDonationSession?.accountId
+    })
     // When the customer clicks on the button, redirect them to Checkout.
     const result = await stripe.redirectToCheckout({
-      // sessionId: session.id
+      sessionId: data?.getStripeProjectDonationSession?.sessionId
     })
 
     if (result.error) {
@@ -109,6 +156,10 @@ const OnlyFiat = props => {
     }
   }
 
+  // if (called && !loading) {
+  //   goStripe()
+  // }
+
   const AmountSelection = () => {
     return (
       <AmountItems>
@@ -117,7 +168,10 @@ const OnlyFiat = props => {
           return (
             <AmountItem
               key={index}
-              onClick={() => setAmountSelect(i)}
+              onClick={() => {
+                setAmountTyped('')
+                setAmountSelect(i)
+              }}
               sx={{
                 backgroundColor: isSelected ? 'white' : 'transparent',
                 color: isSelected ? 'secondary' : 'white'
@@ -133,6 +187,15 @@ const OnlyFiat = props => {
     )
   }
 
+  const SummaryRow = ({ title, amount, style }) => {
+    return (
+      <SmRow style={style}>
+        <Text sx={{ variant: 'text.medium' }}>{title}</Text>
+        <Text sx={{ variant: 'text.medium' }}>${amount}</Text>
+      </SmRow>
+    )
+  }
+
   return (
     <Content>
       <AmountSection>
@@ -141,7 +204,7 @@ const OnlyFiat = props => {
           <Text sx={{ variant: 'text.medium' }}>Or enter your amount:</Text>
           <OpenAmount>
             <Text sx={{ variant: 'text.large' }}>$</Text>
-            <Input
+            <InputComponent
               sx={{
                 variant: 'text.large',
                 '::placeholder': {
@@ -150,15 +213,25 @@ const OnlyFiat = props => {
               }}
               placeholder='Amount'
               type='number'
+              value={amountTyped}
+              onChange={e => {
+                e.preventDefault()
+                setAmountSelect(null)
+                setAmountTyped(e.target.value)
+              }}
             />
           </OpenAmount>
         </AmountContainer>
         <div>
           <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox defaultChecked={false} />
+              <Checkbox
+                defaultChecked={donateToGiveth}
+                onClick={() => setDonateToGiveth(!donateToGiveth)}
+              />
               <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
-                Be a hero, add <strong> $5</strong> to help sustain Giveth
+                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
+                help sustain Giveth
               </Text>
             </div>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
@@ -167,7 +240,10 @@ const OnlyFiat = props => {
             sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
           >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox defaultChecked={false} />
+              <Checkbox
+                defaultChecked={anonymous}
+                onClick={() => setAnonymous(!anonymous)}
+              />
               <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
                 Donate anonymously
               </Text>
@@ -178,9 +254,39 @@ const OnlyFiat = props => {
             <Checkbox defaultChecked={false} />
             <Text sx={{ variant: 'text.medium' }}>Dedicate this donation</Text>
           </Label> */}
+          {(amountSelect || amountTyped) && (
+            <Summary>
+              <SummaryRow
+                title={`Support ${project?.title}`}
+                amount={parseFloat(donation).toFixed(2)}
+              />
+              {donateToGiveth && (
+                <SummaryRow
+                  title='Support Giveth'
+                  amount={GIVETH_DONATION_AMOUNT}
+                />
+              )}
+              <SummaryRow
+                title='Processing Fee: 2.9% + 0.30 USD'
+                amount={parseFloat(donation * 0.029 + 0.3).toFixed(2)}
+                style={{
+                  borderBottom: '1px solid #6B7087',
+                  padding: '0 0 18px 0'
+                }}
+              />
+              <Text sx={{ variant: 'text.medium', textAlign: 'right' }}>
+                ${parseFloat(subtotal).toFixed(2)}
+              </Text>
+            </Summary>
+          )}
         </div>
         <Button
-          onClick={goCheckout}
+          // onClick={goCheckout}
+          onClick={() =>
+            alert(
+              `Stripe doesn't like us :( \nPlease wait until next integration`
+            )
+          }
           sx={{
             variant: 'buttons.default',
             padding: '1.063rem 7.375rem',

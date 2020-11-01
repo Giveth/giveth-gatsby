@@ -1,10 +1,25 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { Text, Flex, Image, Box } from 'theme-ui'
+import { useQuery } from '@apollo/react-hooks'
+import { FETCH_PROJECT } from '../../apollo/gql/projects'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 
-const HighFive = ({ projectImage, projectTitle, projectDescription }) => {
+const HighFive = ({
+  projectId,
+  projectImage,
+  projectTitle,
+  projectDescription
+}) => {
+  const { loading, error, data } = useQuery(FETCH_PROJECT, {
+    variables: { id: projectId }
+  })
+
+  console.log({ loading, error, data })
+  if (loading) return <h3>loading</h3>
+
+  const { project } = data
   return (
     <Flex
       sx={{
@@ -41,8 +56,9 @@ const HighFive = ({ projectImage, projectTitle, projectDescription }) => {
         <Box sx={{ mt: '100px', width: '50%' }}>
           <ProjectListing
             disabled
-            name={projectTitle}
-            description={projectDescription}
+            shadowed
+            name={project[0].title || projectTitle}
+            description={project[0].description || projectDescription}
             image={projectImage}
             raised={0}
             category='Blockchain 4 Good'

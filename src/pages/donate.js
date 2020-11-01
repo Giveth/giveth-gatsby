@@ -5,12 +5,10 @@ import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 import { useQuery } from '@apollo/react-hooks'
 
-import OnlyCrypto from '../components/donate/onlyCrypto'
 import OnlyFiat from '../components/donate/onlyFiat'
 import Success from '../components/donate/success'
 import Layout from '../components/layout'
 import ProjectListing from '../components/projectListing'
-
 import { FETCH_PROJECT } from '../apollo/gql/projects'
 
 import {
@@ -21,6 +19,8 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+
+const OnlyCrypto = React.lazy(() => import('../components/donate/onlyCrypto'))
 
 // CONSTANTS
 
@@ -63,16 +63,13 @@ const Payment = styled.div`
   }
 `
 
-const Share = styled.div`
-  text-align: center;
-`
+const Share = styled.div``
 
 const SocialIcons = styled.div`
   display: flex;
-  justify-content: center;
   margin: 1rem 0;
   * {
-    margin: 0 0.7rem;
+    margin: 0 0.3rem;
   }
 `
 
@@ -117,7 +114,8 @@ const ProjectNotFound = () => {
 const ShowProject = props => {
   const { location, project } = props
   const [paymentType, setPaymentType] = React.useState(CRYPTO)
-  const [isAfterPayment, setIsAterPayment] = React.useState(null)
+  const [isAfterPayment, setIsAfterPayment] = React.useState(null)
+  const [paymentSessionId, setPaymentSessionId] = React.useState(null)
 
   const url =
     location.href && location.href && location.protocol === 'https:'
@@ -128,14 +126,28 @@ const ShowProject = props => {
 
   React.useEffect(() => {
     // Check type
-    const search = props?.location?.search
-    setIsAterPayment(search)
+    const search = getUrlParams(props?.location?.search)
+    setIsAfterPayment(search?.success === 'true')
+    if (search?.sessionId) setPaymentSessionId(search?.sessionId)
   }, [])
 
+  // TODO: Implement this on a utils file
+  function getUrlParams(search) {
+    let hashes = search.slice(search.indexOf('?') + 1).split('&')
+    return hashes.reduce((params, hash) => {
+      let [key, val] = hash.split('=')
+      return Object.assign(params, { [key]: decodeURIComponent(val) })
+    }, {})
+  }
+
   function PaymentOptions() {
+    const isSSR = typeof window === 'undefined'
+
     const ShowPaymentOption = () => {
-      return paymentType === CRYPTO ? (
-        <OnlyCrypto project={project} address={address} />
+      return paymentType === CRYPTO && !isSSR ? (
+        <React.Suspense fallback={<div />}>
+          <OnlyCrypto project={project} address={address} />
+        </React.Suspense>
       ) : (
         <OnlyFiat project={project} />
       )
@@ -174,13 +186,13 @@ const ShowProject = props => {
         <Options>
           <OptionType
             title={CRYPTO}
-            subtitle='Zero Fee'
-            style={LEFT_BOX_STYLE}
+            subtitle='2.9% + 0.30 USD'
+            style={RIGHT_BOX_STYLE}
           />
           <OptionType
             title={CREDIT}
-            subtitle='3.5% Fee'
-            style={RIGHT_BOX_STYLE}
+            subtitle='Zero Fee'
+            style={LEFT_BOX_STYLE}
           />
         </Options>
         <ShowPaymentOption />
@@ -188,11 +200,19 @@ const ShowProject = props => {
     )
   }
 
-  const ShareIcons = ({ message }) => {
+  const ShareIcons = ({ message, centered }) => {
     return (
-      <Share>
+      <Share
+        style={{
+          textAlign: centered && 'center'
+        }}
+      >
         <Text sx={{ variant: 'text.medium' }}>{message}</Text>
-        <SocialIcons>
+        <SocialIcons
+          style={{
+            justifyContent: centered ? 'center' : 'flex-start'
+          }}
+        >
           <TwitterShareButton
             title={shareTitle}
             url={url}
@@ -231,9 +251,9 @@ const ShowProject = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success />
+          <Success sessionId={paymentSessionId} />
           <div style={{ margin: '3rem 0' }}>
-            <ShareIcons message='Share this with your friends:' />
+            <ShareIcons message='Share this with your friends!' />
           </div>
         </Payment>
       </>
@@ -253,7 +273,7 @@ const ShowProject = props => {
           listingId='key1'
           key='key1'
         />
-        <ShareIcons message="Can't donate? Share this page instead." />
+        <ShareIcons message="Can't donate? Share this page instead." centered />
       </ProjectContainer>
       <Payment>
         <PaymentOptions />

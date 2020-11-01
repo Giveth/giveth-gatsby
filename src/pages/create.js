@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import * as queryString from 'query-string'
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
@@ -10,15 +11,18 @@ import peoplePuzzle2 from '../images/people-puzzle2.svg'
 import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
+import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
-const IndexPage = () => {
+const IndexPage = props => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState({})
   const [addProjectQuery, { data }] = useMutation(ADD_PROJECT)
   const [formValues, setFormValues] = useState({})
+  const [askedBankAccount, setAskedBankAccount] = useState(false)
 
+  const { projectId } = queryString.parse(props.location.search)
   const onSubmit = async values => {
     setFormValues(values)
     setProjectAdded(true)
@@ -55,9 +59,89 @@ const IndexPage = () => {
     }
   }
 
-  function ProjectForm () {
+  function AfterCreation() {
+    // TODO: Get project id after creation
+    if (!projectAdded && !projectId) {
+      return <h3>loading</h3>
+    }
+    if (!askedBankAccount && !projectId) {
+      return (
+        <>
+          <img
+            src={decoratorClouds}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '57px',
+              right: '434px',
+              zIndex: -1
+            }}
+            className='hide'
+          />
+          <img
+            src={peoplePuzzle2}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '417px',
+              right: '0px',
+              zIndex: -1
+            }}
+            className='hide'
+          />
+          <ProjectBankAccountInput
+            projectId={addedProject?.id}
+            finalize={() => setAskedBankAccount(true)}
+          />
+        </>
+      )
+    } else {
+      return (
+        <>
+          <img
+            src={decoratorClouds}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '57px',
+              right: '185px',
+              zIndex: '-1'
+            }}
+            className='hide'
+          />
+          <img
+            src={peopleStretching}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '240px',
+              right: '130px',
+              width: '252px',
+              height: '610px',
+              zIndex: '-1'
+            }}
+            className='hide'
+          />
+          <img
+            src={decoratorFizzySquare}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '260px',
+              left: '380px',
+              zIndex: '-1'
+            }}
+            className='hide'
+          />
+          <HighFive projectId={addedProject?.id || projectId} />
+        </>
+      )
+    }
+  }
+
+  function ProjectForm() {
     if (isLoggedIn === true) {
-      if (!projectAdded) {
+      if (!projectAdded && !projectId) {
         return (
           <>
             <img
@@ -86,43 +170,7 @@ const IndexPage = () => {
       } else {
         return (
           <>
-            <img
-              src={decoratorClouds}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '57px',
-                right: '185px'
-              }}
-              className='hide'
-            />
-            <img
-              src={peopleStretching}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '240px',
-                right: '130px',
-                width: '252px',
-                height: '610px'
-              }}
-              className='hide'
-            />
-            <img
-              src={decoratorFizzySquare}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '260px',
-                left: '300px'
-              }}
-              className='hide'
-            />
-            <HighFive
-              projectImage={addedProject.image}
-              projectTitle={addedProject.title}
-              projectDescription={addedProject.description}
-            />
+            <AfterCreation />
           </>
         )
       }

@@ -63,7 +63,6 @@ const Options = styled.span`
   align-items: center;
   bottom: -54px;
   right: 24px;
-  z-index: 1;
 `
 
 const CardFooter = styled.span`
@@ -97,7 +96,13 @@ const ProjectListing = props => {
   return (
     <Box
       key={props.listingId + '_box'}
-      style={{ width: '100%', cursor: props.disabled ? 'default' : 'pointer' }}
+      style={{
+        width: '100%',
+        cursor: props.disabled ? 'default' : 'pointer',
+        border: props.disabled ? null : `1px solid ${theme.colors.muted}`,
+        borderRadius: '12px',
+        boxShadow: props.shadowed ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
+      }}
       onClick={() => {
         !props.disabled && navigate(`/donate/${props?.id || '1'}`)
       }}
