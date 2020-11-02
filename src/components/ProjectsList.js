@@ -261,7 +261,7 @@ const ProjectsList = props => {
                   key={project.title + '-' + index}
                   name={project.title}
                   donateAddress={project.donateAddress}
-                  image={NoImage}
+                  image={project.image || NoImage}
                   raised={project.balance}
                 />
               ))}
