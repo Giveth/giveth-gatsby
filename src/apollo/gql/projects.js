@@ -7,6 +7,7 @@ const FETCH_PROJECTS = gql`
         id
         title
         balance
+        image
       }
       totalCount
     }
@@ -19,6 +20,7 @@ const FETCH_PROJECT = gql`
       id
       title
       description
+      image
     }
   }
 `
