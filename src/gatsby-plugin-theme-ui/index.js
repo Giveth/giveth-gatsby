@@ -88,7 +88,9 @@ export default {
       fontSize: 7,
       lineHeight: 'tallest',
       fontFamily: 'heading',
-      fontWeight: 'regular'
+      fontWeight: 'body',
+      color: 'bodyDark',
+      fontStyle: 'italic'
     },
     overline: {
       fontSize: 2,
@@ -191,6 +193,17 @@ export default {
         outline: 'none',
         borderRadius: '56px',
         borderColor: 'primary'
+      },
+      textarea: {
+        border: '2px solid',
+        borderRadius: '56px',
+        borderColor: 'bodyLight',
+        padding: '20px',
+        '&:focus': {
+          outline: 'none',
+          borderRadius: '56px',
+          borderColor: 'primary'
+        }
       }
     },
     search: {
