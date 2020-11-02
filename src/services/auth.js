@@ -6,7 +6,7 @@ export const getUser = () =>
     ? JSON.parse(window.localStorage.getItem(gatsbyUser))
     : {}
 
-export function setUser (user) {
+export function setUser(user) {
   return window.localStorage.setItem(gatsbyUser, JSON.stringify(user))
 }
 
@@ -22,7 +22,7 @@ export const handleLogin = ({ username, password }) => {
   return false
 }
 
-export function handleLogout () {
+export function handleLogout() {
   localStorage.removeItem(gatsbyUser)
 }
 

@@ -6,13 +6,13 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import styled from '@emotion/styled'
 
 // import graphics
-import decoratorCloud1 from '../images/decorator-cloud1.png'
-import decoratorCloud2 from '../images/decorator-cloud2.png'
-import decoratorFizzysquare from '../images/decorator-fizzy-square-rotated.png'
+import decoratorCloud1 from '../images/decorator-cloud1.svg'
+import decoratorCloud2 from '../images/decorator-cloud2.svg'
+import decoratorFizzysquare from '../images/decorator-fizzy-square-rotated.svg'
 import DecoratorAltruistic from '../images/svg/general/decorators/a.svg'
 import DecoratorDecentralized from '../images/svg/general/decorators/b.svg'
 import DecoratorCommunity from '../images/svg/general/decorators/c.svg'
-import decoratorPuzzleguy from '../images/people-puzzle.png'
+import decoratorPuzzleguy from '../images/people-puzzle.svg'
 
 const Main = styled(Grid)`
   position: relative;

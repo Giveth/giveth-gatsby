@@ -15,7 +15,8 @@ export default {
     bodyDark: '#6B7087',
     bodyLight: '#AAAFCA',
     anotherGrey: '#C9D0E8',
-    lightestBlue: '#EDF0FA'
+    lightestBlue: '#EDF0FA',
+    yellow: '#FFEF9D'
   },
   fonts: {
     body: 'Red Hat Text, sans serif',
@@ -87,7 +88,9 @@ export default {
       fontSize: 7,
       lineHeight: 'tallest',
       fontFamily: 'heading',
-      fontWeight: 'regular'
+      fontWeight: 'body',
+      color: 'bodyDark',
+      fontStyle: 'italic'
     },
     overline: {
       fontSize: 2,
@@ -115,6 +118,13 @@ export default {
       fontFamily: 'heading',
       fontWeight: 'bold',
       letterSpacing: 'narrow'
+    },
+    bold: {
+      fontSize: 4,
+      fontFamily: 'body',
+      fontWeight: 'bold',
+      letterSpacing: 'narrow',
+      lineHeight: '18px'
     },
     styleGuide: {
       fontSize: 6,
@@ -183,7 +193,36 @@ export default {
         outline: 'none',
         borderRadius: '56px',
         borderColor: 'primary'
+      },
+      textarea: {
+        border: '2px solid',
+        borderRadius: '56px',
+        borderColor: 'bodyLight',
+        padding: '20px',
+        '&:focus': {
+          outline: 'none',
+          borderRadius: '56px',
+          borderColor: 'primary'
+        }
       }
+    },
+    search: {
+      background: 'white',
+      borderColor: 'transparent',
+      boxShadow: '0px 4px 20px rgba(212, 218, 238, 0.4)',
+      borderRadius: '12px',
+      padding: '1.125rem 0 1.125rem 1rem',
+      '::placeholder': {
+        fontWeight: 500,
+        fontSize: '0.875rem',
+        lineHeight: '1.188rem',
+        color: '#AAAFCA'
+      }
+    },
+    longInput: {
+      background: 'white',
+      borderColor: 'transparent',
+      borderRadius: '12px'
     }
   },
   buttons: {
@@ -254,6 +293,63 @@ export default {
       color: 'bodyLight',
       cursor: 'pointer',
       fontWeight: 'medium'
+    }
+  },
+  images: {
+    avatar: {
+      width: 30,
+      height: 30
+    }
+  },
+  spinner: {
+    medium: {
+      color: 'primary',
+      size: 30
+    }
+  },
+  badges: {
+    primary: {
+      fontFamily: 'body',
+      color: 'background',
+      bg: 'primary'
+    },
+    outline: {
+      fontFamily: 'body',
+      color: 'primary',
+      bg: 'transparent',
+      boxShadow: 'inset 0 0 0 1px'
+    },
+    altOutline: {
+      fontFamily: 'body',
+      textTransform: 'uppercase',
+      borderColor: 'bodyLight',
+      borderRadius: '48px',
+      padding: '5px 11px',
+      color: 'bodyLight',
+      bg: 'transparent',
+      boxShadow: 'inset 0 0 0 1px'
+    },
+    green: {
+      fontFamily: 'body',
+      background: '#F5FFF6',
+      border: '1px solid #AED6AD',
+      boxSizing: 'border-box',
+      borderRadius: '4.09946px',
+      fontSize: '12px',
+      lineHeight: '150%',
+      textAlign: 'center',
+      color: '#317B2E'
+    },
+    blue: {
+      fontFamily: 'body',
+      background: '#EEF9FF',
+      border: '1px solid #9FC9F4',
+      boxSizing: 'border-box',
+      borderRadius: '4.09946px',
+      fontSize: '12px',
+      lineHeight: '150%',
+      textAlign: 'center',
+      color: '#3F91E4'
     }
   }
 }

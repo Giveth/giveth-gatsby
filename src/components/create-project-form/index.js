@@ -6,16 +6,13 @@ import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 import { Helmet } from 'react-helmet'
 
-import { pinFile } from '../../services/Pinata'
-
 import {
   ProjectNameInput,
   ProjectAdminInput,
   ProjectDescriptionInput,
   ProjectCategoryInput,
   ProjectImpactLocationInput,
-  ProjectImageInput,
-  ProjectBankAccountInput
+  ProjectImageInput
 } from './inputs'
 import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
@@ -31,7 +28,6 @@ const CreateProjectForm = props => {
     { name: 'technology', value: 'Technology' },
     { name: 'other', value: 'Other' }
   ]
-
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
   const steps = [
@@ -79,13 +75,6 @@ const CreateProjectForm = props => {
       />
     ),
     ({ animationStyle }) => (
-      <ProjectBankAccountInput
-        animationStyle={animationStyle}
-        currentValue={formData.projectBankAccount}
-        register={register}
-      />
-    ),
-    ({ animationStyle }) => (
       <FinalVerificationStep
         animationStyle={animationStyle}
         formData={formData}
@@ -96,7 +85,6 @@ const CreateProjectForm = props => {
   ]
 
   const onSubmit = async data => {
-    console.log(data)
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
@@ -115,25 +103,7 @@ const CreateProjectForm = props => {
       })
     }
     if (currentStep === steps.length - 1) {
-      // if the image is not from Gallery pin it, otherwise just link to gallery image
-      if (formData.projectImage.startsWith('blob')) {
-        const imageBlob = await fetch(formData.projectImage).then(r => r.blob())
-        const imageToUpload = new File([imageBlob], formData.imageName)
-        pinFile(imageToUpload)
-          .then(response => {
-            window.localStorage.removeItem('projectImage')
-            props.onSubmit(
-              formData,
-              `https://gateway.pinata.cloud/ipfs/${response.data.IpfsHash}`
-            )
-          })
-          .catch(e => {
-            console.log(e)
-          })
-      } else {
-        window.localStorage.removeItem('projectImage')
-        props.onSubmit(formData)
-      }
+      props.onSubmit(formData)
     }
     nextStep()
   }

@@ -14,8 +14,8 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import logo from '../images/giveth-logo-blue.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
-import decoratorCloud1 from '../images/decorator-cloud1.png'
-import decoratorCloud2 from '../images/decorator-cloud2.png'
+import decoratorCloud1 from '../images/decorator-cloud1.svg'
+import decoratorCloud2 from '../images/decorator-cloud2.svg'
 
 const HeaderContainer = styled.header`
   transition: 0.8s;
@@ -139,7 +139,7 @@ const Decorator = styled.div`
 
 const Login = Loadable(() => import('./torus/login'))
 
-const Header = ({ siteTitle }) => {
+const Header = ({ siteTitle, isHomePage }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [doLogin] = useMutation(DO_LOGIN)
@@ -147,7 +147,7 @@ const Header = ({ siteTitle }) => {
   const [balance, setBalance] = useState(0)
 
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
 
       if (scrollTop > 50) {
@@ -157,7 +157,7 @@ const Header = ({ siteTitle }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   })
@@ -192,7 +192,7 @@ const Header = ({ siteTitle }) => {
   return (
     <HeaderContainer
       className={
-        hasScrolled
+        hasScrolled || !isHomePage
           ? 'HeaderPlaceholderScrolled'
           : 'HeaderPlaceholderNotScrolled'
       }
@@ -200,7 +200,9 @@ const Header = ({ siteTitle }) => {
         marginBottom: '1.45rem'
       }}
     >
-      <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
+      <HeaderSpan
+        className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
+      >
         {!isMobile ? (
           <Decorator>
             <img
@@ -235,7 +237,7 @@ const Header = ({ siteTitle }) => {
             <img src={logo} alt='logo' width='40px' height='40px' />
           ) : (
             <LogoSpan>
-              {hasScrolled ? (
+              {hasScrolled || !isHomePage ? (
                 <img src={logo} alt='logo' width='50px' height='50px' />
               ) : (
                 <img src={logo} alt='logo' width='80px' height='80px' />

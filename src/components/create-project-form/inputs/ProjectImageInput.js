@@ -3,12 +3,20 @@ import { Label, Grid, Image, Text, Flex, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
 
-import decoratorCloud from '../../../images/decorator-cloud1.png'
-import decoratorLeaf from '../../../images/decorator-leaf.png'
+import decoratorCloud from '../../../images/decorator-cloud1.svg'
+import decoratorLeaf from '../../../images/decorator-leaf.svg'
 import gatsbyIcon from '../../../images/gatsby-icon.png'
 import avatar from '../../../images/avatar.jpg'
-import peoplePuzzle from '../../../images/people-puzzle2.png'
+import peoplePuzzle from '../../../images/people-puzzle2.svg'
 import placeHolder from '../../../images/placeholder.png'
+
+const toBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
 
 export const ProjectImageInput = ({
   register,
@@ -19,13 +27,11 @@ export const ProjectImageInput = ({
     ? window.localStorage.getItem('projectImage')
     : {}
   const [image, setImage] = useState(currentValue)
-  const [imageName, setImageName] = useState('')
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
-    onDrop: acceptedFile => {
-      setImageName(acceptedFile[0].name)
-      setImage(URL.createObjectURL(acceptedFile[0]))
+    onDrop: async acceptedFile => {
+      setImage(await toBase64(acceptedFile[0]))
     }
   })
   useEffect(() => {
@@ -75,13 +81,6 @@ export const ProjectImageInput = ({
             name='projectImage'
             type='hidden'
             value={image}
-            ref={register}
-          />
-          <input
-            id='imageName'
-            name='imageName'
-            type='hidden'
-            value={imageName}
             ref={register}
           />
           <Image
