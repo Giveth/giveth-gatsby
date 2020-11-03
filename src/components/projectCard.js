@@ -210,7 +210,7 @@ const ProjectCard = props => {
             <Button
               sx={{ variant: 'buttons.default', mt: 2 }}
               onClick={() => {
-                !props.disabled && navigate(`/donate/${props?.id || '1'}`)
+                !props.disabled && navigate(`/donate/${props?.slug}`)
               }}
             >
               Donate
@@ -225,12 +225,17 @@ const ProjectCard = props => {
               }}
               onClick={() => {
                 !props.disabled &&
-                  navigate(
-                    `/projects/${
-                      props?.id ||
-                      'COVID-19:-ICRC-global-response-to-the-coronavirus'
-                    }`
-                  )
+                  // navigate(
+                  //   `/projects/${
+                  //     props?.slug ||
+                  //     'COVID-19:-ICRC-global-response-to-the-coronavirus'
+                  //   }`,
+                  //   { replace: true }
+                  // )
+                  (window.location.href = `/projects/${
+                    props?.slug ||
+                    'COVID-19:-ICRC-global-response-to-the-coronavirus'
+                  }`)
               }}
             >
               Learn More

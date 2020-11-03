@@ -12,7 +12,11 @@ exports.onCreatePage = async ({ page, actions }) => {
   // only on the client.
   if (page.path.match(/^\/donate/)) {
     page.matchPath = '/donate/:projectId'
-
+    // Update the page.
+    createPage(page)
+  }
+  if (page.path.match(/^\/projects/)) {
+    page.matchPath = '/projects/*'
     // Update the page.
     createPage(page)
   }

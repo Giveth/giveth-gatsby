@@ -38,7 +38,7 @@ const LeftInfo = styled(Flex)`
 `
 
 const Timeline = () => {
-  const content = [1, 2, 3]
+  const content = [1, 2]
   const newUpdateOption = true
   return (
     <VerticalTimeline>

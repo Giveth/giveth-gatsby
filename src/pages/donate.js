@@ -9,7 +9,7 @@ import OnlyFiat from '../components/donate/onlyFiat'
 import Success from '../components/donate/success'
 import Layout from '../components/layout'
 import ProjectListing from '../components/projectListing'
-import { FETCH_PROJECT } from '../apollo/gql/projects'
+import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
 
 import {
   FacebookShareButton,
@@ -156,9 +156,13 @@ const ShowProject = props => {
     const OptionType = ({ title, subtitle, style }) => {
       const isSelected = title === paymentType
       const textColor = isSelected ? theme.colors.secondary : 'white'
+
       return (
         <OptionTypesBox
-          onClick={() => setPaymentType(title)}
+          onClick={() => {
+            if (title === 'Credit Card') return alert('coming soon')
+            setPaymentType(title)
+          }}
           style={{
             backgroundColor: isSelected ? 'white' : theme.colors.secondary,
             ...style
@@ -285,9 +289,11 @@ const ShowProject = props => {
 const Donate = props => {
   const { projectId } = props
 
-  const { loading, error, data } = useQuery(FETCH_PROJECT, {
-    variables: { id: projectId }
+  const { loading, error, data } = useQuery(FETCH_PROJECT_BY_SLUG, {
+    variables: { slug: projectId }
   })
+
+  console.log({ data })
 
   return (
     <Layout asDialog>
@@ -296,8 +302,8 @@ const Donate = props => {
           <Text>Error</Text>
         ) : loading ? (
           <Text>loading</Text>
-        ) : data?.project?.length > 0 ? (
-          <ShowProject {...props} project={data.project[0]} />
+        ) : data?.projectBySlug ? (
+          <ShowProject {...props} project={data.projectBySlug} />
         ) : (
           <ProjectNotFound />
         )}

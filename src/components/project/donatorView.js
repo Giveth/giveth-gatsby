@@ -33,7 +33,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
     ProjectContext
   )
 
-  console.log({ data })
+  console.log({ data, pageContext })
 
   useEffect(() => {
     if (data) {

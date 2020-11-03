@@ -221,7 +221,9 @@ const TimelineCard = props => {
               Creator
             </Badge>
           </Creator>
-          <Text sx={{ variant: 'text.default' }}>Some content in here</Text>
+          <Text sx={{ variant: 'text.default' }}>
+            Some update about the project in here
+          </Text>
         </CardContent>
         <CardFooter>
           <IconButton>

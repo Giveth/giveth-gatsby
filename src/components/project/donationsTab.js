@@ -22,6 +22,13 @@ export const DonationsTab = ({ showModal, setShowModal }) => {
     donations?.length > 0 &&
     donations.reduce((a, b) => ({ amount: a.amount + b.amount }))
 
+  if (!total?.amount)
+    return (
+      <Text sx={{ variant: 'text.large', color: 'secondary' }}>
+        No donations yet :(
+      </Text>
+    )
+
   return (
     <div>
       <Funds>

@@ -8,6 +8,7 @@ const FETCH_PROJECTS = gql`
         title
         balance
         image
+        slug
       }
       totalCount
     }
@@ -17,6 +18,18 @@ const FETCH_PROJECTS = gql`
 const FETCH_PROJECT = gql`
   query Project($id: ID!) {
     project(id: $id) {
+      id
+      title
+      description
+      image
+      slug
+    }
+  }
+`
+
+const FETCH_PROJECT_BY_SLUG = gql`
+  query ProjectBySlug($slug: String!) {
+    projectBySlug(slug: $slug) {
       id
       title
       description
@@ -155,6 +168,7 @@ const ADD_PROJECT = gql`
 export {
   FETCH_PROJECTS,
   FETCH_PROJECT,
+  FETCH_PROJECT_BY_SLUG,
   ADD_PROJECT,
   ADD_BANK_ACCOUNT,
   GET_LINK_BANK_CREATION,

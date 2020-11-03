@@ -20,6 +20,7 @@ const HighFive = ({
   if (loading) return <h3>loading</h3>
 
   const { project } = data
+  console.log({ project })
   return (
     <Flex
       sx={{
@@ -83,7 +84,7 @@ const HighFive = ({
             <FaFacebook size='24px' />
             <FaLinkedin size='24px' />
           </Flex>
-          <Link to='/'>
+          <Link to={`/projects/${project[0]?.slug}`}>
             <Text
               sx={{
                 fontSize: 3,
