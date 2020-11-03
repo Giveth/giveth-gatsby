@@ -1,6 +1,11 @@
 import React from 'react'
-import { Text, Button, Flex, Image, Grid } from 'theme-ui'
+import { Text, Button, Flex, Image, Grid, Box } from 'theme-ui'
 import { animated } from 'react-spring'
+
+import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
+import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
+import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
+import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 
 const FinalVerificationStep = ({
   formData,
@@ -241,15 +246,32 @@ const FinalVerificationStep = ({
         </Text>
       </>
       <>
-        <Image
-          src={window.localStorage.getItem('projectImage')}
-          sx={{
-            objectFit: 'cover',
-            maxHeight: '200px',
-            maxWidth: '600px',
-            mt: '20px'
-          }}
-        />
+        {formData.projectImage.startsWith('data:') ? (
+          <Image
+            src={formData.projectImage}
+            sx={{
+              objectFit: 'cover',
+              maxHeight: '200px',
+              maxWidth: '600px',
+              mt: '20px'
+            }}
+          />
+        ) : (
+          <Box sx={{ mt: '20px' }}>
+            {formData.projectImage === '1' && (
+              <ProjectImageGallery1 style={{ width: '40%', height: '40%' }} />
+            )}
+            {formData.projectImage === '2' && (
+              <ProjectImageGallery2 style={{ width: '40%', height: '40%' }} />
+            )}
+            {formData.projectImage === '3' && (
+              <ProjectImageGallery3 style={{ width: '40%', height: '40%' }} />
+            )}
+            {formData.projectImage === '4' && (
+              <ProjectImageGallery4 style={{ width: '40%', height: '40%' }} />
+            )}
+          </Box>
+        )}
         <br />
         <Button
           type='button'
@@ -259,8 +281,7 @@ const FinalVerificationStep = ({
             background: 'unset',
             fontSize: 1,
             p: 0,
-            pl: 2,
-            mt: '18px'
+            pl: 2
           }}
           onClick={() => setStep(5)}
         >

@@ -22,28 +22,18 @@ export const ProjectImageInput = ({
   currentValue,
   animationStyle
 }) => {
-  const [image, setImage] = useState(currentValue)
-  const [displayImage, setDisplayImage] = useState()
+  const [image, setImage] = useState()
+  const [displayImage, setDisplayImage] = useState(currentValue)
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     onDrop: async acceptedFile => {
-      setImage(acceptedFile[0])
+      setDisplayImage(await toBase64(acceptedFile[0]))
     }
   })
   useEffect(() => {
-    const getBase64 = async image => {
-      const base64Imagedata = await toBase64(image)
-      setDisplayImage(base64Imagedata)
-    }
-    if (image !== undefined) {
-      if (image instanceof File) {
-        getBase64(image)
-      } else if (image.type === 'svg') {
-        setDisplayImage(image)
-      }
-    }
-  }, [image])
+    setImage(displayImage)
+  }, [displayImage])
 
   return (
     <animated.section style={{ ...animationStyle, marginTop: '10px' }}>
@@ -92,13 +82,26 @@ export const ProjectImageInput = ({
               src={placeHolder}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
-          ) : typeof displayImage === 'string' ? (
+          ) : displayImage.startsWith('data:') ? (
             <Image
               src={displayImage}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
           ) : (
-            <div>render the preview of the svg</div>
+            <Flex sx={{ justifyContent: 'center' }}>
+              {displayImage === '1' && (
+                <ProjectImageGallery1 style={{ width: '90%', height: '90%' }} />
+              )}
+              {displayImage === '2' && (
+                <ProjectImageGallery2 style={{ width: '90%', height: '90%' }} />
+              )}
+              {displayImage === '3' && (
+                <ProjectImageGallery3 style={{ width: '90%', height: '90%' }} />
+              )}
+              {displayImage === '4' && (
+                <ProjectImageGallery4 style={{ width: '90%', height: '90%' }} />
+              )}
+            </Flex>
           )}
 
           <Text sx={{ marginTop: '30px' }}>
@@ -126,7 +129,7 @@ export const ProjectImageInput = ({
         <Button
           type='button'
           onClick={() => {
-            setImage(ProjectImageGallery1)
+            setDisplayImage('1')
           }}
           sx={{
             background: 'unset',
@@ -142,6 +145,9 @@ export const ProjectImageInput = ({
         </Button>
         <Button
           type='button'
+          onClick={() => {
+            setDisplayImage('2')
+          }}
           sx={{
             background: 'unset',
             cursor: 'pointer',
@@ -156,6 +162,9 @@ export const ProjectImageInput = ({
         </Button>
         <Button
           type='button'
+          onClick={() => {
+            setDisplayImage('3')
+          }}
           sx={{
             background: 'unset',
             cursor: 'pointer',
@@ -170,6 +179,9 @@ export const ProjectImageInput = ({
         </Button>
         <Button
           type='button'
+          onClick={() => {
+            setDisplayImage('4')
+          }}
           sx={{
             background: 'unset',
             cursor: 'pointer',

@@ -33,18 +33,38 @@ const IndexPage = props => {
         projectCategories.push(category)
       }
     }
+    const getImageFile = async (base64Data, projectName) => {
+      const imageFile = fetch(base64Data)
+        .then(res => res.blob())
+        .then(blob => {
+          return new File([blob], projectName)
+        })
+      console.log('found it', imageFile)
+      return imageFile
+    }
+
+    const projectData = {
+      title: values.projectName,
+      description: values.projectDescription,
+      admin: values.projectAdmin,
+      impactLocation: values.projectImpactLocation,
+      categories: projectCategories
+    }
+    if (values.projectImage.length === 1) {
+      projectData.imageStatic = values.projectImage
+    } else {
+      const imageFile = await getImageFile(
+        values.projectImage,
+        values.projectName
+      )
+      projectData.imageUpload = imageFile
+    }
 
     try {
+      console.log('what were sending', projectData)
       const project = await addProjectQuery({
         variables: {
-          project: {
-            title: values.projectName,
-            description: values.projectDescription,
-            admin: values.projectAdmin,
-            image: values.projectImage,
-            impactLocation: values.projectImpactLocation,
-            categories: projectCategories
-          }
+          project: projectData
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]
       })
@@ -59,7 +79,7 @@ const IndexPage = props => {
     }
   }
 
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     if (!projectAdded && !projectId) {
       return <h3>loading</h3>
@@ -139,7 +159,7 @@ const IndexPage = props => {
     }
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (isLoggedIn === true) {
       if (!projectAdded && !projectId) {
         return (
