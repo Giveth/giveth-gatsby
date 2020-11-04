@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProjectDonatorView } from '../components/project'
 import { FETCH_PROJECTS, FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
+import { Flex, Spinner } from 'theme-ui'
 import ProjectsList, {
   OrderByDirection,
   OrderByField
@@ -79,9 +80,14 @@ const Projects = ({ location }) => {
       />
     </>
   )
+
   return (
     <Layout>
-      {slugProject ? (
+      {loading ? (
+        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Spinner variant='spinner.medium' />
+        </Flex>
+      ) : slugProject ? (
         <ProjectDonatorView pageContext={{ project: slugProject }} />
       ) : (
         <AllProjects />
