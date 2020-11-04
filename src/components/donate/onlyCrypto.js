@@ -173,15 +173,85 @@ const OnlyCrypto = props => {
     return ready
   }
 
+  // FOR REGULAR TX
+  // const sendTx = async () => {
+  //   try {
+  //     await setProvider()
+  //     const signer = getSigner(provider)
+  //     console.log(ethers.utils.parseEther(subtotal.toString()))
+  //     const { hash } = await signer.sendTransaction({
+  //       to: '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+  //       value: ethers.utils.parseEther(subtotal.toString())
+  //     })
+  // }
+
+  // Contract Call
   const sendTx = async () => {
     try {
       await setProvider()
       const signer = getSigner(provider)
       console.log(ethers.utils.parseEther(subtotal.toString()))
-      const { hash } = await signer.sendTransaction({
-        to: '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+
+      const abi = [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: 'address',
+              name: 'origin',
+              type: 'address'
+            },
+            {
+              indexed: false,
+              internalType: 'address',
+              name: 'target',
+              type: 'address'
+            },
+            {
+              indexed: false,
+              internalType: 'uint256',
+              name: 'amount',
+              type: 'uint256'
+            }
+          ],
+          name: 'Transfer',
+          type: 'event'
+        },
+        {
+          constant: false,
+          inputs: [
+            {
+              internalType: 'address payable',
+              name: 'target',
+              type: 'address'
+            }
+          ],
+          name: 'transfer',
+          outputs: [],
+          payable: true,
+          stateMutability: 'payable',
+          type: 'function'
+        }
+      ]
+
+      const contractAddress = '0x4248bfcfae44942D1C26296CCB554C66926E639D'
+
+      const contract = new ethers.Contract(contractAddress, abi, signer)
+
+      const overrides = {
+        gasLimit: 500000,
+        gasPrice: ethers.BigNumber.from('20000000000'),
         value: ethers.utils.parseEther(subtotal.toString())
-      })
+      }
+
+      const { hash } = await contract.transfer(
+        '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+        overrides
+      )
+
+      console.log({ hash })
+
       notify.config({ desktopPosition: 'topRight' })
       const { emitter } = notify.hash(hash)
 
@@ -200,9 +270,9 @@ const OnlyCrypto = props => {
       emitter.on('txCancel', console.log)
       emitter.on('txFailed', console.log)
 
-      // emitter.on("all", event => {
-      //   console.log("ALLLLLLL", event)
-      // })
+      emitter.on('all', event => {
+        console.log('ALLLLLLL', event)
+      })
     } catch (error) {
       console.log({ error })
     }
