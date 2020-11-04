@@ -1,9 +1,11 @@
-import ApolloClient from 'apollo-boost'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { createUploadLink } from 'apollo-upload-client'
 import fetch from 'isomorphic-fetch'
 import gql from 'graphql-tag'
 
 export const client = new ApolloClient({
-  uri: process.env.GATSBY_APOLLO_SERVER,
+  cache: new InMemoryCache(),
+  link: createUploadLink({ uri: process.env.GATSBY_APOLLO_SERVER }),
   request: operation => {
     // const token = localStorage.getItem('token')
     const token = true

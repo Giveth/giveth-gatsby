@@ -3,11 +3,10 @@ import { Label, Grid, Image, Text, Flex, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
 
-import decoratorCloud from '../../../images/decorator-cloud1.svg'
-import decoratorLeaf from '../../../images/decorator-leaf.svg'
-import gatsbyIcon from '../../../images/gatsby-icon.png'
-import avatar from '../../../images/avatar.jpg'
-import peoplePuzzle from '../../../images/people-puzzle2.svg'
+import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
+import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery2.svg'
+import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
+import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 import placeHolder from '../../../images/placeholder.png'
 
 const toBase64 = file =>
@@ -23,24 +22,19 @@ export const ProjectImageInput = ({
   currentValue,
   animationStyle
 }) => {
-  currentValue = window.localStorage.getItem('projectImage')
-    ? window.localStorage.getItem('projectImage')
-    : {}
-  const [image, setImage] = useState(currentValue)
+  const [image, setImage] = useState()
+  const [displayImage, setDisplayImage] = useState(currentValue)
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
     onDrop: async acceptedFile => {
-      setImage(await toBase64(acceptedFile[0]))
+      setDisplayImage(await toBase64(acceptedFile[0]))
     }
   })
   useEffect(() => {
-    if (Object.keys(image).length === 0 && image.constructor === Object) {
-      console.log('empty')
-    } else {
-      window.localStorage.setItem('projectImage', image)
-    }
-  }, [image])
+    setImage(displayImage)
+  }, [displayImage])
+
   return (
     <animated.section style={{ ...animationStyle, marginTop: '10px' }}>
       <Label
@@ -83,14 +77,33 @@ export const ProjectImageInput = ({
             value={image}
             ref={register}
           />
-          <Image
-            src={
-              Object.keys(image).length === 0 && image.constructor === Object
-                ? placeHolder
-                : image
-            }
-            sx={{ objectFit: 'cover', maxHeight: '150px' }}
-          />
+          {displayImage === undefined ? (
+            <Image
+              src={placeHolder}
+              sx={{ objectFit: 'cover', maxHeight: '150px' }}
+            />
+          ) : displayImage.startsWith('data:') ? (
+            <Image
+              src={displayImage}
+              sx={{ objectFit: 'cover', maxHeight: '150px' }}
+            />
+          ) : (
+            <Flex sx={{ justifyContent: 'center' }}>
+              {displayImage === '1' && (
+                <ProjectImageGallery1 style={{ width: '90%', height: '90%' }} />
+              )}
+              {displayImage === '2' && (
+                <ProjectImageGallery2 style={{ width: '90%', height: '90%' }} />
+              )}
+              {displayImage === '3' && (
+                <ProjectImageGallery3 style={{ width: '90%', height: '90%' }} />
+              )}
+              {displayImage === '4' && (
+                <ProjectImageGallery4 style={{ width: '90%', height: '90%' }} />
+              )}
+            </Flex>
+          )}
+
           <Text sx={{ marginTop: '30px' }}>
             Drag & drop an image here or{' '}
             <Text sx={{ display: 'inline-block', color: 'primary' }}>
@@ -113,34 +126,74 @@ export const ProjectImageInput = ({
           mt: '16px'
         }}
       >
-        {[decoratorCloud, decoratorLeaf, gatsbyIcon, avatar, peoplePuzzle].map(
-          galleryImage => {
-            return (
-              <Button
-                key={galleryImage}
-                type='button'
-                onClick={() => setImage(galleryImage)}
-                sx={{
-                  background: 'unset',
-                  cursor: 'pointer',
-                  width: '80px',
-                  height: '80px',
-                  padding: 0
-                }}
-              >
-                <Image
-                  sx={{
-                    border: '2px solid #DFDAE8',
-                    borderRadius: '8px',
-                    width: '100%',
-                    height: '100%'
-                  }}
-                  src={galleryImage}
-                />
-              </Button>
-            )
-          }
-        )}
+        <Button
+          type='button'
+          onClick={() => {
+            setDisplayImage('1')
+          }}
+          sx={{
+            background: 'unset',
+            cursor: 'pointer',
+            width: '80px',
+            height: '80px',
+            padding: 0,
+            border: '2px solid #DFDAE8',
+            borderRadius: '8px'
+          }}
+        >
+          <ProjectImageGallery1 style={{ width: '100%', height: '100%' }} />
+        </Button>
+        <Button
+          type='button'
+          onClick={() => {
+            setDisplayImage('2')
+          }}
+          sx={{
+            background: 'unset',
+            cursor: 'pointer',
+            width: '80px',
+            height: '80px',
+            padding: 0,
+            border: '2px solid #DFDAE8',
+            borderRadius: '8px'
+          }}
+        >
+          <ProjectImageGallery2 style={{ width: '100%', height: '100%' }} />
+        </Button>
+        <Button
+          type='button'
+          onClick={() => {
+            setDisplayImage('3')
+          }}
+          sx={{
+            background: 'unset',
+            cursor: 'pointer',
+            width: '80px',
+            height: '80px',
+            padding: 0,
+            border: '2px solid #DFDAE8',
+            borderRadius: '8px'
+          }}
+        >
+          <ProjectImageGallery3 style={{ width: '100%', height: '100%' }} />
+        </Button>
+        <Button
+          type='button'
+          onClick={() => {
+            setDisplayImage('4')
+          }}
+          sx={{
+            background: 'unset',
+            cursor: 'pointer',
+            width: '80px',
+            height: '80px',
+            padding: 0,
+            border: '2px solid #DFDAE8',
+            borderRadius: '8px'
+          }}
+        >
+          <ProjectImageGallery4 style={{ width: '100%', height: '100%' }} />
+        </Button>
       </Grid>
       <Button
         aria-label='Next'
