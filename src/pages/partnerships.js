@@ -4,10 +4,13 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import React, { useState } from 'react'
 import { Link, graphql } from 'gatsby'
 import styled from '@emotion/styled'
-import { FaMediumM, FaGithub } from 'react-icons/fa'
+
 import useMediaQuery from 'react-responsive'
 
 import Layout from '../components/layout'
+
+import { FaMediumM, FaGithub } from 'react-icons/fa'
+import decoratorPuzzle from '../images/decorator-puzzlepieces.svg'
 
 const Main = styled(Grid)`
   justify-content: start;
@@ -22,11 +25,27 @@ const ContentItem = styled(Grid)`
   border-radius: 12px;
 `
 
+const Decorator = styled.div`
+  position: absolute;
+`
+
 const Partnerships = ({ data }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
 
   return (
     <Layout>
+      {!isMobile ? (
+        <Decorator>
+          <img
+            src={decoratorPuzzle}
+            alt=''
+            sx={{
+              position: 'absolute',
+              right: '-90vw'
+            }}
+          />
+        </Decorator>
+      ) : null}
       <Main sx={{ width: '70%' }}>
         <Text sx={{ variant: 'headings.h2' }}>Partnerships</Text>
         <Text
@@ -61,7 +80,7 @@ const Partnerships = ({ data }) => {
         >
           Our partners and friends{' '}
         </Text>
-        <Grid columns={3} gap={4}>
+        <Grid columns={3} gap={4} sx={{ maxWidth: '800px' }}>
           {data.contentFriends.edges.map(edges => (
             <Link
               to={edges.node.link}
@@ -80,6 +99,7 @@ const Partnerships = ({ data }) => {
             </Link>
           ))}
         </Grid>
+        <Text>Todo: "Partner with us Element"</Text>
       </Main>
     </Layout>
   )
