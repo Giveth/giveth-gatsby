@@ -20,7 +20,7 @@ const IndexPage = props => {
   const [addedProject, setAddedProject] = useState({})
   const [addProjectQuery, { data }] = useMutation(ADD_PROJECT)
   const [formValues, setFormValues] = useState({})
-  const [askedBankAccount, setAskedBankAccount] = useState(false)
+  // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(props.location.search)
   const onSubmit = async values => {
@@ -61,7 +61,6 @@ const IndexPage = props => {
     }
 
     try {
-      console.log('what were sending', projectData)
       const project = await addProjectQuery({
         variables: {
           project: projectData
@@ -81,82 +80,86 @@ const IndexPage = props => {
 
   function AfterCreation () {
     // TODO: Get project id after creation
-    if (!projectAdded && !projectId) {
-      return <h3>loading</h3>
-    }
-    if (!askedBankAccount && !projectId) {
-      return (
-        <>
-          <img
-            src={decoratorClouds}
-            alt=''
-            css={{
-              position: 'absolute',
-              top: '57px',
-              right: '434px',
-              zIndex: -1
-            }}
-            className='hide'
-          />
-          <img
-            src={peoplePuzzle2}
-            alt=''
-            css={{
-              position: 'absolute',
-              top: '417px',
-              right: '0px',
-              zIndex: -1
-            }}
-            className='hide'
-          />
-          <ProjectBankAccountInput
-            projectId={addedProject?.id}
-            finalize={() => setAskedBankAccount(true)}
-          />
-        </>
-      )
-    } else {
-      return (
-        <>
-          <img
-            src={decoratorClouds}
-            alt=''
-            css={{
-              position: 'absolute',
-              top: '57px',
-              right: '185px',
-              zIndex: '-1'
-            }}
-            className='hide'
-          />
-          <img
-            src={peopleStretching}
-            alt=''
-            css={{
-              position: 'absolute',
-              top: '240px',
-              right: '130px',
-              width: '252px',
-              height: '610px',
-              zIndex: '-1'
-            }}
-            className='hide'
-          />
-          <img
-            src={decoratorFizzySquare}
-            alt=''
-            css={{
-              position: 'absolute',
-              top: '260px',
-              left: '380px',
-              zIndex: '-1'
-            }}
-            className='hide'
-          />
-          <HighFive projectId={addedProject?.id || projectId} />
-        </>
-      )
-    }
+    // if (!projectAdded && !projectId) {
+    //   return <h3>loading</h3>
+    // }
+    // if (!askedBankAccount && !projectId) {
+    //   return (
+    //     <>
+    //       <img
+    //         src={decoratorClouds}
+    //         alt=''
+    //         css={{
+    //           position: 'absolute',
+    //           top: '57px',
+    //           right: '434px',
+    //           zIndex: -1
+    //         }}
+    //         className='hide'
+    //       />
+    //       <img
+    //         src={peoplePuzzle2}
+    //         alt=''
+    //         css={{
+    //           position: 'absolute',
+    //           top: '417px',
+    //           right: '0px',
+    //           zIndex: -1
+    //         }}
+    //         className='hide'
+    //       />
+    //       <ProjectBankAccountInput
+    //         projectId={addedProject?.id}
+    //         finalize={() => setAskedBankAccount(true)}
+    //       />
+    //     </>
+    //   )
+    // } else {
+    return (
+      <>
+        <img
+          src={decoratorClouds}
+          alt=''
+          css={{
+            position: 'absolute',
+            top: '57px',
+            right: '185px',
+            zIndex: '-1'
+          }}
+          className='hide'
+        />
+        <img
+          src={peopleStretching}
+          alt=''
+          css={{
+            position: 'absolute',
+            top: '240px',
+            right: '130px',
+            width: '252px',
+            height: '610px',
+            zIndex: '-1'
+          }}
+          className='hide'
+        />
+        <img
+          src={decoratorFizzySquare}
+          alt=''
+          css={{
+            position: 'absolute',
+            top: '260px',
+            left: '380px',
+            zIndex: '-1'
+          }}
+          className='hide'
+        />
+        <HighFive
+          projectId={addedProject.id}
+          projectImage={addedProject.image}
+          projectTitle={addedProject.title}
+          projectDescription={addedProject.description}
+        />
+      </>
+    )
   }
 
   function ProjectForm () {
