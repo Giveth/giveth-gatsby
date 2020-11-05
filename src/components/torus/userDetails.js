@@ -98,12 +98,12 @@ const UserDetails = () => {
         <img
           alt=''
           style={{ width: '30px', borderRadius: '15px' }}
-          src={user.profileImage}
+          src={user?.profileImage}
           className='avatarimage'
         />
 
         <Text p={1} sx={{ variant: 'text.default', fontWeight: 'normal' }}>
-          {user.name}
+          {user?.name}
         </Text>
       </Button>
       {active ? (
