@@ -63,7 +63,7 @@ const UserDetails = () => {
     isWalletProved
   } = useContext(ProveWalletContext)
 
-  const address = (user.addresses && user.addresses[0]) || ''
+  const address = (user?.addresses && user.addresses[0]) || ''
   const truncAddress = `${address.substring(0, 5)} ... ${address.substring(
     address.length - 5,
     address.length
