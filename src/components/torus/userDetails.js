@@ -1,9 +1,11 @@
 /** @jsx jsx */
 import { Button, Text, jsx } from 'theme-ui'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import { Link } from 'gatsby'
+import { TorusContext } from '../../contextProvider/torusProvider'
+import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 
 const AccountDetails = styled.div`
   width: 200px;
@@ -52,9 +54,14 @@ const Balance = styled.div`
   padding: 0 0.5rem;
 `
 
-const UserDetails = props => {
-  const { user, balance, logout } = props
+const UserDetails = () => {
   const [active, setActive] = useState(false)
+
+  const { logout, user, balance } = useContext(TorusContext)
+  const {
+    proveWallet,
+    isWalletProved
+  } = useContext(ProveWalletContext)
 
   const address = (user.addresses && user.addresses[0]) || ''
   const truncAddress = `${address.substring(0, 5)} ... ${address.substring(
@@ -70,6 +77,9 @@ const UserDetails = props => {
     }
   }
 
+  const handleLogout = () => {
+    logout()
+  }
   return (
     <div>
       <Button
@@ -126,6 +136,19 @@ const UserDetails = props => {
               </MenuItem>
             </a>
           </Link>
+          {!isWalletProved && (
+            <MenuItem
+              sx={{
+                variant: 'text.medium',
+                color: 'secondary',
+                fontWeight: 'bold'
+              }}
+              onClick={proveWallet}
+              className='boxheight'
+            >
+              Verify Your Wallet
+            </MenuItem>
+          )}
           <MenuItem
             sx={{
               variant: 'text.medium',
@@ -178,7 +201,7 @@ const UserDetails = props => {
               color: 'secondary',
               fontWeight: 'bold'
             }}
-            onClick={logout}
+            onClick={handleLogout}
             className='boxheight'
           >
             Sign out

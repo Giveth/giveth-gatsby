@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import styled from '@emotion/styled'
 import { Text, jsx } from 'theme-ui'
+import { useContext } from 'react'
+import { TorusContext } from '../../contextProvider/torusProvider'
 
 const Container = styled.div`
   width: 70px;
@@ -9,16 +11,19 @@ const Container = styled.div`
   place-content: center;
 `
 
-const LoginButton = props => (
-  <Container>
-    <Text
-      p='10px'
-      sx={{ variant: 'text.medium', color: 'primary', cursor: 'pointer' }}
-      onClick={props.login}
-    >
-      Sign in
-    </Text>
-  </Container>
-)
+const LoginButton = props => {
+  const { login } = useContext(TorusContext)
+  return (
+    <Container>
+      <Text
+        p='10px'
+        sx={{ variant: 'text.medium', color: 'primary', cursor: 'pointer' }}
+        onClick={login}
+      >
+        Sign in
+      </Text>
+    </Container>
+  )
+}
 
 export default LoginButton

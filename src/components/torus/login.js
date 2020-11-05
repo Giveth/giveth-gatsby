@@ -3,12 +3,12 @@ import { TorusContext } from '../../contextProvider/torusProvider'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
 
-const Login = props => {
-  const { isLoggedIn, login, logout, user, balance } = useContext(TorusContext)
+const Login = () => {
+  const { isLoggedIn } = useContext(TorusContext)
   if (!isLoggedIn) {
-    return <LoginButton login={login} />
+    return <LoginButton />
   } else {
-    return <UserDetails logout={logout} user={user} balance={balance} />
+    return <UserDetails />
   }
 }
 export default Login
