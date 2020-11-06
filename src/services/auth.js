@@ -6,24 +6,12 @@ export const getUser = () =>
     ? JSON.parse(window.localStorage.getItem(gatsbyUser))
     : {}
 
-export function setUser(user) {
+export function setUser (user) {
   return window.localStorage.setItem(gatsbyUser, JSON.stringify(user))
 }
 
-export const handleLogin = ({ username, password }) => {
-  if (username === 'john' && password === 'pass') {
-    return setUser({
-      username: 'john',
-      name: 'Johnny',
-      email: 'johnny@example.org'
-    })
-  }
-
-  return false
-}
-
-export function handleLogout() {
-  localStorage.removeItem(gatsbyUser)
+export function handleLogout () {
+  logout()
 }
 
 export const checkIfLoggedIn = () => {
@@ -35,6 +23,7 @@ export const checkIfLoggedIn = () => {
 export const logout = (callback = () => {}) => {
   if (isBrowser()) {
     window.localStorage.removeItem(gatsbyUser)
+    window.localStorage.removeItem('token')
   }
   callback()
 }
