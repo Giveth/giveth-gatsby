@@ -108,6 +108,7 @@ const ProjectListing = props => {
       }}
     >
       <ProjectCard key={props.listingId + '_card'}>
+        {/* need to add options from the gallery. */}
         <div
           key={props.listingId + '_div'}
           src={props.image}

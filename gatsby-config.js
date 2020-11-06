@@ -89,14 +89,12 @@ module.exports = {
       options: {
         typeName: 'GIVETH',
         fieldName: 'giveth',
-        // url: `${process.env.GATSBY_APOLLO_SERVER}`,
-        url: 'https://graph.topia.us',
+        url: `${process.env.GATSBY_APOLLO_SERVER}`,
         // HTTP headers
         headers: {
           // Learn about environment variables: https://gatsby.dev/env-vars
           // Authorization: `Bearer ${process.env.APOLLO_AUTH_TOKEN}`
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImZpcnN0TmFtZSI6IkJyeWFuIiwiaWF0IjoxNTk5Mzk5NjcxLCJleHAiOjE2MDE5OTE2NzF9.hIYd483Yvt1bwDXMzzKONjIl5VVMkA4_MiSwriw2CEA'
+          Authorization: `Bearer ${process.env.APOLLO_AUTH_TOKEN}`
         }
       }
     }
