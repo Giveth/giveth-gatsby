@@ -11,6 +11,8 @@ import Layout from '../components/layout'
 
 import { FaMediumM, FaGithub } from 'react-icons/fa'
 import decoratorPuzzle from '../images/decorator-puzzlepieces.svg'
+import DarkClouds from '../images/svg/general/decorators/dark-clouds.svg'
+import RaisedHands from '../images/decorator-raised-one-hand.png'
 
 const Main = styled(Grid)`
   justify-content: start;
@@ -27,6 +29,29 @@ const ContentItem = styled(Grid)`
 
 const Decorator = styled.div`
   position: absolute;
+`
+const RaisedHandsImg = styled.img`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  @media (max-width: 800px) {
+    display: none;
+    align-items: flex-start;
+  }
+`
+
+const SpecialCardContainer = styled(Flex)`
+  width: 100%;
+  min-height: 240px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  background-color: ${theme.colors.secondary};
+  border: 1px solid ${theme.colors.muted};
+  box-sizing: border-box;
+  border-radius: 12px;
+  margin: 0.5rem 0;
 `
 
 const Partnerships = ({ data }) => {
@@ -99,7 +124,48 @@ const Partnerships = ({ data }) => {
             </Link>
           ))}
         </Grid>
-        <Text>Todo: "Partner with us Element"</Text>
+
+        <SpecialCardContainer sx={{ maxWidth: '800px' }}>
+          <DarkClouds
+            style={{ position: 'absolute', top: '41px', right: '42px' }}
+          />
+          <Box
+            sx={{
+              width: '60%',
+              pb: 2,
+              pt: 4,
+              textAlign: 'center',
+              alignSelf: 'center'
+            }}
+          >
+            <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+              Partner with us
+            </Text>
+          </Box>
+
+          <Text
+            sx={{
+              variant: 'text.default',
+              pb: 4,
+              color: 'bodyLight'
+            }}
+          >
+            We're always open for new partnerships
+          </Text>
+          <Link to='/contact'>
+            <Button
+              mt={1}
+              p={3}
+              sx={{
+                width: '200px',
+                variant: 'buttons.default'
+              }}
+            >
+              Contact Us
+            </Button>
+          </Link>
+          <RaisedHandsImg src={RaisedHands} />
+        </SpecialCardContainer>
       </Main>
     </Layout>
   )
