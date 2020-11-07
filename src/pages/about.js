@@ -3,7 +3,7 @@ import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
 import React, { useState } from 'react'
 import { Link, graphql } from 'gatsby'
 import styled from '@emotion/styled'
-import { FaMediumM, FaGithub } from 'react-icons/fa'
+import { FaMediumM, FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa'
 
 import Layout from '../components/layout'
 import ContentTeam from '../components/ContentTeam'
@@ -314,7 +314,8 @@ const AboutPage = ({ data }) => {
               justifyContent: 'space-around',
               fontFamily: 'heading',
               textTransform: 'uppercase',
-              my: '20px'
+              my: '-20px',
+              mb: '10px'
             }}
           >
             <Text>Givers: 24</Text>
@@ -323,25 +324,28 @@ const AboutPage = ({ data }) => {
           <Flex pt={3} sx={{ justifyContent: 'center' }}>
             <Text
               sx={{
-                color: 'primary',
+                variant: 'text.medium',
+                color: 'secondary',
                 textDecoration: 'none',
                 mt: '10px'
               }}
             >
-              Follow us elsewhere
+              Find us elsewhere
             </Text>
           </Flex>
           <Grid
             pt={2}
             sx={{
-              gridTemplateColumns: 'auto auto',
+              gridTemplateColumns: 'repeat(4, auto)',
               fontSize: '40px',
               justifyContent: 'center',
               fontFamily: 'heading'
             }}
           >
-            <FaMediumM />
-            <FaGithub />
+            <FaTwitter size={'30px'} />
+            <FaLinkedin size={'30px'} />
+            <FaMediumM size={'30px'} />
+            <FaGithub size={'30px'} />
           </Grid>
         </Flex>
       </Flex>

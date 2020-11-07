@@ -13,6 +13,7 @@ import { AiOutlineDown } from 'react-icons/ai'
 
 const ContentContainer = styled.div`
   display: grid;
+  grid-template-rows: auto;
   padding: 0.5rem 0;
   max-width: 960px;
   margin: 0 auto;
@@ -25,11 +26,11 @@ const ContentContainer = styled.div`
 
 const ContentItem = styled.div`
   display: grid;
+  max-width: 960px;
   grid-template-columns: 1fr;
   grid-template-rows: auto auto;
   align-self: center;
   background-position: center;
-  background-attachment: fixed;
   background-color: ${theme.colors.background};
   color: ${theme.colors.secondary};
   transition: 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);

@@ -144,6 +144,7 @@ const Footer = () => {
             >
               Social Coding
             </FooterExternalLink>
+            <FooterLink to='/join'>Join Our Community</FooterLink>
           </LinkBox>
         </InnerGrid>
         <DonateSection
