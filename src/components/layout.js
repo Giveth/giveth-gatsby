@@ -15,12 +15,11 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 import TorusProvider from '../contextProvider/torusProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
-import { useMutation } from '@apollo/react-hooks'
-import { DO_LOGIN } from '../apollo/gql/auth'
 
 import Dialog from './dialog'
 import Footer from './footer'
 import { Helmet } from 'react-helmet'
+import ProveWalletProvider from '../contextProvider/proveWalletProvider'
 
 const AlertOptions = {
   timeout: 5000,
@@ -37,35 +36,6 @@ const Layout = ({ isHomePage, children, asDialog, noHeader }) => {
       }
     }
   `)
-
-  const [doLogin] = useMutation(DO_LOGIN)
-
-  const onLogin = async (signedMessage, userAddress, userEmail) => {
-    console.log('onLogin > doinglogin')
-    try {
-      const loginResponse = await doLogin({
-        variables: {
-          walletAddress: userAddress,
-          signature: signedMessage,
-          email: userEmail
-        }
-      })
-
-      console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
-
-      // const token = jwt.verify(
-      //   loginResponse.data.loginWallet.token,
-      //   process.env.GATSBY_JWT_SECRET
-      // )
-      // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      // web3.eth.getBalance(user.publicAddress).then(setBalance)
-      // console.log(`setting balance to zero`)
-      // setBalance(0)
-      // window.location = process.env.GATSBY_BASE_URL
-    } catch (error) {
-      console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
-    }
-  }
 
   const Template = () => {
     if (asDialog) {
@@ -104,14 +74,16 @@ const Layout = ({ isHomePage, children, asDialog, noHeader }) => {
           crossOrigin='anonymous'
         />
       </Helmet>
-      <TorusProvider onLogin={onLogin}>
-        <GlobalProvider>
-          <ThemeProvider theme={theme}>
-            <Provider template={AlertTemplate} {...AlertOptions}>
-              <Template />
-            </Provider>
-          </ThemeProvider>
-        </GlobalProvider>
+      <TorusProvider>
+        <ProveWalletProvider>
+          <GlobalProvider>
+            <ThemeProvider theme={theme}>
+              <Provider template={AlertTemplate} {...AlertOptions}>
+                <Template />
+              </Provider>
+            </ThemeProvider>
+          </GlobalProvider>
+        </ProveWalletProvider>
       </TorusProvider>
     </>
   )

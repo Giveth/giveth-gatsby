@@ -114,7 +114,6 @@ const TorusProvider = props => {
       torusNotLoadedMessage()
     }
     Auth.handleLogout()
-    Auth.logout()
     setIsLoggedIn(false)
     if (balancePolling) {
       clearInterval(balancePolling)
@@ -136,14 +135,22 @@ const TorusProvider = props => {
         user.addresses = addresses
         Auth.setUser(user)
         setIsLoggedIn(true)
-        const signedMessage = await web3.eth.personal.sign(
-          'our_secret',
-          user.addresses[0],
-          ''
-        )
-        await props.onLogin(signedMessage, user?.addresses[0], user?.email)
       }
     }
+  }
+
+  async function signMessage (message) {
+    let signedMessage = null
+
+    if (isLoggedIn) {
+      signedMessage = await web3.eth.personal.sign(
+        message,
+        user.addresses[0],
+        ''
+      )
+    }
+
+    return signedMessage
   }
 
   return (
@@ -153,7 +160,8 @@ const TorusProvider = props => {
         login,
         logout,
         balance,
-        user
+        user,
+        signMessage
       }}
     >
       {props.children}
