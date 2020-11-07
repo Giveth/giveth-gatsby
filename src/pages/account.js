@@ -2,20 +2,14 @@
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
 import { MyAccount, MyDonations, MyProjects } from '../components/account'
-import { jsx, Text, Flex, IconButton, Box, Button } from 'theme-ui'
+import { jsx, Text, Flex, Box } from 'theme-ui'
 import styled from '@emotion/styled'
 import Layout from '../components/layout'
-import Loadable from '@loadable/component'
 import { useMediaQuery } from 'react-responsive'
-import { useMutation } from '@apollo/react-hooks'
-
-import { DO_LOGIN } from '../apollo/gql/auth'
 
 import theme from '../gatsby-plugin-theme-ui/index'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import { BsArrowLeft } from 'react-icons/bs'
-
-import Footer from '../components/footer'
 
 const UserSpan = styled.span`
   position: relative;
@@ -45,37 +39,6 @@ const AccountPage = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [selectedView, setSelectedView] = useState('My Account')
   const options = ['My Account', 'My Projects', 'My Donations']
-  // const Login = Loadable(() => import('../components/torus/login'))
-  // const [doLogin] = useMutation(DO_LOGIN)
-
-  const [balance, setBalance] = useState(0)
-  // const onLogin = () => {}
-  // const onLogin = async (signedMessage, userAddress, userEmail) => {
-  //   console.log('onLogin > doinglogin')
-  //   try {
-  //     const loginResponse = await doLogin({
-  //       variables: {
-  //         walletAddress: userAddress,
-  //         signature: signedMessage.signature,
-  //         email: userEmail
-  //       }
-  //     })
-
-  //     console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
-
-  //     // const token = jwt.verify(
-  //     //   loginResponse.data.loginWallet.token,
-  //     //   process.env.GATSBY_JWT_SECRET
-  //     // )
-  //     // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-  //     // web3.eth.getBalance(user.publicAddress).then(setBalance)
-  //     console.log('setting balance to zero')
-  //     setBalance(0)
-  //     window.location = process.env.GATSBY_BASE_URL
-  //   } catch (error) {
-  //     console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
-  //   }
-  // }
 
   const SetView = () => {
     switch (selectedView) {

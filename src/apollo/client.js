@@ -1,21 +1,39 @@
-import ApolloClient from 'apollo-boost'
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { createUploadLink } from 'apollo-upload-client'
+import { setContext } from '@apollo/client/link/context'
 import fetch from 'isomorphic-fetch'
 import gql from 'graphql-tag'
 
+const gatsbyUser = process.env.GATSBY_LOCAL_USER_LABEL || 'gatsbyUser'
+
+const httpLink = createUploadLink({ uri: process.env.GATSBY_APOLLO_SERVER })
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token')
+  // return the headers to the context so httpLink can read them
+  const mutation = {
+    authorization: token ? `Bearer ${token}` : ''
+  }
+  if (localStorage.getItem(gatsbyUser)) {
+    const user = JSON.parse(localStorage.getItem(gatsbyUser))
+    const userAddress = user?.addresses && user.addresses[0]
+
+    if (userAddress) mutation['wallet-address'] = userAddress
+  }
+
+  console.log('mutation:', mutation)
+  return {
+    headers: {
+      ...headers,
+      ...mutation
+    }
+  }
+})
+
 export const client = new ApolloClient({
-  uri: process.env.GATSBY_APOLLO_SERVER,
-  request: operation => {
-    // const token = localStorage.getItem('token')
-    const token = true
-    // NOTE: this token serves for testing while backend is updated, while we build the auth flow
-    operation.setContext({
-      headers: {
-        authorization: token
-          ? 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1LCJmaXJzdE5hbWUiOiJDYW1pbG8iLCJpYXQiOjE2MDExODE5NjgsImV4cCI6MTYwMzc3Mzk2OH0.zjnJhN0hCpPOWXLJ_y1LXxya06f453vuvI_E6RWfUOo'
-          : ''
-      }
-    })
-  },
+  cache: new InMemoryCache(),
+  link: authLink.concat(httpLink),
   typeDefs: gql`
     enum OrderField {
       CreationDate

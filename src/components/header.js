@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
-import { useMutation } from '@apollo/react-hooks'
-import { DO_LOGIN } from '../apollo/gql/auth'
 import Loadable from '@loadable/component'
 import { IconButton, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -142,9 +140,6 @@ const Login = Loadable(() => import('./torus/login'))
 const Header = ({ siteTitle, isHomePage }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
-  const [doLogin] = useMutation(DO_LOGIN)
-  // const [doRegister] = useMutation(DO_REGISTER)
-  const [balance, setBalance] = useState(0)
 
   useEffect(() => {
     function handleScroll() {
@@ -161,33 +156,6 @@ const Header = ({ siteTitle, isHomePage }) => {
       window.removeEventListener('scroll', handleScroll)
     }
   })
-
-  const onLogin = async (signedMessage, userAddress, userEmail) => {
-    console.log('onLogin > doinglogin')
-    try {
-      const loginResponse = await doLogin({
-        variables: {
-          walletAddress: userAddress,
-          signature: signedMessage,
-          email: userEmail
-        }
-      })
-
-      console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
-
-      // const token = jwt.verify(
-      //   loginResponse.data.loginWallet.token,
-      //   process.env.GATSBY_JWT_SECRET
-      // )
-      // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      // web3.eth.getBalance(user.publicAddress).then(setBalance)
-      console.log('setting balance to zero')
-      setBalance(0)
-      window.location = process.env.GATSBY_BASE_URL
-    } catch (error) {
-      console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
-    }
-  }
 
   return (
     <HeaderContainer
@@ -274,7 +242,7 @@ const Header = ({ siteTitle, isHomePage }) => {
             </span>
           )}
           <img src={iconVerticalLine} alt='' />
-          <Login onLogin={onLogin} balance={balance} />
+          <Login />
         </UserSpan>
       </HeaderSpan>
     </HeaderContainer>

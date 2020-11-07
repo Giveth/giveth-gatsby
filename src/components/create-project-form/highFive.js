@@ -12,15 +12,15 @@ const HighFive = ({
   projectTitle,
   projectDescription
 }) => {
-  const { loading, error, data } = useQuery(FETCH_PROJECT, {
-    variables: { id: projectId }
-  })
+  // const { loading, error, data } = useQuery(FETCH_PROJECT, {
+  //   variables: { id: projectId }
+  // })
 
-  console.log({ loading, error, data })
-  if (loading) return <h3>loading</h3>
+  // console.log({ loading, error, data })
+  // if (loading) return <h3>loading</h3>
 
-  const { project } = data
-  console.log({ project })
+  // const { project } = data
+  // console.log({ project })
   return (
     <Flex
       sx={{
@@ -58,8 +58,8 @@ const HighFive = ({
           <ProjectListing
             disabled
             shadowed
-            name={project[0].title || projectTitle}
-            description={project[0].description || projectDescription}
+            name={projectTitle}
+            description={projectDescription}
             image={projectImage}
             raised={0}
             category='Blockchain 4 Good'
