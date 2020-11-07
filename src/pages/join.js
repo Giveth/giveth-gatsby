@@ -5,7 +5,6 @@ import { Link, graphql } from 'gatsby'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import Hero from '../components/content/JoinPageHero'
-import HomeTopProjects from '../components/HomeTopProjects'
 import JoinChatCard from '../components/content/JoinPageCard'
 
 const JoinPage = ({ data }) => {
@@ -26,7 +25,9 @@ export default JoinPage
 
 export const query = graphql`
   query JoinChatQuery {
-    contentChats: allContentfulContentJoinChatprovider {
+    contentChats: allContentfulContentJoinChatprovider(
+      sort: { order: ASC, fields: createdAt }
+    ) {
       edges {
         node {
           id
