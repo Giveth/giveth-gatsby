@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import React from 'react'
-import { Box, Grid, Text, jsx } from 'theme-ui'
+import { Link } from 'gatsby'
+import { Router } from '@reach/router'
+import { Box, Button, Grid, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 import { useQuery } from '@apollo/react-hooks'
@@ -190,12 +192,12 @@ const ShowProject = props => {
         <Options>
           <OptionType
             title={CRYPTO}
-            subtitle='2.9% + 0.30 USD'
+            subtitle='Zero Fee'
             style={RIGHT_BOX_STYLE}
           />
           <OptionType
             title={CREDIT}
-            subtitle='Zero Fee'
+            subtitle='2.9% + 0.30 USD'
             style={LEFT_BOX_STYLE}
           />
         </Options>
@@ -312,4 +314,33 @@ const Donate = props => {
   )
 }
 
-export default Donate
+const DonateWithoutSlug = () => {
+  return (
+    <Layout asDialog>
+      <Content style={{ justifyItems: 'center' }}>
+        <Link to='/projects'>
+          <Button
+            variant='default'
+            sx={{
+              paddingTop: '20px',
+              paddingBottom: '20px'
+            }}
+          >
+            <Text>Go see our projects</Text>
+          </Button>
+        </Link>
+      </Content>
+    </Layout>
+  )
+}
+
+const DonateIndex = () => {
+  return (
+    <Router basepath='/'>
+      <DonateWithoutSlug path='donate' />
+      <Donate path='donate/:projectId' />
+    </Router>
+  )
+}
+
+export default DonateIndex

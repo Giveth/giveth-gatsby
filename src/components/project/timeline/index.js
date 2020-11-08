@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { ProjectContext } from '../../../contextProvider/projectProvider'
 import { Button, Flex, Text } from 'theme-ui'
@@ -37,8 +37,7 @@ const LeftInfo = styled(Flex)`
   z-index: 1;
 `
 
-const Timeline = () => {
-  const content = [1, 2]
+const Timeline = ({ content = [], addUpdate, project }) => {
   const newUpdateOption = true
   return (
     <VerticalTimeline>
@@ -50,24 +49,35 @@ const Timeline = () => {
               UPDATE
             </Text>
           </LeftInfo>
-          <Card newUpdateOption />
+          <Card newUpdateOption={addUpdate} />
         </Container>
       )}
-      {content.map((i, index) => (
-        <Container key={index}>
-          <LeftInfo sx={{ left: '-13px' }}>
-            <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>WED</Text>
-            <Text sx={{ variant: 'headings.h4' }}>2</Text>
-          </LeftInfo>
-          <Card
-            specialContent={
-              index + 1 === content.length
-                ? { title: 'Project Launched' }
-                : false
-            }
-          />
-        </Container>
-      ))}
+      {content
+        ?.slice(0)
+        .reverse()
+        .map((i, index) => (
+          <Container key={index}>
+            <LeftInfo sx={{ left: '-13px' }}>
+              <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
+                WED
+              </Text>
+              <Text sx={{ variant: 'headings.h4' }}>2</Text>
+            </LeftInfo>
+            <Card content={i?.projectUpdate} />
+          </Container>
+        ))}
+      <Container>
+        <LeftInfo sx={{ left: '-13px' }}>
+          <Text sx={{ variant: 'text.small', color: 'bodyLight' }}></Text>
+          <Text sx={{ variant: 'headings.h4' }}></Text>
+        </LeftInfo>
+        <Card
+          specialContent={{
+            title: 'Project Launched',
+            content: project?.createdAt
+          }}
+        />
+      </Container>
     </VerticalTimeline>
   )
 }

@@ -9,6 +9,7 @@ const FETCH_PROJECTS = gql`
         balance
         image
         slug
+        creationDate
       }
       totalCount
     }
@@ -23,6 +24,7 @@ const FETCH_PROJECT = gql`
       description
       image
       slug
+      creationDate
     }
   }
 `
@@ -34,6 +36,8 @@ const FETCH_PROJECT_BY_SLUG = gql`
       title
       description
       image
+      slug
+      creationDate
     }
   }
 `
@@ -143,7 +147,6 @@ const GET_STRIPE_PROJECT_DONATIONS = gql`
         donor
         currency
         status
-        createdAt
       }
       totalDonors
     }
@@ -164,6 +167,38 @@ const ADD_PROJECT = gql`
     }
   }
 `
+/*
+ ** PROJECT UPDATES
+ */
+const ADD_PROJECT_UPDATE = gql`
+  mutation($projectId: Float!, $title: String!, $content: String!) {
+    addProjectUpdate(projectId: $projectId, title: $title, content: $content) {
+      id
+      projectId
+      userId
+      content
+    }
+  }
+`
+
+const GET_PROJECT_UPDATES = gql`
+  query GetProjectUpdates($projectId: Float!, $take: Float!, $skip: Float!) {
+    getProjectUpdates(projectId: $projectId, take: $take, skip: $skip) {
+      projectUpdate {
+        id
+        title
+        content
+        createdAt
+        projectId
+        userId
+      }
+      reactions {
+        reaction
+        userId
+      }
+    }
+  }
+`
 
 export {
   FETCH_PROJECTS,
@@ -174,5 +209,7 @@ export {
   GET_LINK_BANK_CREATION,
   GET_DONATION_SESSION,
   GET_STRIPE_DONATION_PDF,
-  GET_STRIPE_PROJECT_DONATIONS
+  GET_STRIPE_PROJECT_DONATIONS,
+  ADD_PROJECT_UPDATE,
+  GET_PROJECT_UPDATES
 }

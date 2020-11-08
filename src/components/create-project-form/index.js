@@ -19,7 +19,7 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 
 const CreateProjectForm = props => {
-  const APIKEY = 'AIzaSyBEHB5JWEyBUNF4F8mrSxtiVCLOyUPOBL4'
+  const APIKEY = process.env.GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const categoryList = [

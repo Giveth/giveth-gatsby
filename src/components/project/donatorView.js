@@ -27,13 +27,14 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [totalGivers, setTotalGivers] = useState(null)
 
   const { data, loading, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
-    variables: { projectId: 1 }
+    variables: { projectId: pageContext?.project?.id }
   })
+
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
 
-  console.log({ data, pageContext })
+  console.log({ pageContext })
 
   useEffect(() => {
     if (data) {
@@ -203,7 +204,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 {pageContext?.project?.description}
               </Text>
             ) : currentTab === 'updates' ? (
-              <UpdatesTab />
+              <UpdatesTab project={pageContext?.project} />
             ) : (
               <DonationsTab />
             )}

@@ -78,7 +78,7 @@ const IndexPage = props => {
     }
   }
 
-  function AfterCreation () {
+  function AfterCreation() {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -153,7 +153,7 @@ const IndexPage = props => {
           className='hide'
         />
         <HighFive
-          projectId={addedProject.id}
+          projectId={projectId || addedProject.id}
           projectImage={addedProject.image}
           projectTitle={addedProject.title}
           projectDescription={addedProject.description}
@@ -162,7 +162,7 @@ const IndexPage = props => {
     )
   }
 
-  function ProjectForm () {
+  function ProjectForm() {
     if (isLoggedIn === true) {
       if (!projectAdded && !projectId) {
         return (

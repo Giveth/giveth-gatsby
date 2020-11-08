@@ -232,10 +232,7 @@ const ProjectCard = props => {
                   //   }`,
                   //   { replace: true }
                   // )
-                  (window.location.href = `/projects/${
-                    props?.slug ||
-                    'COVID-19:-ICRC-global-response-to-the-coronavirus'
-                  }`)
+                  (window.location.href = `/projects/${props?.slug || ''}`)
               }}
             >
               Learn More

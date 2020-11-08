@@ -8,7 +8,9 @@ const proveWalletContext = React.createContext({})
 const ProveWalletProvider = props => {
   const { user, isLoggedIn, signMessage } = useContext(TorusContext)
   const [doLogin] = useMutation(DO_LOGIN)
-  const [isWalletProved, setIsWalletProved] = useState(isLoggedIn && !!localStorage.getItem('token'))
+  const [isWalletProved, setIsWalletProved] = useState(
+    isLoggedIn && !!localStorage.getItem('token')
+  )
 
   useEffect(() => {
     setIsWalletProved(isLoggedIn && !!localStorage.getItem('token'))
@@ -28,9 +30,15 @@ const ProveWalletProvider = props => {
             }
           })
 
-          console.log(`didlogin - loginResponse ---> : ${JSON.stringify(loginResponse, null, 2)}`)
-
+          console.log(
+            `didlogin - loginResponse ---> : ${JSON.stringify(
+              loginResponse,
+              null,
+              2
+            )}`
+          )
           const token = loginResponse?.data?.loginWallet?.token
+          console.log({ token })
           if (token) localStorage.setItem('token', token)
         } catch (error) {
           console.error(`error1  : ${JSON.stringify(error, null, 2)}`)

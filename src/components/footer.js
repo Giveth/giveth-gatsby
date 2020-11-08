@@ -93,7 +93,7 @@ const Footer = () => {
         <InnerGrid>
           <LinkBox>
             <FooterLink to='/'>Home</FooterLink>
-            <FooterLink to='/causes'>Causes</FooterLink>
+            {/* <FooterLink to='/causes'>Causes</FooterLink> */}
             <FooterLink to='/projects'>Projects</FooterLink>
           </LinkBox>
           <LinkBox>
