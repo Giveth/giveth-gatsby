@@ -153,6 +153,7 @@ const IndexPage = props => {
           className='hide'
         />
         <HighFive
+          addedProject={addedProject}
           projectId={projectId || addedProject.id}
           projectImage={addedProject.image}
           projectTitle={addedProject.title}

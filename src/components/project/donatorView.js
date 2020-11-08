@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Text, Box, Button } from 'theme-ui'
 import { ProjectContext } from '../../contextProvider/projectProvider'
+import { TorusContext } from '../../contextProvider/torusProvider'
 import { DonationsTab, UpdatesTab } from './index'
 import testImg from '../../images/giveth-test-image.png'
 import { GrCircleInformation } from 'react-icons/gr'
@@ -22,6 +23,7 @@ const FloatingDonateView = styled(Flex)`
 `
 
 export const ProjectDonatorView = ({ pageContext }) => {
+  const { user } = React.useContext(TorusContext)
   const [currentTab, setCurrentTab] = useState('description')
   const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
@@ -33,6 +35,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
+
+  console.log({ user })
+  // TODO: Needs to check if logged user is owner of this project
 
   console.log({ pageContext })
 

@@ -32,6 +32,7 @@ exports.createPages = async ({ graphql, actions }) => {
           description
           slug
           creationDate
+          admin
         }
       }
     }

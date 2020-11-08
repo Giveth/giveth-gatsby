@@ -10,6 +10,7 @@ const FETCH_PROJECTS = gql`
         image
         slug
         creationDate
+        admin
       }
       totalCount
     }
@@ -20,6 +21,7 @@ const FETCH_PROJECT = gql`
   query Project($id: ID!) {
     project(id: $id) {
       id
+      admin
       title
       description
       image
@@ -38,6 +40,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       image
       slug
       creationDate
+      admin
     }
   }
 `
@@ -161,6 +164,7 @@ const ADD_PROJECT = gql`
       admin
       image
       impactLocation
+      slug
       categories {
         name
       }

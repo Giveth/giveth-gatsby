@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import * as Auth from '../services/auth'
 import { TorusContext } from './torusProvider'
 import { useMutation } from '@apollo/react-hooks'
 import { DO_LOGIN } from '../apollo/gql/auth'
@@ -38,8 +39,10 @@ const ProveWalletProvider = props => {
             )}`
           )
           const token = loginResponse?.data?.loginWallet?.token
-          console.log({ token })
+          const userIDFromDB = loginResponse?.data?.loginWallet?.user?.id
+          console.log({ token, userIDFromDB })
           if (token) localStorage.setItem('token', token)
+          if (userIDFromDB) Auth.setUser({ ...user, userIDFromDB })
         } catch (error) {
           console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
         }

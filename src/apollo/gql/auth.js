@@ -13,10 +13,22 @@ const DO_LOGIN = gql`
     ) {
       token
       user {
+        id
         firstName
         lastName
         email
       }
+    }
+  }
+`
+
+const GET_USER = gql`
+  query User($userId: String!) {
+    user(userId: $userId) {
+      id
+      firstName
+      lastName
+      email
     }
   }
 `
@@ -37,4 +49,4 @@ const DO_REGISTER = gql`
     }
   }
 `
-export { DO_LOGIN, DO_REGISTER }
+export { DO_LOGIN, DO_REGISTER, GET_USER }

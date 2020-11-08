@@ -7,20 +7,23 @@ import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 
 const HighFive = ({
+  addedProject,
   projectId,
   projectImage,
   projectTitle,
   projectDescription
 }) => {
-  const { loading, error, data } = useQuery(FETCH_PROJECT, {
-    variables: { id: projectId }
-  })
+  // This will be useful when we need to handle the route on webhook
 
-  console.log({ loading, error, data })
-  if (loading) return <h3>loading</h3>
+  // const { loading, error, data } = useQuery(FETCH_PROJECT, {
+  //   variables: { id: projectId }
+  // })
 
-  const { project } = data
-  console.log({ project })
+  // console.log({ loading, error, data })
+  // if (loading) return <h3>loading</h3>
+
+  // const project = data?.project
+  // console.log({ data, project })
   return (
     <Flex
       sx={{
@@ -58,8 +61,8 @@ const HighFive = ({
           <ProjectListing
             disabled
             shadowed
-            name={project[0].title || projectTitle}
-            description={project[0].description || projectDescription}
+            name={projectTitle}
+            description={projectDescription}
             image={projectImage}
             raised={0}
             category='Blockchain 4 Good'
@@ -84,7 +87,7 @@ const HighFive = ({
             <FaFacebook size='24px' />
             <FaLinkedin size='24px' />
           </Flex>
-          <Link to={`/projects/${project[0]?.slug}`}>
+          <Link to={`/projects/${addedProject?.slug}`}>
             <Text
               sx={{
                 fontSize: 3,
