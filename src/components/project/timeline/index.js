@@ -42,13 +42,13 @@ const LeftInfo = styled(Flex)`
   z-index: 1;
 `
 
-const Timeline = ({ content = [], addUpdate, project }) => {
+const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
   const newUpdateOption = true
   const projectCreationDate = dayjs(project?.creationDate)
 
   return (
     <VerticalTimeline>
-      {newUpdateOption && (
+      {newUpdateOption && isOwner && (
         <Container>
           <LeftInfo sx={{ left: '-23px' }}>
             <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>NEW</Text>

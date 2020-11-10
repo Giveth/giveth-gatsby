@@ -11,6 +11,9 @@ const FETCH_PROJECTS = gql`
         slug
         creationDate
         admin
+        categories {
+          name
+        }
       }
       totalCount
     }
@@ -27,6 +30,9 @@ const FETCH_PROJECT = gql`
       image
       slug
       creationDate
+      categories {
+        name
+      }
     }
   }
 `
@@ -41,6 +47,9 @@ const FETCH_PROJECT_BY_SLUG = gql`
       slug
       creationDate
       admin
+      categories {
+        name
+      }
     }
   }
 `
