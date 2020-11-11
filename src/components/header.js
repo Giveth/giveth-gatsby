@@ -228,7 +228,7 @@ const Header = ({ siteTitle, isHomePage }) => {
 
         <MiddleSpan>
           <NavLink to='/'>Home</NavLink>
-          <NavLink to='/causes'>Causes</NavLink>
+          {/* <NavLink to='/causes'>Causes</NavLink> */}
           <NavLink to='/projects'>Projects</NavLink>
         </MiddleSpan>
 

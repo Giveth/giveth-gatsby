@@ -260,6 +260,7 @@ const ProjectsList = props => {
                   listingId={project.title + '-' + index}
                   key={project.title + '-' + index}
                   name={project.title}
+                  slug={project.slug}
                   donateAddress={project.donateAddress}
                   image={project.image || NoImage}
                   raised={project.balance}

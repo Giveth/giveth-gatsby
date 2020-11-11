@@ -44,7 +44,8 @@ export const ProjectNameInput = ({
           mt: '200px',
           width: '180px',
           height: '52px',
-          borderRadius: '48px'
+          borderRadius: '48px',
+          cursor: 'pointer'
         }}
         type='submit'
       >

@@ -201,7 +201,8 @@ export const ProjectImageInput = ({
           mt: '50px',
           width: '180px',
           height: '52px',
-          borderRadius: '48px'
+          borderRadius: '48px',
+          cursor: 'pointer'
         }}
         type='submit'
       >

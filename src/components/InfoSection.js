@@ -166,13 +166,13 @@ const InfoSection = () => {
           }}
         >
           <Text sx={{ variant: 'headings.h4' }}>For Givers</Text>
-          <Text sx={{ variant: 'text.paragraph' }}>
+          {/* <Text sx={{ variant: 'text.paragraph' }}>
             Send donations to the{' '}
             <Link to='/causes' className='intextlink'>
               Cause
             </Link>{' '}
             or Project you most care about.
-          </Text>
+          </Text> */}
           <Link to='/donate'>
             <Button sx={{ variant: 'buttons.default' }}>
               Donate to a project

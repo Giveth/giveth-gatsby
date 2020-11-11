@@ -1,6 +1,8 @@
 /** @jsx jsx */
 import React from 'react'
-import { Box, Grid, Text, jsx } from 'theme-ui'
+import { Link } from 'gatsby'
+import { Router } from '@reach/router'
+import { Box, Button, Grid, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 import { useQuery } from '@apollo/react-hooks'
@@ -9,7 +11,7 @@ import OnlyFiat from '../components/donate/onlyFiat'
 import Success from '../components/donate/success'
 import Layout from '../components/layout'
 import ProjectListing from '../components/projectListing'
-import { FETCH_PROJECT } from '../apollo/gql/projects'
+import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
 
 import {
   FacebookShareButton,
@@ -156,9 +158,13 @@ const ShowProject = props => {
     const OptionType = ({ title, subtitle, style }) => {
       const isSelected = title === paymentType
       const textColor = isSelected ? theme.colors.secondary : 'white'
+
       return (
         <OptionTypesBox
-          onClick={() => setPaymentType(title)}
+          onClick={() => {
+            if (title === 'Credit Card') return alert('coming soon')
+            setPaymentType(title)
+          }}
           style={{
             backgroundColor: isSelected ? 'white' : theme.colors.secondary,
             ...style
@@ -186,12 +192,12 @@ const ShowProject = props => {
         <Options>
           <OptionType
             title={CRYPTO}
-            subtitle='2.9% + 0.30 USD'
+            subtitle='Zero Fee'
             style={RIGHT_BOX_STYLE}
           />
           <OptionType
             title={CREDIT}
-            subtitle='Zero Fee'
+            subtitle='2.9% + 0.30 USD'
             style={LEFT_BOX_STYLE}
           />
         </Options>
@@ -285,9 +291,11 @@ const ShowProject = props => {
 const Donate = props => {
   const { projectId } = props
 
-  const { loading, error, data } = useQuery(FETCH_PROJECT, {
-    variables: { id: projectId }
+  const { loading, error, data } = useQuery(FETCH_PROJECT_BY_SLUG, {
+    variables: { slug: projectId }
   })
+
+  console.log({ data })
 
   return (
     <Layout asDialog>
@@ -296,8 +304,8 @@ const Donate = props => {
           <Text>Error</Text>
         ) : loading ? (
           <Text>loading</Text>
-        ) : data?.project?.length > 0 ? (
-          <ShowProject {...props} project={data.project[0]} />
+        ) : data?.projectBySlug ? (
+          <ShowProject {...props} project={data.projectBySlug} />
         ) : (
           <ProjectNotFound />
         )}
@@ -306,4 +314,33 @@ const Donate = props => {
   )
 }
 
-export default Donate
+const DonateWithoutSlug = () => {
+  return (
+    <Layout asDialog>
+      <Content style={{ justifyItems: 'center' }}>
+        <Link to='/projects'>
+          <Button
+            variant='default'
+            sx={{
+              paddingTop: '20px',
+              paddingBottom: '20px'
+            }}
+          >
+            <Text>Go see our projects</Text>
+          </Button>
+        </Link>
+      </Content>
+    </Layout>
+  )
+}
+
+const DonateIndex = () => {
+  return (
+    <Router basepath='/'>
+      <DonateWithoutSlug path='donate' />
+      <Donate path='donate/:projectId' />
+    </Router>
+  )
+}
+
+export default DonateIndex

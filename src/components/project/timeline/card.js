@@ -91,6 +91,7 @@ const RaisedHandsImg = styled.img`
 const TimelineCard = props => {
   const [newTitle, setNewTitle] = useState(null)
   const [newInput, setNewInput] = useState(null)
+  const { content } = props
   if (props.newUpdateOption) {
     return (
       <Box style={{ width: '100%' }}>
@@ -109,6 +110,7 @@ const TimelineCard = props => {
             }}
             type='text'
             placeholder='Title'
+            value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
           />
           <Textarea
@@ -126,6 +128,7 @@ const TimelineCard = props => {
             }}
             type='text'
             placeholder='Write your update...'
+            value={newInput}
             onChange={e => setNewInput(e.target.value)}
           />
           <Flex sx={{ my: 2, mx: 3, justifyContent: 'flex-end' }}>
@@ -134,6 +137,11 @@ const TimelineCard = props => {
                 variant: 'buttons.small',
                 background: 'none',
                 color: 'primary'
+              }}
+              onClick={() => {
+                props.newUpdateOption({ title: newTitle, content: newInput })
+                setNewTitle('')
+                setNewInput('')
               }}
             >
               <Text variant='text.bold'>SUBMIT</Text>
@@ -171,7 +179,7 @@ const TimelineCard = props => {
               color: 'bodyLight'
             }}
           >
-            Feb 26, 2020
+            {props?.specialContent?.content}
           </Text>
           <RaisedHandsImg src={RaisedHands} />
         </SpecialCardContainer>
@@ -195,13 +203,13 @@ const TimelineCard = props => {
         >
           <Top>
             <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
-              Update #
+              Update # {content?.id}
             </Text>
             <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
-              May 15, 2020
+              {content?.createdAt}
             </Text>
           </Top>
-          Name
+          {content?.title}
         </Heading>
         <CardContent>
           <Creator>
@@ -221,7 +229,7 @@ const TimelineCard = props => {
               Creator
             </Badge>
           </Creator>
-          <Text sx={{ variant: 'text.default' }}>Some content in here</Text>
+          <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
         </CardContent>
         <CardFooter>
           <IconButton>

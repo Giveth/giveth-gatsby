@@ -8,6 +8,12 @@ const FETCH_PROJECTS = gql`
         title
         balance
         image
+        slug
+        creationDate
+        admin
+        categories {
+          name
+        }
       }
       totalCount
     }
@@ -18,9 +24,32 @@ const FETCH_PROJECT = gql`
   query Project($id: ID!) {
     project(id: $id) {
       id
+      admin
       title
       description
       image
+      slug
+      creationDate
+      categories {
+        name
+      }
+    }
+  }
+`
+
+const FETCH_PROJECT_BY_SLUG = gql`
+  query ProjectBySlug($slug: String!) {
+    projectBySlug(slug: $slug) {
+      id
+      title
+      description
+      image
+      slug
+      creationDate
+      admin
+      categories {
+        name
+      }
     }
   }
 `
@@ -130,7 +159,6 @@ const GET_STRIPE_PROJECT_DONATIONS = gql`
         donor
         currency
         status
-        createdAt
       }
       totalDonors
     }
@@ -145,8 +173,41 @@ const ADD_PROJECT = gql`
       admin
       image
       impactLocation
+      slug
       categories {
         name
+      }
+    }
+  }
+`
+/*
+ ** PROJECT UPDATES
+ */
+const ADD_PROJECT_UPDATE = gql`
+  mutation($projectId: Float!, $title: String!, $content: String!) {
+    addProjectUpdate(projectId: $projectId, title: $title, content: $content) {
+      id
+      projectId
+      userId
+      content
+    }
+  }
+`
+
+const GET_PROJECT_UPDATES = gql`
+  query GetProjectUpdates($projectId: Float!, $take: Float!, $skip: Float!) {
+    getProjectUpdates(projectId: $projectId, take: $take, skip: $skip) {
+      projectUpdate {
+        id
+        title
+        content
+        createdAt
+        projectId
+        userId
+      }
+      reactions {
+        reaction
+        userId
       }
     }
   }
@@ -155,10 +216,13 @@ const ADD_PROJECT = gql`
 export {
   FETCH_PROJECTS,
   FETCH_PROJECT,
+  FETCH_PROJECT_BY_SLUG,
   ADD_PROJECT,
   ADD_BANK_ACCOUNT,
   GET_LINK_BANK_CREATION,
   GET_DONATION_SESSION,
   GET_STRIPE_DONATION_PDF,
-  GET_STRIPE_PROJECT_DONATIONS
+  GET_STRIPE_PROJECT_DONATIONS,
+  ADD_PROJECT_UPDATE,
+  GET_PROJECT_UPDATES
 }

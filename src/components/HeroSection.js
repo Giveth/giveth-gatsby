@@ -86,7 +86,7 @@ const Hero = () => {
             width: '290px'
           }}
         >
-          <Link to='/donate'>
+          <Link to='/projects'>
             <Button
               mt={4}
               p={4}

@@ -90,7 +90,8 @@ export const ProjectDescriptionInput = ({
             fontFamily: 'body',
             fontWeight: 'bold',
             fontSize: 2,
-            letterSpacing: '4%'
+            letterSpacing: '4%',
+            cursor: 'pointer'
           }}
         >
           NEXT
