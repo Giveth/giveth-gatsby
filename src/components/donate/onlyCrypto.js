@@ -127,8 +127,6 @@ const OnlyCrypto = props => {
     }
   }, [onboard])
 
-  console.log({ project })
-
   const donation = parseFloat(amountTyped)
   const givethFee =
     Math.round((GIVETH_DONATION_AMOUNT * 100.0) / ethPrice) / 100
@@ -175,10 +173,6 @@ const OnlyCrypto = props => {
   // FOR REGULAR TX
   const sendTx = async () => {
     try {
-      if (!project?.walletAddress)
-        return alert(
-          'there was an error fetching the eth address for this project'
-        )
       await setProvider()
       const signer = getSigner(provider)
       console.log(ethers.utils.parseEther(subtotal.toString()))
@@ -186,7 +180,10 @@ const OnlyCrypto = props => {
         to: project?.walletAddress,
         value: ethers.utils.parseEther(subtotal.toString())
       })
-      console.log({ hash })
+      props.setHashSent({ hash, subtotal })
+
+      // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
+      if (process.env.GATSBY_NETWORK === 'ropsten') return
 
       notify.config({ desktopPosition: 'topRight' })
       const { emitter } = notify.hash(hash)
@@ -214,7 +211,7 @@ const OnlyCrypto = props => {
     }
   }
 
-  // Contract Call
+  // Contract call example
   // const sendTx = async () => {
   //   try {
   //     await setProvider()
@@ -342,19 +339,25 @@ const OnlyCrypto = props => {
               value={amountTyped}
               onChange={e => {
                 e.preventDefault()
+                if (
+                  parseFloat(e.target.value) !== 0 &&
+                  parseFloat(e.target.value) < 0.001
+                ) {
+                  return
+                }
                 setAmountTyped(e.target.value)
               }}
             />
           </OpenAmount>
         </AmountContainer>
         <>
-          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+          {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
             <>
               <Checkbox
                 defaultChecked={donateToGiveth}
                 onClick={() => setDonateToGiveth(!donateToGiveth)}
               />
-              {/* <Text
+              <Text
                 sx={{
                   variant: 'text.medium',
                   textAlign: 'left'
@@ -362,10 +365,10 @@ const OnlyCrypto = props => {
               >
                 Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
                 help sustain Giveth
-              </Text> */}
+              </Text>
             </>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
-          </CheckboxLabel>
+          </CheckboxLabel> */}
           {/* <CheckboxLabel
             sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
           >
@@ -425,6 +428,14 @@ const OnlyCrypto = props => {
         >
           <Button
             onClick={async () => {
+              if (!project?.walletAddress) {
+                return alert(
+                  'There is no eth address assigned for this project'
+                )
+              }
+              if (!amountTyped || parseFloat(amountTyped) <= 0) {
+                return alert('Please set an amount')
+              }
               const ready = await readyToTransact()
               if (!ready) return
               sendTx()
@@ -435,7 +446,7 @@ const OnlyCrypto = props => {
               mt: 2
             }}
           >
-            Donate
+            DONATE
           </Button>
         </Flex>
       </AmountSection>

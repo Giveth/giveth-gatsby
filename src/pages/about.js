@@ -339,7 +339,10 @@ const AboutPage = ({ data }) => {
               gridTemplateColumns: 'repeat(4, auto)',
               fontSize: '40px',
               justifyContent: 'center',
-              fontFamily: 'heading'
+              fontFamily: 'heading',
+              '*': {
+                outline: ' none'
+              }
             }}
           >
             <FaTwitter size={'30px'} />

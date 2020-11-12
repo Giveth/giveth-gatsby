@@ -2,7 +2,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { Router } from '@reach/router'
-import { Box, Button, Grid, Text, jsx } from 'theme-ui'
+import { Box, Button, Grid, Spinner, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 import { useQuery } from '@apollo/react-hooks'
@@ -47,7 +47,7 @@ const Content = styled(Grid)`
 `
 
 const ProjectContainer = styled.div`
-  width: 25rem;
+  width: 25vw;
   margin: 0 3.125rem 0 0;
   @media (max-width: 800px) {
     width: 100%;
@@ -57,9 +57,8 @@ const ProjectContainer = styled.div`
 const Payment = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0 3.125rem;
   @media (max-width: 800px) {
-    width: 100%;
+    width: 80vw;
     margin: 3rem 0;
     padding: 0;
   }
@@ -115,16 +114,10 @@ const ProjectNotFound = () => {
 
 const ShowProject = props => {
   const { location, project } = props
+  const [hashSent, setHashSent] = React.useState(false)
   const [paymentType, setPaymentType] = React.useState(CRYPTO)
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
-
-  const url =
-    location.href && location.href && location.protocol === 'https:'
-      ? location.href
-      : 'http://v2.giveth.io/'
-  const shareTitle = 'Make a donation today!'
-  const address = '0x000000000000000000000000000'
 
   React.useEffect(() => {
     // Check type
@@ -148,7 +141,7 @@ const ShowProject = props => {
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO && !isSSR ? (
         <React.Suspense fallback={<div />}>
-          <OnlyCrypto project={project} address={address} />
+          <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
         </React.Suspense>
       ) : (
         <OnlyFiat project={project} />
@@ -207,6 +200,9 @@ const ShowProject = props => {
   }
 
   const ShareIcons = ({ message, centered }) => {
+    const shareTitle = `Make a donation today to ${project?.title}!`
+    const url = location.href
+
     return (
       <Share
         style={{
@@ -215,8 +211,11 @@ const ShowProject = props => {
       >
         <Text sx={{ variant: 'text.medium' }}>{message}</Text>
         <SocialIcons
-          style={{
-            justifyContent: centered ? 'center' : 'flex-start'
+          sx={{
+            justifyContent: centered ? 'center' : 'flex-start',
+            '*': {
+              outline: 'none'
+            }
           }}
         >
           <TwitterShareButton
@@ -228,12 +227,12 @@ const ShowProject = props => {
           </TwitterShareButton>
           <LinkedinShareButton
             title={shareTitle}
-            summary='this is the summary'
+            summary={project?.description}
             url={url}
           >
             <LinkedinIcon size={40} round />
           </LinkedinShareButton>
-          <FacebookShareButton quote={shareTitle} url={url}>
+          <FacebookShareButton quote={shareTitle} url={url} hashtag='#giveth'>
             <FacebookIcon size={40} round />
           </FacebookShareButton>
         </SocialIcons>
@@ -241,7 +240,7 @@ const ShowProject = props => {
     )
   }
 
-  if (isAfterPayment) {
+  if (isAfterPayment || hashSent) {
     return (
       <>
         <ProjectContainer>
@@ -260,7 +259,7 @@ const ShowProject = props => {
           />
         </ProjectContainer>
         <Payment>
-          <Success sessionId={paymentSessionId} />
+          <Success sessionId={paymentSessionId} hash={hashSent} />
           <div style={{ margin: '3rem 0' }}>
             <ShareIcons message='Share this with your friends!' />
           </div>
@@ -309,7 +308,7 @@ const Donate = props => {
         {error ? (
           <Text>Error</Text>
         ) : loading ? (
-          <Text>loading</Text>
+          <Spinner variant='spinner.medium' />
         ) : data?.projectBySlug ? (
           <ShowProject {...props} project={data.projectBySlug} />
         ) : (
