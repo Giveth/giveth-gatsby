@@ -146,6 +146,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
               </Text>
             </Box>
           </Flex>
+          {/*
+          // NOTIFICATION BADGE
           <Flex
             sx={{
               my: '20px',
@@ -173,7 +175,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 information about the project.
               </Text>
             </IconContext.Provider>
-          </Flex>
+          </Flex> */}
           <Flex
             sx={{
               width: ['100%', null, '60%'],

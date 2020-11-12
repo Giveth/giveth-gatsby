@@ -354,7 +354,7 @@ const OnlyCrypto = props => {
                 defaultChecked={donateToGiveth}
                 onClick={() => setDonateToGiveth(!donateToGiveth)}
               />
-              <Text
+              {/* <Text
                 sx={{
                   variant: 'text.medium',
                   textAlign: 'left'
@@ -362,7 +362,7 @@ const OnlyCrypto = props => {
               >
                 Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
                 help sustain Giveth
-              </Text>
+              </Text> */}
             </>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
           </CheckboxLabel>

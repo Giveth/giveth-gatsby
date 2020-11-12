@@ -73,9 +73,9 @@ const CardFooter = styled.span`
   padding: 0rem 1rem;
 `
 
-const Categories = () => {
-  const categories = ['covid-19', 'non-profit']
-  return categories.map((category, index) => (
+const Categories = data => {
+  if (data?.categories?.length === 0) return null
+  return data?.categories?.map((category, index) => (
     <Badge key={index}>
       <Text
         sx={{ variant: 'text.default' }}
@@ -144,14 +144,14 @@ const ProjectListing = props => {
               </DotInner>
             )}
           </Dot>
-          <Options>
+          {/* <Options>
             <IconButton>
               <img src={iconHeart} alt='' />
             </IconButton>
             <IconButton>
               <img src={iconShare} alt='' />
             </IconButton>
-          </Options>
+          </Options> */}
         </div>
         <Heading
           sx={{ variant: 'headings.h6' }}
@@ -204,7 +204,7 @@ const ProjectListing = props => {
           </Text>
         </CardContent>
         <CardFooter>
-          <Categories />
+          <Categories categories={props?.category} />
         </CardFooter>
       </ProjectCard>
       {
