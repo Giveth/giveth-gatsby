@@ -79,7 +79,6 @@ const OnlyCrypto = props => {
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
   const [notify, setNotify] = useState(null)
-
   const { project } = props
   const [ethPrice, setEthPrice] = useState(1)
   const [amountTyped, setAmountTyped] = useState(null)
@@ -176,11 +175,15 @@ const OnlyCrypto = props => {
   // FOR REGULAR TX
   const sendTx = async () => {
     try {
+      if (!project?.walletAddress)
+        return alert(
+          'there was an error fetching the eth address for this project'
+        )
       await setProvider()
       const signer = getSigner(provider)
       console.log(ethers.utils.parseEther(subtotal.toString()))
       const { hash } = await signer.sendTransaction({
-        to: '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+        to: project?.walletAddress,
         value: ethers.utils.parseEther(subtotal.toString())
       })
       console.log({ hash })

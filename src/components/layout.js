@@ -26,7 +26,7 @@ const AlertOptions = {
   position: positions.BOTTOM_CENTER
 }
 
-const Layout = ({ isHomePage, children, asDialog, noHeader }) => {
+const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -59,7 +59,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader }) => {
             }}
           >
             <main>{children}</main>
-            <Footer />
+            {!noFooter && <Footer />}
           </div>
         </>
       )
