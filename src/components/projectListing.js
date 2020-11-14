@@ -72,9 +72,10 @@ const CardFooter = styled.span`
   padding: 0rem 1rem;
 `
 
-const Categories = data => {
-  if (data?.categories?.length === 0) return null
-  return data?.categories?.map((category, index) => (
+const Categories = ({ categories }) => {
+  console.log({ categories })
+  if (!categories || categories.length < 1) return null
+  return categories?.map((category, index) => (
     <Badge key={index}>
       <Text
         sx={{ variant: 'text.default' }}
@@ -203,7 +204,7 @@ const ProjectListing = props => {
           </Text>
         </CardContent>
         <CardFooter>
-          <Categories categories={props?.category} />
+          <Categories categories={props?.categories} />
         </CardFooter>
       </ProjectCard>
       {

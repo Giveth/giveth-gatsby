@@ -34,6 +34,7 @@ exports.createPages = async ({ graphql, actions }) => {
           creationDate
           admin
           image
+          walletAddress
           categories {
             name
           }

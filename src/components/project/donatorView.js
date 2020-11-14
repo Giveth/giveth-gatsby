@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Text, Box, Button } from 'theme-ui'
+import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { DonationsTab, UpdatesTab } from './index'
@@ -48,51 +49,57 @@ export const ProjectDonatorView = ({ pageContext }) => {
   console.log({ pageContext })
 
   useEffect(() => {
-    if (data) {
+    const firstFetch = async () => {
       // Add donations to current project store
+      const cryptoTxs = await getEtherscanTxs(project.walletAddress)
+      console.log({ cryptoTxs, data })
+      const donations = [
+        data?.getStripeProjectDonations || null,
+        ...cryptoTxs?.txs
+      ].filter(function (e) {
+        return e
+      })
+
       setCurrentProjectView({
         ...currentProjectView,
-        donations: data?.getStripeProjectDonations
+        ethBalance: cryptoTxs?.balance,
+        donations
       })
-      const donations = data?.getStripeProjectDonations
       setTotalDonations(donations?.length)
       setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
+      setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
     }
-    setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
-  }, [data])
+
+    firstFetch()
+  }, [])
 
   const setImage = img => {
     if (/^\d+$/.test(img)) {
       // Is not url
       let svg = null
+      const style = {
+        objectFit: 'cover',
+        // objectPosition: '100% 25%',
+        width: '100%',
+        height: '100%',
+        margin: '0 5%',
+        borderRadius: '10px'
+      }
       switch (parseInt(img)) {
         case 1:
-          svg = <ProjectImageGallery1 />
+          svg = <ProjectImageGallery1 style={style} />
           break
         case 2:
-          svg = <ProjectImageGallery2 />
+          svg = <ProjectImageGallery2 style={style} />
           break
         case 3:
-          svg = <ProjectImageGallery3 />
+          svg = <ProjectImageGallery3 style={style} />
           break
         case 4:
-          svg = <ProjectImageGallery4 />
+          svg = <ProjectImageGallery4 style={style} />
           break
       }
-      return (
-        <div
-          style={{
-            objectFit: 'cover',
-            // objectPosition: '100% 25%',
-            width: '85%',
-            margin: 'auto',
-            height: '100%',
-            borderRadius: '10px'
-          }}
-        >
-          {svg}
-        </div>
-      )
+      return svg
     } else {
       return false
     }
@@ -111,8 +118,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
             sx={{
               objectFit: 'cover',
               // objectPosition: '100% 25%',
-              width: '85%',
-              margin: 'auto',
+              width: '100vw',
+              margin: '0 5%',
               height: '250px',
               borderRadius: '10px'
             }}
@@ -262,7 +269,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             ) : currentTab === 'updates' ? (
               <UpdatesTab project={project} isOwner={isOwner} />
             ) : (
-              <DonationsTab />
+              <DonationsTab project={project} />
             )}
           </Box>
         </Box>
