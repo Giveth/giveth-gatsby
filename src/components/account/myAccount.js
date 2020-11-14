@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import React from 'react'
+import { TorusContext } from '../../contextProvider/torusProvider'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
@@ -17,13 +18,15 @@ import {
 } from 'theme-ui'
 
 export const MyAccount = () => {
+  const { user } = React.useContext(TorusContext)
+  console.log({ user })
   return (
     <>
       <Flex>
-        <Text>Profile image</Text>
+        <Avatar src={user?.profileImage} sx={{ width: 100, height: 100 }} />
         <Box sx={{ ml: '27px' }}>
-          <Text sx={{ color: 'secondary', fontSize: 7 }}>Marko</Text>
-          <Text sx={{ color: 'bodyDark', fontSize: 3 }}>account@email</Text>
+          <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
+          <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
         </Box>
       </Flex>
       <Flex sx={{ mt: '40px', alignItems: 'center' }}>
@@ -43,7 +46,7 @@ export const MyAccount = () => {
         </Button>
       </Flex>
       <Text sx={{ mt: '14px', variant: 'text.medium' }}>
-        0x712852005C0423db1511c59D20283092E4aB3a2A
+        {user?.addresses[0]}
       </Text>
       <Flex sx={{ mt: '40px' }}>
         <Box
