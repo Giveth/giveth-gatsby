@@ -11,7 +11,7 @@ import theme from '../../gatsby-plugin-theme-ui'
 
 import Timeline from './timeline'
 
-export const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
+const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
   const client = useApolloClient()
   const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE)
   const [updates, setUpdates] = React.useState(null)
@@ -64,3 +64,5 @@ export const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     </>
   )
 }
+
+export default UpdatesTab

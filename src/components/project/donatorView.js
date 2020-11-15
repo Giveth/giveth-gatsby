@@ -3,7 +3,6 @@ import { Flex, Image, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
-import { DonationsTab, UpdatesTab } from './index'
 
 import testImg from '../../images/giveth-test-image.png'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
@@ -17,6 +16,9 @@ import { Link } from 'gatsby'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
+
+const DonationsTab = React.lazy(() => import('./donationsTab'))
+const UpdatesTab = React.lazy(() => import('./updatesTab'))
 
 const FloatingDonateView = styled(Flex)`
   position: fixed;
@@ -35,6 +37,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
+  const isSSR = typeof window === 'undefined'
 
   const { data, loading, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
     variables: { projectId: pageContext?.project?.id }
@@ -269,10 +272,16 @@ export const ProjectDonatorView = ({ pageContext }) => {
               >
                 {pageContext?.project?.description}
               </Text>
-            ) : currentTab === 'updates' ? (
-              <UpdatesTab project={project} isOwner={isOwner} />
+            ) : currentTab === 'updates' && !isSSR ? (
+              <React.Suspense fallback={<div />}>
+                <UpdatesTab project={project} isOwner={isOwner} />
+              </React.Suspense>
             ) : (
-              <DonationsTab project={project} />
+              !isSSR && (
+                <React.Suspense fallback={<div />}>
+                  <DonationsTab project={project} />
+                </React.Suspense>
+              )
             )}
           </Box>
         </Box>

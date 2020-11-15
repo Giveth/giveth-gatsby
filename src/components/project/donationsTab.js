@@ -14,7 +14,7 @@ const Funds = styled.div`
   border-radius: 12px;
 `
 
-export const DonationsTab = ({ project, showModal, setShowModal }) => {
+const DonationsTab = ({ project, showModal, setShowModal }) => {
   const [loading, setLoading] = React.useState(true)
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
@@ -62,3 +62,5 @@ export const DonationsTab = ({ project, showModal, setShowModal }) => {
     </div>
   )
 }
+
+export default DonationsTab
