@@ -53,12 +53,15 @@ export const ProjectDonatorView = ({ pageContext }) => {
       // Add donations to current project store
       const cryptoTxs = await getEtherscanTxs(project.walletAddress)
       console.log({ cryptoTxs, data })
-      const donations = [
-        data?.getStripeProjectDonations || null,
-        ...cryptoTxs?.txs
-      ].filter(function (e) {
-        return e
-      })
+      let donations = []
+      if (cryptoTxs) {
+        donations = [
+          data?.getStripeProjectDonations || null,
+          ...cryptoTxs.txs
+        ].filter(function (e) {
+          return e
+        })
+      }
 
       setCurrentProjectView({
         ...currentProjectView,
