@@ -14,18 +14,19 @@ import AlertTemplate from 'react-alert-template-mui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 import TorusProvider from '../contextProvider/torusProvider'
-import { useMutation } from '@apollo/react-hooks'
-import { DO_LOGIN } from '../apollo/gql/auth'
+import GlobalProvider from '../contextProvider/globalProvider'
 
 import Dialog from './dialog'
 import Footer from './footer'
+import { Helmet } from 'react-helmet'
+import ProveWalletProvider from '../contextProvider/proveWalletProvider'
 
 const AlertOptions = {
   timeout: 5000,
   position: positions.BOTTOM_CENTER
 }
 
-const Layout = ({ children, asDialog }) => {
+const Layout = ({ isHomePage, children, asDialog, noHeader }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -36,48 +37,25 @@ const Layout = ({ children, asDialog }) => {
     }
   `)
 
-  const [doLogin] = useMutation(DO_LOGIN)
-
-  const onLogin = async (signedMessage, userAddress, userEmail) => {
-    console.log('onLogin > doinglogin')
-    try {
-      const loginResponse = await doLogin({
-        variables: {
-          walletAddress: userAddress,
-          signature: signedMessage.signature,
-          email: userEmail
-        }
-      })
-
-      console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
-
-      // const token = jwt.verify(
-      //   loginResponse.data.loginWallet.token,
-      //   process.env.GATSBY_JWT_SECRET
-      // )
-      // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      // web3.eth.getBalance(user.publicAddress).then(setBalance)
-      // console.log(`setting balance to zero`)
-      // setBalance(0)
-      window.location = process.env.GATSBY_BASE_URL
-    } catch (error) {
-      console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
-    }
-  }
-
   const Template = () => {
     if (asDialog) {
       return <Dialog>{children}</Dialog>
     } else {
       return (
         <>
-          <Header siteTitle={data.site.siteMetadata.title} />
+          {!noHeader ? (
+            <Header
+              siteTitle={data.site.siteMetadata.title}
+              isHomePage={isHomePage}
+            />
+          ) : null}
           <div
             sx={{
               // applies width 100% to all viewport widths,
               // width 50% above the first breakpoint,
               // and 25% above the next breakpoint
-              width: ['100%', '50%', '25%']
+              width: ['100%', '50%', '25%'],
+              overflow: 'hidden'
             }}
           >
             <main>{children}</main>
@@ -89,13 +67,25 @@ const Layout = ({ children, asDialog }) => {
   }
 
   return (
-    <TorusProvider onLogin={onLogin}>
-      <ThemeProvider theme={theme}>
-        <Provider template={AlertTemplate} {...AlertOptions}>
-          <Template />
-        </Provider>
-      </ThemeProvider>
-    </TorusProvider>
+    <>
+      <Helmet>
+        <script
+          src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed'
+          crossOrigin='anonymous'
+        />
+      </Helmet>
+      <TorusProvider>
+        <ProveWalletProvider>
+          <GlobalProvider>
+            <ThemeProvider theme={theme}>
+              <Provider template={AlertTemplate} {...AlertOptions}>
+                <Template />
+              </Provider>
+            </ThemeProvider>
+          </GlobalProvider>
+        </ProveWalletProvider>
+      </TorusProvider>
+    </>
   )
 }
 

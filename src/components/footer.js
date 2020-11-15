@@ -9,6 +9,7 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import logo from '../images/giveth-logo-blue.svg'
 import SocialNetworks from './SocialNetworks'
 import { FaGithub } from 'react-icons/fa'
+import { FiExternalLink } from 'react-icons/fi'
 
 const Container = styled(Box)`
   margin: 0 auto;
@@ -92,12 +93,20 @@ const Footer = () => {
         <InnerGrid>
           <LinkBox>
             <FooterLink to='/'>Home</FooterLink>
-            <FooterLink to='/causes'>Causes</FooterLink>
+            {/* <FooterLink to='/causes'>Causes</FooterLink> */}
             <FooterLink to='/projects'>Projects</FooterLink>
           </LinkBox>
           <LinkBox>
             <FooterLink to='/about'>About Us</FooterLink>
+            <FooterLink to='/faq'>FAQ</FooterLink>
             <FooterLink to='/partnerships'>Partnerships</FooterLink>
+            <FooterLink to='https://wiki.giveth.io'>
+              Wiki <FiExternalLink size='18px' />
+            </FooterLink>
+            <FooterLink to='https://medium.com/giveth'>
+              Blog <FiExternalLink size='18px' />
+            </FooterLink>
+            <FooterLink to='/contact'>Contact</FooterLink>
           </LinkBox>
           <LinkBox>
             <FooterExternalLink
@@ -135,6 +144,7 @@ const Footer = () => {
             >
               Social Coding
             </FooterExternalLink>
+            <FooterLink to='/join'>Join Our Community</FooterLink>
           </LinkBox>
         </InnerGrid>
         <DonateSection

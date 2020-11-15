@@ -2,8 +2,6 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
-import { useMutation } from '@apollo/react-hooks'
-import { DO_LOGIN } from '../apollo/gql/auth'
 import Loadable from '@loadable/component'
 import { IconButton, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
@@ -14,8 +12,8 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import logo from '../images/giveth-logo-blue.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
-import decoratorCloud1 from '../images/decorator-cloud1.png'
-import decoratorCloud2 from '../images/decorator-cloud2.png'
+import decoratorCloud1 from '../images/decorator-cloud1.svg'
+import decoratorCloud2 from '../images/decorator-cloud2.svg'
 
 const HeaderContainer = styled.header`
   transition: 0.8s;
@@ -139,15 +137,12 @@ const Decorator = styled.div`
 
 const Login = Loadable(() => import('./torus/login'))
 
-const Header = ({ siteTitle }) => {
+const Header = ({ siteTitle, isHomePage }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
-  const [doLogin] = useMutation(DO_LOGIN)
-  // const [doRegister] = useMutation(DO_REGISTER)
-  const [balance, setBalance] = useState(0)
 
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
 
       if (scrollTop > 50) {
@@ -157,42 +152,15 @@ const Header = ({ siteTitle }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   })
 
-  const onLogin = async (signedMessage, userAddress, userEmail) => {
-    console.log('onLogin > doinglogin')
-    try {
-      const loginResponse = await doLogin({
-        variables: {
-          walletAddress: userAddress,
-          signature: signedMessage.signature,
-          email: userEmail
-        }
-      })
-
-      console.log(`didlogin - loginResponse ---> : ${loginResponse}`)
-
-      // const token = jwt.verify(
-      //   loginResponse.data.loginWallet.token,
-      //   process.env.GATSBY_JWT_SECRET
-      // )
-      // console.log(`token : ${JSON.stringify(token, null, 2)}`)
-      // web3.eth.getBalance(user.publicAddress).then(setBalance)
-      console.log('setting balance to zero')
-      setBalance(0)
-      window.location = process.env.GATSBY_BASE_URL
-    } catch (error) {
-      console.error(`error1  : ${JSON.stringify(error, null, 2)}`)
-    }
-  }
-
   return (
     <HeaderContainer
       className={
-        hasScrolled
+        hasScrolled || !isHomePage
           ? 'HeaderPlaceholderScrolled'
           : 'HeaderPlaceholderNotScrolled'
       }
@@ -200,7 +168,9 @@ const Header = ({ siteTitle }) => {
         marginBottom: '1.45rem'
       }}
     >
-      <HeaderSpan className={hasScrolled ? 'HeaderScrolled' : ''}>
+      <HeaderSpan
+        className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
+      >
         {!isMobile ? (
           <Decorator>
             <img
@@ -235,7 +205,7 @@ const Header = ({ siteTitle }) => {
             <img src={logo} alt='logo' width='40px' height='40px' />
           ) : (
             <LogoSpan>
-              {hasScrolled ? (
+              {hasScrolled || !isHomePage ? (
                 <img src={logo} alt='logo' width='50px' height='50px' />
               ) : (
                 <img src={logo} alt='logo' width='80px' height='80px' />
@@ -258,7 +228,7 @@ const Header = ({ siteTitle }) => {
 
         <MiddleSpan>
           <NavLink to='/'>Home</NavLink>
-          <NavLink to='/causes'>Causes</NavLink>
+          {/* <NavLink to='/causes'>Causes</NavLink> */}
           <NavLink to='/projects'>Projects</NavLink>
         </MiddleSpan>
 
@@ -272,7 +242,7 @@ const Header = ({ siteTitle }) => {
             </span>
           )}
           <img src={iconVerticalLine} alt='' />
-          <Login onLogin={onLogin} balance={balance} />
+          <Login />
         </UserSpan>
       </HeaderSpan>
     </HeaderContainer>

@@ -1,10 +1,12 @@
 /** @jsx jsx */
-import { Box, Button, Grid, jsx, Select, Text, Input } from 'theme-ui'
+import { Box, Button, Grid, Flex, jsx, Select, Text, Input } from 'theme-ui'
 import ProjectCard from './projectCard'
 import NoImage from '../images/no-image-available.jpg'
+import SearchIcon from '../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
+import DropdownInput from '../components/dropdownInput'
 import theme from '../gatsby-plugin-theme-ui'
 import React from 'react'
 
@@ -30,6 +32,9 @@ const CreateLink = styled(Link)`
   :hover {
     color: ${theme.colors.accent};
   }
+`
+const IconSearch = styled(SearchIcon)`
+  margin-left: -2.5rem;
 `
 
 const SelectMenu = props => {
@@ -128,46 +133,87 @@ const ProjectsList = props => {
           <CreateLink to='/create'>Create a project</CreateLink>
         </div>
 
-        <div
-          style={{
+        <Flex
+          sx={{
             width: '100%',
-            display: 'flex'
+            flexDirection: ['column-reverse', null, 'row'],
+            mt: 2
           }}
         >
-          <SelectMenu
-            caption='impact'
-            options={{
-              covid19: 'COVID-19'
+          <Flex
+            sx={{
+              width: '100%',
+              flexDirection: ['row', null, 'row'],
+              justifyContent: ['space-around', null, null]
             }}
-            onChange={console.log}
-          />
-          <SelectMenu
-            caption='location'
-            options={{
-              worldWide: 'World Wide'
-            }}
-            onChange={console.log}
-          />
-          <SelectMenu
+          >
+            <Flex
+              sx={{
+                width: ['30%'],
+                alignItems: 'center',
+                mt: [4, 0, 0]
+              }}
+            >
+              <DropdownInput
+                options={['COVID-19']}
+                current={0}
+                // setCurrent={i => setFilter(i)}
+              />
+            </Flex>
+            <Flex
+              sx={{
+                width: ['30%'],
+                alignItems: 'center',
+                mt: [4, 0, 0]
+              }}
+            >
+              <DropdownInput
+                options={['World Wide']}
+                current={0}
+                // setCurrent={i => setFilter(i)}
+              />
+            </Flex>
+            <Flex
+              sx={{
+                width: ['30%'],
+                alignItems: 'center',
+                mt: [4, 0, 0]
+              }}
+            >
+              <DropdownInput
+                options={['Amount Raised']}
+                current={0}
+                // setCurrent={i => setFilter(i)}
+              />
+            </Flex>
+            {/* <SelectMenu
             caption='sort by'
             options={orderBySelectOptions}
             onChange={selectOrderByField}
-          />
-          <div
-            style={{
+          /> */}
+          </Flex>
+          <Flex
+            sx={{
               flexGrow: 3,
-              display: 'flex'
+              alignItems: 'center',
+              display: 'flex',
+              width: ['100%', '100%', '50%'],
+              padding: '0 3% 0 0',
+              mt: [4, 0, 0],
+              mb: [0, 4, 0]
             }}
           >
             <Input
-              placeholder='search'
+              placeholder='Search Projects'
+              variant='forms.search'
               style={{
                 width: '100%',
                 margin: 'auto'
               }}
             />
-          </div>
-        </div>
+            <IconSearch />
+          </Flex>
+        </Flex>
 
         <div
           style={{
@@ -210,11 +256,13 @@ const ProjectsList = props => {
             {projects &&
               projects.map((project, index) => (
                 <ProjectCard
+                  id={project.id}
                   listingId={project.title + '-' + index}
                   key={project.title + '-' + index}
                   name={project.title}
+                  slug={project.slug}
                   donateAddress={project.donateAddress}
-                  image={NoImage}
+                  image={project.image || NoImage}
                   raised={project.balance}
                 />
               ))}

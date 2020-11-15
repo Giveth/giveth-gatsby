@@ -25,6 +25,13 @@ module.exports = {
   plugins: [
     'gatsby-plugin-theme-ui',
     'gatsby-plugin-react-helmet',
+    {
+      resolve: 'gatsby-source-contentful',
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID || '',
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || ''
+      }
+    },
     'gatsby-plugin-emotion',
     {
       resolve: 'gatsby-source-filesystem',
@@ -57,7 +64,7 @@ module.exports = {
         background_color: '#663399',
         theme_color: '#663399',
         display: 'minimal-ui',
-        icon: 'src/images/gatsby-icon.png' // This path is relative to the root of the site.
+        icon: 'src/images/giveth-logo-blue.svg' // This path is relative to the root of the site.
       }
     },
     {
@@ -82,14 +89,12 @@ module.exports = {
       options: {
         typeName: 'GIVETH',
         fieldName: 'giveth',
-        // url: `${process.env.GATSBY_APOLLO_SERVER}`,
-        url: 'https://graph.topia.us',
+        url: `${process.env.GATSBY_APOLLO_SERVER}`,
         // HTTP headers
         headers: {
           // Learn about environment variables: https://gatsby.dev/env-vars
           // Authorization: `Bearer ${process.env.APOLLO_AUTH_TOKEN}`
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjUsImZpcnN0TmFtZSI6IkJyeWFuIiwiaWF0IjoxNTk5Mzk5NjcxLCJleHAiOjE2MDE5OTE2NzF9.hIYd483Yvt1bwDXMzzKONjIl5VVMkA4_MiSwriw2CEA'
+          Authorization: `Bearer ${process.env.APOLLO_AUTH_TOKEN}`
         }
       }
     }

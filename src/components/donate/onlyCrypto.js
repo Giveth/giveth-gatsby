@@ -1,15 +1,24 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
-import { Box, Button, Text, jsx } from 'theme-ui'
+import React, { useState, useEffect } from 'react'
+import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
+import { useApolloClient } from '@apollo/react-hooks'
+import { initOnboard, initNotify } from '../../services/onBoard'
+import { ethers } from 'ethers'
+import getSigner from '../../services/ethersSigner'
+import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
-import QRCode from 'qrcode.react'
+import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
+
+let provider
+
+const GIVETH_DONATION_AMOUNT = 5
 
 const Content = styled.div`
   max-width: 41.25rem;
   word-wrap: break-word;
 `
 
-const QRSection = styled.div`
+const AmountSection = styled.div`
   margin: 1.3rem 0 0 0;
   @media (max-width: 800px) {
     display: flex;
@@ -20,73 +29,413 @@ const QRSection = styled.div`
   }
 `
 
-const QRContainer = styled(Box)`
-  max-width: 13rem;
-  border-radius: 12px;
-  margin: 1rem 0 0 0;
-`
-
-const AddressContainer = styled.div`
+const AmountContainer = styled.div`
   margin: 2rem 0;
   @media (max-width: 800px) {
-    align-self: center;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 `
 
-const CopyButton = styled(Button)`
-  width: 100%;
-  max-width: 20rem;
+const OpenAmount = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+
+const InputComponent = styled.input`
+  background: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 0.4rem 1rem 4rem;
+  outline: none;
+`
+
+const CheckboxLabel = styled(Label)`
   @media (max-width: 800px) {
-    width: 70%;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
+  cursor: pointer;
+}
+`
+
+const Summary = styled(Flex)`
+  flex-direction: column;
+  margin: 2rem 0;
+`
+
+const SmRow = styled(Flex)`
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 0.75rem 0;
 `
 
 const OnlyCrypto = props => {
-  const { project, address } = props
-  const [copyMsg, setCopyMsg] = useState('COPY ADDRESS')
+  // ON BOARD
+  const [wallet, setWallet] = useState(null)
+  const [onboard, setOnboard] = useState(null)
+  const [notify, setNotify] = useState(null)
 
-  function copyAddress () {
-    navigator.clipboard.writeText(address)
-    setCopyMsg('Address Copied!')
-  }
+  const { project } = props
+  const [ethPrice, setEthPrice] = useState(1)
+  const [amountTyped, setAmountTyped] = useState(null)
+  const [donateToGiveth, setDonateToGiveth] = useState(false)
+  const [anonymous, setAnonymous] = useState(false)
+  const client = useApolloClient()
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setCopyMsg('COPY ADDRESS')
-    }, 5000)
-    // Clear timeout if the component is unmounted
-    return () => timer
-  }, [copyMsg])
+    const init = async () => {
+      fetch(
+        'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP'
+      )
+        .then(response => response.json())
+        .then(data => setEthPrice(data.USD))
+      setOnboard(
+        initOnboard({
+          wallet: wallet => {
+            if (wallet.provider) {
+              setWallet(wallet)
+
+              const ethersProvider = new ethers.providers.Web3Provider(
+                wallet.provider
+              )
+              provider = ethersProvider
+              window.localStorage.setItem('selectedWallet', wallet.name)
+            } else {
+              provider = null
+              setWallet({})
+            }
+          }
+        })
+      )
+      setNotify(initNotify())
+    }
+    console.log(ethers.utils.parseEther('1.0'))
+    init()
+  }, [])
+
+  useEffect(() => {
+    const previouslySelectedWallet = window.localStorage.getItem(
+      'selectedWallet'
+    )
+
+    if (previouslySelectedWallet && onboard) {
+      onboard.walletSelect(previouslySelectedWallet)
+    }
+  }, [onboard])
+
+  console.log({ project })
+
+  const donation = parseFloat(amountTyped)
+  const givethFee =
+    Math.round((GIVETH_DONATION_AMOUNT * 100.0) / ethPrice) / 100
+
+  const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
+
+  const eth2usd = eth => {
+    return (eth * ethPrice).toFixed(2)
+  }
+
+  const SummaryRow = ({ title, amount, style }) => {
+    return (
+      <SmRow style={style}>
+        <Text sx={{ variant: 'text.medium' }}>{title}</Text>
+        {amount?.length === 2 ? (
+          <Flex sx={{ alignItems: 'center' }}>
+            <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
+              {amount[0]}
+            </Text>
+            <Text sx={{ variant: 'text.medium' }}> {amount[1]}</Text>
+          </Flex>
+        ) : (
+          <Text sx={{ variant: 'text.medium' }}> {amount}</Text>
+        )}
+      </SmRow>
+    )
+  }
+
+  const setProvider = async () => {
+    await onboard.walletSelect()
+    await onboard.walletCheck()
+  }
+
+  const readyToTransact = async () => {
+    if (!provider) {
+      const walletSelected = await onboard.walletSelect()
+      if (!walletSelected) return false
+    }
+
+    const ready = await onboard.walletCheck()
+    return ready
+  }
+
+  // FOR REGULAR TX
+  const sendTx = async () => {
+    try {
+      await setProvider()
+      const signer = getSigner(provider)
+      console.log(ethers.utils.parseEther(subtotal.toString()))
+      const { hash } = await signer.sendTransaction({
+        to: '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+        value: ethers.utils.parseEther(subtotal.toString())
+      })
+      console.log({ hash })
+
+      notify.config({ desktopPosition: 'topRight' })
+      const { emitter } = notify.hash(hash)
+
+      emitter.on('txPool', transaction => {
+        return {
+          // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
+          // or you could use onclick for when someone clicks on the notification itself
+          onclick: () =>
+            window.open(`https://ropsten.etherscan.io/tx/${transaction.hash}`)
+        }
+      })
+
+      emitter.on('txSent', console.log)
+      emitter.on('txConfirmed', console.log)
+      emitter.on('txSpeedUp', console.log)
+      emitter.on('txCancel', console.log)
+      emitter.on('txFailed', console.log)
+
+      emitter.on('all', event => {
+        console.log('ALLLLLLL', event)
+      })
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  // Contract Call
+  // const sendTx = async () => {
+  //   try {
+  //     await setProvider()
+  //     const signer = getSigner(provider)
+  //     console.log(ethers.utils.parseEther(subtotal.toString()))
+
+  //     const abi = [
+  //       {
+  //         anonymous: false,
+  //         inputs: [
+  //           {
+  //             indexed: false,
+  //             internalType: 'address',
+  //             name: 'origin',
+  //             type: 'address'
+  //           },
+  //           {
+  //             indexed: false,
+  //             internalType: 'address',
+  //             name: 'target',
+  //             type: 'address'
+  //           },
+  //           {
+  //             indexed: false,
+  //             internalType: 'uint256',
+  //             name: 'amount',
+  //             type: 'uint256'
+  //           }
+  //         ],
+  //         name: 'Transfer',
+  //         type: 'event'
+  //       },
+  //       {
+  //         constant: false,
+  //         inputs: [
+  //           {
+  //             internalType: 'address payable',
+  //             name: 'target',
+  //             type: 'address'
+  //           }
+  //         ],
+  //         name: 'transfer',
+  //         outputs: [],
+  //         payable: true,
+  //         stateMutability: 'payable',
+  //         type: 'function'
+  //       }
+  //     ]
+
+  //     const contractAddress = '0x4248bfcfae44942D1C26296CCB554C66926E639D'
+
+  //     const contract = new ethers.Contract(contractAddress, abi, signer)
+
+  //     const overrides = {
+  //       gasLimit: 500000,
+  //       gasPrice: ethers.BigNumber.from('20000000000'),
+  //       value: ethers.utils.parseEther(subtotal.toString())
+  //     }
+
+  //     const { hash } = await contract.transfer(
+  //       '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+  //       overrides
+  //     )
+
+  //     console.log({ hash })
+
+  //     notify.config({ desktopPosition: 'topRight' })
+  //     const { emitter } = notify.hash(hash)
+
+  //     emitter.on('txPool', transaction => {
+  //       return {
+  //         // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
+  //         // or you could use onclick for when someone clicks on the notification itself
+  //         onclick: () =>
+  //           window.open(`https://ropsten.etherscan.io/tx/${transaction.hash}`)
+  //       }
+  //     })
+
+  //     emitter.on('txSent', console.log)
+  //     emitter.on('txConfirmed', console.log)
+  //     emitter.on('txSpeedUp', console.log)
+  //     emitter.on('txCancel', console.log)
+  //     emitter.on('txFailed', console.log)
+
+  //     emitter.on('all', event => {
+  //       console.log('ALLLLLLL', event)
+  //     })
+  //   } catch (error) {
+  //     console.log({ error })
+  //   }
+  // }
 
   return (
     <Content>
-      <QRSection>
-        <Text sx={{ variant: 'text.medium' }}>
-          Send ETH or any ERC20 to this address.
-        </Text>
-        <Text sx={{ variant: 'text.medium' }}>
-          100% of donations go directly to the project.
-        </Text>
-        <QRContainer p={4} color='white' bg='white'>
-          <QRCode value={address} size={140} />
-        </QRContainer>
-      </QRSection>
-      <AddressContainer>
-        <Text
-          sx={{ variant: 'text.overlineSmall' }}
-          style={{ fontSize: '16px' }}
+      <AmountSection>
+        <AmountContainer>
+          <Text sx={{ variant: 'text.large', mb: 1 }}>
+            Enter your Ether amount
+          </Text>
+          <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
+            {ethPrice && `1 ETH ≈ USD $${ethPrice}`}
+          </Text>
+          <OpenAmount>
+            <Text
+              sx={{
+                variant: 'text.large',
+                color: 'secondary',
+                position: 'absolute',
+                ml: 3
+              }}
+            >
+              ETH
+            </Text>
+            <InputComponent
+              sx={{
+                variant: 'text.large',
+                width: ['100%', '60%', '60%'],
+                color: 'secondary',
+                '::placeholder': {
+                  color: 'anotherGrey'
+                }
+              }}
+              placeholder='Amount'
+              type='number'
+              value={amountTyped}
+              onChange={e => {
+                e.preventDefault()
+                setAmountTyped(e.target.value)
+              }}
+            />
+          </OpenAmount>
+        </AmountContainer>
+        <>
+          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+            <>
+              <Checkbox
+                defaultChecked={donateToGiveth}
+                onClick={() => setDonateToGiveth(!donateToGiveth)}
+              />
+              <Text
+                sx={{
+                  variant: 'text.medium',
+                  textAlign: 'left'
+                }}
+              >
+                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
+                help sustain Giveth
+              </Text>
+            </>
+            <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
+          </CheckboxLabel>
+          {/* <CheckboxLabel
+            sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Checkbox
+                defaultChecked={anonymous}
+                onClick={() => setAnonymous(!anonymous)}
+              />
+              <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
+                Donate anonymously
+              </Text>
+            </div>
+            <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
+          </CheckboxLabel> */}
+          {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
+            <Checkbox defaultChecked={false} />
+            <Text sx={{ variant: 'text.medium' }}>Dedicate this donation</Text>
+          </Label> */}
+          {amountTyped && (
+            <Summary>
+              <SummaryRow
+                title={`Support ${project?.title}`}
+                amount={[
+                  `$${eth2usd(donation)}`,
+                  `ETH ${parseFloat(donation)}`
+                ]}
+              />
+              {donateToGiveth && (
+                <SummaryRow
+                  title='Support Giveth'
+                  amount={[
+                    `$${GIVETH_DONATION_AMOUNT}`,
+                    `≈ ETH ${(GIVETH_DONATION_AMOUNT / ethPrice).toFixed(2)}`
+                  ]}
+                />
+              )}
+              <SummaryRow
+                title='Processing Fee'
+                amount={['Network Fee Only', '']}
+                style={{
+                  borderBottom: '1px solid #6B7087',
+                  padding: '0 0 18px 0'
+                }}
+              />
+              <Text sx={{ variant: 'text.medium', textAlign: 'right' }}>
+                ETH {parseFloat(subtotal)}
+              </Text>
+            </Summary>
+          )}
+        </>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            textAlign: 'center'
+          }}
         >
-          {address}
-        </Text>
-        <CopyButton
-          sx={{ variant: 'buttons.default', mt: 2 }}
-          onClick={copyAddress}
-          type='submit'
-        >
-          {copyMsg}
-        </CopyButton>
-      </AddressContainer>
+          <Button
+            onClick={async () => {
+              const ready = await readyToTransact()
+              if (!ready) return
+              sendTx()
+            }}
+            sx={{
+              variant: 'buttons.default',
+              padding: '1.063rem 7.375rem',
+              mt: 2
+            }}
+          >
+            Donate
+          </Button>
+        </Flex>
+      </AmountSection>
     </Content>
   )
 }

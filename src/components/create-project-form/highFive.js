@@ -1,10 +1,29 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import { Text, Flex, Image, Box } from 'theme-ui'
+import { useQuery } from '@apollo/react-hooks'
+import { FETCH_PROJECT } from '../../apollo/gql/projects'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 
-const HighFive = ({ projectImage, projectTitle, projectDescription }) => {
+const HighFive = ({
+  addedProject,
+  projectId,
+  projectImage,
+  projectTitle,
+  projectDescription
+}) => {
+  // This will be useful when we need to handle the route on webhook
+
+  // const { loading, error, data } = useQuery(FETCH_PROJECT, {
+  //   variables: { id: projectId }
+  // })
+
+  // console.log({ loading, error, data })
+  // if (loading) return <h3>loading</h3>
+
+  // const project = data?.project
+  // console.log({ data, project })
   return (
     <Flex
       sx={{
@@ -41,6 +60,7 @@ const HighFive = ({ projectImage, projectTitle, projectDescription }) => {
         <Box sx={{ mt: '100px', width: '50%' }}>
           <ProjectListing
             disabled
+            shadowed
             name={projectTitle}
             description={projectDescription}
             image={projectImage}
@@ -67,7 +87,7 @@ const HighFive = ({ projectImage, projectTitle, projectDescription }) => {
             <FaFacebook size='24px' />
             <FaLinkedin size='24px' />
           </Flex>
-          <Link to='/'>
+          <Link to={`/projects/${addedProject?.slug}`}>
             <Text
               sx={{
                 fontSize: 3,

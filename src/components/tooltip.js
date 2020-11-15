@@ -27,9 +27,15 @@ const Tooltip = styled.div`
   &:hover .tooltip-text {
     visibility: visible;
   }
+  @media (max-width: 600px) {
+    .tooltip-text {
+      margin: 10% 0 0 0;
+      left: 10%;
+    }
+  }
 `
 
-export default function ToolTip ({ content }) {
+export default function ToolTip({ content }) {
   return (
     <Tooltip
       sx={{
