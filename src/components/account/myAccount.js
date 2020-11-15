@@ -46,7 +46,7 @@ export const MyAccount = () => {
         </Button>
       </Flex>
       <Text sx={{ mt: '14px', variant: 'text.medium' }}>
-        {user?.addresses.length > 0 && user?.addresses[0]}
+        {user?.addresses?.length > 0 && user?.addresses[0]}
       </Text>
       <Flex sx={{ mt: '40px' }}>
         <Box
