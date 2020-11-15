@@ -11,6 +11,7 @@ const FETCH_PROJECTS = gql`
         slug
         creationDate
         admin
+        walletAddress
         categories {
           name
         }
@@ -30,6 +31,7 @@ const FETCH_PROJECT = gql`
       image
       slug
       creationDate
+      walletAddress
       categories {
         name
       }
@@ -47,6 +49,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       slug
       creationDate
       admin
+      walletAddress
       categories {
         name
       }
@@ -174,6 +177,7 @@ const ADD_PROJECT = gql`
       image
       impactLocation
       slug
+      walletAddress
       categories {
         name
       }

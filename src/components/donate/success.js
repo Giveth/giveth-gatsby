@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Label, Text, jsx } from 'theme-ui'
+import { Box, Button, Checkbox, Label, Link, Text, jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { useApolloClient } from '@apollo/react-hooks'
 import { base64ToBlob } from '../../utils'
@@ -35,7 +35,7 @@ const DownloadReceipt = styled(Box)`
 `
 
 const Success = props => {
-  const { project, sessionId } = props
+  const { project, sessionId, hash } = props
   const [amountSelect, setAmountSelect] = useState(null)
   const [pdfBase64, setPdfBase64] = useState(null)
 
@@ -73,45 +73,52 @@ const Success = props => {
     getData()
   }, [])
 
+  console.log({ hash })
+
   return (
     <Content>
       <Text sx={{ variant: 'headings.h3', my: 3, textAlign: 'left' }}>
         You're a giver now!
       </Text>
       <Text sx={{ variant: 'headings.h5' }}>
-        Thank you for supporting <strong> xxx </strong>.
+        Thank you for supporting <strong> {project?.title} </strong>.
       </Text>
       <Text sx={{ variant: 'headings.h5', pt: -1 }}>
-        Your <strong> $$$ </strong> contribution goes a long way!
+        Your <strong> {hash && `${hash.subtotal} ETH`} </strong> contribution
+        goes a long way!
       </Text>
-      <Receipt sx={{ my: 4 }}>
-        <DownloadReceipt onClick={() => downloadPDF()}>
-          <Text
-            sx={{
-              variant: 'text.paragraph',
-              pt: -1,
-              color: 'bodyLight'
-            }}
-          >
-            Download receipt
-          </Text>
-          <BillIcon />
-        </DownloadReceipt>
-        {
-          // TODO: Leave this for crypto only
-          /* <div style={{ flex: 0.4 }}>
-          <Text
-            sx={{
-              variant: 'text.paragraph',
-              color: 'yellow',
-              cursor: 'pointer'
-            }}
-          >
-            View transaction details
-          </Text>
-        </div> */
-        }
-      </Receipt>
+      {hash ? (
+        <Receipt sx={{ my: 4 }}>
+          <div style={{ flex: 1 }}>
+            <Link
+              sx={{
+                variant: 'text.paragraph',
+                color: 'yellow',
+                cursor: 'pointer'
+              }}
+              href={`https://etherscan.io/tx/${hash?.hash}`}
+            >
+              View transaction details
+            </Link>
+          </div>
+        </Receipt>
+      ) : (
+        <Receipt sx={{ my: 4 }}>
+          <DownloadReceipt onClick={() => downloadPDF()}>
+            <Text
+              sx={{
+                variant: 'text.paragraph',
+                pt: -1,
+                color: 'bodyLight'
+              }}
+            >
+              Download receipt
+            </Text>
+            <BillIcon />
+          </DownloadReceipt>
+        </Receipt>
+      )}
+
       <Text sx={{ variant: 'headings.h5', pt: 4 }}>
         Stay a Giver?{' '}
         <span

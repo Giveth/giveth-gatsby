@@ -10,19 +10,8 @@ import decoratorClouds from '../images/decorator-clouds.svg'
 
 const Main = styled.main`
   padding: 4.063rem 4.5rem 0 4.5rem;
-
-  @media (max-width: 1100px) {
-    padding: 4.063rem 2rem 0 2rem;
-  }
-
-  @media (max-width: 800px) {
-    padding: 7.063rem 1rem 0 1rem;
-  }
-
-  @media (min-width: 1300px) {
-    display: flex;
-    justify-content: center;
-  }
+  display: flex;
+  justify-content: center;
 `
 
 const DialogContainer = styled(Container)`
@@ -49,6 +38,12 @@ const BackButton = styled(NavLink)`
   flex-direction: row;
   width: 100%;
   max-width: 7rem;
+  position: absolute;
+  left: 4.875rem;
+  top: 4.875rem;
+  @media (max-width: 600px) {
+    left: 2rem;
+  }
 `
 
 const DialogContent = styled.div`
@@ -60,21 +55,21 @@ export default function Dialog({ children }) {
     <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
       <LeftConfetti />
       <Clouds src={decoratorClouds} alt='' className='hide' />
+      <BackButton onClick={() => window.history.back()}>
+        <LeftArrow />
+        <Text
+          sx={{ variant: 'text.default' }}
+          style={{
+            fontSize: '16px',
+            fontWeight: '500',
+            color: 'white',
+            paddingLeft: '17px'
+          }}
+        >
+          Giveth
+        </Text>
+      </BackButton>
       <Main>
-        <BackButton onClick={() => window.history.back()}>
-          <LeftArrow />
-          <Text
-            sx={{ variant: 'text.default' }}
-            style={{
-              fontSize: '16px',
-              fontWeight: '500',
-              color: 'white',
-              paddingLeft: '17px'
-            }}
-          >
-            Giveth
-          </Text>
-        </BackButton>
         <DialogContent>{children}</DialogContent>
       </Main>
     </DialogContainer>

@@ -103,7 +103,6 @@ const OnlyFiat = props => {
   const amounts = [500, 100, 50, 30]
 
   useEffect(() => {}, [])
-  console.log({ project })
 
   const donation = parseFloat(amountTyped || amountSelect)
   const donationPlusFee =

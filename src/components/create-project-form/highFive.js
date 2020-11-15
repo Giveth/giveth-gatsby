@@ -65,7 +65,7 @@ const HighFive = ({
             description={projectDescription}
             image={projectImage}
             raised={0}
-            category='Blockchain 4 Good'
+            categories={['Blockchain 4 Good']}
             listingId='key1'
             key='key1'
           />
