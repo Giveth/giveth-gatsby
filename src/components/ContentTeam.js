@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
+import { jsx, Text } from 'theme-ui'
 import theme from '../gatsby-plugin-theme-ui/index'
 
 import React from 'react'

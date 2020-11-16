@@ -43,16 +43,23 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `)
   const projectPageTemplate = require.resolve('./src/templates/project.js')
-  projectResults.data.giveth.projects.forEach(project => {
-    console.log('theproject ====>', project.title, 'theslug===>', project.slug)
+  if (projectResults.data) {
+    projectResults.data.giveth.projects.forEach(project => {
+      console.log(
+        'theproject ====>',
+        project.title,
+        'theslug===>',
+        project.slug
+      )
 
-    createPage({
-      path: `/projects/${project.slug}`,
-      component: projectPageTemplate,
-      context: {
-        // entire project is passed down as context
-        project: project
-      }
+      createPage({
+        path: `/projects/${project.slug}`,
+        component: projectPageTemplate,
+        context: {
+          // entire project is passed down as context
+          project: project
+        }
+      })
     })
-  })
+  }
 }

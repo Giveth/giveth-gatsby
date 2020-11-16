@@ -159,7 +159,7 @@ const Header = ({ siteTitle, isHomePage }) => {
     return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
-  })
+  }, [])
 
   return (
     <HeaderContainer

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Text, Box, Button } from 'theme-ui'
+import SEO from '../seo'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
@@ -10,8 +11,6 @@ import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.s
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 
-import { GrCircleInformation } from 'react-icons/gr'
-import { IconContext } from 'react-icons'
 import { Link } from 'gatsby'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
@@ -21,8 +20,6 @@ const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
 
 const FloatingDonateView = styled(Flex)`
-  position: fixed;
-
   @media screen and (max-width: 800px) {
     width: 80%;
     align-self: center;
@@ -39,7 +36,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [isOwner, setIsOwner] = useState(false)
   const isSSR = typeof window === 'undefined'
 
-  const { data, loading, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
+  const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
     variables: { projectId: pageContext?.project?.id }
   })
 
@@ -113,6 +110,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
   return (
     <>
+      <SEO title={project?.title} />
       <Flex>
         {setImage(project?.image) || (
           <Image
@@ -132,7 +130,13 @@ export const ProjectDonatorView = ({ pageContext }) => {
           />
         )}
       </Flex>
-      <Flex sx={{ width: '80%', margin: 'auto' }}>
+      <Flex
+        sx={{
+          width: '80%',
+          margin: 'auto',
+          justifyContent: 'space-around'
+        }}
+      >
         <Box sx={{ width: ['100%', null, '70%'] }}>
           <Flex>
             <Box sx={{ mt: '20px' }}>
@@ -287,10 +291,10 @@ export const ProjectDonatorView = ({ pageContext }) => {
         </Box>
         <FloatingDonateView
           sx={{
-            right: '10%',
+            left: '10%',
             p: 2,
             pb: 4,
-            marginTop: '-3rem',
+            marginTop: '-2rem',
             borderRadius: '30px',
             width: '20%',
             flexDirection: 'column',

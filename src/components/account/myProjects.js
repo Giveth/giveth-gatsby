@@ -1,12 +1,10 @@
 /** @jsx jsx */
 import React from 'react'
 import { Link } from 'gatsby'
-import { ProjectContext } from '../../contextProvider/projectProvider'
 import ProjectCard from '../projectListing'
-import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import { Box, Grid, Text, Flex, jsx } from 'theme-ui'
+import { Box, Grid, Text, jsx } from 'theme-ui'
 import DarkClouds from '../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHand from '../../images/decorator-raised-one-hand.png'
 

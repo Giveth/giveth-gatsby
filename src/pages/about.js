@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
 import React, { useState } from 'react'
-import { Link, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
 import styled from '@emotion/styled'
 import { FaMediumM, FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa'
 

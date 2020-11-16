@@ -1,14 +1,14 @@
 import React, { useContext } from 'react'
-import { Heading, Box, Card, IconButton, Text } from 'theme-ui'
+import { Heading, Box, Card, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
 import theme from '../gatsby-plugin-theme-ui/index'
-import Donate from '../components/donateForm'
+// import Donate from '../components/donateForm'
 
-import iconShare from '../images/icon-share.svg'
-import iconHeart from '../images/icon-heart.svg'
-import { TorusContext } from '../contextProvider/torusProvider'
+// import iconShare from '../images/icon-share.svg'
+// import iconHeart from '../images/icon-heart.svg'
+// import { TorusContext } from '../contextProvider/torusProvider'
 
 const ProjectCard = styled(Card)`
   background-color: ${theme.colors.background};
@@ -54,15 +54,15 @@ const DotInner = styled.span`
   position: relative;
 `
 
-const Options = styled.span`
-  font-family: 'Red Hat Text', sans-serif;
-  color: ${theme.colors.background};
-  display: flex;
-  position: absolute;
-  align-items: center;
-  bottom: -54px;
-  right: 24px;
-`
+// const Options = styled.span`
+//   font-family: 'Red Hat Text', sans-serif;
+//   color: ${theme.colors.background};
+//   display: flex;
+//   position: absolute;
+//   align-items: center;
+//   bottom: -54px;
+//   right: 24px;
+// `
 
 const CardFooter = styled.span`
   display: flex;
@@ -92,7 +92,7 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectListing = props => {
-  const { balance } = useContext(TorusContext)
+  // const { balance } = useContext(TorusContext)
   return (
     <Box
       key={props.listingId + '_box'}

@@ -1,13 +1,12 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
+import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
-import Tooltip from '../../components/tooltip'
+// import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
-import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
 let provider
 

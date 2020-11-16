@@ -1,22 +1,16 @@
 import React from 'react'
-import styled from '@emotion/styled'
-import { ProjectContext } from '../../contextProvider/projectProvider'
 import {
   GET_PROJECT_UPDATES,
   ADD_PROJECT_UPDATE
 } from '../../apollo/gql/projects'
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks'
-import { Button, Flex, Text } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 
 import Timeline from './timeline'
 
 const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
-  const client = useApolloClient()
   const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE)
-  const [updates, setUpdates] = React.useState(null)
 
-  const { data, loading } = useQuery(GET_PROJECT_UPDATES, {
+  const { data } = useQuery(GET_PROJECT_UPDATES, {
     variables: {
       projectId: parseInt(project?.id),
       take: 100,
@@ -25,10 +19,6 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
   })
 
   console.log({ data })
-
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
 
   const addUpdate = async ({ title, content }) => {
     try {

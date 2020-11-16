@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { Button, Flex, Spinner, Text } from 'theme-ui'
+import { Spinner, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui'
 import Table from './donationsTable'
 
@@ -16,9 +16,7 @@ const Funds = styled.div`
 
 const DonationsTab = ({ project, showModal, setShowModal }) => {
   const [loading, setLoading] = React.useState(true)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  const { currentProjectView } = React.useContext(ProjectContext)
   console.log({ currentProjectView })
   const total = currentProjectView?.ethBalance
 

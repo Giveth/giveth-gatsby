@@ -6,26 +6,23 @@ import { useMutation } from '@apollo/react-hooks'
 import { Text } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 import Layout from '../components/layout'
-import { Link } from 'gatsby'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import peoplePuzzle2 from '../images/people-puzzle2.svg'
 import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
-import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
+// import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
 const IndexPage = props => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState({})
-  const [addProjectQuery, { data }] = useMutation(ADD_PROJECT)
-  const [formValues, setFormValues] = useState({})
+  const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(props.location.search)
   const onSubmit = async (values, walletAddress) => {
-    setFormValues(values)
     setProjectAdded(true)
 
     const projectCategories = []

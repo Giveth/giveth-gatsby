@@ -5,17 +5,7 @@ import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import {
-  Avatar,
-  Badge,
-  Button,
-  Box,
-  Input,
-  Flex,
-  Spinner,
-  Text,
-  jsx
-} from 'theme-ui'
+import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { useQuery } from '@apollo/react-hooks'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -171,7 +161,7 @@ export const MyDonations = () => {
     ProjectContext
   )
 
-  const { data, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
+  const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
     variables: { projectId: 1 }
   })
 

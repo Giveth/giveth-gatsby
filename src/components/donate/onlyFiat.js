@@ -1,6 +1,6 @@
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
+import React, { useState } from 'react'
+import { Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
@@ -102,41 +102,39 @@ const OnlyFiat = props => {
   const client = useApolloClient()
   const amounts = [500, 100, 50, 30]
 
-  useEffect(() => {}, [])
-
   const donation = parseFloat(amountTyped || amountSelect)
   const donationPlusFee =
     donation + (donateToGiveth === true ? GIVETH_DONATION_AMOUNT : 0)
   const subtotal = (donationPlusFee + 0.3) / 0.971
 
-  const goCheckout = async event => {
-    try {
-      if (!amountSelect && !amountTyped) {
-        return alert('Please set an amount before donating')
-      }
-      const amount = amountTyped || amountSelect
-      if (amount <= 0) return alert('Please set a valid amount')
-      // await getDonationSession({ variables: { amount: amountSelect } })
-      const projId = project?.id
-      let givethDonation = 0
-      donateToGiveth === true && (givethDonation = 5)
-      const { data } = await client.query({
-        query: GET_DONATION_SESSION,
-        variables: {
-          projectId: parseFloat(projId),
-          amount: parseFloat(subtotal),
-          anonymous: anonymous,
-          donateToGiveth: donateToGiveth,
-          successUrl: `${window.location.origin}/donate/${projId}?success=true`,
-          cancelUrl: `${window.location.origin}/donate/${projId}?success=false`
-        }
-      })
-      goStripe(data)
-    } catch (error) {
-      alert(error?.message?.split('GraphQL error: ')[1])
-      console.log({ error })
-    }
-  }
+  // const goCheckout = async event => {
+  //   try {
+  //     if (!amountSelect && !amountTyped) {
+  //       return alert('Please set an amount before donating')
+  //     }
+  //     const amount = amountTyped || amountSelect
+  //     if (amount <= 0) return alert('Please set a valid amount')
+  //     // await getDonationSession({ variables: { amount: amountSelect } })
+  //     const projId = project?.id
+  //     let givethDonation = 0
+  //     donateToGiveth === true && (givethDonation = 5)
+  //     const { data } = await client.query({
+  //       query: GET_DONATION_SESSION,
+  //       variables: {
+  //         projectId: parseFloat(projId),
+  //         amount: parseFloat(subtotal),
+  //         anonymous: anonymous,
+  //         donateToGiveth: donateToGiveth,
+  //         successUrl: `${window.location.origin}/donate/${projId}?success=true`,
+  //         cancelUrl: `${window.location.origin}/donate/${projId}?success=false`
+  //       }
+  //     })
+  //     goStripe(data)
+  //   } catch (error) {
+  //     alert(error?.message?.split('GraphQL error: ')[1])
+  //     console.log({ error })
+  //   }
+  // }
 
   const goStripe = async data => {
     // Get Stripe.js instance

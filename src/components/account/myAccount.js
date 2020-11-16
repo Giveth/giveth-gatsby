@@ -1,21 +1,7 @@
 /** @jsx jsx */
 import React from 'react'
 import { TorusContext } from '../../contextProvider/torusProvider'
-import { ProjectContext } from '../../contextProvider/projectProvider'
-import Pagination from 'react-js-pagination'
-import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui'
-import {
-  Avatar,
-  Badge,
-  Button,
-  Box,
-  Input,
-  Flex,
-  Spinner,
-  Text,
-  jsx
-} from 'theme-ui'
+import { Avatar, Button, Box, Flex, Text, jsx } from 'theme-ui'
 
 export const MyAccount = () => {
   const { user } = React.useContext(TorusContext)

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
+import { jsx, Flex, Grid, Text, Box, Button } from 'theme-ui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import React, { useState } from 'react'
 import { Link, graphql } from 'gatsby'
@@ -9,7 +9,7 @@ import useMediaQuery from 'react-responsive'
 
 import Layout from '../components/layout'
 
-import { FaMediumM, FaGithub } from 'react-icons/fa'
+// import { FaMediumM, FaGithub } from 'react-icons/fa'
 import decoratorPuzzle from '../images/decorator-puzzlepieces.svg'
 import DarkClouds from '../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHands from '../images/decorator-raised-one-hand.png'
@@ -118,7 +118,7 @@ const Partnerships = ({ data }) => {
               key={edges.node.id}
             >
               <ContentItem>
-                <img width='50px' src={edges.node.logo.file.url} />
+                <img alt='' width='50px' src={edges.node.logo.file.url} />
                 <Text>{edges.node.description}</Text>
               </ContentItem>
             </Link>

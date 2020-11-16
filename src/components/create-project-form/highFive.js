@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { Text, Flex, Image, Box } from 'theme-ui'
-import { useQuery } from '@apollo/react-hooks'
-import { FETCH_PROJECT } from '../../apollo/gql/projects'
+import { Text, Flex, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 

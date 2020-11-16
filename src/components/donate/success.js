@@ -1,10 +1,9 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Label, Link, Text, jsx } from 'theme-ui'
+import { Box, Link, Text, jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { useApolloClient } from '@apollo/react-hooks'
 import { base64ToBlob } from '../../utils'
-import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
 
@@ -36,7 +35,6 @@ const DownloadReceipt = styled(Box)`
 
 const Success = props => {
   const { project, sessionId, hash } = props
-  const [amountSelect, setAmountSelect] = useState(null)
   const [pdfBase64, setPdfBase64] = useState(null)
 
   const client = useApolloClient()
