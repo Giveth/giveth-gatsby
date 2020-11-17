@@ -11,6 +11,7 @@ const HighFive = ({
   projectTitle,
   projectDescription
 }) => {
+  console.log({ projectImage })
   // This will be useful when we need to handle the route on webhook
 
   // const { loading, error, data } = useQuery(FETCH_PROJECT, {
@@ -30,7 +31,7 @@ const HighFive = ({
         justifyContent: 'center',
         alignContent: 'center',
         textAlign: 'center',
-        mt: '150px'
+        mt: '100px'
       }}
     >
       <Text
@@ -54,14 +55,14 @@ const HighFive = ({
         Your project is published and ready to raise funds.
       </Text>
 
-      <Flex>
-        <Box sx={{ mt: '100px', width: '50%' }}>
+      <Flex sx={{ justifyContent: 'flex-start', ml: '20%' }}>
+        <Box sx={{ mt: '100px', width: '30%', bg: 'white' }}>
           <ProjectListing
             disabled
             shadowed
             name={projectTitle}
             description={projectDescription}
-            image={projectImage}
+            image={projectImage || addedProject?.image}
             raised={0}
             categories={['Blockchain 4 Good']}
             listingId='key1'
@@ -69,7 +70,7 @@ const HighFive = ({
           />
         </Box>
 
-        <Box sx={{ mt: '40%', ml: '10%', width: '40%' }}>
+        <Box sx={{ mt: '20%', ml: '10%', width: '20%', bg: 'white' }}>
           <Text
             sx={{
               fontSize: 3,

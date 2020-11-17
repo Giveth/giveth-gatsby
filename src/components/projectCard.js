@@ -204,8 +204,8 @@ const ProjectCard = props => {
         {altStyle && (
           <AltCardContent>
             <Givers>
-              <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
-              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text>
+              {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
+              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
             </Givers>
             <Button
               sx={{ variant: 'buttons.default', mt: 2 }}

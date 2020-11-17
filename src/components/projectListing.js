@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Heading, Box, Card, Text } from 'theme-ui'
+import { Heading, Box, Card, Image, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
@@ -9,6 +9,11 @@ import theme from '../gatsby-plugin-theme-ui/index'
 // import iconShare from '../images/icon-share.svg'
 // import iconHeart from '../images/icon-heart.svg'
 // import { TorusContext } from '../contextProvider/torusProvider'
+
+import ProjectImageGallery1 from '../images/svg/create/projectImageGallery1.svg'
+import ProjectImageGallery2 from '../images/svg/create/projectImageGallery2.svg'
+import ProjectImageGallery3 from '../images/svg/create/projectImageGallery3.svg'
+import ProjectImageGallery4 from '../images/svg/create/projectImageGallery4.svg'
 
 const ProjectCard = styled(Card)`
   background-color: ${theme.colors.background};
@@ -34,24 +39,20 @@ const Badge = styled.span`
 `
 
 const Dot = styled.span`
+  display: grid;
   height: 68px;
   width: 68px;
-  display: grid;
   color: ${theme.colors.background};
   border: 6px solid ${theme.colors.background};
   border-radius: 50%;
-  position: absolute;
-  bottom: -34px;
-  left: 24px;
+  margin: -10% 0 0 24px;
   font-family: 'Red Hat Text', sans-serif;
   font-size: 10px;
 `
 
 const DotInner = styled.span`
-  display: block;
   text-align: center;
   align-self: center;
-  position: relative;
 `
 
 // const Options = styled.span`
@@ -71,6 +72,36 @@ const CardFooter = styled.span`
   margin: 1rem 0;
   padding: 0rem 1rem;
 `
+
+const setImage = img => {
+  if (/^\d+$/.test(img)) {
+    // Is not url
+    let svg = null
+    const style = {
+      width: '100%',
+      height: '100%',
+      zIndex: -1,
+      borderRadius: '12px 12px 0px 0px'
+    }
+    switch (parseInt(img)) {
+      case 1:
+        svg = <ProjectImageGallery1 style={style} />
+        break
+      case 2:
+        svg = <ProjectImageGallery2 style={style} />
+        break
+      case 3:
+        svg = <ProjectImageGallery3 style={style} />
+        break
+      case 4:
+        svg = <ProjectImageGallery4 style={style} />
+        break
+    }
+    return svg
+  } else {
+    return false
+  }
+}
 
 const Categories = ({ categories }) => {
   console.log({ categories })
@@ -98,6 +129,7 @@ const ProjectListing = props => {
       key={props.listingId + '_box'}
       style={{
         width: '100%',
+        flexDirection: 'row',
         cursor: props.disabled ? 'default' : 'pointer',
         border: props.disabled ? null : `1px solid ${theme.colors.muted}`,
         borderRadius: '12px',
@@ -109,41 +141,46 @@ const ProjectListing = props => {
     >
       <ProjectCard key={props.listingId + '_card'}>
         {/* need to add options from the gallery. */}
-        <div
-          key={props.listingId + '_div'}
-          src={props.image}
-          style={{
-            width: '100%',
-            height: '186px',
-            margin: '0 auto',
-            borderRadius: '12px 12px 0px 0px',
-            backgroundImage: `url(${props.image})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            position: 'relative'
-          }}
-          alt={props.name}
-        >
-          <Dot
-            key={props.listingId + '_card'}
-            style={{
-              backgroundColor:
-                props.raised === 0
-                  ? theme.colors.attention
-                  : theme.colors.secondary
-            }}
-          >
-            {props.raised === 0 ? (
-              <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
-              </DotInner>
-            ) : (
-              <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
-                <Text sx={{ variant: 'text.microbold' }}>${props?.raised}</Text>
-              </DotInner>
-            )}
-          </Dot>
+        <div key={props.listingId + '_div'}>
+          {setImage(props.image) || (
+            <Image
+              src={props.image}
+              style={{
+                width: '100%',
+                height: '186px',
+                borderRadius: '12px 12px 0px 0px',
+                backgroundImage: `url(${props.image})`,
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat'
+              }}
+              alt={props.name}
+            />
+          )}
+          <div style={{ position: 'absolute', marginTop: '-2.5%' }}>
+            <Dot
+              key={props.listingId + '_card'}
+              style={{
+                backgroundColor:
+                  props.raised === 0
+                    ? theme.colors.attention
+                    : theme.colors.secondary
+              }}
+            >
+              {props.raised === 0 ? (
+                <DotInner>
+                  <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
+                </DotInner>
+              ) : (
+                <DotInner>
+                  <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
+                  <Text sx={{ variant: 'text.microbold' }}>
+                    ${props?.raised}
+                  </Text>
+                </DotInner>
+              )}
+            </Dot>
+          </div>
+
           {/* <Options>
             <IconButton>
               <img src={iconHeart} alt='' />
