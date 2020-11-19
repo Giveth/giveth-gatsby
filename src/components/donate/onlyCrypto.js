@@ -2,7 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
+import Modal from '../modal'
+import QRCode from 'qrcode.react'
 import { initOnboard, initNotify } from '../../services/onBoard'
+import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
@@ -83,6 +86,8 @@ const OnlyCrypto = props => {
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [anonymous, setAnonymous] = useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false)
+
   const client = useApolloClient()
 
   useEffect(() => {
@@ -305,6 +310,18 @@ const OnlyCrypto = props => {
 
   return (
     <Content>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setIsOpen(false)}
+        contentLabel='QR Modal'
+      >
+        <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+          <QRCode value={project?.walletAddress} size={250} />
+          <Text sx={{ variant: 'text.large', mt: 4 }}>
+            {project?.walletAddress}
+          </Text>
+        </Flex>
+      </Modal>
       <AmountSection>
         <AmountContainer>
           <Text sx={{ variant: 'text.large', mb: 1 }}>
@@ -420,8 +437,8 @@ const OnlyCrypto = props => {
         </>
         <Flex
           sx={{
-            flexDirection: 'column',
-            alignItems: 'flex-start',
+            flexDirection: 'row',
+            alignItems: 'center',
             textAlign: 'center'
           }}
         >
@@ -447,6 +464,10 @@ const OnlyCrypto = props => {
           >
             DONATE
           </Button>
+          <SVGLogo
+            onClick={() => setIsOpen(true)}
+            sx={{ cursor: 'pointer', ml: 3 }}
+          />
         </Flex>
       </AmountSection>
     </Content>

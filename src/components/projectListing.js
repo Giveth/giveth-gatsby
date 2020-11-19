@@ -154,6 +154,10 @@ const ProjectListing = props => {
                 backgroundRepeat: 'no-repeat'
               }}
               alt={props.name}
+              onError={ev =>
+                (ev.target.src =
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT17JlsfL6JrGYQ2Ze5ptTTuawx5J4axpWkIw&usqp=CAU')
+              }
             />
           )}
           <div style={{ position: 'absolute', marginTop: '-2.5%' }}>

@@ -62,6 +62,7 @@
     "react-hook-form": "^6.9.6",
     "react-icons": "^3.11.0",
     "react-js-pagination": "^3.0.3",
+    "react-modal": "^3.11.2",
     "react-responsive": "^8.1.0",
     "react-share": "^4.3.1",
     "react-spring": "^8.0.27",
