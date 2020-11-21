@@ -16,24 +16,17 @@ import decoratorCloud1 from '../images/decorator-cloud1.svg'
 import decoratorCloud2 from '../images/decorator-cloud2.svg'
 
 const HeaderContainer = styled.header`
-  transition: 0.8s;
-
-  &.HeaderPlaceholderNotScrolled {
-    height: 240px;
-    @media (max-width: 700) {
-      height: 160px;
-    }
-  }
-
-  &.HeaderPlaceholderScrolled {
-    height: 112px;
+  transition: max-height 0.8s ease;
+  height: 140px;
+  @media (max-width: 700) {
+    height: 160px;
   }
 `
 
 const HeaderSpan = styled.nav`
   position: fixed;
   margin: 0 auto;
-  padding: 80px;
+  padding: 80px 80px 0 80px;
   max-width: 100vw;
   top: 0;
   display: grid;
@@ -41,7 +34,7 @@ const HeaderSpan = styled.nav`
   align-items: center;
   background-color: ${theme.colors.background};
   width: 100%;
-  transition: 0.8s;
+  transition: padding 0.8s ease-out;
   z-index: 200;
   backdrop-filter: blur(30px);
   .hide {
@@ -79,6 +72,17 @@ const LogoSpan = styled.span`
   grid-template-columns: repeat(2, auto);
   align-items: center;
   justify-content: start;
+
+  img {
+    width: 80px;
+    height: 80px;
+    transform: scale(1);
+    transition: 0.8s all ease;
+  }
+
+  &.HeaderLogoScrolled img {
+    transform: scale(0.7);
+  }
 
   @media (max-width: 1030px) {
     grid-column: 1;
@@ -159,11 +163,6 @@ const Header = ({ siteTitle, isHomePage }) => {
 
   return (
     <HeaderContainer
-      className={
-        hasScrolled || !isHomePage
-          ? 'HeaderPlaceholderScrolled'
-          : 'HeaderPlaceholderNotScrolled'
-      }
       style={{
         marginBottom: '1.45rem'
       }}
@@ -204,12 +203,10 @@ const Header = ({ siteTitle, isHomePage }) => {
           {isMobile ? (
             <img src={logo} alt='logo' width='40px' height='40px' />
           ) : (
-            <LogoSpan>
-              {hasScrolled || !isHomePage ? (
-                <img src={logo} alt='logo' width='50px' height='50px' />
-              ) : (
-                <img src={logo} alt='logo' width='80px' height='80px' />
-              )}
+            <LogoSpan
+              className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
+            >
+              <img src={logo} alt='logo' />
               <Text
                 pl={3}
                 sx={{
@@ -228,7 +225,7 @@ const Header = ({ siteTitle, isHomePage }) => {
 
         <MiddleSpan>
           <NavLink to='/'>Home</NavLink>
-          <NavLink to='/causes'>Causes</NavLink>
+          {/* <NavLink to='/causes'>Causes</NavLink> */}
           <NavLink to='/projects'>Projects</NavLink>
         </MiddleSpan>
 

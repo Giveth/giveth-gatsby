@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Heading, Flex, Button, Progress, Text } from 'theme-ui'
-
+import { TorusContext } from '../../contextProvider/torusProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 import { Helmet } from 'react-helmet'
@@ -19,9 +19,11 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 
 const CreateProjectForm = props => {
-  const APIKEY = 'AIzaSyBEHB5JWEyBUNF4F8mrSxtiVCLOyUPOBL4'
+  const APIKEY = process.env.GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
+  const { user } = React.useContext(TorusContext)
+
   const categoryList = [
     { name: 'nonprofit', value: 'Non-profit' },
     { name: 'covid19', value: 'COVID-19' },
@@ -103,7 +105,7 @@ const CreateProjectForm = props => {
       })
     }
     if (currentStep === steps.length - 1) {
-      props.onSubmit(formData)
+      props.onSubmit(formData, user?.addresses[0])
     }
     nextStep()
   }
@@ -119,6 +121,11 @@ const CreateProjectForm = props => {
   })
 
   const [showCloseModal, setShowCloseModal] = useState(false)
+
+  // CHECKS USER
+  if (JSON.stringify(user) === JSON.stringify({})) {
+    return <h3>go back</h3>
+  }
 
   return (
     <>

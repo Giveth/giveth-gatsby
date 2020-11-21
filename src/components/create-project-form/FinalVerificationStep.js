@@ -294,7 +294,8 @@ const FinalVerificationStep = ({
             mt: '39px',
             width: '240px',
             height: '52px',
-            borderRadius: '48px'
+            borderRadius: '48px',
+            cursor: 'pointer'
           }}
           type='submit'
         >

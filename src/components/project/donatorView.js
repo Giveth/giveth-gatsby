@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Text, Box, Button } from 'theme-ui'
+import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { DonationsTab, UpdatesTab } from './index'
+import { TorusContext } from '../../contextProvider/torusProvider'
+
 import testImg from '../../images/giveth-test-image.png'
+import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
+import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
+import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
+import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
+
 import { GrCircleInformation } from 'react-icons/gr'
 import { IconContext } from 'react-icons'
 import { Link } from 'gatsby'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
+
+const DonationsTab = React.lazy(() => import('./donationsTab'))
+const UpdatesTab = React.lazy(() => import('./updatesTab'))
 
 const FloatingDonateView = styled(Flex)`
   position: fixed;
@@ -22,47 +32,105 @@ const FloatingDonateView = styled(Flex)`
 `
 
 export const ProjectDonatorView = ({ pageContext }) => {
+  const { user } = React.useContext(TorusContext)
   const [currentTab, setCurrentTab] = useState('description')
   const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
+  const [isOwner, setIsOwner] = useState(false)
+  const isSSR = typeof window === 'undefined'
 
   const { data, loading, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
-    variables: { projectId: 1 }
+    variables: { projectId: pageContext?.project?.id }
   })
+
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
 
-  console.log({ data })
+  const project = pageContext?.project
+
+  console.log({ pageContext })
 
   useEffect(() => {
-    if (data) {
+    const firstFetch = async () => {
       // Add donations to current project store
+      const cryptoTxs = await getEtherscanTxs(project.walletAddress)
+      console.log({ cryptoTxs, data })
+      let donations = []
+      if (cryptoTxs) {
+        donations = [
+          data?.getStripeProjectDonations || null,
+          ...cryptoTxs.txs
+        ].filter(function (e) {
+          return e
+        })
+      }
+
       setCurrentProjectView({
         ...currentProjectView,
-        donations: data?.getStripeProjectDonations
+        ethBalance: cryptoTxs?.balance,
+        donations
       })
-      console.log('HERE', { data })
-      const donations = data?.getStripeProjectDonations
       setTotalDonations(donations?.length)
       setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
+      setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
     }
-  }, [data])
+
+    firstFetch()
+  }, [])
+
+  const setImage = img => {
+    if (/^\d+$/.test(img)) {
+      // Is not url
+      let svg = null
+      const style = {
+        objectFit: 'cover',
+        // objectPosition: '100% 25%',
+        width: '100%',
+        height: '100%',
+        margin: '0 5%',
+        borderRadius: '10px'
+      }
+      switch (parseInt(img)) {
+        case 1:
+          svg = <ProjectImageGallery1 style={style} />
+          break
+        case 2:
+          svg = <ProjectImageGallery2 style={style} />
+          break
+        case 3:
+          svg = <ProjectImageGallery3 style={style} />
+          break
+        case 4:
+          svg = <ProjectImageGallery4 style={style} />
+          break
+      }
+      return svg
+    } else {
+      return false
+    }
+  }
 
   return (
     <>
       <Flex>
-        <Image
-          src={testImg}
-          sx={{
-            objectFit: 'cover',
-            objectPosition: 'top',
-            width: '85%',
-            margin: 'auto',
-            height: '250px',
-            borderRadius: '10px'
-          }}
-        />
+        {setImage(project?.image) || (
+          <Image
+            src={project?.image ? project?.image : testImg}
+            onError={ev =>
+              (ev.target.src =
+                'https://miro.medium.com/max/4998/1*pGxFDKfIk59bcQgGW14EIg.jpeg')
+            }
+            sx={{
+              objectFit: 'cover',
+              // objectPosition: '100% 25%',
+              width: '100vw',
+              margin: '0 5%',
+              height: '250px',
+              borderRadius: '10px'
+            }}
+          />
+        )}
       </Flex>
       <Flex sx={{ width: '80%', margin: 'auto' }}>
         <Box sx={{ width: ['100%', null, '70%'] }}>
@@ -91,6 +159,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
               </Text>
             </Box>
           </Flex>
+          {/*
+          // NOTIFICATION BADGE
           <Flex
             sx={{
               my: '20px',
@@ -118,7 +188,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 information about the project.
               </Text>
             </IconContext.Provider>
-          </Flex>
+          </Flex> */}
           <Flex
             sx={{
               width: ['100%', null, '60%'],
@@ -202,10 +272,16 @@ export const ProjectDonatorView = ({ pageContext }) => {
               >
                 {pageContext?.project?.description}
               </Text>
-            ) : currentTab === 'updates' ? (
-              <UpdatesTab />
+            ) : currentTab === 'updates' && !isSSR ? (
+              <React.Suspense fallback={<div />}>
+                <UpdatesTab project={project} isOwner={isOwner} />
+              </React.Suspense>
             ) : (
-              <DonationsTab />
+              !isSSR && (
+                <React.Suspense fallback={<div />}>
+                  <DonationsTab project={project} />
+                </React.Suspense>
+              )
             )}
           </Box>
         </Box>
@@ -225,9 +301,18 @@ export const ProjectDonatorView = ({ pageContext }) => {
         >
           <Button
             variant='default'
-            sx={{ paddingTop: '20px', paddingBottom: '20px' }}
+            sx={{
+              paddingTop: '20px',
+              paddingBottom: '20px',
+              backgroundColor: isOwner && 'secondary'
+            }}
+            onClick={() =>
+              isOwner
+                ? window.location.replace('/account')
+                : window.location.replace(`/donate/${project?.slug}`)
+            }
           >
-            Donate
+            {isOwner ? 'Edit' : 'Donate'}
           </Button>
           <Flex
             sx={{
@@ -243,33 +328,34 @@ export const ProjectDonatorView = ({ pageContext }) => {
             </Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly' }}>
-            {['Non-Profit', 'SDG Impact'].map(category => {
-              return (
-                <Text
-                  sx={{
-                    color: 'primary',
-                    borderColor: 'primary',
-                    borderStyle: 'solid',
-                    borderWidth: '1px',
-                    display: 'inline',
-                    fontSize: 1,
-                    fontFamily: 'body',
-                    mt: '9px',
-                    backgroundColor: 'white',
-                    borderRadius: '18px',
-                    paddingY: 1,
-                    paddingX: 2,
-                    textAlign: 'center'
-                  }}
-                >
-                  {category}
-                </Text>
-              )
-            })}
+            {project?.categories.length > 0 &&
+              project?.categories.map(category => {
+                return (
+                  <Text
+                    sx={{
+                      color: 'primary',
+                      borderColor: 'primary',
+                      borderStyle: 'solid',
+                      borderWidth: '1px',
+                      display: 'inline',
+                      fontSize: 1,
+                      fontFamily: 'body',
+                      mt: '9px',
+                      backgroundColor: 'white',
+                      borderRadius: '18px',
+                      paddingY: 1,
+                      paddingX: 2,
+                      textAlign: 'center'
+                    }}
+                  >
+                    {category?.name?.toUpperCase()}
+                  </Text>
+                )
+              })}
           </Flex>
 
           <Flex sx={{ justifyContent: 'center' }}>
-            <Link to='/'>
+            <Link to='/projects'>
               <Text
                 sx={{
                   color: 'primary',

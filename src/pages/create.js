@@ -5,6 +5,7 @@ import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
 import { Text } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
+import Layout from '../components/layout'
 import { Link } from 'gatsby'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import peoplePuzzle2 from '../images/people-puzzle2.svg'
@@ -23,7 +24,7 @@ const IndexPage = props => {
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(props.location.search)
-  const onSubmit = async values => {
+  const onSubmit = async (values, walletAddress) => {
     setFormValues(values)
     setProjectAdded(true)
 
@@ -63,7 +64,7 @@ const IndexPage = props => {
     try {
       const project = await addProjectQuery({
         variables: {
-          project: projectData
+          project: { ...projectData, walletAddress }
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]
       })
@@ -78,7 +79,7 @@ const IndexPage = props => {
     }
   }
 
-  function AfterCreation () {
+  function AfterCreation() {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -153,7 +154,8 @@ const IndexPage = props => {
           className='hide'
         />
         <HighFive
-          projectId={addedProject.id}
+          addedProject={addedProject}
+          projectId={projectId || addedProject.id}
           projectImage={addedProject.image}
           projectTitle={addedProject.title}
           projectDescription={addedProject.description}
@@ -162,7 +164,7 @@ const IndexPage = props => {
     )
   }
 
-  function ProjectForm () {
+  function ProjectForm() {
     if (isLoggedIn === true) {
       if (!projectAdded && !projectId) {
         return (
@@ -214,23 +216,23 @@ const IndexPage = props => {
   }
 
   return (
-    // <Layout>
-    <div
-      sx={{
-        // applies width 100% to all viewport widths,
-        // width 50% above the first breakpoint,
-        // and 25% above the next breakpoint
-        width: ['100%', '50%', '25%']
-      }}
-      style={{
-        maxWidth: '1440px'
-      }}
-    >
-      <SEO title='Create Project' />
+    <Layout noFooter noHeader>
+      <div
+        sx={{
+          // applies width 100% to all viewport widths,
+          // width 50% above the first breakpoint,
+          // and 25% above the next breakpoint
+          width: ['100%', '50%', '25%']
+        }}
+        style={{
+          maxWidth: '1440px'
+        }}
+      >
+        <SEO title='Create Project' />
 
-      <ProjectForm />
-    </div>
-    // </Layout>
+        <ProjectForm />
+      </div>
+    </Layout>
   )
 }
 

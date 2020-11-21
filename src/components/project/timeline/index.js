@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from '@emotion/styled'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+
 import { ProjectContext } from '../../../contextProvider/projectProvider'
 import { Button, Flex, Text } from 'theme-ui'
 import Card from './card'
 import theme from '../../../gatsby-plugin-theme-ui'
+
+dayjs.extend(localizedFormat)
 
 const VerticalTimeline = styled.div`
   position: relative;
@@ -37,12 +42,13 @@ const LeftInfo = styled(Flex)`
   z-index: 1;
 `
 
-const Timeline = () => {
-  const content = [1, 2, 3]
+const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
   const newUpdateOption = true
+  const projectCreationDate = dayjs(project?.creationDate)
+
   return (
     <VerticalTimeline>
-      {newUpdateOption && (
+      {newUpdateOption && isOwner && (
         <Container>
           <LeftInfo sx={{ left: '-23px' }}>
             <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>NEW</Text>
@@ -50,24 +56,51 @@ const Timeline = () => {
               UPDATE
             </Text>
           </LeftInfo>
-          <Card newUpdateOption />
+          <Card newUpdateOption={addUpdate} />
         </Container>
       )}
-      {content.map((i, index) => (
-        <Container key={index}>
-          <LeftInfo sx={{ left: '-13px' }}>
-            <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>WED</Text>
-            <Text sx={{ variant: 'headings.h4' }}>2</Text>
-          </LeftInfo>
-          <Card
-            specialContent={
-              index + 1 === content.length
-                ? { title: 'Project Launched' }
-                : false
-            }
-          />
-        </Container>
-      ))}
+      {content
+        ?.slice(0)
+        .reverse()
+        .map((i, index) => {
+          const date = dayjs(i.createdAt)
+          return (
+            <Container key={index}>
+              <LeftInfo sx={{ left: '-13px' }}>
+                <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
+                  {date?.format('MMM') || ''}
+                </Text>
+                <Text sx={{ variant: 'headings.h4' }}>
+                  {' '}
+                  {date?.format('DD') || ''}
+                </Text>
+                <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
+                  {date?.format('YYYY') || ''}
+                </Text>
+              </LeftInfo>
+              <Card content={i?.projectUpdate} />
+            </Container>
+          )
+        })}
+      <Container>
+        <LeftInfo sx={{ left: '-13px' }}>
+          <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
+            {projectCreationDate?.format('MMM') || ''}
+          </Text>
+          <Text sx={{ variant: 'headings.h4' }}>
+            {projectCreationDate?.format('DD') || ''}
+          </Text>
+          <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
+            {projectCreationDate?.format('YYYY') || ''}
+          </Text>
+        </LeftInfo>
+        <Card
+          specialContent={{
+            title: 'Project Launched',
+            content: projectCreationDate?.format('dddd LL') || ''
+          }}
+        />
+      </Container>
     </VerticalTimeline>
   )
 }

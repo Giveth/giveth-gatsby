@@ -43,7 +43,6 @@ const Dot = styled.span`
   position: absolute;
   bottom: -34px;
   left: 24px;
-  z-index: 1;
   font-family: 'Red Hat Text', sans-serif;
   font-size: 10px;
 `
@@ -73,9 +72,10 @@ const CardFooter = styled.span`
   padding: 0rem 1rem;
 `
 
-const Categories = () => {
-  const categories = ['covid-19', 'non-profit']
-  return categories.map((category, index) => (
+const Categories = ({ categories }) => {
+  console.log({ categories })
+  if (!categories || categories.length < 1) return null
+  return categories?.map((category, index) => (
     <Badge key={index}>
       <Text
         sx={{ variant: 'text.default' }}
@@ -140,18 +140,18 @@ const ProjectListing = props => {
             ) : (
               <DotInner>
                 <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
-                <Text sx={{ variant: 'text.microbold' }}>${props.raised}</Text>
+                <Text sx={{ variant: 'text.microbold' }}>${props?.raised}</Text>
               </DotInner>
             )}
           </Dot>
-          <Options>
+          {/* <Options>
             <IconButton>
               <img src={iconHeart} alt='' />
             </IconButton>
             <IconButton>
               <img src={iconShare} alt='' />
             </IconButton>
-          </Options>
+          </Options> */}
         </div>
         <Heading
           sx={{ variant: 'headings.h6' }}
@@ -165,7 +165,7 @@ const ProjectListing = props => {
           }}
           key={props.listingId + '_heading'}
         >
-          {props.name}
+          {props?.name}
           <Text
             sx={{ variant: 'text.default' }}
             style={{
@@ -176,7 +176,7 @@ const ProjectListing = props => {
               paddingTop: '4px'
             }}
           >
-            This is a description
+            {props?.descripcion}
           </Text>
         </Heading>
         <CardContent>
@@ -199,12 +199,12 @@ const ProjectListing = props => {
             {
               /* Description String */
 
-              props.description
+              props?.description
             }
           </Text>
         </CardContent>
         <CardFooter>
-          <Categories />
+          <Categories categories={props?.categories} />
         </CardFooter>
       </ProjectCard>
       {

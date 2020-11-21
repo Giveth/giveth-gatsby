@@ -256,7 +256,8 @@ export default {
       fontWeight: 'medium',
       fontSize: 2,
       textTransform: 'capitalize',
-      borderRadius: '48px'
+      borderRadius: '48px',
+      outline: 'none'
     },
     tiny: {
       cursor: 'pointer',

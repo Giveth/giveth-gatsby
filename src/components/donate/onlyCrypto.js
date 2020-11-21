@@ -79,7 +79,6 @@ const OnlyCrypto = props => {
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
   const [notify, setNotify] = useState(null)
-
   const { project } = props
   const [ethPrice, setEthPrice] = useState(1)
   const [amountTyped, setAmountTyped] = useState(null)
@@ -128,8 +127,6 @@ const OnlyCrypto = props => {
     }
   }, [onboard])
 
-  console.log({ project })
-
   const donation = parseFloat(amountTyped)
   const givethFee =
     Math.round((GIVETH_DONATION_AMOUNT * 100.0) / ethPrice) / 100
@@ -173,15 +170,21 @@ const OnlyCrypto = props => {
     return ready
   }
 
+  // FOR REGULAR TX
   const sendTx = async () => {
     try {
       await setProvider()
       const signer = getSigner(provider)
       console.log(ethers.utils.parseEther(subtotal.toString()))
       const { hash } = await signer.sendTransaction({
-        to: '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+        to: project?.walletAddress,
         value: ethers.utils.parseEther(subtotal.toString())
       })
+      props.setHashSent({ hash, subtotal })
+
+      // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
+      if (process.env.GATSBY_NETWORK === 'ropsten') return
+
       notify.config({ desktopPosition: 'topRight' })
       const { emitter } = notify.hash(hash)
 
@@ -200,13 +203,106 @@ const OnlyCrypto = props => {
       emitter.on('txCancel', console.log)
       emitter.on('txFailed', console.log)
 
-      // emitter.on("all", event => {
-      //   console.log("ALLLLLLL", event)
-      // })
+      emitter.on('all', event => {
+        console.log('ALLLLLLL', event)
+      })
     } catch (error) {
       console.log({ error })
     }
   }
+
+  // Contract call example
+  // const sendTx = async () => {
+  //   try {
+  //     await setProvider()
+  //     const signer = getSigner(provider)
+  //     console.log(ethers.utils.parseEther(subtotal.toString()))
+
+  //     const abi = [
+  //       {
+  //         anonymous: false,
+  //         inputs: [
+  //           {
+  //             indexed: false,
+  //             internalType: 'address',
+  //             name: 'origin',
+  //             type: 'address'
+  //           },
+  //           {
+  //             indexed: false,
+  //             internalType: 'address',
+  //             name: 'target',
+  //             type: 'address'
+  //           },
+  //           {
+  //             indexed: false,
+  //             internalType: 'uint256',
+  //             name: 'amount',
+  //             type: 'uint256'
+  //           }
+  //         ],
+  //         name: 'Transfer',
+  //         type: 'event'
+  //       },
+  //       {
+  //         constant: false,
+  //         inputs: [
+  //           {
+  //             internalType: 'address payable',
+  //             name: 'target',
+  //             type: 'address'
+  //           }
+  //         ],
+  //         name: 'transfer',
+  //         outputs: [],
+  //         payable: true,
+  //         stateMutability: 'payable',
+  //         type: 'function'
+  //       }
+  //     ]
+
+  //     const contractAddress = '0x4248bfcfae44942D1C26296CCB554C66926E639D'
+
+  //     const contract = new ethers.Contract(contractAddress, abi, signer)
+
+  //     const overrides = {
+  //       gasLimit: 500000,
+  //       gasPrice: ethers.BigNumber.from('20000000000'),
+  //       value: ethers.utils.parseEther(subtotal.toString())
+  //     }
+
+  //     const { hash } = await contract.transfer(
+  //       '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+  //       overrides
+  //     )
+
+  //     console.log({ hash })
+
+  //     notify.config({ desktopPosition: 'topRight' })
+  //     const { emitter } = notify.hash(hash)
+
+  //     emitter.on('txPool', transaction => {
+  //       return {
+  //         // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
+  //         // or you could use onclick for when someone clicks on the notification itself
+  //         onclick: () =>
+  //           window.open(`https://ropsten.etherscan.io/tx/${transaction.hash}`)
+  //       }
+  //     })
+
+  //     emitter.on('txSent', console.log)
+  //     emitter.on('txConfirmed', console.log)
+  //     emitter.on('txSpeedUp', console.log)
+  //     emitter.on('txCancel', console.log)
+  //     emitter.on('txFailed', console.log)
+
+  //     emitter.on('all', event => {
+  //       console.log('ALLLLLLL', event)
+  //     })
+  //   } catch (error) {
+  //     console.log({ error })
+  //   }
+  // }
 
   return (
     <Content>
@@ -243,13 +339,19 @@ const OnlyCrypto = props => {
               value={amountTyped}
               onChange={e => {
                 e.preventDefault()
+                if (
+                  parseFloat(e.target.value) !== 0 &&
+                  parseFloat(e.target.value) < 0.001
+                ) {
+                  return
+                }
                 setAmountTyped(e.target.value)
               }}
             />
           </OpenAmount>
         </AmountContainer>
         <>
-          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+          {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
             <>
               <Checkbox
                 defaultChecked={donateToGiveth}
@@ -266,7 +368,7 @@ const OnlyCrypto = props => {
               </Text>
             </>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
-          </CheckboxLabel>
+          </CheckboxLabel> */}
           {/* <CheckboxLabel
             sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
           >
@@ -326,6 +428,14 @@ const OnlyCrypto = props => {
         >
           <Button
             onClick={async () => {
+              if (!project?.walletAddress) {
+                return alert(
+                  'There is no eth address assigned for this project'
+                )
+              }
+              if (!amountTyped || parseFloat(amountTyped) <= 0) {
+                return alert('Please set an amount')
+              }
               const ready = await readyToTransact()
               if (!ready) return
               sendTx()
@@ -336,7 +446,7 @@ const OnlyCrypto = props => {
               mt: 2
             }}
           >
-            Donate
+            DONATE
           </Button>
         </Flex>
       </AmountSection>
