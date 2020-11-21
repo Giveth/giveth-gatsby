@@ -1,8 +1,10 @@
 /** @jsx jsx */
-import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
+import { jsx, Flex, Grid, Text, Box, Button } from 'theme-ui'
 import theme from '../gatsby-plugin-theme-ui/index'
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, graphql } from 'gatsby'
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
+import { BLOCKS } from '@contentful/rich-text-types'
 import styled from '@emotion/styled'
 
 import useMediaQuery from 'react-responsive'
@@ -19,6 +21,8 @@ const Main = styled(Grid)`
   padding-left: 140px;
 `
 const ContentItem = styled(Grid)`
+  grid-template-rows: auto auto 1fr;
+  grid-gap: 1rem;
   justify-items: center;
   padding: 1.5rem;
   width: 250px;
@@ -55,6 +59,43 @@ const SpecialCardContainer = styled(Flex)`
 `
 
 const Partnerships = ({ data }) => {
+  const richTextOptions = {
+    renderNode: {
+      [BLOCKS.EMBEDDED_ASSET]: node => {
+        const { title, description, file } = node.data.target.fields
+        const mimeType = file['en-US'].contentType
+        const mimeGroup = mimeType.split('/')[0]
+
+        switch (mimeGroup) {
+          case 'image':
+            return (
+              <img
+                title={title ? title['en-US'] : null}
+                alt={description ? description['en-US'] : null}
+                src={file['en-US'].url}
+              />
+            )
+          case 'application':
+            return (
+              <a
+                alt={description ? description['en-US'] : null}
+                href={file['en-US'].url}
+              >
+                {title ? title['en-US'] : file['en-US'].details.fileName}
+              </a>
+            )
+          default:
+            return (
+              <span style={{ backgroundColor: 'black', color: 'white' }}>
+                {' '}
+                {mimeType} embedded asset{' '}
+              </span>
+            )
+        }
+      }
+    }
+  }
+
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
 
   return (
@@ -72,30 +113,24 @@ const Partnerships = ({ data }) => {
         </Decorator>
       ) : null}
       <Main sx={{ width: '70%' }}>
-        <Text sx={{ variant: 'headings.h2' }}>Partnerships</Text>
+        <Text sx={{ variant: 'headings.h2' }}>
+          {data.contentPartnerships.nodes[0].title}
+        </Text>
         <Text
           sx={{
             variant: 'text.large'
           }}
         >
-          We have many partnerships in the Ethereum Community. Many use our
-          smart contracts, some have been audited by us, others are Givers, all
-          of them are our friends.
+          {data.contentPartnerships.nodes[0].subtitle}
         </Text>
         <Text
           sx={{
             variant: 'text.default'
           }}
         >
-          God blessed them and said to them, “Be fruitful and increase in
-          number; fill the earth and subdue it. Rule over the fish in the sea
-          and the birds in the sky and over every living creature that moves on
-          the ground.” Then God said, “I give you every seed-bearing plant on
-          the face of the whole earth and every tree that has fruit with seed in
-          it. They will be yours for food. And to all the beasts of the earth
-          and all the birds in the sky and all the creatures that move along the
-          ground—everything that has the breath of life in it—I give every green
-          plant for food.” And it was so.
+          {documentToReactComponents(
+            data.contentPartnerships.nodes[0].moreInfo.json
+          )}
         </Text>
         <Text
           pt={5}
@@ -107,21 +142,29 @@ const Partnerships = ({ data }) => {
         </Text>
         <Grid columns={3} gap={4} sx={{ maxWidth: '800px' }}>
           {data.contentFriends.edges.map(edges => (
-            <Link
-              to={edges.node.link}
-              sx={{
-                variant: 'headings.h6',
-                textDecoration: 'none',
-                textAlign: 'center',
-                color: 'secondaryDark'
-              }}
-              key={edges.node.id}
-            >
-              <ContentItem>
-                <img width='50px' src={edges.node.logo.file.url} />
-                <Text>{edges.node.description}</Text>
-              </ContentItem>
-            </Link>
+            <ContentItem key={edges.node.id}>
+              <Link
+                to={edges.node.link}
+                sx={{
+                  textDecoration: 'none',
+                  textAlign: 'center',
+                  color: 'secondaryDark'
+                }}
+              >
+                <img
+                  width='auto'
+                  height='50px'
+                  src={edges.node.logo.file.url}
+                />
+
+                <Text pt={2} sx={{ variant: 'headings.h6' }}>
+                  {edges.node.name}
+                </Text>
+                <Text pt={3} sx={{ variant: 'text.default' }}>
+                  {edges.node.description}
+                </Text>
+              </Link>
+            </ContentItem>
           ))}
         </Grid>
 
@@ -179,13 +222,23 @@ export const query = graphql`
       edges {
         node {
           id
-          link
+          name
           description
+          link
           logo {
             file {
               url
             }
           }
+        }
+      }
+    }
+    contentPartnerships: allContentfulContentPartnerships {
+      nodes {
+        title
+        subtitle
+        moreInfo {
+          json
         }
       }
     }
