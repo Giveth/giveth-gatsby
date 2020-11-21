@@ -7,7 +7,7 @@ import theme from '../gatsby-plugin-theme-ui/index'
 
 // import graphics
 import logo from '../images/giveth-logo-blue.svg'
-import SocialNetworks from './SocialNetworks'
+import SocialNetworks from './content/SocialNetworks'
 import { FaGithub } from 'react-icons/fa'
 import { FiExternalLink } from 'react-icons/fi'
 

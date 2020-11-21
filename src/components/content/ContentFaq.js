@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../../gatsby-plugin-theme-ui/index'
 
 import React, { useState, useEffect } from 'react'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'

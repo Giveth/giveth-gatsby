@@ -11,7 +11,7 @@ import {
   FaWikipediaW
 } from 'react-icons/fa'
 
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../../gatsby-plugin-theme-ui/index'
 
 const SocialContainer = styled.div``
 
