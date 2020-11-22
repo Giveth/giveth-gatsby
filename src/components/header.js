@@ -1,9 +1,10 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'gatsby'
+import { ProveWalletContext } from '../contextProvider/proveWalletProvider'
+import { navigate, Link } from 'gatsby'
 import Loadable from '@loadable/component'
-import { IconButton, Text, jsx } from 'theme-ui'
+import { IconButton, Text, jsx, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
@@ -123,7 +124,8 @@ const NavLink = styled(Link)`
   }
 `
 
-const CreateLink = styled(Link)`
+const CreateLink = styled.div`
+  cursor: pointer;
   text-decoration: none;
   font-family: 'Red Hat Display', sans-serif;
   text-transform: uppercase;
@@ -142,6 +144,7 @@ const Decorator = styled.div`
 const Login = Loadable(() => import('./torus/login'))
 
 const Header = ({ siteTitle, isHomePage }) => {
+  const { checkWalletProof } = useContext(ProveWalletContext)
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
 
@@ -160,6 +163,16 @@ const Header = ({ siteTitle, isHomePage }) => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
+
+  const goCreate = async () => {
+    const check = await checkWalletProof({
+      msg: 'For this action we need to validate your account first'
+    })
+    if (check) {
+      navigate('create')
+    }
+    console.log({ check })
+  }
 
   return (
     <HeaderContainer
@@ -231,12 +244,12 @@ const Header = ({ siteTitle, isHomePage }) => {
 
         <UserSpan>
           {isMobile ? null : (
-            <span>
-              <CreateLink to='/create'>Create a project</CreateLink>
+            <Flex>
+              <CreateLink onClick={goCreate}>Create a project</CreateLink>
               <IconButton>
                 <img src={iconSearch} alt='' />
               </IconButton>
-            </span>
+            </Flex>
           )}
           <img src={iconVerticalLine} alt='' />
           <Login />

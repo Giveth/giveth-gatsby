@@ -51,10 +51,24 @@ const ProveWalletProvider = props => {
       }
     }
   }
+
+  const checkWalletProof = async ({ msg }) => {
+    if (isWalletProved) return true
+    if (!isWalletProved && isLoggedIn) {
+      if (window.confirm(msg)) {
+        await proveWallet()
+        return false
+      } else {
+        return false
+      }
+    }
+  }
+
   return (
     <proveWalletContext.Provider
       value={{
         proveWallet,
+        checkWalletProof,
         isWalletProved
       }}
     >
