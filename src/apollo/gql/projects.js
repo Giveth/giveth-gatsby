@@ -217,6 +217,30 @@ const GET_PROJECT_UPDATES = gql`
   }
 `
 
+const GET_PROJECT_BY_ADDRESS = gql`
+  query ProjectByAddress($address: String!) {
+    projectByAddress(address: $address) {
+      id
+      title
+      description
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      categories {
+        name
+      }
+    }
+  }
+`
+
+const REGISTER_PROJECT_DONATION = gql`
+  mutation($txId: String!, $anonymous: Boolean!) {
+    registerProjectDonation(txId: $txId, anonymous: $anonymous)
+  }
+`
+
 export {
   FETCH_PROJECTS,
   FETCH_PROJECT,
@@ -228,5 +252,7 @@ export {
   GET_STRIPE_DONATION_PDF,
   GET_STRIPE_PROJECT_DONATIONS,
   ADD_PROJECT_UPDATE,
-  GET_PROJECT_UPDATES
+  GET_PROJECT_UPDATES,
+  GET_PROJECT_BY_ADDRESS,
+  REGISTER_PROJECT_DONATION
 }

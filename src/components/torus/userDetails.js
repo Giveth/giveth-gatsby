@@ -58,10 +58,7 @@ const UserDetails = () => {
   const [active, setActive] = useState(false)
 
   const { logout, user, balance } = useContext(TorusContext)
-  const {
-    proveWallet,
-    isWalletProved
-  } = useContext(ProveWalletContext)
+  const { proveWallet, isWalletProved } = useContext(ProveWalletContext)
 
   const address = (user?.addresses && user.addresses[0]) || ''
   const truncAddress = `${address.substring(0, 5)} ... ${address.substring(

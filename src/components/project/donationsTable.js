@@ -2,6 +2,8 @@
 import React from 'react'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
+import { useApolloClient } from '@apollo/react-hooks'
+import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
@@ -166,6 +168,7 @@ const CustomTable = () => {
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
+  const client = useApolloClient()
 
   console.log('fromTable', currentProjectView)
   React.useEffect(() => {
@@ -228,6 +231,22 @@ const CustomTable = () => {
       setCurrentItem(pageNumber)
     }
 
+    const filterTx = async () => {
+      // ADAPT THIS
+      try {
+        const { data } = await client.query({
+          query: GET_PROJECT_BY_ADDRESS,
+          variables: {
+            address: '0xDED8DAE93e585977BC09e1Fd857a97D997b71fCD'
+          }
+        })
+        console.log('BO', { data })
+      } catch (error) {
+        console.log({ error })
+      }
+    }
+
+    // filterTx()
     return (
       <>
         <Table>

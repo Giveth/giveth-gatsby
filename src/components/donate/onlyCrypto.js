@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
+import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
 import { initOnboard, initNotify } from '../../services/onBoard'
@@ -144,7 +145,15 @@ const OnlyCrypto = props => {
   const SummaryRow = ({ title, amount, style }) => {
     return (
       <SmRow style={style}>
-        <Text sx={{ variant: 'text.medium' }}>{title}</Text>
+        <Text
+          sx={{
+            variant: 'text.medium',
+            textAlign: 'left',
+            width: ['50%', '70%']
+          }}
+        >
+          {title}
+        </Text>
         {amount?.length === 2 ? (
           <Flex sx={{ alignItems: 'center' }}>
             <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
@@ -153,7 +162,15 @@ const OnlyCrypto = props => {
             <Text sx={{ variant: 'text.medium' }}> {amount[1]}</Text>
           </Flex>
         ) : (
-          <Text sx={{ variant: 'text.medium' }}> {amount}</Text>
+          <Text
+            sx={{
+              variant: 'text.small',
+              textAlign: 'right',
+              color: 'anotherGrey'
+            }}
+          >
+            {amount}
+          </Text>
         )}
       </SmRow>
     )
@@ -185,6 +202,20 @@ const OnlyCrypto = props => {
         value: ethers.utils.parseEther(subtotal.toString())
       })
       props.setHashSent({ hash, subtotal })
+      console.log({ txId: hash?.toString(), anonymous: false })
+      // Send tx hash to our graph
+      // try {
+      //   const { data } = await client.mutate({
+      //     mutation: REGISTER_PROJECT_DONATION,
+      //     variables: {
+      //       txId: hash?.toString(),
+      //       anonymous: false
+      //     }
+      //   })
+      //   console.log('BO', { data })
+      // } catch (error) {
+      //   console.log({ error })
+      // }
 
       // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
       if (process.env.GATSBY_NETWORK === 'ropsten') return
@@ -315,15 +346,46 @@ const OnlyCrypto = props => {
         onRequestClose={() => setIsOpen(false)}
         contentLabel='QR Modal'
       >
-        <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            pt: 5,
+            px: 4,
+            maxWidth: ['85vw', '60vw', '60vw'],
+            textAlign: 'center'
+          }}
+        >
           <QRCode value={project?.walletAddress} size={250} />
-          <Text sx={{ variant: 'text.large', mt: 4 }}>
+          <Text sx={{ variant: ['headings.h5', 'headings.h5'], mt: 4, mb: 2 }}>
+            Donate to {project?.title}
+          </Text>
+          <Text sx={{ variant: ['headings.h6', 'headings.h6'] }}>
+            send ETH or ERC20 tokens using this address
+          </Text>
+          <Text
+            sx={{
+              variant: ['text.medium', 'text.large'],
+              fontWeight: 'bold',
+              py: 4
+            }}
+          >
             {project?.walletAddress}
           </Text>
+          <Button
+            onClick={() => setIsOpen(false)}
+            sx={{
+              variant: 'buttons.default',
+              padding: '1.063rem 7.375rem',
+              mt: 2
+            }}
+          >
+            Close
+          </Button>
         </Flex>
       </Modal>
       <AmountSection>
-        <AmountContainer>
+        <AmountContainer sx={{ width: ['100%', '100%'] }}>
           <Text sx={{ variant: 'text.large', mb: 1 }}>
             Enter your Ether amount
           </Text>
@@ -423,7 +485,7 @@ const OnlyCrypto = props => {
               )}
               <SummaryRow
                 title='Processing Fee'
-                amount={['Network Fee Only', '']}
+                amount={['Network Fee Only']}
                 style={{
                   borderBottom: '1px solid #6B7087',
                   padding: '0 0 18px 0'
