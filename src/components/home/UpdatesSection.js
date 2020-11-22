@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive'
 import { useMediumFeed } from './MediumFeed'
 import MailchimpSignup from './MailchimpSignup'
 
-import decoratorElements from '../images/decorator-elements.svg'
+import decoratorElements from '../../images/decorator-elements.svg'
 
 // apply style to elements
 const Main = styled(Grid)`

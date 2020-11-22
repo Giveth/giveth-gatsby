@@ -8,7 +8,7 @@ import { FaMediumM, FaGithub } from 'react-icons/fa'
 import useMediaQuery from 'react-responsive'
 
 import Layout from '../components/layout'
-import ContentFaq from '../components/ContentFaq'
+import ContentFaq from '../components/content/ContentFaq'
 
 const Main = styled(Box)``
 
