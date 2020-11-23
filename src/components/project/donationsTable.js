@@ -246,7 +246,7 @@ const CustomTable = () => {
       }
     }
 
-    // filterTx()
+    filterTx()
     return (
       <>
         <Table>

@@ -46,7 +46,8 @@ const IndexPage = props => {
       description: values.projectDescription,
       admin: values.projectAdmin,
       impactLocation: values.projectImpactLocation,
-      categories: projectCategories
+      categories: projectCategories,
+      walletAddress: values.projectWalletAddress
     }
     if (values.projectImage.length === 1) {
       projectData.imageStatic = values.projectImage
@@ -61,7 +62,7 @@ const IndexPage = props => {
     try {
       const project = await addProjectQuery({
         variables: {
-          project: { ...projectData, walletAddress }
+          project: { ...projectData }
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]
       })

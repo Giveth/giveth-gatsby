@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { ProveWalletContext } from '../contextProvider/proveWalletProvider'
 import { navigate, Link } from 'gatsby'
 import Loadable from '@loadable/component'
 import { IconButton, Text, jsx, Flex } from 'theme-ui'
@@ -144,7 +143,6 @@ const Decorator = styled.div`
 const Login = Loadable(() => import('./torus/login'))
 
 const Header = ({ siteTitle, isHomePage }) => {
-  const { checkWalletProof } = useContext(ProveWalletContext)
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
 
@@ -165,13 +163,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
-    const check = await checkWalletProof({
-      msg: 'For this action we need to validate your account first'
-    })
-    if (check) {
-      navigate('create')
-    }
-    console.log({ check })
+    navigate('/create')
   }
 
   return (

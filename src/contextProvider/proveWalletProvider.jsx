@@ -27,7 +27,8 @@ const ProveWalletProvider = props => {
             variables: {
               walletAddress: user?.addresses[0],
               signature: signedMessage,
-              email: user?.email
+              email: user?.email,
+              avatar: user?.profileImage
             }
           })
 
@@ -52,23 +53,10 @@ const ProveWalletProvider = props => {
     }
   }
 
-  const checkWalletProof = async ({ msg }) => {
-    if (isWalletProved) return true
-    if (!isWalletProved && isLoggedIn) {
-      if (window.confirm(msg)) {
-        await proveWallet()
-        return false
-      } else {
-        return false
-      }
-    }
-  }
-
   return (
     <proveWalletContext.Provider
       value={{
         proveWallet,
-        checkWalletProof,
         isWalletProved
       }}
     >

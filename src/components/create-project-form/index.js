@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import Web3 from 'web3'
 import PropTypes from 'prop-types'
-import { Box, Heading, Flex, Button, Progress, Text } from 'theme-ui'
+import { Box, Heading, Flex, Button, Progress, Link, Text } from 'theme-ui'
+import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
@@ -12,13 +14,15 @@ import {
   ProjectDescriptionInput,
   ProjectCategoryInput,
   ProjectImpactLocationInput,
-  ProjectImageInput
+  ProjectImageInput,
+  ProjectEthAddressInput
 } from './inputs'
-import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
+import ConfirmationModal from '../confirmationModal'
 
 const CreateProjectForm = props => {
+  const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
   const APIKEY = process.env.GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
@@ -69,10 +73,18 @@ const CreateProjectForm = props => {
         register={register}
       />
     ),
+
     ({ animationStyle }) => (
       <ProjectImageInput
         animationStyle={animationStyle}
         currentValue={formData.projectImage}
+        register={register}
+      />
+    ),
+    ({ animationStyle }) => (
+      <ProjectEthAddressInput
+        animationStyle={animationStyle}
+        currentValue={formData.projectWalletAddress}
         register={register}
       />
     ),
@@ -90,6 +102,18 @@ const CreateProjectForm = props => {
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
+    if (currentStep === 6) {
+      console.log(
+        data?.projectWalletAddress,
+        data?.projectWalletAddress?.length
+      )
+      if (
+        data?.projectWalletAddress?.length < 42 &&
+        !Web3.utils.isAddress(data?.projectWalletAddress)
+      ) {
+        return alert('eth address not valid')
+      }
+    }
     if (currentStep === 3) {
       projectCategory = {
         ...data
@@ -104,6 +128,7 @@ const CreateProjectForm = props => {
         ...data
       })
     }
+    console.log({ formData })
     if (currentStep === steps.length - 1) {
       props.onSubmit(formData, user?.addresses[0])
     }
@@ -122,9 +147,50 @@ const CreateProjectForm = props => {
 
   const [showCloseModal, setShowCloseModal] = useState(false)
 
+  useEffect(() => {
+    const checkProjectWallet = async () => {
+      // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
+    }
+    checkProjectWallet()
+  }, [])
+
   // CHECKS USER
   if (JSON.stringify(user) === JSON.stringify({})) {
-    return <h3>go back</h3>
+    return (
+      <Flex sx={{ flexDirection: 'column' }}>
+        <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 6, mx: 6 }}>
+          You are not logged in yet...
+        </Text>
+        <Text
+          sx={{ variant: 'headings.h4', color: 'primary', mx: 6 }}
+          style={{
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
+          onClick={() => window.location.replace('/')}
+        >
+          go to our homepage
+        </Text>
+      </Flex>
+    )
+  }
+
+  if (!isWalletProved) {
+    return (
+      <Text sx={{ variant: 'headings.h2', color: 'secondary', m: 6 }}>
+        Let's first verify your wallet{' '}
+        <Link
+          sx={{
+            color: 'primary',
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
+          onClick={() => proveWallet()}
+        >
+          here
+        </Link>
+      </Text>
+    )
   }
 
   return (
@@ -220,9 +286,14 @@ const CreateProjectForm = props => {
                   const Step = steps[item]
                   return <Step key={key} animationStyle={props} />
                 })}
-                <CloseModal
+                <ConfirmationModal
                   showModal={showCloseModal}
                   setShowModal={setShowCloseModal}
+                  title='Are you sure?'
+                  confirmation={{
+                    do: () => window.location.replace('/'),
+                    title: 'Yes'
+                  }}
                 />
               </>
             </form>
