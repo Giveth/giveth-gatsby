@@ -55,8 +55,8 @@ const HighFive = ({
         Your project is published and ready to raise funds.
       </Text>
 
-      <Flex sx={{ justifyContent: 'flex-start', ml: '20%' }}>
-        <Box sx={{ mt: '100px', width: '30%', bg: 'white' }}>
+      <Flex sx={{ width: '80%', justifyContent: 'center' }}>
+        <Box sx={{ minWidth: '20vw', mt: '100px', width: '30%', bg: 'white' }}>
           <ProjectListing
             disabled
             shadowed

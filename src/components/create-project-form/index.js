@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react'
 import Web3 from 'web3'
 import PropTypes from 'prop-types'
 import { Box, Heading, Flex, Button, Progress, Link, Text } from 'theme-ui'
+import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
+import { useApolloClient } from '@apollo/react-hooks'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { useForm } from 'react-hook-form'
@@ -26,6 +28,8 @@ const CreateProjectForm = props => {
   const APIKEY = process.env.GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
+  const [walletUsed, setWalletUsed] = useState(false)
+  const client = useApolloClient()
   const { user } = React.useContext(TorusContext)
 
   const categoryList = [
@@ -84,7 +88,10 @@ const CreateProjectForm = props => {
     ({ animationStyle }) => (
       <ProjectEthAddressInput
         animationStyle={animationStyle}
-        currentValue={formData.projectWalletAddress}
+        currentValue={
+          walletUsed !== true ? walletUsed : formData.projectWalletAddress
+        }
+        walletUsed={walletUsed}
         register={register}
       />
     ),
@@ -150,6 +157,17 @@ const CreateProjectForm = props => {
   useEffect(() => {
     const checkProjectWallet = async () => {
       // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
+      const { data } = await client.query({
+        query: GET_PROJECT_BY_ADDRESS,
+        variables: {
+          address: user?.addresses[0] + 's'
+        }
+      })
+      if (data?.projectByAddress) {
+        setWalletUsed(true)
+      } else {
+        setWalletUsed(user?.addresses[0])
+      }
     }
     checkProjectWallet()
   }, [])

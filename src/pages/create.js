@@ -3,7 +3,7 @@ import * as queryString from 'query-string'
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
-import { Text } from 'theme-ui'
+import { Text, Spinner } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 import Layout from '../components/layout'
 import decoratorClouds from '../images/decorator-clouds.svg'
@@ -17,7 +17,7 @@ const IndexPage = props => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
-  const [addedProject, setAddedProject] = useState({})
+  const [addedProject, setAddedProject] = useState(null)
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
@@ -151,13 +151,17 @@ const IndexPage = props => {
           }}
           className='hide'
         />
-        <HighFive
-          addedProject={addedProject}
-          projectId={projectId || addedProject.id}
-          projectImage={addedProject.image}
-          projectTitle={addedProject.title}
-          projectDescription={addedProject.description}
-        />
+        {addedProject ? (
+          <HighFive
+            addedProject={addedProject}
+            projectId={projectId || addedProject.id}
+            projectImage={addedProject.image}
+            projectTitle={addedProject.title}
+            projectDescription={addedProject.description}
+          />
+        ) : (
+          <Spinner variant='spinner.medium' />
+        )}
       </>
     )
   }

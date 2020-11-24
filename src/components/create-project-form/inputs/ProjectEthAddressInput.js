@@ -5,13 +5,19 @@ import { animated } from 'react-spring'
 export const ProjectEthAddressInput = ({
   register,
   currentValue,
+  walletUsed,
   animationStyle
 }) => {
   const [characterLength, setCharacterLength] = useState(
     currentValue ? currentValue.length : 0
   )
+  const [address, setAddress] = useState(null)
   const getLength = e => {
     setCharacterLength(e.target.value.length)
+  }
+  const onChangeAddress = e => {
+    setCharacterLength(e.target.value.length)
+    setAddress(true)
   }
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
@@ -49,7 +55,7 @@ export const ProjectEthAddressInput = ({
           ref={register({ required: true })}
           defaultValue={currentValue}
           placeholder='0x00000...'
-          onChange={e => setCharacterLength(e.target.value.length)}
+          onChange={e => onChangeAddress(e)}
         />
         <Text
           sx={{
@@ -62,6 +68,21 @@ export const ProjectEthAddressInput = ({
           {characterLength}/42
         </Text>
       </Flex>
+      {walletUsed !== true && !address && (
+        <Text
+          sx={{
+            fontSize: '3',
+            fontFamily: 'heading',
+            color: 'attention',
+            mt: '8px',
+            lineHeight: '19px'
+          }}
+        >
+          This is your torus wallet address, you can choose another one if
+          desired*
+        </Text>
+      )}
+
       <Button
         aria-label='Next'
         sx={{
