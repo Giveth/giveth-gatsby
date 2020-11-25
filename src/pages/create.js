@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
+import Web3 from 'web3'
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
@@ -47,7 +48,7 @@ const IndexPage = props => {
       admin: values.projectAdmin,
       impactLocation: values.projectImpactLocation,
       categories: projectCategories,
-      walletAddress: values.projectWalletAddress
+      walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress)
     }
     if (values.projectImage.length === 1) {
       projectData.imageStatic = values.projectImage
@@ -77,7 +78,7 @@ const IndexPage = props => {
     }
   }
 
-  function AfterCreation () {
+  function AfterCreation() {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -166,7 +167,7 @@ const IndexPage = props => {
     )
   }
 
-  function ProjectForm () {
+  function ProjectForm() {
     if (isLoggedIn === true) {
       if (!projectAdded && !projectId) {
         return (

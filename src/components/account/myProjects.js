@@ -35,34 +35,23 @@ const RaisedHandImg = styled.img`
   }
 `
 
-export const MyProjects = props => {
+const MyProjects = props => {
+  const { projects } = props
   return (
     <>
       <Grid p={4} columns={[1, 2]} style={{ justifyItems: 'center' }}>
-        <ProjectCard
-          name='Giveth DAC'
-          image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
-          raised={111}
-          categories={['Blockchain 4 Good']}
-          listingId='key1'
-          key='key1'
-        />
-        <ProjectCard
-          name='Aragon DAC'
-          image='https://feathers.beta.giveth.io/uploads/3aa88b6ed3a6e0f54542086886194696a21c06b756864b97a1c1a0dcf58d4e17.png'
-          raised={423}
-          categories={['Blockchain 4 Good']}
-          listingId='key2'
-          key='key2'
-        />
-        <ProjectCard
-          name='Fairdata Society'
-          image='https://ipfs.giveth.io/ipfs/QmUCepVMUhCHhZ5mSEXqWgL3taxPU5gaUhczTZgA4JLyPk'
-          raised={0}
-          categories={['Social Technology']}
-          listingId='key3'
-          key='key3'
-        />
+        {projects?.map((item, index) => {
+          return (
+            <ProjectCard
+              name={item?.title}
+              image={item?.image}
+              raised={111}
+              categories={item?.categories}
+              listingId={index}
+              key={index}
+            />
+          )
+        })}
         <SpecialCard to='/create' sx={{ cursor: 'pointer' }}>
           {' '}
           <DarkClouds
@@ -95,3 +84,5 @@ export const MyProjects = props => {
     </>
   )
 }
+
+export default MyProjects

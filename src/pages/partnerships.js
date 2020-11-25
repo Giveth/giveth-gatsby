@@ -237,6 +237,9 @@ export const query = graphql`
       nodes {
         title
         subtitle
+        moreInfo {
+          json
+        }
       }
     }
   }

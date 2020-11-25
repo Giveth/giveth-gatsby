@@ -1,11 +1,23 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { Avatar, Button, Box, Flex, Text, jsx } from 'theme-ui'
 
-export const MyAccount = () => {
-  const { user } = React.useContext(TorusContext)
-  console.log({ user })
+const MyAccount = ({ info }) => {
+  const [ethPrice, setEthPrice] = useState(1)
+  const { balance, user } = React.useContext(TorusContext)
+  console.log({ balance, user })
+
+  useEffect(() => {
+    const init = async () => {
+      fetch(
+        'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP'
+      )
+        .then(response => response.json())
+        .then(data => setEthPrice(data.USD))
+    }
+    init()
+  })
   return (
     <>
       <Flex>
@@ -19,7 +31,7 @@ export const MyAccount = () => {
         <Text sx={{ textTransform: 'uppercase', fontSize: 0 }}>
           Wallet Address
         </Text>
-        <Button
+        {/* <Button
           type='button'
           sx={{
             color: 'primary',
@@ -29,7 +41,7 @@ export const MyAccount = () => {
           }}
         >
           Change
-        </Button>
+        </Button> */}
       </Flex>
       <Text sx={{ mt: '14px', variant: 'text.medium' }}>
         {user?.addresses?.length > 0 && user?.addresses[0]}
@@ -54,7 +66,9 @@ export const MyAccount = () => {
           >
             My donations
           </Text>
-          <Text sx={{ color: 'primary', fontSize: 7 }}>24</Text>
+          <Text sx={{ color: 'primary', fontSize: 7 }}>
+            {info?.myDonations}
+          </Text>
         </Box>
         <Box
           sx={{
@@ -76,7 +90,7 @@ export const MyAccount = () => {
           >
             My projects
           </Text>
-          <Text sx={{ color: 'primary', fontSize: 7 }}>3</Text>
+          <Text sx={{ color: 'primary', fontSize: 7 }}>{info?.myProjects}</Text>
         </Box>
       </Flex>
       <Box
@@ -102,7 +116,7 @@ export const MyAccount = () => {
         </Text>
         <Flex sx={{ alignItems: 'baseline', paddingTop: '10px' }}>
           <Text sx={{ fontFamily: 'heading', color: 'secondary', fontSize: 7 }}>
-            $128.640,40
+            {balance && ethPrice && `$${(ethPrice * balance).toFixed(2)}`}
           </Text>
           <Text
             sx={{
@@ -112,10 +126,12 @@ export const MyAccount = () => {
               ml: '10%'
             }}
           >
-            376.85 ETH
+            {balance ? `${balance} ETH` : null}
           </Text>
         </Flex>
       </Box>
     </>
   )
 }
+
+export default MyAccount

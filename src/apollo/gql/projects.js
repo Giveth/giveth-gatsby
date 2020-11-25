@@ -21,6 +21,29 @@ const FETCH_PROJECTS = gql`
   }
 `
 
+const FETCH_USER_PROJECTS = gql`
+  query FetchProjects(
+    $limit: Int
+    $skip: Int
+    $orderBy: OrderBy
+    $admin: Float
+  ) {
+    projects(take: $limit, skip: $skip, orderBy: $orderBy, admin: $admin) {
+      id
+      title
+      balance
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      categories {
+        name
+      }
+    }
+  }
+`
+
 const FETCH_PROJECT = gql`
   query Project($id: ID!) {
     project(id: $id) {
@@ -243,6 +266,7 @@ const REGISTER_PROJECT_DONATION = gql`
 
 export {
   FETCH_PROJECTS,
+  FETCH_USER_PROJECTS,
   FETCH_PROJECT,
   FETCH_PROJECT_BY_SLUG,
   ADD_PROJECT,

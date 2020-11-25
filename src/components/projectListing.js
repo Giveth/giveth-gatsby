@@ -104,22 +104,24 @@ const setImage = img => {
 }
 
 const Categories = ({ categories }) => {
-  console.log({ categories })
-  if (!categories || categories.length < 1) return null
-  return categories?.map((category, index) => (
-    <Badge key={index}>
-      <Text
-        sx={{ variant: 'text.default' }}
-        style={{
-          fontSize: '10px',
-          color: theme.colors.bodyLight,
-          fontWeight: '500'
-        }}
-      >
-        {category.toUpperCase()}
-      </Text>
-    </Badge>
-  ))
+  if (!categories || !categories.isArray || categories?.length <= 0) return null
+  return categories?.map((category, index) => {
+    console.log({ category })
+    return (
+      <Badge key={index}>
+        <Text
+          sx={{ variant: 'text.default' }}
+          style={{
+            fontSize: '10px',
+            color: theme.colors.bodyLight,
+            fontWeight: '500'
+          }}
+        >
+          {category}
+        </Text>
+      </Badge>
+    )
+  })
 }
 
 const ProjectListing = props => {

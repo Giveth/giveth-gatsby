@@ -111,7 +111,7 @@ const Categories = () => {
           fontWeight: '500'
         }}
       >
-        {category.toUpperCase()}
+        {category?.toUpperCase()}
       </Text>
     </Badge>
   ))
