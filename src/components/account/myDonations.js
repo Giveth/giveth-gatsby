@@ -1,11 +1,14 @@
 /** @jsx jsx */
 import React from 'react'
 import { ProjectContext } from '../../contextProvider/projectProvider'
+import { ethers } from 'ethers'
+import { getEtherscanTxs } from '../../utils'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
 import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
+import { TorusContext } from '../../contextProvider/torusProvider'
 import { useQuery } from '@apollo/react-hooks'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -20,7 +23,6 @@ const Table = styled.table`
   margin: 4rem 0;
   padding: 0;
   width: 100%;
-  table-layout: fixed;
 
   thead {
     text-align: left;
@@ -151,8 +153,9 @@ const FilterBox = styled(Flex)`
   justify-content: space-between;
 `
 
-export const MyDonations = () => {
+const MyDonations = () => {
   const options = ['All Donations', 'Fiat', 'Crypto']
+  const { user } = React.useContext(TorusContext)
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
@@ -165,11 +168,21 @@ export const MyDonations = () => {
     variables: { projectId: 1 }
   })
 
-  console.log({ data })
-
   React.useEffect(() => {
     const setup = async () => {
-      setCurrentDonations(currentProjectView?.donations)
+      const cryptoTxs = await getEtherscanTxs(user?.addresses[0])
+      console.log({ cryptoTxs })
+      let donations = []
+      if (cryptoTxs) {
+        donations = [
+          data?.getStripeProjectDonations || null,
+          ...cryptoTxs.txs
+        ].filter(function (e) {
+          return e
+        })
+      }
+
+      setCurrentDonations(donations)
       setLoading(false)
     }
 
@@ -207,7 +220,7 @@ export const MyDonations = () => {
       case 'Fiat':
         return items?.filter(item => item.currency === 'USD')
       case 'Crypto':
-        return []
+        return items?.filter(item => item.currency === 'ETH')
       default:
         return items
     }
@@ -261,6 +274,7 @@ export const MyDonations = () => {
           </thead>
           <tbody>
             {currentItems.map((i, key) => {
+              console.log({ i })
               return (
                 <tr key={key}>
                   <td
@@ -268,7 +282,9 @@ export const MyDonations = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {dayjs(i.createdAt).format('ll')}
+                      {i?.createdAt
+                        ? dayjs.unix(i.createdAt).format('ll')
+                        : 'null'}
                     </Text>
                   </td>
                   <DonorBox
@@ -293,10 +309,12 @@ export const MyDonations = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.amount?.toLocaleString('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
-                      })}
+                      {i?.currency === 'ETH'
+                        ? parseFloat(ethers.utils.formatEther(i?.value))
+                        : i?.amount?.toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD'
+                          })}
                     </Text>
                   </td>
                   <td
@@ -304,7 +322,7 @@ export const MyDonations = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      Tx
+                      {i?.hash}
                     </Text>
                   </td>
                 </tr>
@@ -366,3 +384,5 @@ export const MyDonations = () => {
     </>
   )
 }
+
+export default MyDonations

@@ -1,15 +1,18 @@
 /** @jsx jsx */
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
-import { MyAccount, MyDonations, MyProjects } from '../components/account'
+import { MyAccount, MyProjects } from '../components/account'
 import { jsx, Text, Flex, Box } from 'theme-ui'
 import styled from '@emotion/styled'
 import Layout from '../components/layout'
 import { useMediaQuery } from 'react-responsive'
-
 import theme from '../gatsby-plugin-theme-ui/index'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import { BsArrowLeft } from 'react-icons/bs'
+
+const MyDonations = React.lazy(() =>
+  import('../components/account/myDonations')
+)
 
 const UserSpan = styled.span`
   position: relative;
@@ -39,6 +42,7 @@ const AccountPage = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [selectedView, setSelectedView] = useState('My Account')
   const options = ['My Account', 'My Projects', 'My Donations']
+  const isSSR = typeof window === 'undefined'
 
   const SetView = () => {
     switch (selectedView) {
@@ -47,7 +51,13 @@ const AccountPage = () => {
       case 'My Projects':
         return <MyProjects />
       case 'My Donations':
-        return <MyDonations />
+        return (
+          !isSSR && (
+            <React.Suspense fallback={<div />}>
+              <MyDonations />
+            </React.Suspense>
+          )
+        )
       default:
         return null
     }

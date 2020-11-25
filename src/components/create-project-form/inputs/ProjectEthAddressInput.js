@@ -12,10 +12,9 @@ export const ProjectEthAddressInput = ({
     currentValue ? currentValue.length : 0
   )
   const [address, setAddress] = useState(null)
-  const getLength = e => {
-    setCharacterLength(e.target.value.length)
-  }
+
   const onChangeAddress = e => {
+    e.preventDefault()
     setCharacterLength(e.target.value.length)
     setAddress(true)
   }
@@ -52,7 +51,7 @@ export const ProjectEthAddressInput = ({
           type='text'
           id='projectWalletAddress'
           name='projectWalletAddress'
-          ref={register({ required: true })}
+          ref={register()}
           defaultValue={currentValue}
           placeholder='0x00000...'
           onChange={e => onChangeAddress(e)}

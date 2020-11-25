@@ -44,21 +44,21 @@ const CreateProjectForm = props => {
     ({ animationStyle }) => (
       <ProjectNameInput
         animationStyle={animationStyle}
-        currentValue={formData.projectName}
+        currentValue={formData?.projectName}
         register={register}
       />
     ),
     ({ animationStyle }) => (
       <ProjectAdminInput
         animationStyle={animationStyle}
-        currentValue={formData.projectAdmin}
+        currentValue={formData?.projectAdmin}
         register={register}
       />
     ),
     ({ animationStyle }) => (
       <ProjectDescriptionInput
         animationStyle={animationStyle}
-        currentValue={formData.projectDescription}
+        currentValue={formData?.projectDescription}
         register={register}
       />
     ),
@@ -66,14 +66,14 @@ const CreateProjectForm = props => {
       <ProjectCategoryInput
         animationStyle={animationStyle}
         categoryList={categoryList}
-        currentValue={formData.projectCategory}
+        currentValue={formData?.projectCategory}
         register={register}
       />
     ),
     ({ animationStyle }) => (
       <ProjectImpactLocationInput
         animationStyle={animationStyle}
-        currentValue={formData.projectImpactLocation}
+        currentValue={formData?.projectImpactLocation}
         register={register}
       />
     ),
@@ -81,7 +81,7 @@ const CreateProjectForm = props => {
     ({ animationStyle }) => (
       <ProjectImageInput
         animationStyle={animationStyle}
-        currentValue={formData.projectImage}
+        currentValue={formData?.projectImage}
         register={register}
       />
     ),
@@ -89,7 +89,9 @@ const CreateProjectForm = props => {
       <ProjectEthAddressInput
         animationStyle={animationStyle}
         currentValue={
-          walletUsed !== true ? walletUsed : formData.projectWalletAddress
+          typeof walletUsed !== 'boolean'
+            ? walletUsed
+            : formData?.projectWalletAddress
         }
         walletUsed={walletUsed}
         register={register}
@@ -109,16 +111,24 @@ const CreateProjectForm = props => {
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
+    console.log({ currentStep })
     if (currentStep === 6) {
-      console.log(
-        data?.projectWalletAddress,
-        data?.projectWalletAddress?.length
-      )
       if (
-        data?.projectWalletAddress?.length < 42 &&
+        data?.projectWalletAddress?.length !== 42 ||
         !Web3.utils.isAddress(data?.projectWalletAddress)
       ) {
         return alert('eth address not valid')
+      }
+      // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
+      const res = await client.query({
+        query: GET_PROJECT_BY_ADDRESS,
+        variables: {
+          address: data?.projectWalletAddress
+        }
+      })
+      console.log({ res })
+      if (res?.data?.projectByAddress) {
+        return alert('this eth address is already being used for a project')
       }
     }
     if (currentStep === 3) {
@@ -137,7 +147,7 @@ const CreateProjectForm = props => {
     }
     console.log({ formData })
     if (currentStep === steps.length - 1) {
-      props.onSubmit(formData, user?.addresses[0])
+      props.onSubmit(formData)
     }
     nextStep()
   }
@@ -160,7 +170,7 @@ const CreateProjectForm = props => {
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
-          address: user?.addresses[0] + 's'
+          address: user?.addresses[0]
         }
       })
       if (data?.projectByAddress) {
