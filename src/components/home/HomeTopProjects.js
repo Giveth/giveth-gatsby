@@ -2,9 +2,9 @@
 
 import { jsx } from 'theme-ui'
 import { useQuery } from '@apollo/react-hooks'
-import { FETCH_PROJECTS } from '../apollo/gql/projects'
+import { FETCH_PROJECTS } from '../../apollo/gql/projects'
 import { navigate } from 'gatsby'
-import ProjectsList, { OrderByDirection, OrderByField } from './ProjectsList'
+import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
 import { useState } from 'react'
 
 const HomeTopProjects = () => {

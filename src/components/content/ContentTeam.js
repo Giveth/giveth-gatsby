@@ -1,7 +1,6 @@
 /** @jsx jsx */
-import { jsx, Text } from 'theme-ui'
-import theme from '../gatsby-plugin-theme-ui/index'
-
+import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
+import theme from '../../gatsby-plugin-theme-ui/index'
 import React from 'react'
 import styled from '@emotion/styled'
 import { FaGithub, FaTwitter } from 'react-icons/fa'
@@ -146,10 +145,7 @@ const ContentTeam = ({ headerdata }) => (
                 textAlign: 'center'
               }}
             >
-              Kane conceived Batman in early 1939 to capitalize on the
-              popularity of DC's Superman; although Kane frequently claimed sole
-              creation credit, Finger substantially developed the concept from a
-              generic superhero into something more bat-like.{' '}
+              {edges.node.shortBio}
             </Text>
             <Social1
               href={edges.node.socialTwitter}

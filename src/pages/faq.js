@@ -6,7 +6,7 @@ import styled from '@emotion/styled'
 // import useMediaQuery from 'react-responsive'
 
 import Layout from '../components/layout'
-import ContentFaq from '../components/ContentFaq'
+import ContentFaq from '../components/content/ContentFaq'
 
 const Main = styled(Box)``
 
