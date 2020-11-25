@@ -129,7 +129,8 @@ const Partnerships = ({ data }) => {
           }}
         >
           {documentToReactComponents(
-            data.contentPartnerships.nodes[0].moreInfo.json
+            data.contentPartnerships.nodes[0].moreInfo.json,
+            richTextOptions
           )}
         </Text>
         <Text

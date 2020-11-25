@@ -169,7 +169,8 @@ const AboutPage = ({ data }) => {
             {currentTab === 'mission' ? (
               <Text sx={{ variant: 'text.default' }}>
                 {documentToReactComponents(
-                  data.contentAboutUs.edges[0].node.missionandvision.json
+                  data.contentAboutUs.edges[0].node.missionandvision.json,
+                  richTextOptions
                 )}
               </Text>
             ) : currentTab === 'history' ? (
@@ -182,7 +183,8 @@ const AboutPage = ({ data }) => {
                 }}
               >
                 {documentToReactComponents(
-                  data.contentAboutUs.edges[0].node.history.json
+                  data.contentAboutUs.edges[0].node.history.json,
+                  richTextOptions
                 )}
               </Text>
             ) : (
