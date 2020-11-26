@@ -3,8 +3,9 @@ import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import Web3 from 'web3'
 
 export function titleCase(str) {
+  if (!str) return null
   return str
-    .toLowerCase()
+    ?.toLowerCase()
     .split(' ')
     .map(function (word) {
       return word.replace(word[0], word[0].toUpperCase())

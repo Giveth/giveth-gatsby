@@ -188,7 +188,7 @@ const CustomTable = () => {
     const some = donations?.filter(donation => {
       return (
         donation?.donor
-          .toString()
+          ?.toString()
           .toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
       )
