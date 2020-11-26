@@ -52,6 +52,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   useEffect(() => {
     const firstFetch = async () => {
       // Add donations to current project store
+      if (!project.walletAddress) return
       const cryptoTxs = await getEtherscanTxs(
         project.walletAddress,
         client,
