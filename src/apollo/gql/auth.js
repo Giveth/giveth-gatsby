@@ -37,6 +37,19 @@ const GET_USER = gql`
   }
 `
 
+const GET_USER_BY_ADDRESS = gql`
+  query UserByAddress($address: String!) {
+    userByAddress(address: $address) {
+      id
+      firstName
+      lastName
+      email
+      avatar
+      walletAddress
+    }
+  }
+`
+
 const DO_REGISTER = gql`
   mutation DoRegister($name: String!, $email: String!, $password: String!) {
     register(
@@ -53,4 +66,4 @@ const DO_REGISTER = gql`
     }
   }
 `
-export { DO_LOGIN, DO_REGISTER, GET_USER }
+export { DO_LOGIN, DO_REGISTER, GET_USER, GET_USER_BY_ADDRESS }

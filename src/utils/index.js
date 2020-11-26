@@ -1,4 +1,5 @@
 import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
+import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import Web3 from 'web3'
 
 export function titleCase(str) {
@@ -22,7 +23,11 @@ export function base64ToBlob(base64) {
   return new Blob([bytes], { type: 'application/pdf' })
 }
 
-export async function getEtherscanTxs(address, apolloClient = false) {
+export async function getEtherscanTxs(
+  address,
+  apolloClient = false,
+  isDonor = false
+) {
   try {
     const apiKey = process.env.ETHERSCAN_API_KEY
     const api = process.env.GATSBY_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
@@ -41,12 +46,14 @@ export async function getEtherscanTxs(address, apolloClient = false) {
       .then(async data => {
         const modified = []
         for (const t of data?.result) {
-          const extra = await apolloClient?.query({
-            query: GET_PROJECT_BY_ADDRESS,
-            variables: {
-              address: Web3.utils.toChecksumAddress(t?.to)
-            }
-          })
+          const extra = apolloClient
+            ? await apolloClient?.query({
+                query: isDonor ? GET_USER_BY_ADDRESS : GET_PROJECT_BY_ADDRESS,
+                variables: {
+                  address: Web3.utils.toChecksumAddress(t?.to)
+                }
+              })
+            : null
           modified.push({
             ...t,
             extra: extra?.data || null,

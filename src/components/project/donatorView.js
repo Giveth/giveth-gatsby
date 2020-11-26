@@ -12,7 +12,7 @@ import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.s
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 
 import { Link } from 'gatsby'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useApolloClient } from '@apollo/react-hooks'
 import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 
@@ -35,6 +35,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
   const isSSR = typeof window === 'undefined'
+  const client = useApolloClient()
 
   const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
     variables: { projectId: pageContext?.project?.id }
@@ -51,7 +52,11 @@ export const ProjectDonatorView = ({ pageContext }) => {
   useEffect(() => {
     const firstFetch = async () => {
       // Add donations to current project store
-      const cryptoTxs = await getEtherscanTxs(project.walletAddress)
+      const cryptoTxs = await getEtherscanTxs(
+        project.walletAddress,
+        client,
+        true
+      )
       console.log({ cryptoTxs, data })
       let donations = []
       if (cryptoTxs) {

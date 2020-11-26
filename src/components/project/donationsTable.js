@@ -288,11 +288,18 @@ const CustomTable = () => {
                     data-label='Donor'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
-                    <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
+                    <Avatar
+                      src={
+                        i?.extra?.userByAddress?.avatar ||
+                        'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
+                      }
+                    />
                     <Text
                       sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
                     >
-                      {i?.donor}
+                      {i?.extra?.userByAddress?.firstName
+                        ? `${i?.extra?.userByAddress?.firstName} ${i?.extra?.userByAddress?.lastName}`
+                        : i?.extra?.userByAddress?.email || i?.donor}
                     </Text>
                   </DonorBox>
                   <td
