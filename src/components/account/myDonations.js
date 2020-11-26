@@ -191,14 +191,13 @@ const MyDonations = props => {
   const searching = search => {
     const donations = currentDonations
     if (!search || search === '') {
-      console.log('cy')
       return setCurrentDonations(props?.donations)
     }
     const some = donations.filter(donation => {
       return (
-        donation.donor
-          .toString()
-          .toLowerCase()
+        donation?.donor
+          ?.toString()
+          ?.toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
       )
     })
