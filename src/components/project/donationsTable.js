@@ -272,6 +272,7 @@ const CustomTable = () => {
           <tbody>
             {currentItems.reverse().map((i, key) => {
               if (!i) return null
+              console.log({ i })
               return (
                 <tr key={key}>
                   <td
@@ -313,7 +314,7 @@ const CustomTable = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH'
+                      {i?.currency === 'ETH' && i?.value
                         ? parseFloat(ethers.utils.formatEther(i?.value))
                         : i?.amount?.toLocaleString('en-US', {
                             style: 'currency',
