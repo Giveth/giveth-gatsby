@@ -30,7 +30,7 @@ export async function getEtherscanTxs(
   isDonor = false
 ) {
   try {
-    const apiKey = process.env.ETHERSCAN_API_KEY
+    const apiKey = process.env.GATSBY_ETHERSCAN_API_KEY
     const api = process.env.GATSBY_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
     const balance = await fetch(
       `https://${api}.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
