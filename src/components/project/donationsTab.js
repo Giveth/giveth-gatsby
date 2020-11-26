@@ -17,7 +17,6 @@ const Funds = styled.div`
 const DonationsTab = ({ project, showModal, setShowModal }) => {
   const [loading, setLoading] = React.useState(true)
   const { currentProjectView } = React.useContext(ProjectContext)
-  console.log({ currentProjectView })
   const total = currentProjectView?.ethBalance
 
   React.useEffect(() => {

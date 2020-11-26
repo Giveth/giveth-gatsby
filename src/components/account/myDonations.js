@@ -308,7 +308,7 @@ const MyDonations = props => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH'
+                      {i?.currency === 'ETH' && i?.value
                         ? parseFloat(ethers.utils.formatEther(i?.value))
                         : i?.amount?.toLocaleString('en-US', {
                             style: 'currency',

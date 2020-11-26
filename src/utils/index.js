@@ -46,6 +46,13 @@ export async function getEtherscanTxs(
       .then(response => response.json())
       .then(async data => {
         const modified = []
+        if (data?.status === '0' || typeof data?.result === 'string') {
+          return {
+            balance,
+            txs: [],
+            error: data?.result
+          }
+        }
         for (const t of data?.result) {
           const extra = apolloClient
             ? await apolloClient?.query({

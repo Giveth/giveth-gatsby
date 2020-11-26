@@ -300,7 +300,7 @@ const Donate = props => {
     variables: { slug: projectId }
   })
 
-  console.log({ data })
+  // console.log({ data })
 
   return (
     <Layout asDialog>

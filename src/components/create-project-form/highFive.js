@@ -11,7 +11,7 @@ const HighFive = ({
   projectTitle,
   projectDescription
 }) => {
-  console.log({ projectImage })
+  // console.log({ projectImage })
   // This will be useful when we need to handle the route on webhook
 
   // const { loading, error, data } = useQuery(FETCH_PROJECT, {

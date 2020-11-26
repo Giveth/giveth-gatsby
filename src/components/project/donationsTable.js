@@ -170,7 +170,6 @@ const CustomTable = () => {
   )
   const client = useApolloClient()
 
-  console.log('fromTable', currentProjectView)
   React.useEffect(() => {
     const setup = async () => {
       setCurrentDonations(currentProjectView?.donations)
@@ -231,22 +230,22 @@ const CustomTable = () => {
       setCurrentItem(pageNumber)
     }
 
-    const filterTx = async () => {
-      // ADAPT THIS
-      try {
-        const { data } = await client.query({
-          query: GET_PROJECT_BY_ADDRESS,
-          variables: {
-            address: '0xDED8DAE93e585977BC09e1Fd857a97D997b71fCD'
-          }
-        })
-        console.log('BO', { data })
-      } catch (error) {
-        console.log({ error })
-      }
-    }
+    // const filterTx = async () => {
+    //   // ADAPT THIS
+    //   try {
+    //     const { data } = await client.query({
+    //       query: GET_PROJECT_BY_ADDRESS,
+    //       variables: {
+    //         address: '0xDED8DAE93e585977BC09e1Fd857a97D997b71fCD'
+    //       }
+    //     })
+    //     console.log('BO', { data })
+    //   } catch (error) {
+    //     console.log({ error })
+    //   }
+    // }
 
-    filterTx()
+    // filterTx()
     return (
       <>
         <Table>

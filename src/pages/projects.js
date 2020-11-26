@@ -56,7 +56,7 @@ const Projects = ({ location }) => {
     const slug = pathname[2]
     if (slug) {
       // redirect
-      console.log({ slug })
+      // console.log({ slug })
       getProject(slug)
     } else {
       setLoading(false)

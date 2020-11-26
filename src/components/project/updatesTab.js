@@ -18,7 +18,7 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     }
   })
 
-  console.log({ data })
+  // console.log({ data })
 
   const addUpdate = async ({ title, content }) => {
     try {
