@@ -194,6 +194,7 @@ const MyDonations = props => {
       return setCurrentDonations(props?.donations)
     }
     const some = donations.filter(donation => {
+      if (!donation?.donor) return null
       return (
         donation?.donor
           ?.toString()
