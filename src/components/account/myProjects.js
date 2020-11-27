@@ -1,7 +1,8 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'gatsby'
 import ProjectCard from '../projectListing'
+import ProjectEdition from './projectEdition/index'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
 import { Box, Grid, Text, jsx } from 'theme-ui'
@@ -37,12 +38,22 @@ const RaisedHandImg = styled.img`
 
 const MyProjects = props => {
   const { projects } = props
+  const [editProject, setEditProject] = useState(null)
+  if (editProject) {
+    return (
+      <ProjectEdition
+        project={editProject}
+        goBack={() => setEditProject(null)}
+      />
+    )
+  }
   return (
     <>
       <Grid p={4} columns={[1, 2]} style={{ justifyItems: 'center' }}>
         {projects?.map((item, index) => {
           return (
             <ProjectCard
+              action={() => setEditProject(item)}
               name={item?.title}
               image={item?.image}
               raised={111}

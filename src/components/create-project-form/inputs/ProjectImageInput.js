@@ -8,14 +8,7 @@ import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 import placeHolder from '../../../images/placeholder.png'
-
-const toBase64 = file =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
-  })
+import { toBase64 } from '../../../utils'
 
 export const ProjectImageInput = ({
   register,

@@ -22,6 +22,7 @@ import {
 import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
+import { categoryList } from '../../utils/constants'
 
 const CreateProjectForm = props => {
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
@@ -32,12 +33,6 @@ const CreateProjectForm = props => {
   const client = useApolloClient()
   const { user } = React.useContext(TorusContext)
 
-  const categoryList = [
-    { name: 'nonprofit', value: 'Non-profit' },
-    { name: 'covid19', value: 'COVID-19' },
-    { name: 'technology', value: 'Technology' },
-    { name: 'other', value: 'Other' }
-  ]
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
   const steps = [

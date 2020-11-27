@@ -24,6 +24,14 @@ export function base64ToBlob(base64) {
   return new Blob([bytes], { type: 'application/pdf' })
 }
 
+export const toBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
+
 export async function getEtherscanTxs(
   address,
   apolloClient = false,
