@@ -5,20 +5,19 @@
  */
 
 exports.onCreatePage = async ({ page, actions }) => {
-  const { createPage } = actions
-
+  // const { createPage } = actions
   // page.matchPath is a special key that's used for matching pages
   // only on the client.
-  if (page.path.match(/^\/donate/)) {
-    page.matchPath = '/donate/*'
-    // Update the page.
-    createPage(page)
-  }
-  if (page.path.match(/^\/projects/)) {
-    page.matchPath = '/projects/*'
-    // Update the page.
-    createPage(page)
-  }
+  // if (page.path.match(/^\/donate/)) {
+  //   page.matchPath = '/donate/*'
+  //   // Update the page.
+  //   createPage(page)
+  // }
+  // if (page.path.match(/^\/projects/)) {
+  //   page.matchPath = '/projects/*'
+  //   // Update the page.
+  //   createPage(page)
+  // }
 }
 
 exports.createPages = async ({ graphql, actions }) => {
