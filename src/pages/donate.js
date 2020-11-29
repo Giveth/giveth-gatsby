@@ -156,7 +156,7 @@ const ShowProject = props => {
         <OptionTypesBox
           onClick={() => {
             if (title === 'Credit Card') return alert('coming soon')
-            setPaymentType(title)
+            // setPaymentType(title)
           }}
           style={{
             backgroundColor: isSelected ? 'white' : theme.colors.secondary,

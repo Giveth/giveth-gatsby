@@ -13,6 +13,8 @@ import {
   Textarea
 } from 'theme-ui'
 import theme from '../../../gatsby-plugin-theme-ui/index'
+import { useApolloClient } from '@apollo/react-hooks'
+import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
 import { useDropzone } from 'react-dropzone'
 import { categoryList } from '../../../utils/constants'
 import { toBase64 } from '../../../utils'
@@ -25,6 +27,7 @@ import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery
 function ProjectEdition(props) {
   const { project, goBack } = props
   const [displayImage, setDisplayImage] = useState(null)
+  const client = useApolloClient()
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
@@ -35,6 +38,28 @@ function ProjectEdition(props) {
   const { register, handleSubmit, errors } = useForm() // initialize the hook
   const onSubmit = data => {
     console.log(data)
+  }
+  console.log({ project })
+  const connectBankAccount = async () => {
+    try {
+      const projectId = project?.id
+      if (!projectId) return alert('no project here')
+      const connectLink = await client.query({
+        query: GET_LINK_BANK_CREATION,
+        variables: {
+          projectId: parseInt(projectId),
+          returnUrl: `${window.location.origin}/account?projectId=${projectId}`,
+          refreshUrl: `${window.location.origin}/account?projectId=${projectId}`
+        }
+      })
+      if (connectLink?.data?.setProjectBankAccount) {
+        window.location.href = connectLink.data.setProjectBankAccount
+      } else {
+        alert('error')
+      }
+    } catch (error) {
+      console.log({ error })
+    }
   }
 
   const CustomLabel = ({ title, htmlFor, style, variant }) => {
@@ -57,7 +82,6 @@ function ProjectEdition(props) {
       <a onClick={goBack}>
         <h3>go back</h3>
       </a>
-      <h3>{project?.title}</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <>
           <Grid
@@ -180,7 +204,19 @@ function ProjectEdition(props) {
               })}
             </Box>
             {/* <CustomLabel title='Impact' htmlFor='editImpactLocation' /> */}
-            <CustomLabel title='Donation Address' htmlFoyyyr='editWalletAddress' />
+            <CustomLabel title='Bank Account' htmlFor='addBankAccount' />
+            <Text
+              onClick={connectBankAccount}
+              sx={{
+                fontFamily: 'body',
+                mt: '-5%',
+                color: 'primary',
+                cursor: 'pointer'
+              }}
+            >
+              Connect your bank account
+            </Text>
+            <CustomLabel title='Donation Address' htmlFor='editWalletAddress' />
             <Input name='editAdmin' ref={register} />
             <CustomLabel
               variant='text.caption'

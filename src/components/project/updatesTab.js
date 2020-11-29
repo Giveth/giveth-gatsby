@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   GET_PROJECT_UPDATES,
   ADD_PROJECT_UPDATE
 } from '../../apollo/gql/projects'
 import { useMutation, useQuery } from '@apollo/react-hooks'
+import { ProjectContext } from '../../contextProvider/projectProvider'
 
 import Timeline from './timeline'
 
 const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
   const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE)
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
 
   const { data } = useQuery(GET_PROJECT_UPDATES, {
     variables: {
@@ -18,7 +22,14 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     }
   })
 
-  // console.log({ data })
+  useEffect(() => {
+    if (data) {
+      setCurrentProjectView({
+        ...currentProjectView,
+        updates: data?.getProjectUpdates
+      })
+    }
+  }, [data])
 
   const addUpdate = async ({ title, content }) => {
     try {

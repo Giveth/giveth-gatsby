@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Flex, Image, Text, Box, Button } from 'theme-ui'
+import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import SEO from '../seo'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
@@ -13,7 +13,10 @@ import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.s
 
 import { Link } from 'gatsby'
 import { useQuery, useApolloClient } from '@apollo/react-hooks'
-import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
+import {
+  GET_STRIPE_PROJECT_DONATIONS,
+  GET_PROJECT_UPDATES
+} from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
@@ -69,10 +72,21 @@ export const ProjectDonatorView = ({ pageContext }) => {
         })
       }
 
+      // Get Updates
+      const updates = await client?.query({
+        query: GET_PROJECT_UPDATES,
+        variables: {
+          projectId: parseInt(project?.id),
+          take: 100,
+          skip: 0
+        }
+      })
+
       setCurrentProjectView({
         ...currentProjectView,
         ethBalance: cryptoTxs?.balance,
-        donations
+        donations,
+        updates: updates?.data?.getProjectUpdates
       })
       setTotalDonations(donations?.length)
       setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
@@ -113,7 +127,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
       return false
     }
   }
-
+  console.log({ currentProjectView })
   return (
     <>
       <SEO title={project?.title} />
@@ -245,7 +259,15 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   borderBottomStyle: currentTab === 'updates' ? 'solid' : null
                 }}
               >
-                Updates
+                Updates{' '}
+                {currentProjectView?.updates ? (
+                  <Badge variant='blueDot' sx={{ ml: 2 }}>
+                    {' '}
+                    <Text>{currentProjectView?.updates.length} </Text>
+                  </Badge>
+                ) : (
+                  ''
+                )}
               </Text>
             </Button>
             <Button
@@ -265,7 +287,10 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   borderBottomStyle: currentTab === 'donation' ? 'solid' : null
                 }}
               >
-                Donations
+                Donations{' '}
+                {currentProjectView?.donations
+                  ? `( ${currentProjectView?.donations.length} )`
+                  : ''}
               </Text>
             </Button>
           </Flex>

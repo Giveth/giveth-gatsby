@@ -270,7 +270,6 @@ const MyDonations = props => {
           </thead>
           <tbody>
             {currentItems.map((i, key) => {
-              console.log({ i })
               return (
                 <tr key={key}>
                   <td

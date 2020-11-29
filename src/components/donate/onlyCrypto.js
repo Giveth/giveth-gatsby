@@ -182,19 +182,17 @@ const OnlyCrypto = props => {
   }
 
   const readyToTransact = async () => {
-    if (!provider) {
-      const walletSelected = await onboard.walletSelect()
-      if (!walletSelected) return false
-    }
-
+    onboard.walletReset()
+    const walletSelected = await onboard.walletSelect()
+    if (!walletSelected) return false
     const ready = await onboard.walletCheck()
+    console.log({ ready })
     return ready
   }
 
   // FOR REGULAR TX
   const sendTx = async () => {
     try {
-      await setProvider()
       const signer = getSigner(provider)
       console.log(ethers.utils.parseEther(subtotal.toString()))
       const { hash } = await signer.sendTransaction({
@@ -242,6 +240,7 @@ const OnlyCrypto = props => {
         console.log('ALLLLLLL', event)
       })
     } catch (error) {
+      alert(error?.message)
       console.log({ error })
     }
   }
