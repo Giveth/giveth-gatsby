@@ -2,44 +2,95 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Flex,
-  Grid,
   Box,
   Button,
   Checkbox,
   Label,
-  Image,
   Text,
   Input,
   Textarea
 } from 'theme-ui'
+import Web3 from 'web3'
 import theme from '../../../gatsby-plugin-theme-ui/index'
 import { useApolloClient } from '@apollo/react-hooks'
-import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
+import {
+  GET_LINK_BANK_CREATION,
+  EDIT_PROJECT
+} from '../../../apollo/gql/projects'
 import { useDropzone } from 'react-dropzone'
+import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
 import { toBase64 } from '../../../utils'
+import ImageSection from './imageSection'
+import styled from '@emotion/styled'
 
-import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
-import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery2.svg'
-import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
-import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
+const CustomInput = styled(Input)`
+  color: ${theme.colors.secondary};
+`
 
 function ProjectEdition(props) {
   const { project, goBack } = props
-  const [displayImage, setDisplayImage] = useState(null)
+
+  const { title, admin, description, walletAddress } = project
+  const [categories, setCategories] = useState(project?.categories)
+
   const client = useApolloClient()
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
-    multiple: false,
-    onDrop: async acceptedFile => {
-      setDisplayImage(await toBase64(acceptedFile[0]))
-    }
-  })
   const { register, handleSubmit, errors } = useForm() // initialize the hook
-  const onSubmit = data => {
-    console.log(data)
+
+  const onSubmit = async data => {
+    console.log({ project, data })
+    // Validate eth address
+    if (project?.walletAddress !== data.editWalletAddress) {
+      if (
+        data?.editWalletAddress?.length !== 42 ||
+        !Web3.utils.isAddress(data?.editWalletAddress)
+      ) {
+        return alert('eth address not valid')
+      }
+    }
+
+    const projectCategories = []
+    for (const category in categoryList) {
+      const name = categoryList[category]?.name
+      if (data[name]) {
+        projectCategories.push({ name: categoryList[category].name.toString() })
+      }
+    }
+
+    const projectData = {
+      title: data.editTitle,
+      description: data.editDescription,
+      admin: project.admin,
+      // impactLocation: project.,
+      categories: projectCategories,
+      walletAddress: Web3.utils.toChecksumAddress(data.editWalletAddress)
+    }
+
+    // Validate Image
+    if (project?.image !== data?.editImage) {
+      if (data?.editImage.length === 1) {
+        projectData.imageStatic = data.editImage
+      } else {
+        //download image to send
+        const imageFile = await getImageFile(data.editImage, data?.editTitle)
+        projectData.imageUpload = imageFile
+      }
+    }
+    console.log({ projectData })
+    try {
+      const edit = await client.mutate({
+        mutation: EDIT_PROJECT,
+        variables: {
+          newProjectData: projectData,
+          projectId: parseFloat(project?.id)
+        }
+      })
+      console.log({ edit })
+    } catch (error) {
+      console.log({ error })
+    }
   }
-  console.log({ project })
+
   const connectBankAccount = async () => {
     try {
       const projectId = project?.id
@@ -76,7 +127,6 @@ function ProjectEdition(props) {
       </Label>
     )
   }
-
   return (
     <>
       <a onClick={goBack}>
@@ -84,85 +134,16 @@ function ProjectEdition(props) {
       </a>
       <form onSubmit={handleSubmit(onSubmit)}>
         <>
-          <Grid
-            sx={{
-              justifyContent: 'center',
-              alignContent: 'center',
-              textAlign: 'center',
-              border: '2px dashed #DFDAE8',
-              width: '100%',
-              minHeight: '270px',
-              maxHeight: '270px',
-              mt: '12px',
-              p: '2.5%'
-            }}
-          >
-            <Flex
-              sx={{
-                flexDirection: 'column',
-                alignItems: 'center',
-                alignContent: 'center',
-                fontFamily: 'body',
-                fontSize: 3
-              }}
-              {...getRootProps()}
-            >
-              <Flex sx={{ justifyContent: 'center' }}>
-                {displayImage === '1' && (
-                  <ProjectImageGallery1
-                    style={{ width: '90%', height: '90%' }}
-                  />
-                )}
-                {displayImage === '2' && (
-                  <ProjectImageGallery2
-                    style={{ width: '90%', height: '90%' }}
-                  />
-                )}
-                {displayImage === '3' && (
-                  <ProjectImageGallery3
-                    style={{ width: '90%', height: '90%' }}
-                  />
-                )}
-                {displayImage === '4' && (
-                  <ProjectImageGallery4
-                    style={{ width: '90%', height: '90%' }}
-                  />
-                )}
-              </Flex>
-              <Text sx={{ marginTop: '30px' }}>
-                Drag & drop an image here or{' '}
-                <Text sx={{ display: 'inline-block', color: 'primary' }}>
-                  Upload from computer
-                </Text>
-              </Text>
-              <Text sx={{ marginTop: '8px' }}>
-                Suggested image size min. 1200px width. Image size up to 16mb.
-              </Text>
-            </Flex>
-          </Grid>
-          <Button
-            type='button'
-            onClick={() => {
-              setDisplayImage('3')
-            }}
-            sx={{
-              background: 'unset',
-              cursor: 'pointer',
-              width: '80px',
-              height: '80px',
-              padding: 0,
-              mt: 4,
-              border: '2px solid #DFDAE8',
-              borderRadius: '8px'
-            }}
-          >
-            <ProjectImageGallery3 style={{ width: '100%', height: '100%' }} />
-          </Button>
+          <ImageSection image={project?.image} register={register} />
           <Flex sx={{ width: '70%', flexDirection: 'column' }}>
-            <CustomLabel title='Project Name' htmlFor='editName' />
-            <Input name='editName' ref={register} />{' '}
-            <CustomLabel title='Project Admin' htmlFor='editAdmin' />
-            <Input name='editAdmin' ref={register} />
+            <CustomLabel title='Project Name' htmlFor='editTitle' />
+            <CustomInput
+              name='editTitle'
+              ref={register}
+              defaultValue={title}
+            />{' '}
+            {/* <CustomLabel title='Project Admin' htmlFor='editAdmin' />
+            <CustomInput name='editAdmin' ref={register} defaultValue={admin} /> */}
             <CustomLabel
               title='Project Description'
               htmlFor='editDescription'
@@ -170,16 +151,21 @@ function ProjectEdition(props) {
             <Textarea
               sx={{
                 resize: 'none',
-                fontFamily: 'body'
+                fontFamily: 'body',
+                color: 'secondary'
               }}
               id='editDescription'
               name='editDescription'
+              defaultValue={description}
               ref={register}
               rows={12}
             />
             <CustomLabel title='Category' htmlFor='editCategory' />
             <Box>
               {categoryList.map(category => {
+                const categoryFound = categories?.find(
+                  i => i.name === category.name
+                )
                 return (
                   <Label
                     sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
@@ -190,13 +176,20 @@ function ProjectEdition(props) {
                       id={category.name}
                       name={category.name}
                       ref={register}
-                      // defaultChecked={
-                      //   currentValue
-                      //     ? currentValue[category.name][0] === 'on'
-                      //       ? 1
-                      //       : 0
-                      //     : 0
-                      // }
+                      onClick={() => {
+                        const update = categories
+                        categoryFound
+                          ? setCategories(
+                              // remove
+                              categories?.filter(i => i.name !== category.name)
+                            )
+                          : setCategories([
+                              // add
+                              ...categories,
+                              { name: category.name }
+                            ])
+                      }}
+                      defaultChecked={categoryFound ? 1 : 0}
                     />
                     <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
                   </Label>
@@ -217,7 +210,11 @@ function ProjectEdition(props) {
               Connect your bank account
             </Text>
             <CustomLabel title='Donation Address' htmlFor='editWalletAddress' />
-            <Input name='editAdmin' ref={register} />
+            <CustomInput
+              name='editWalletAddress'
+              ref={register}
+              defaultValue={walletAddress}
+            />
             <CustomLabel
               variant='text.caption'
               style={{ margin: '5px 0 0 5px', color: theme.colors.bodyLight }}
@@ -225,6 +222,44 @@ function ProjectEdition(props) {
               htmlFor={null}
             />
           </Flex>
+          <Button
+            aria-label='Next'
+            sx={{
+              mt: '39px',
+              width: '240px',
+              height: '52px',
+              borderRadius: '48px',
+              cursor: 'pointer'
+            }}
+            type='submit'
+          >
+            <Text
+              sx={{
+                fontFamily: 'body',
+                fontWeight: 'bold',
+                fontSize: 2,
+                letterSpacing: '4%',
+                textTransform: 'uppercase',
+                textAlign: 'center'
+              }}
+            >
+              Save
+            </Text>
+          </Button>
+          <Button
+            type='button'
+            aria-label='Cancel'
+            onClick={goBack}
+            sx={{
+              fontSize: '3',
+              fontFamily: 'body',
+              color: 'secondary',
+              background: 'unset',
+              cursor: 'pointer'
+            }}
+          >
+            Cancel
+          </Button>
         </>
       </form>
     </>

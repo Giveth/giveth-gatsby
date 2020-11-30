@@ -32,6 +32,16 @@ export const toBase64 = file =>
     reader.onerror = error => reject(error)
   })
 
+export const getImageFile = async (base64Data, projectName) => {
+  const imageFile = await fetch(base64Data)
+    .then(res => res.blob())
+    .then(blob => {
+      return new File([blob], projectName)
+    })
+  console.log('found it', imageFile)
+  return imageFile
+}
+
 export async function getEtherscanTxs(
   address,
   apolloClient = false,

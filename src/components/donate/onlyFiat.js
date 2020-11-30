@@ -116,6 +116,7 @@ const OnlyFiat = props => {
       if (amount <= 0) return alert('Please set a valid amount')
       // await getDonationSession({ variables: { amount: amountSelect } })
       const projId = project?.id
+      const slug = project?.slug
       let givethDonation = 0
       donateToGiveth === true && (givethDonation = 5)
       const { data } = await client.query({
@@ -125,8 +126,8 @@ const OnlyFiat = props => {
           amount: parseFloat(subtotal),
           anonymous: anonymous,
           donateToGiveth: donateToGiveth,
-          successUrl: `${window.location.origin}/donate/${projId}?success=true`,
-          cancelUrl: `${window.location.origin}/donate/${projId}?success=false`
+          successUrl: `${window.location.origin}/donate/${slug}?success=true`,
+          cancelUrl: `${window.location.origin}/donate/${slug}?success=false`
         }
       })
       goStripe(data)

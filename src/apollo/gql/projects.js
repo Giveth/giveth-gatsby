@@ -11,7 +11,9 @@ const FETCH_PROJECTS = gql`
         slug
         creationDate
         admin
+        description
         walletAddress
+        impactLocation
         categories {
           name
         }
@@ -32,11 +34,13 @@ const FETCH_USER_PROJECTS = gql`
       id
       title
       balance
+      description
       image
       slug
       creationDate
       admin
       walletAddress
+      impactLocation
       categories {
         name
       }
@@ -55,6 +59,7 @@ const FETCH_PROJECT = gql`
       slug
       creationDate
       walletAddress
+      impactLocation
       categories {
         name
       }
@@ -73,6 +78,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       creationDate
       admin
       walletAddress
+      impactLocation
       categories {
         name
       }
@@ -251,6 +257,7 @@ const GET_PROJECT_BY_ADDRESS = gql`
       creationDate
       admin
       walletAddress
+      impactLocation
       categories {
         name
       }
@@ -261,6 +268,25 @@ const GET_PROJECT_BY_ADDRESS = gql`
 const REGISTER_PROJECT_DONATION = gql`
   mutation($txId: String!, $anonymous: Boolean!) {
     registerProjectDonation(txId: $txId, anonymous: $anonymous)
+  }
+`
+
+const EDIT_PROJECT = gql`
+  mutation editProject($newProjectData: ProjectInput!, $projectId: Float!) {
+    editProject(newProjectData: $newProjectData, projectId: $projectId) {
+      id
+      title
+      description
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+    }
   }
 `
 
@@ -278,5 +304,6 @@ export {
   ADD_PROJECT_UPDATE,
   GET_PROJECT_UPDATES,
   GET_PROJECT_BY_ADDRESS,
-  REGISTER_PROJECT_DONATION
+  REGISTER_PROJECT_DONATION,
+  EDIT_PROJECT
 }
