@@ -56,7 +56,7 @@ const Projects = ({ location }) => {
     const slug = pathname[2]
     if (slug) {
       // redirect
-      // console.log({ slug })
+      console.log({ slug })
       getProject(slug)
     } else {
       setLoading(false)
@@ -83,15 +83,7 @@ const Projects = ({ location }) => {
 
   return (
     <Layout>
-      {loading ? (
-        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Spinner variant='spinner.medium' />
-        </Flex>
-      ) : slugProject ? (
-        <ProjectDonatorView pageContext={{ project: slugProject }} />
-      ) : (
-        <AllProjects />
-      )}
+      <AllProjects />
     </Layout>
   )
 }

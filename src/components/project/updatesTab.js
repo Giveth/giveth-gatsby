@@ -57,7 +57,7 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
   return (
     <>
       <Timeline
-        content={data?.getProjectUpdates}
+        content={currentProjectView?.updates}
         addUpdate={addUpdate}
         project={project}
         isOwner={isOwner}

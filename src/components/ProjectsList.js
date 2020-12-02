@@ -37,60 +37,60 @@ const IconSearch = styled(SearchIcon)`
   margin-left: -2.5rem;
 `
 
-const SelectMenu = props => {
-  const { caption, options = {}, onChange = () => {}, defaultValue } = props
-  return (
-    <div
-      style={{
-        flexGrow: 1,
-        margin: '10px'
-      }}
-    >
-      <Text
-        pl={3}
-        sx={{
-          variant: 'text.default',
-          color: 'secondary',
-          fontSize: 3,
-          fontWeight: 'medium',
-          textDecoration: 'none',
-          textTransform: 'uppercase'
-        }}
-      >
-        {caption}
-      </Text>
-      <Select
-        pl={3}
-        sx={{
-          variant: 'text.default',
-          color: 'secondary',
-          fontSize: 3,
-          fontWeight: 'medium',
-          textDecoration: 'none',
-          width: '100%'
-        }}
-        defaultValue={defaultValue}
-        onChange={e => onChange(e.target.value)}
-        mb={3}
-        name='cars'
-        id='cars'
-      >
-        {Object.entries(options).map(([key, value]) => (
-          <option key={key} value={key}>
-            {value}
-          </option>
-        ))}
-      </Select>
-    </div>
-  )
-}
+// const SelectMenu = props => {
+//   const { caption, options = {}, onChange = () => {}, defaultValue } = props
+//   return (
+//     <div
+//       style={{
+//         flexGrow: 1,
+//         margin: '10px'
+//       }}
+//     >
+//       <Text
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           textTransform: 'uppercase'
+//         }}
+//       >
+//         {caption}
+//       </Text>
+//       <Select
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           width: '100%'
+//         }}
+//         defaultValue={defaultValue}
+//         onChange={e => onChange(e.target.value)}
+//         mb={3}
+//         name='cars'
+//         id='cars'
+//       >
+//         {Object.entries(options).map(([key, value]) => (
+//           <option key={key} value={key}>
+//             {value}
+//           </option>
+//         ))}
+//       </Select>
+//     </div>
+//   )
+// }
 
 const orderBySelectOptions = {}
 orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
-  const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
+  const { projects, totalCount, loadMore, hasMore } = props
   return (
     <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
       <div
@@ -289,7 +289,7 @@ ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
   totalCount: PropTypes.number.isRequired,
   loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired,
-  selectOrderByField: PropTypes.func.isRequired
+  hasMore: PropTypes.bool.isRequired
+  // selectOrderByField: PropTypes.func.isRequired
 }
 export default ProjectsList

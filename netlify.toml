@@ -11,7 +11,7 @@
   force = true
 
 [[redirects]]
-  from = "/projects/*"
-  to = "/projects"
+  from = "/project/*"
+  to = "/project"
   status = 200
   force = true

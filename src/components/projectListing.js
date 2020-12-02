@@ -181,8 +181,10 @@ const ProjectListing = props => {
                 </DotInner>
               ) : (
                 <DotInner>
-                  <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
-                  <Text sx={{ variant: 'text.microbold' }}>
+                  <Text sx={{ variant: 'text.overlineSmall', color: 'white' }}>
+                    RAISED
+                  </Text>
+                  <Text sx={{ variant: 'text.microbold', color: 'white' }}>
                     ${props?.raised}
                   </Text>
                 </DotInner>

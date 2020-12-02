@@ -161,8 +161,12 @@ const ProjectCard = props => {
               </DotInner>
             ) : (
               <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
-                <Text sx={{ variant: 'text.microbold' }}>${props.raised}</Text>
+                <Text sx={{ variant: 'text.overlineSmall', color: 'white' }}>
+                  RAISED
+                </Text>
+                <Text sx={{ variant: 'text.microbold', color: 'white' }}>
+                  ${props.raised}
+                </Text>
               </DotInner>
             )}
           </Dot>
@@ -226,13 +230,13 @@ const ProjectCard = props => {
               onClick={() => {
                 !props.disabled &&
                   // navigate(
-                  //   `/projects/${
+                  //   `/project/${
                   //     props?.slug ||
                   //     'COVID-19:-ICRC-global-response-to-the-coronavirus'
                   //   }`,
                   //   { replace: true }
                   // )
-                  (window.location.href = `/projects/${props?.slug || ''}`)
+                  (window.location.href = `/project/${props?.slug || ''}`)
               }}
             >
               Learn More

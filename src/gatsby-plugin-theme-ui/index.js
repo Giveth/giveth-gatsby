@@ -57,10 +57,10 @@ export default {
   },
   text: {
     default: {
-      color: 'text',
       fontSize: 3,
       fontFamily: 'body',
-      lineHeight: 'tallest'
+      lineHeight: 'tallest',
+      color: 'white'
     },
     small: {
       fontSize: 1,

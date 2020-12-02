@@ -6,7 +6,6 @@ import { Avatar, Button, Box, Flex, Text, jsx } from 'theme-ui'
 const MyAccount = ({ info }) => {
   const [ethPrice, setEthPrice] = useState(1)
   const { balance, user } = React.useContext(TorusContext)
-  console.log({ balance, user })
 
   useEffect(() => {
     const init = async () => {

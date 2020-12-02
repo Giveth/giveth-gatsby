@@ -148,6 +148,7 @@ export const ProjectImageInput = ({
         {[1, 2, 3, 4].map((i, index) => {
           return (
             <Selection
+              key={index}
               type='button'
               onClick={() => {
                 setDisplayImage(i?.toString())

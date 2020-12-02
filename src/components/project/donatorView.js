@@ -50,52 +50,55 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
   const project = pageContext?.project
 
-  console.log({ pageContext })
-
   useEffect(() => {
     const firstFetch = async () => {
-      // Add donations to current project store
-      if (!project.walletAddress) return
-      const cryptoTxs = await getEtherscanTxs(
-        project.walletAddress,
-        client,
-        true
-      )
-      console.log({ cryptoTxs, data })
-      let donations = []
-      if (cryptoTxs) {
-        donations = [
-          data?.getStripeProjectDonations || null,
-          ...cryptoTxs.txs
-        ].filter(function (e) {
-          return e
-        })
-      }
-
-      // Get Updates
-      const updates = await client?.query({
-        query: GET_PROJECT_UPDATES,
-        variables: {
-          projectId: parseInt(project?.id),
-          take: 100,
-          skip: 0
+      try {
+        // Add donations to current project store
+        if (!project.walletAddress) return
+        const cryptoTxs = await getEtherscanTxs(
+          project.walletAddress,
+          client,
+          true
+        )
+        console.log({ cryptoTxs, data })
+        let donations = []
+        if (cryptoTxs) {
+          donations = [
+            data?.getStripeProjectDonations || null,
+            ...cryptoTxs.txs
+          ].filter(function (e) {
+            return e
+          })
         }
-      })
 
-      setCurrentProjectView({
-        ...currentProjectView,
-        ethBalance: cryptoTxs?.balance,
-        donations,
-        updates: updates?.data?.getProjectUpdates
-      })
-      setTotalDonations(donations?.length)
-      setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
-      setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
+        // Get Updates
+        const updates = await client?.query({
+          query: GET_PROJECT_UPDATES,
+          variables: {
+            projectId: parseInt(project?.id),
+            take: 100,
+            skip: 0
+          }
+        })
+        console.log({ updates })
+
+        setCurrentProjectView({
+          ...currentProjectView,
+          ethBalance: cryptoTxs?.balance,
+          donations,
+          updates: updates?.data?.getProjectUpdates
+        })
+        setTotalDonations(donations?.length)
+        setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
+        setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
+      } catch (error) {
+        console.log({ error })
+      }
     }
 
     firstFetch()
   }, [])
-
+  console.log('AA')
   const setImage = img => {
     if (/^\d+$/.test(img)) {
       // Is not url
@@ -364,9 +367,10 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly' }}>
             {project?.categories.length > 0 &&
-              project?.categories.map(category => {
+              project?.categories.map((category, index) => {
                 return (
                   <Text
+                    key={index}
                     sx={{
                       color: 'primary',
                       borderColor: 'primary',
@@ -393,6 +397,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Link to='/projects'>
               <Text
                 sx={{
+                  variant: 'text.medium',
                   color: 'primary',
                   textDecoration: 'none',
                   mt: '10px'

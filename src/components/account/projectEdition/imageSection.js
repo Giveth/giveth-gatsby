@@ -118,6 +118,7 @@ function ImageSection({ image, register }) {
       {[1, 2, 3, 4].map((i, index) => {
         return (
           <Selection
+            key={index}
             type='button'
             onClick={() => {
               setDisplayImage(i?.toString())

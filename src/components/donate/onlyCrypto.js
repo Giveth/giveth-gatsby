@@ -385,7 +385,7 @@ const OnlyCrypto = props => {
       </Modal>
       <AmountSection>
         <AmountContainer sx={{ width: ['100%', '100%'] }}>
-          <Text sx={{ variant: 'text.large', mb: 1 }}>
+          <Text sx={{ variant: 'text.large', mb: 1, color: 'white' }}>
             Enter your Ether amount
           </Text>
           <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>

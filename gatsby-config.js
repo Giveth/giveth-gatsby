@@ -100,7 +100,7 @@ module.exports = {
     },
     {
       resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/projects/*`, `/donate/*`] }
+      options: { prefixes: [`/project/*`, `/donate/*`] }
     }
 
     // this (optional) plugin enables Progressive Web App + Offline functionality

@@ -6,6 +6,7 @@ import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { loadStripe } from '@stripe/stripe-js'
 import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
+import theme from '../../gatsby-plugin-theme-ui/index'
 
 const GIVETH_DONATION_AMOUNT = 5
 
@@ -170,12 +171,18 @@ const OnlyFiat = props => {
                 setAmountTyped('')
                 setAmountSelect(i)
               }}
-              sx={{
+              style={{
                 backgroundColor: isSelected ? 'white' : 'transparent',
-                color: isSelected ? 'secondary' : 'white'
+                color: isSelected ? theme.colors.secondary : 'white'
               }}
             >
-              <Text sx={{ variant: 'text.large', fontWeight: '700' }}>
+              <Text
+                sx={{
+                  variant: 'text.large',
+                  color: isSelected ? theme.colors.secondary : 'white',
+                  fontWeight: '700'
+                }}
+              >
                 ${i}
               </Text>
             </AmountItem>
@@ -188,8 +195,8 @@ const OnlyFiat = props => {
   const SummaryRow = ({ title, amount, style }) => {
     return (
       <SmRow style={style}>
-        <Text sx={{ variant: 'text.medium' }}>{title}</Text>
-        <Text sx={{ variant: 'text.medium' }}>${amount}</Text>
+        <Text sx={{ variant: 'text.medium', color: 'white' }}>{title}</Text>
+        <Text sx={{ variant: 'text.medium', color: 'white' }}>${amount}</Text>
       </SmRow>
     )
   }
@@ -199,9 +206,11 @@ const OnlyFiat = props => {
       <AmountSection>
         <AmountSelection />
         <AmountContainer>
-          <Text sx={{ variant: 'text.medium' }}>Or enter your amount:</Text>
+          <Text sx={{ variant: 'text.medium', color: 'white' }}>
+            Or enter your amount:
+          </Text>
           <OpenAmount>
-            <Text sx={{ variant: 'text.large' }}>$</Text>
+            <Text sx={{ variant: 'text.large', color: 'white' }}>$</Text>
             <InputComponent
               sx={{
                 variant: 'text.large',
@@ -227,7 +236,13 @@ const OnlyFiat = props => {
                 defaultChecked={donateToGiveth}
                 onClick={() => setDonateToGiveth(!donateToGiveth)}
               />
-              <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
+              <Text
+                sx={{
+                  variant: 'text.medium',
+                  textAlign: 'left',
+                  color: 'white'
+                }}
+              >
                 Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
                 help sustain Giveth
               </Text>
@@ -242,7 +257,13 @@ const OnlyFiat = props => {
                 defaultChecked={anonymous}
                 onClick={() => setAnonymous(!anonymous)}
               />
-              <Text sx={{ variant: 'text.medium', textAlign: 'left' }}>
+              <Text
+                sx={{
+                  variant: 'text.medium',
+                  color: 'white',
+                  textAlign: 'left'
+                }}
+              >
                 Donate anonymously
               </Text>
             </div>
@@ -272,7 +293,13 @@ const OnlyFiat = props => {
                   padding: '0 0 18px 0'
                 }}
               />
-              <Text sx={{ variant: 'text.medium', textAlign: 'right' }}>
+              <Text
+                sx={{
+                  variant: 'text.medium',
+                  textAlign: 'right',
+                  color: 'white'
+                }}
+              >
                 ${parseFloat(subtotal).toFixed(2)}
               </Text>
             </Summary>

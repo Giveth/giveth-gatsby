@@ -271,7 +271,6 @@ const CustomTable = () => {
           <tbody>
             {currentItems.reverse().map((i, key) => {
               if (!i) return null
-              console.log({ i })
               return (
                 <tr key={key}>
                   <td

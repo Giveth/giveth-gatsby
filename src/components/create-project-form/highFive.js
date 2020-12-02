@@ -86,7 +86,7 @@ const HighFive = ({
             <FaFacebook size='24px' />
             <FaLinkedin size='24px' />
           </Flex>
-          <Link to={`/projects/${addedProject?.slug}`}>
+          <Link to={`/project/${addedProject?.slug}`}>
             <Text
               sx={{
                 fontSize: 3,

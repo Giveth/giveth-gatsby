@@ -53,7 +53,7 @@ function ProjectEdition(props) {
     for (const category in categoryList) {
       const name = categoryList[category]?.name
       if (data[name]) {
-        projectCategories.push({ name: categoryList[category].name.toString() })
+        projectCategories.push(categoryList[category].name)
       }
     }
 
