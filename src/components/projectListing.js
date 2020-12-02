@@ -177,7 +177,9 @@ const ProjectListing = props => {
             >
               {props.raised === 0 ? (
                 <DotInner>
-                  <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
+                  <Text sx={{ variant: 'text.overlineSmall', color: 'white' }}>
+                    NEW
+                  </Text>
                 </DotInner>
               ) : (
                 <DotInner>

@@ -99,9 +99,9 @@ const Givers = styled.div`
   }
 `
 
-const Categories = () => {
-  const categories = ['covid-19', 'non-profit']
-  return categories.map((category, index) => (
+const Categories = categories => {
+  if (!categories || !categories.isArray || categories?.length <= 0) return null
+  return categories?.map((category, index) => (
     <Badge key={index}>
       <Text
         sx={{ variant: 'text.default' }}
@@ -111,13 +111,14 @@ const Categories = () => {
           fontWeight: '500'
         }}
       >
-        {category?.toUpperCase()}
+        {category?.name?.toUpperCase()}
       </Text>
     </Badge>
   ))
 }
 const ProjectCard = props => {
   // const { balance } = useContext(TorusContext)
+  const { project } = props
   const [altStyle, setAltStyle] = useState(false)
   return (
     <Box
@@ -157,7 +158,9 @@ const ProjectCard = props => {
           >
             {props.raised === 0 ? (
               <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
+                <Text sx={{ variant: 'text.overlineSmall', color: 'white' }}>
+                  NEW
+                </Text>
               </DotInner>
             ) : (
               <DotInner>
@@ -202,7 +205,7 @@ const ProjectCard = props => {
               paddingTop: '4px'
             }}
           >
-            This is a description
+            {''}
           </Text>
         </Heading>
         {altStyle && (
@@ -263,12 +266,12 @@ const ProjectCard = props => {
             {
               /* Description String */
 
-              props.description
+              project?.description
             }
           </Text>
         </CardContent>
         <CardFooter>
-          <Categories />
+          <Categories categories={project?.categories} />
         </CardFooter>
       </CardContainer>
       {

@@ -51,8 +51,14 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
       {newUpdateOption && isOwner && (
         <Container>
           <LeftInfo sx={{ left: '-23px' }}>
-            <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>NEW</Text>
-            <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>
+            <Text
+              sx={{ variant: 'text.small', color: 'bodyDark', color: 'white' }}
+            >
+              NEW
+            </Text>
+            <Text
+              sx={{ variant: 'text.small', color: 'bodyDark', color: 'white' }}
+            >
               UPDATE
             </Text>
           </LeftInfo>

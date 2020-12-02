@@ -6,6 +6,7 @@ import { useQuery, useApolloClient } from '@apollo/react-hooks'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 import { TorusContext } from '../../contextProvider/torusProvider'
+import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import { getEtherscanTxs } from '../../utils'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../../gatsby-plugin-theme-ui/index'
@@ -43,17 +44,15 @@ const CreateLink = styled(Link)`
 `
 
 const AccountPage = props => {
-  const { user } = React.useContext(TorusContext)
+  const { user, isLoggedIn } = React.useContext(TorusContext)
+  const { isWalletProved } = React.useContext(ProveWalletContext)
+  const [projects, setProjects] = React.useState(null)
   const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [selectedView, setSelectedView] = useState('My Account')
   const [userDonations, setUserDonations] = useState(null)
   const options = ['My Account', 'My Projects', 'My Donations']
   const isSSR = typeof window === 'undefined'
-
-  const projects = useQuery(FETCH_USER_PROJECTS, {
-    variables: { admin: parseFloat(user?.userIDFromDB) }
-  })
   const projectsList = projects?.data?.projects
 
   const SetView = () => {
@@ -103,6 +102,7 @@ const AccountPage = props => {
 
   React.useEffect(() => {
     const setup = async () => {
+      if (!isLoggedIn) return
       const cryptoTxs = await getEtherscanTxs(user?.addresses[0], client)
       if (cryptoTxs) {
         setUserDonations(
@@ -111,10 +111,33 @@ const AccountPage = props => {
           })
         )
       }
+      // setup projects
+      if (!user?.userIDFromDB) return
+      const projects = await client.query({
+        query: FETCH_USER_PROJECTS,
+        variables: {
+          admin: parseFloat(user?.userIDFromDB)
+        }
+      })
+
+      setProjects(projects)
     }
 
     setup()
-  }, [])
+  }, [user])
+
+  if (!isLoggedIn) {
+    return (
+      <Text
+        sx={{
+          variant: 'headings.h3',
+          my: 20
+        }}
+      >
+        unavailable
+      </Text>
+    )
+  }
 
   return (
     <>

@@ -99,7 +99,14 @@ const UserDetails = () => {
           className='avatarimage'
         />
 
-        <Text p={1} sx={{ variant: 'text.default', fontWeight: 'normal' }}>
+        <Text
+          p={1}
+          sx={{
+            variant: 'text.default',
+            fontWeight: 'normal',
+            color: 'secondary'
+          }}
+        >
           {user?.name}
         </Text>
       </Button>

@@ -1,6 +1,7 @@
 /** @jsx jsx */
-import React, { useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'gatsby'
+import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import ProjectCard from '../projectListing'
 import ProjectEdition from './projectEdition/index'
 import styled from '@emotion/styled'
@@ -39,12 +40,38 @@ const RaisedHandImg = styled.img`
 const MyProjects = props => {
   const { projects } = props
   const [editProject, setEditProject] = useState(null)
+  const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   if (editProject) {
     return (
       <ProjectEdition
         project={editProject}
         goBack={() => setEditProject(null)}
       />
+    )
+  }
+
+  if (!isWalletProved) {
+    return (
+      <>
+        <Text sx={{ variant: 'headings.h4', color: 'secondary', mt: 4 }}>
+          Let's first verify your wallet{' '}
+          <a
+            sx={{
+              color: 'primary',
+              textDecoration: 'underline',
+              cursor: 'pointer'
+            }}
+            onClick={proveWallet}
+          >
+            here
+          </a>
+        </Text>
+      </>
     )
   }
   return (

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { ethers } from 'ethers'
 import { titleCase } from '../../utils'
@@ -179,6 +179,7 @@ const MyDonations = props => {
 
   React.useEffect(() => {
     const setup = async () => {
+      window.scrollTo(0, 0)
       if (props?.donations) {
         setCurrentDonations(props?.donations)
         setLoading(false)
