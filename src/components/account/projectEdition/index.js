@@ -240,7 +240,8 @@ function ProjectEdition(props) {
                 fontSize: 2,
                 letterSpacing: '4%',
                 textTransform: 'uppercase',
-                textAlign: 'center'
+                textAlign: 'center',
+                color: 'white'
               }}
             >
               Save

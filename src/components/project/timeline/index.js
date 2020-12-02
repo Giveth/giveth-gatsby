@@ -84,7 +84,10 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
                   {date?.format('YYYY') || ''}
                 </Text>
               </LeftInfo>
-              <Card content={i?.projectUpdate} />
+              <Card
+                content={i?.projectUpdate}
+                number={content.length - index}
+              />
             </Container>
           )
         })}
