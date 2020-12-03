@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { Text, Flex, Image, Box } from 'theme-ui'
-import { useQuery } from '@apollo/react-hooks'
-import { FETCH_PROJECT } from '../../apollo/gql/projects'
+import { Text, Flex, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 
@@ -13,6 +11,7 @@ const HighFive = ({
   projectTitle,
   projectDescription
 }) => {
+  // console.log({ projectImage })
   // This will be useful when we need to handle the route on webhook
 
   // const { loading, error, data } = useQuery(FETCH_PROJECT, {
@@ -32,7 +31,7 @@ const HighFive = ({
         justifyContent: 'center',
         alignContent: 'center',
         textAlign: 'center',
-        mt: '150px'
+        mt: '100px'
       }}
     >
       <Text
@@ -56,14 +55,14 @@ const HighFive = ({
         Your project is published and ready to raise funds.
       </Text>
 
-      <Flex>
-        <Box sx={{ mt: '100px', width: '50%' }}>
+      <Flex sx={{ width: '80%', justifyContent: 'center' }}>
+        <Box sx={{ minWidth: '20vw', mt: '100px', width: '30%', bg: 'white' }}>
           <ProjectListing
             disabled
             shadowed
             name={projectTitle}
             description={projectDescription}
-            image={projectImage}
+            image={projectImage || addedProject?.image}
             raised={0}
             categories={['Blockchain 4 Good']}
             listingId='key1'
@@ -71,7 +70,7 @@ const HighFive = ({
           />
         </Box>
 
-        <Box sx={{ mt: '40%', ml: '10%', width: '40%' }}>
+        <Box sx={{ mt: '20%', ml: '10%', width: '20%', bg: 'white' }}>
           <Text
             sx={{
               fontSize: 3,
@@ -87,7 +86,7 @@ const HighFive = ({
             <FaFacebook size='24px' />
             <FaLinkedin size='24px' />
           </Flex>
-          <Link to={`/projects/${addedProject?.slug}`}>
+          <Link to={`/project/${addedProject?.slug}`}>
             <Text
               sx={{
                 fontSize: 3,

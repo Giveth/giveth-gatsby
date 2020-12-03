@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui/index'
-
 import React from 'react'
 import styled from '@emotion/styled'
 import { FaGithub, FaTwitter } from 'react-icons/fa'

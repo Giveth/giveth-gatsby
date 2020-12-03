@@ -1,9 +1,9 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'gatsby'
+import { navigate, Link } from 'gatsby'
 import Loadable from '@loadable/component'
-import { IconButton, Text, jsx } from 'theme-ui'
+import { IconButton, Text, jsx, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
@@ -122,7 +122,8 @@ const NavLink = styled(Link)`
   }
 `
 
-const CreateLink = styled(Link)`
+const CreateLink = styled.div`
+  cursor: pointer;
   text-decoration: none;
   font-family: 'Red Hat Display', sans-serif;
   text-transform: uppercase;
@@ -158,7 +159,11 @@ const Header = ({ siteTitle, isHomePage }) => {
     return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
-  })
+  }, [])
+
+  const goCreate = async () => {
+    navigate('/create')
+  }
 
   return (
     <HeaderContainer
@@ -239,12 +244,12 @@ const Header = ({ siteTitle, isHomePage }) => {
 
         <UserSpan>
           {isMobile ? null : (
-            <span>
-              <CreateLink to='/create'>Create a project</CreateLink>
+            <Flex>
+              <CreateLink onClick={goCreate}>Create a project</CreateLink>
               <IconButton>
                 <img src={iconSearch} alt='' />
               </IconButton>
-            </span>
+            </Flex>
           )}
           <img src={iconVerticalLine} alt='' />
           <Login />

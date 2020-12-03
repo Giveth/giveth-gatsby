@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Flex, Heading, Text, jsx } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import { Grid, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 
 // import decorative graphics

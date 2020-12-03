@@ -27,7 +27,8 @@ const ProveWalletProvider = props => {
             variables: {
               walletAddress: user?.addresses[0],
               signature: signedMessage,
-              email: user?.email
+              email: user?.email,
+              avatar: user?.profileImage
             }
           })
 
@@ -51,6 +52,7 @@ const ProveWalletProvider = props => {
       }
     }
   }
+
   return (
     <proveWalletContext.Provider
       value={{

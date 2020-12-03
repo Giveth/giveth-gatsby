@@ -18,7 +18,7 @@ const FinalVerificationStep = ({
     if (formData.projectCategory[category].length !== 0) {
       chosenCategories.push(
         categoryList.filter(categoryItem => categoryItem.name === category)[0]
-          .value
+          ?.value
       )
     }
   }
@@ -243,6 +243,47 @@ const FinalVerificationStep = ({
           }}
         >
           {formData.projectImpactLocation}
+        </Text>
+      </>
+      <>
+        <Flex>
+          <Text
+            sx={{
+              fontSize: 0,
+              textTransform: 'uppercase',
+              fontFamily: 'heading',
+              fontWeight: 'bold',
+              color: 'bodyLight',
+              mt: '18px'
+            }}
+          >
+            ETH Address
+          </Text>
+          <Button
+            type='button'
+            sx={{
+              color: 'primary',
+              border: 0,
+              background: 'unset',
+              fontSize: 1,
+              p: 0,
+              pl: 2,
+              mt: '18px'
+            }}
+            onClick={() => setStep(6)}
+          >
+            <Text>Edit</Text>
+          </Button>
+        </Flex>
+        <Text
+          sx={{
+            fontSize: 4,
+            fontFamily: 'heading',
+            color: 'secondary',
+            mt: '9px'
+          }}
+        >
+          {formData.projectWalletAddress}
         </Text>
       </>
       <>

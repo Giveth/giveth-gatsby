@@ -12,6 +12,8 @@ import {
   Text,
   Textarea
 } from 'theme-ui'
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
@@ -21,6 +23,8 @@ import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHands from '../../../images/decorator-raised-hands.png'
+
+dayjs.extend(localizedFormat)
 
 const CardContainer = styled(Card)`
   position: relative;
@@ -91,7 +95,7 @@ const RaisedHandsImg = styled.img`
 const TimelineCard = props => {
   const [newTitle, setNewTitle] = useState(null)
   const [newInput, setNewInput] = useState(null)
-  const { content } = props
+  const { content, number } = props
   if (props.newUpdateOption) {
     return (
       <Box style={{ width: '100%' }}>
@@ -203,10 +207,12 @@ const TimelineCard = props => {
         >
           <Top>
             <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
-              Update # {content?.id}
+              Update # {number}
             </Text>
             <Text sx={{ variant: 'text.small', color: 'bodyLight' }}>
-              {content?.createdAt}
+              {
+                // dayjs(content?.createdAt)
+              }
             </Text>
           </Top>
           {content?.title}
@@ -222,7 +228,9 @@ const TimelineCard = props => {
                   mx: 2
                 }}
               >
-                User Name
+                {
+                  //here goes the creator name
+                }
               </Text>
             </CreatorName>
             <Badge variant='altOutline' sx={{ mt: [2, 0, 0] }}>

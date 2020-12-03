@@ -1,12 +1,12 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'gatsby'
-import { ProjectContext } from '../../contextProvider/projectProvider'
+import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import ProjectCard from '../projectListing'
-import Pagination from 'react-js-pagination'
+import ProjectEdition from './projectEdition/index'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import { Box, Grid, Text, Flex, jsx } from 'theme-ui'
+import { Box, Grid, Text, jsx } from 'theme-ui'
 import DarkClouds from '../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHand from '../../images/decorator-raised-one-hand.png'
 
@@ -37,34 +37,59 @@ const RaisedHandImg = styled.img`
   }
 `
 
-export const MyProjects = props => {
+const MyProjects = props => {
+  const { projects } = props
+  const [editProject, setEditProject] = useState(null)
+  const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
+  if (editProject) {
+    return (
+      <ProjectEdition
+        project={editProject}
+        goBack={() => setEditProject(null)}
+      />
+    )
+  }
+
+  if (!isWalletProved) {
+    return (
+      <>
+        <Text sx={{ variant: 'headings.h4', color: 'secondary', mt: 4 }}>
+          Let's first verify your wallet{' '}
+          <a
+            sx={{
+              color: 'primary',
+              textDecoration: 'underline',
+              cursor: 'pointer'
+            }}
+            onClick={proveWallet}
+          >
+            here
+          </a>
+        </Text>
+      </>
+    )
+  }
   return (
     <>
       <Grid p={4} columns={[1, 2]} style={{ justifyItems: 'center' }}>
-        <ProjectCard
-          name='Giveth DAC'
-          image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
-          raised={111}
-          categories={['Blockchain 4 Good']}
-          listingId='key1'
-          key='key1'
-        />
-        <ProjectCard
-          name='Aragon DAC'
-          image='https://feathers.beta.giveth.io/uploads/3aa88b6ed3a6e0f54542086886194696a21c06b756864b97a1c1a0dcf58d4e17.png'
-          raised={423}
-          categories={['Blockchain 4 Good']}
-          listingId='key2'
-          key='key2'
-        />
-        <ProjectCard
-          name='Fairdata Society'
-          image='https://ipfs.giveth.io/ipfs/QmUCepVMUhCHhZ5mSEXqWgL3taxPU5gaUhczTZgA4JLyPk'
-          raised={0}
-          categories={['Social Technology']}
-          listingId='key3'
-          key='key3'
-        />
+        {projects?.map((item, index) => {
+          return (
+            <ProjectCard
+              action={() => setEditProject(item)}
+              name={item?.title}
+              image={item?.image}
+              raised={111}
+              categories={item?.categories}
+              listingId={index}
+              key={index}
+            />
+          )
+        })}
         <SpecialCard to='/create' sx={{ cursor: 'pointer' }}>
           {' '}
           <DarkClouds
@@ -97,3 +122,5 @@ export const MyProjects = props => {
     </>
   )
 }
+
+export default MyProjects

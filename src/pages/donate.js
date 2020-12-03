@@ -156,7 +156,7 @@ const ShowProject = props => {
         <OptionTypesBox
           onClick={() => {
             if (title === 'Credit Card') return alert('coming soon')
-            setPaymentType(title)
+            // setPaymentType(title)
           }}
           style={{
             backgroundColor: isSelected ? 'white' : theme.colors.secondary,
@@ -181,7 +181,7 @@ const ShowProject = props => {
 
     return (
       <>
-        <Text sx={{ variant: 'headings.h5' }}>Donate With</Text>
+        <Text sx={{ variant: 'headings.h5', color: 'white' }}>Donate With</Text>
         <Options>
           <OptionType
             title={CRYPTO}
@@ -209,7 +209,7 @@ const ShowProject = props => {
           textAlign: centered && 'center'
         }}
       >
-        <Text sx={{ variant: 'text.medium' }}>{message}</Text>
+        <Text sx={{ variant: 'text.medium', color: 'white' }}>{message}</Text>
         <SocialIcons
           sx={{
             justifyContent: centered ? 'center' : 'flex-start',
@@ -300,7 +300,7 @@ const Donate = props => {
     variables: { slug: projectId }
   })
 
-  console.log({ data })
+  // console.log({ data })
 
   return (
     <Layout asDialog>
