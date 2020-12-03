@@ -1,14 +1,12 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-
+import { Link } from 'gatsby'
 import Layout from '../components/layout'
 import { Router } from '@reach/router'
-import SEO from '../components/seo'
-import { useQuery } from '@apollo/react-hooks'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProjectDonatorView } from '../components/project'
-import { FETCH_PROJECTS, FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
-import { Flex, Spinner } from 'theme-ui'
+import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
+import { Flex, Text, Spinner } from 'theme-ui'
 import React, { useEffect, useState } from 'react'
 
 const Project = props => {
@@ -56,9 +54,14 @@ const Project = props => {
   )
 }
 
+const ProjectWithoutSlug = () => {
+  return <Layout />
+}
+
 const ProjectIndex = () => {
   return (
     <Router basepath='/'>
+      <ProjectWithoutSlug path='project/' />
       <Project path='project/:id' />
     </Router>
   )

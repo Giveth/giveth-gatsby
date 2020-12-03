@@ -323,7 +323,7 @@ const DonateWithoutSlug = () => {
   return (
     <Layout asDialog>
       <Content style={{ justifyItems: 'center' }}>
-        <Link to='/projects'>
+        {/* <Link to='/projects'>
           <Button
             variant='default'
             sx={{
@@ -333,7 +333,7 @@ const DonateWithoutSlug = () => {
           >
             <Text sx={{ color: 'background' }}>Go see our projects</Text>
           </Button>
-        </Link>
+        </Link> */}
       </Content>
     </Layout>
   )

@@ -4,23 +4,6 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-exports.onCreatePage = async ({ page, actions }) => {
-  const { createPage } = actions
-
-  // page.matchPath is a special key that's used for matching pages
-  // only on the client.
-  if (page.path.match(/^\/donate/)) {
-    page.matchPath = '/donate/*'
-    // Update the page.
-    createPage(page)
-  }
-  if (page.path.match(/^\/project/)) {
-    page.matchPath = '/project/*'
-    // Update the page.
-    createPage(page)
-  }
-}
-
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
   const projectResults = await graphql(`

@@ -171,22 +171,25 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     const checkProjectWallet = async () => {
+      console.log({ user })
+      if (!user) return null
+      if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
       // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
-          address: user?.addresses[0]
+          address: user?.addresses && user.addresses[0]
         }
       })
       if (data?.projectByAddress) {
         setWalletUsed(true)
       } else {
-        setWalletUsed(user?.addresses[0])
+        setWalletUsed(user?.addresses && user.addresses[0])
       }
       setLoading(false)
     }
     checkProjectWallet()
-  }, [])
+  }, [user])
 
   if (loading) {
     return (
