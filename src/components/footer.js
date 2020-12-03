@@ -100,10 +100,10 @@ const Footer = () => {
             <FooterLink to='/about'>About Us</FooterLink>
             <FooterLink to='/faq'>FAQ</FooterLink>
             <FooterLink to='/partnerships'>Partnerships</FooterLink>
-            <FooterLink to='https://wiki.giveth.io'>
+            <FooterLink href='https://wiki.giveth.io'>
               Wiki <FiExternalLink size='18px' />
             </FooterLink>
-            <FooterLink to='https://medium.com/giveth'>
+            <FooterLink href='https://medium.com/giveth'>
               Blog <FiExternalLink size='18px' />
             </FooterLink>
             <FooterLink to='/contact'>Contact</FooterLink>

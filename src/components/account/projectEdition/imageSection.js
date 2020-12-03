@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Label, Grid, Image, Text, Flex, Button } from 'theme-ui'
-import { animated } from 'react-spring'
+import { Flex, Grid, Button, Image, Text } from 'theme-ui'
 import { useDropzone } from 'react-dropzone'
+import { toBase64 } from '../../../utils'
 import styled from '@emotion/styled'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
@@ -9,7 +9,6 @@ import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 import placeHolder from '../../../images/placeholder.png'
-import { toBase64 } from '../../../utils'
 
 const Selection = styled(Button)`
   background: unset;
@@ -22,13 +21,9 @@ const Selection = styled(Button)`
   border-radius: 8px;
 `
 
-export const ProjectImageInput = ({
-  register,
-  currentValue,
-  animationStyle
-}) => {
-  const [image, setImage] = useState()
-  const [displayImage, setDisplayImage] = useState(currentValue)
+function ImageSection({ image, register }) {
+  const [displayImage, setDisplayImage] = useState(image)
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
@@ -50,32 +45,19 @@ export const ProjectImageInput = ({
     )
   }
 
-  useEffect(() => {
-    setImage(displayImage)
-  }, [displayImage])
-
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '10px' }}>
-      <Label
-        sx={{
-          fontSize: 8,
-          fontFamily: 'heading'
-        }}
-        htmlFor='projectImage'
-      >
-        Add an image to your project
-      </Label>
+    <>
       <Grid
         sx={{
           justifyContent: 'center',
           alignContent: 'center',
+          textAlign: 'center',
           border: '2px dashed #DFDAE8',
-          width: '650px',
+          width: '100%',
           minHeight: '270px',
           maxHeight: '270px',
           mt: '12px',
-          p: '2.5%',
-          gap: '20px'
+          p: '20% 0'
         }}
       >
         <Flex
@@ -90,10 +72,10 @@ export const ProjectImageInput = ({
         >
           <input {...getInputProps()} />
           <input
-            id='projectImage'
-            name='projectImage'
+            id='editImage'
+            name='editImage'
             type='hidden'
-            value={image}
+            value={displayImage}
             ref={register}
           />
           {displayImage === undefined ? (
@@ -122,7 +104,6 @@ export const ProjectImageInput = ({
               )}
             </Flex>
           )}
-
           <Text sx={{ marginTop: '30px' }}>
             Drag & drop an image here or{' '}
             <Text sx={{ display: 'inline-block', color: 'primary' }}>
@@ -134,53 +115,21 @@ export const ProjectImageInput = ({
           </Text>
         </Flex>
       </Grid>
-      <Text sx={{ mt: '32px', fontFamily: 'body', fontSize: 3 }}>
-        Select an image from our gallery.
-      </Text>
-      <Grid
-        sx={{
-          justifyContent: 'center',
-          width: '500px',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          mt: '16px'
-        }}
-      >
-        {[1, 2, 3, 4].map((i, index) => {
-          return (
-            <Selection
-              key={index}
-              type='button'
-              onClick={() => {
-                setDisplayImage(i?.toString())
-              }}
-            >
-              {ProjectImage(i)}
-            </Selection>
-          )
-        })}
-      </Grid>
-      <Button
-        aria-label='Next'
-        sx={{
-          mt: '50px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
-        }}
-        type='submit'
-      >
-        <Text
-          sx={{
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%'
-          }}
-        >
-          NEXT
-        </Text>
-      </Button>
-    </animated.section>
+      {[1, 2, 3, 4].map((i, index) => {
+        return (
+          <Selection
+            key={index}
+            type='button'
+            onClick={() => {
+              setDisplayImage(i?.toString())
+            }}
+          >
+            {ProjectImage(i)}
+          </Selection>
+        )
+      })}
+    </>
   )
 }
+
+export default ImageSection

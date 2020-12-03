@@ -1,10 +1,8 @@
 import React from 'react'
-import { Container, NavLink, Text } from 'theme-ui'
+import { Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../gatsby-plugin-theme-ui/index'
 import TooltipImg from '../images/svg/general/decorators/tooltip.svg'
 
-const TooltipText = styled.span``
 const Tooltip = styled.div`
   margin: 0 0.5rem;
 

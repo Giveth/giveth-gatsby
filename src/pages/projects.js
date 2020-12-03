@@ -83,15 +83,7 @@ const Projects = ({ location }) => {
 
   return (
     <Layout>
-      {loading ? (
-        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Spinner variant='spinner.medium' />
-        </Flex>
-      ) : slugProject ? (
-        <ProjectDonatorView pageContext={{ project: slugProject }} />
-      ) : (
-        <AllProjects />
-      )}
+      <AllProjects />
     </Layout>
   )
 }

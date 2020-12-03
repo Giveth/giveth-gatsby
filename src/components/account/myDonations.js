@@ -1,25 +1,19 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ProjectContext } from '../../contextProvider/projectProvider'
+import { ethers } from 'ethers'
+import { titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import {
-  Avatar,
-  Badge,
-  Button,
-  Box,
-  Input,
-  Flex,
-  Spinner,
-  Text,
-  jsx
-} from 'theme-ui'
+import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
+import { TorusContext } from '../../contextProvider/torusProvider'
 import { useQuery } from '@apollo/react-hooks'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
+import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
 import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 
@@ -29,8 +23,8 @@ const Table = styled.table`
   border-collapse: collapse;
   margin: 4rem 0;
   padding: 0;
-  width: 100%;
   table-layout: fixed;
+  width: 100%;
 
   thead {
     text-align: left;
@@ -45,12 +39,20 @@ const Table = styled.table`
     border-bottom: 1px solid #eaebee;
     padding: 0.35em;
   }
-
+  thead th:first-child,
+  thead th:nth-child(3),
+  thead th:nth-child(4) {
+    border-left: none;
+    width: 10em;
+    min-width: 10em;
+    max-width: 10em;
+  }
   th,
   td {
     padding: 0.625em;
+    width: 80%;
+    overflow: auto;
   }
-
   th {
     padding: 1rem 0;
     font-size: 0.625rem;
@@ -60,7 +62,6 @@ const Table = styled.table`
   td {
     padding: 1rem 0;
   }
-
   @media screen and (max-width: 800px) {
     border: 0;
 
@@ -161,8 +162,9 @@ const FilterBox = styled(Flex)`
   justify-content: space-between;
 `
 
-export const MyDonations = () => {
+const MyDonations = props => {
   const options = ['All Donations', 'Fiat', 'Crypto']
+  const { user } = React.useContext(TorusContext)
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
@@ -171,39 +173,33 @@ export const MyDonations = () => {
     ProjectContext
   )
 
-  const { data, error } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
+  const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
     variables: { projectId: 1 }
   })
 
-  console.log({ data })
-
   React.useEffect(() => {
     const setup = async () => {
-      setCurrentDonations(currentProjectView?.donations)
-      setLoading(false)
-    }
-
-    if (data) {
-      // Add donations to current project store
-      setCurrentProjectView({
-        ...currentProjectView,
-        donations: data?.getStripeProjectDonations
-      })
+      window.scrollTo(0, 0)
+      if (props?.donations) {
+        setCurrentDonations(props?.donations)
+        setLoading(false)
+      }
     }
 
     setup()
   }, [currentProjectView, data])
 
   const searching = search => {
-    const donations = currentProjectView?.donations
+    const donations = currentDonations
     if (!search || search === '') {
-      return setCurrentDonations(donations)
+      return setCurrentDonations(props?.donations)
     }
     const some = donations.filter(donation => {
+      if (!donation?.donor) return null
       return (
-        donation.donor
-          .toString()
-          .toLowerCase()
+        donation?.donor
+          ?.toString()
+          ?.toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
       )
     })
@@ -217,7 +213,7 @@ export const MyDonations = () => {
       case 'Fiat':
         return items?.filter(item => item.currency === 'USD')
       case 'Crypto':
-        return []
+        return items?.filter(item => item.currency === 'ETH')
       default:
         return items
     }
@@ -243,6 +239,10 @@ export const MyDonations = () => {
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
+    }
+
+    const copy = hash => {
+      navigator.clipboard.writeText(hash)
     }
 
     return (
@@ -278,18 +278,23 @@ export const MyDonations = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {dayjs(i.createdAt).format('ll')}
+                      {i?.createdAt
+                        ? dayjs.unix(i.createdAt).format('ll')
+                        : 'null'}
                     </Text>
                   </td>
                   <DonorBox
-                    data-label='Donor'
+                    data-label='Project'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
-                    <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
                     <Text
-                      sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
+                      sx={{
+                        variant: 'text.small',
+                        color: 'primary',
+                        ml: 2
+                      }}
                     >
-                      {i.donor}
+                      {titleCase(i?.extra?.projectByAddress?.title) || i?.donor}
                     </Text>
                   </DonorBox>
                   <td
@@ -303,19 +308,52 @@ export const MyDonations = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.amount?.toLocaleString('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
-                      })}
+                      {i?.currency === 'ETH' && i?.value
+                        ? parseFloat(ethers.utils.formatEther(i?.value))
+                        : i?.amount?.toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD'
+                          })}
                     </Text>
                   </td>
                   <td
                     data-label='Transaction'
                     sx={{ variant: 'text.small', color: 'secondary' }}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row'
+                    }}
                   >
-                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      Tx
-                    </Text>
+                    <div
+                      style={{
+                        width: '120px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        marginRight: 6
+                      }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i?.hash}
+                      </Text>
+                    </div>
+                    <FiCopy
+                      size='18px'
+                      sx={{ cursor: 'pointer', mr: 2 }}
+                      onClick={() => copy(i?.hash)}
+                    />{' '}
+                    <FiExternalLink
+                      size='18px'
+                      sx={{ cursor: 'pointer' }}
+                      onClick={() =>
+                        window.open(`https://etherscan.io/tx/${i?.hash}`)
+                      }
+                    />
                   </td>
                 </tr>
               )
@@ -376,3 +414,5 @@ export const MyDonations = () => {
     </>
   )
 }
+
+export default MyDonations

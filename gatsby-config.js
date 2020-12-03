@@ -97,6 +97,10 @@ module.exports = {
           Authorization: `Bearer ${process.env.APOLLO_AUTH_TOKEN}`
         }
       }
+    },
+    {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/project/*`, `/donate/*`] }
     }
 
     // this (optional) plugin enables Progressive Web App + Offline functionality

@@ -11,12 +11,39 @@ const FETCH_PROJECTS = gql`
         slug
         creationDate
         admin
+        description
         walletAddress
+        impactLocation
         categories {
           name
         }
       }
       totalCount
+    }
+  }
+`
+
+const FETCH_USER_PROJECTS = gql`
+  query FetchProjects(
+    $limit: Int
+    $skip: Int
+    $orderBy: OrderBy
+    $admin: Float
+  ) {
+    projects(take: $limit, skip: $skip, orderBy: $orderBy, admin: $admin) {
+      id
+      title
+      balance
+      description
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
     }
   }
 `
@@ -32,6 +59,7 @@ const FETCH_PROJECT = gql`
       slug
       creationDate
       walletAddress
+      impactLocation
       categories {
         name
       }
@@ -50,6 +78,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       creationDate
       admin
       walletAddress
+      impactLocation
       categories {
         name
       }
@@ -57,15 +86,15 @@ const FETCH_PROJECT_BY_SLUG = gql`
   }
 `
 
-const ADD_PROJECT_SIMPLE = gql`
-  mutation($title: String!, $description: String!) {
-    addProjectSimple(title: $title, description: $description) {
-      id
-      title
-      description
-    }
-  }
-`
+// const ADD_PROJECT_SIMPLE = gql`
+//   mutation($title: String!, $description: String!) {
+//     addProjectSimple(title: $title, description: $description) {
+//       id
+//       title
+//       description
+//     }
+//   }
+// `
 
 const ADD_BANK_ACCOUNT = gql`
   mutation AddBankAccount($id: ID!) {
@@ -217,8 +246,53 @@ const GET_PROJECT_UPDATES = gql`
   }
 `
 
+const GET_PROJECT_BY_ADDRESS = gql`
+  query ProjectByAddress($address: String!) {
+    projectByAddress(address: $address) {
+      id
+      title
+      description
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+    }
+  }
+`
+
+const REGISTER_PROJECT_DONATION = gql`
+  mutation($txId: String!, $anonymous: Boolean!) {
+    registerProjectDonation(txId: $txId, anonymous: $anonymous)
+  }
+`
+
+const EDIT_PROJECT = gql`
+  mutation editProject($newProjectData: ProjectInput!, $projectId: Float!) {
+    editProject(newProjectData: $newProjectData, projectId: $projectId) {
+      id
+      title
+      description
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+    }
+  }
+`
+
 export {
   FETCH_PROJECTS,
+  FETCH_USER_PROJECTS,
   FETCH_PROJECT,
   FETCH_PROJECT_BY_SLUG,
   ADD_PROJECT,
@@ -228,5 +302,8 @@ export {
   GET_STRIPE_DONATION_PDF,
   GET_STRIPE_PROJECT_DONATIONS,
   ADD_PROJECT_UPDATE,
-  GET_PROJECT_UPDATES
+  GET_PROJECT_UPDATES,
+  GET_PROJECT_BY_ADDRESS,
+  REGISTER_PROJECT_DONATION,
+  EDIT_PROJECT
 }
