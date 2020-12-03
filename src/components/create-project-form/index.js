@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Web3 from 'web3'
 import PropTypes from 'prop-types'
-import { Box, Heading, Flex, Button, Progress, Link, Text } from 'theme-ui'
+import {
+  Box,
+  Heading,
+  Flex,
+  Button,
+  Spinner,
+  Progress,
+  Link,
+  Text
+} from 'theme-ui'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
@@ -25,6 +34,7 @@ import ConfirmationModal from '../confirmationModal'
 import { categoryList } from '../../utils/constants'
 
 const CreateProjectForm = props => {
+  const [loading, setLoading] = useState(true)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
   const APIKEY = process.env.GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
@@ -161,21 +171,33 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     const checkProjectWallet = async () => {
+      console.log({ user })
+      if (!user) return null
+      if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
       // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
-          address: user?.addresses[0]
+          address: user?.addresses && user.addresses[0]
         }
       })
       if (data?.projectByAddress) {
         setWalletUsed(true)
       } else {
-        setWalletUsed(user?.addresses[0])
+        setWalletUsed(user?.addresses && user.addresses[0])
       }
+      setLoading(false)
     }
     checkProjectWallet()
-  }, [])
+  }, [user])
+
+  if (loading) {
+    return (
+      <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+        <Spinner variant='spinner.medium' />
+      </Flex>
+    )
+  }
 
   // CHECKS USER
   if (JSON.stringify(user) === JSON.stringify({})) {

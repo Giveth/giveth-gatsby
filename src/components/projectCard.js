@@ -158,16 +158,20 @@ const ProjectCard = props => {
           >
             {props.raised === 0 ? (
               <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall', color: 'white' }}>
+                <Text
+                  sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                >
                   NEW
                 </Text>
               </DotInner>
             ) : (
               <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall', color: 'white' }}>
+                <Text
+                  sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                >
                   RAISED
                 </Text>
-                <Text sx={{ variant: 'text.microbold', color: 'white' }}>
+                <Text sx={{ variant: 'text.microbold', color: 'background' }}>
                   ${props.raised}
                 </Text>
               </DotInner>

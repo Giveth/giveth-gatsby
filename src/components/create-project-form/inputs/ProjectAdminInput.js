@@ -58,6 +58,7 @@ export const ProjectAdminInput = ({
       >
         <Text
           sx={{
+            color: 'background',
             fontFamily: 'body',
             fontWeight: 'bold',
             fontSize: 2,

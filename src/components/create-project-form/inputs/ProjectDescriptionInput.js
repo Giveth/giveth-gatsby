@@ -87,6 +87,7 @@ export const ProjectDescriptionInput = ({
       >
         <Text
           sx={{
+            color: 'background',
             fontFamily: 'body',
             fontWeight: 'bold',
             fontSize: 2,

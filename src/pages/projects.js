@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import { useQuery } from '@apollo/react-hooks'
@@ -12,9 +12,9 @@ import ProjectsList, {
   OrderByDirection,
   OrderByField
 } from '../components/ProjectsList'
-import React, { useEffect, useState } from 'react'
 
-const Projects = ({ location }) => {
+const Projects = props => {
+  const { location } = props
   const client = useApolloClient()
 
   const [limit, setLimit] = useState(2)

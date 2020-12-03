@@ -385,7 +385,7 @@ const OnlyCrypto = props => {
       </Modal>
       <AmountSection>
         <AmountContainer sx={{ width: ['100%', '100%'] }}>
-          <Text sx={{ variant: 'text.large', mb: 1, color: 'white' }}>
+          <Text sx={{ variant: 'text.large', mb: 1, color: 'background' }}>
             Enter your Ether amount
           </Text>
           <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
@@ -447,7 +447,7 @@ const OnlyCrypto = props => {
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
           </CheckboxLabel> */}
           {/* <CheckboxLabel
-            sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
+            sx={{ mb: '12px', alignItems: 'center', color: 'background' }}
           >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <Checkbox
