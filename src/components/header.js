@@ -206,7 +206,7 @@ const Header = ({ siteTitle, isHomePage }) => {
         >
           {isMobile ? (
             <Logo
-              siteId={process.env.SITE_ID}
+              siteId={process.env.GATSBY_SITE_ID}
               alt=''
               width='40px'
               height='40px'

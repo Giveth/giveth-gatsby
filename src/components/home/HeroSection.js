@@ -12,7 +12,7 @@ import imgPeopleHeader from '../../images/people-header.svg'
 
 //Dynamic import https://v8.dev/features/dynamic-import
 // ;(async loadContent () => {
-//   const contentFile = `../content/${process.env.SITE_ID}.js`
+//   const contentFile = `../content/${process.env.GATSBY_SITE_ID}.js`
 //   const content = await import(contentFile)
 //   console.log(`content.mainHead ---> : ${content.mainHead}`)
 // })()

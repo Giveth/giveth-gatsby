@@ -15,9 +15,8 @@ exports.onCreatePage = async ({ page, actions }) => {
     createPage(page)
   }
   if (page.path.match(/^\//)) {
-    console.log(`process.env.SITE_ID ---> : ${process.env.SITE_ID}`)
     page.context = {
-      site: process.env.SITE_ID + '-home'
+      site: process.env.GATSBY_SITE_ID + '-home'
     }
     // Update the page.
     createPage(page)

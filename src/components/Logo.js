@@ -4,7 +4,7 @@ import coTookenLogo from '../images/co2ken-logo.png'
 
 const Logo = props => {
   let siteLogo
-  const siteId = process.env.SITE_ID
+  const siteId = process.env.GATSBY_SITE_ID
 
   if (siteId === 'giveth') {
     siteLogo = logo
