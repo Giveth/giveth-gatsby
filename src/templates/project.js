@@ -61,7 +61,7 @@ const ProjectWithoutSlug = () => {
 const ProjectIndex = () => {
   return (
     <Router basepath='/'>
-      <ProjectWithoutSlug path='project/' />
+      <ProjectWithoutSlug path='project' />
       <Project path='project/:id' />
     </Router>
   )
