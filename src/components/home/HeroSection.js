@@ -44,8 +44,6 @@ let x = 0
 const Hero = ({ content }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
 
-  console.log(`content123 : ${JSON.stringify(content, null, 2)}`)
-
   return (
     <HeroSection>
       <img
