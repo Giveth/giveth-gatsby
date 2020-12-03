@@ -14,6 +14,11 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page.
     createPage(page)
   }
+  if (page.path.match(/^\/project/)) {
+    page.matchPath = '/project/*'
+    // Update the page.
+    createPage(page)
+  }
 }
 
 exports.createPages = async ({ graphql, actions }) => {
