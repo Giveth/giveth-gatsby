@@ -4,50 +4,57 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 
-// IMPORTANT
-// Using the [ bracket ] syntax over the project folder indicates
-// that those pages will be rendered exclusively client side,
-// so it makes no sense to do this at build time.
+exports.onCreatePage = async ({ page, actions }) => {
+  const { createPage } = actions
 
-// exports.createPages = async ({ graphql, actions }) => {
-//   const { createPage } = actions
-//   const projectResults = await graphql(`
-//     query {
-//       giveth {
-//         projects {
-//           id
-//           title
-//           description
-//           slug
-//           creationDate
-//           admin
-//           image
-//           walletAddress
-//           categories {
-//             name
-//           }
-//         }
-//       }
-//     }
-//   `)
-//   const projectPageTemplate = require.resolve('./src/templates/project.js')
-//   if (projectResults.data) {
-//     projectResults.data.giveth.projects.forEach(project => {
-//       console.log(
-//         'theproject ====>',
-//         project.title,
-//         'theslug===>',
-//         project.slug
-//       )
+  // page.matchPath is a special key that's used for matching pages
+  // only on the client.
+  if (page.path.match(/^\/donate/)) {
+    page.matchPath = '/donate/*'
+    // Update the page.
+    createPage(page)
+  }
+}
 
-//       createPage({
-//         path: `/project/${project.slug}`,
-//         component: projectPageTemplate,
-//         context: {
-//           // entire project is passed down as context
-//           project: project
-//         }
-//       })
-//     })
-//   }
-// }
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  const projectResults = await graphql(`
+    query {
+      giveth {
+        projects {
+          id
+          title
+          description
+          slug
+          creationDate
+          admin
+          image
+          walletAddress
+          categories {
+            name
+          }
+        }
+      }
+    }
+  `)
+  const projectPageTemplate = require.resolve('./src/templates/project.js')
+  if (projectResults.data) {
+    projectResults.data.giveth.projects.forEach(project => {
+      console.log(
+        'theproject ====>',
+        project.title,
+        'theslug===>',
+        project.slug
+      )
+
+      createPage({
+        path: `/project/${project.slug}`,
+        component: projectPageTemplate,
+        context: {
+          // entire project is passed down as context
+          project: project
+        }
+      })
+    })
+  }
+}
