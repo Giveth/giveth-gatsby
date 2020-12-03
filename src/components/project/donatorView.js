@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import { Flex, Image, Text, Box, Button } from 'theme-ui'
+import {
+  Label,
+  Input,
+  Select,
+  Textarea,
+  Radio,
+  Checkbox,
+  Slider,
+  Flex,
+  Image,
+  Text,
+  Box,
+  Button
+} from 'theme-ui'
+
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
@@ -16,6 +30,7 @@ import { Link } from 'gatsby'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
+import Tokenize from '../Tokenize'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
@@ -154,9 +169,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   color: 'primary',
                   mt: '10px'
                 }}
-              >
-                Project organization
-              </Text>
+              ></Text>
             </Box>
           </Flex>
           {/*
@@ -261,17 +274,20 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
           <Box sx={{ mt: '30px' }}>
             {currentTab === 'description' ? (
-              <Text
-                sx={{
-                  mb: 4,
-                  fontSize: 3,
-                  fontFamily: 'body',
-                  fontWeight: 'body',
-                  color: 'black'
-                }}
-              >
-                {pageContext?.project?.description}
-              </Text>
+              <>
+                <Text
+                  sx={{
+                    mb: 4,
+                    fontSize: 3,
+                    fontFamily: 'body',
+                    fontWeight: 'body',
+                    color: 'black'
+                  }}
+                >
+                  {pageContext?.project?.description}
+                </Text>
+                <Tokenize />
+              </>
             ) : currentTab === 'updates' && !isSSR ? (
               <React.Suspense fallback={<div />}>
                 <UpdatesTab project={project} isOwner={isOwner} />

@@ -45,10 +45,12 @@ const Projects = ({ location }) => {
             slug: slug.toString()
           }
         })
+        console.log(`data is ---> : ${data}`)
+
         setSlugProject(data?.projectBySlug)
         setLoading(false)
       } catch (error) {
-        console.log({ error })
+        console.log('error is', { error })
         setLoading(false)
       }
     }
@@ -56,7 +58,7 @@ const Projects = ({ location }) => {
     const slug = pathname[2]
     if (slug) {
       // redirect
-      console.log({ slug })
+      console.log('slug', { slug })
       getProject(slug)
     } else {
       setLoading(false)

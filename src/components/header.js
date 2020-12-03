@@ -7,9 +7,8 @@ import { IconButton, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
-
+import Logo from './Logo'
 // import graphics
-import logo from '../images/giveth-logo-blue.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
 import decoratorCloud1 from '../images/decorator-cloud1.svg'
@@ -140,13 +139,13 @@ const Decorator = styled.div`
 `
 
 const Login = Loadable(() => import('./torus/login'))
-
+const siteId = process.env.SITE_ID
 const Header = ({ siteTitle, isHomePage }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
 
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
 
       if (scrollTop > 50) {
@@ -156,7 +155,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   })
@@ -201,24 +200,33 @@ const Header = ({ siteTitle, isHomePage }) => {
           }}
         >
           {isMobile ? (
-            <img src={logo} alt='logo' width='40px' height='40px' />
+            <Logo
+              siteId={process.env.SITE_ID}
+              alt=''
+              width='40px'
+              height='40px'
+            />
           ) : (
             <LogoSpan
               className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
             >
-              <img src={logo} alt='logo' />
-              <Text
-                pl={3}
-                sx={{
-                  variant: 'text.default',
-                  color: 'secondary',
-                  fontSize: 3,
-                  fontWeight: 'medium',
-                  textDecoration: 'none'
-                }}
-              >
-                THE FUTURE OF GIVING
-              </Text>
+              <Logo alt='' width='auto' height='auto' />
+              {siteId === 'giveth' ? (
+                <Text
+                  pl={3}
+                  sx={{
+                    variant: 'text.default',
+                    color: 'secondary',
+                    fontSize: 3,
+                    fontWeight: 'medium',
+                    textDecoration: 'none'
+                  }}
+                >
+                  THE FUTURE OF GIVING
+                </Text>
+              ) : (
+                ''
+              )}
             </LogoSpan>
           )}
         </Link>

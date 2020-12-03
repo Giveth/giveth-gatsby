@@ -14,6 +14,13 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page.
     createPage(page)
   }
+  if (page.path.match(/^\//)) {
+    page.context = {
+      site: process.env.SITE_ID + '-home'
+    }
+    // Update the page.
+    createPage(page)
+  }
   if (page.path.match(/^\/projects/)) {
     page.matchPath = '/projects/*'
     // Update the page.
@@ -63,3 +70,17 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   }
 }
+
+exports.onCreateNode = ({ node }) => {
+  if (node.internal.type === `File`) {
+    //console.log(node)
+  }
+}
+// exports.sourceNodes = ({ actions, createNodeId, createContentDigest }) => {
+//   createNode({
+//     id: 'James',
+//     field1: `a string`,
+//     field2: 10,
+//     field3: true
+//   })
+// }

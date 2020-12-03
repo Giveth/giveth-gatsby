@@ -1,4 +1,6 @@
 /** @jsx jsx */
+import React, { useState, useEffect } from 'react'
+import { useStaticQuery } from 'gatsby'
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
@@ -7,6 +9,13 @@ import styled from '@emotion/styled'
 // import decorative graphics
 import decoratorLeaf from '../../images/decorator-leaf.svg'
 import imgPeopleHeader from '../../images/people-header.svg'
+
+//Dynamic import https://v8.dev/features/dynamic-import
+// ;(async loadContent () => {
+//   const contentFile = `../content/${process.env.SITE_ID}.js`
+//   const content = await import(contentFile)
+//   console.log(`content.mainHead ---> : ${content.mainHead}`)
+// })()
 
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
@@ -31,9 +40,12 @@ const HeroText = styled(Box)`
     position: static;
   }
 `
-
-const Hero = () => {
+let x = 0
+const Hero = ({ content }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
+
+  console.log(`content123 : ${JSON.stringify(content, null, 2)}`)
+
   return (
     <HeroSection>
       <img
@@ -53,7 +65,7 @@ const Hero = () => {
             color: 'secondaryDark'
           }}
         >
-          Sustainable fundraising for
+          {content.mainHead}
         </Heading>
         <Heading
           sx={{
@@ -64,7 +76,7 @@ const Hero = () => {
             color: 'secondaryDark'
           }}
         >
-          social impact
+          {content.headBold}
         </Heading>
         <Text
           pt={4}
@@ -76,9 +88,7 @@ const Hero = () => {
             lineHeight: 'taller'
           }}
         >
-          Our mission is to connect people, ideas, and resources to facilitate
-          and incentivize social impact with a transparent framework for
-          distributing funds.
+          {content.mainText}
         </Text>
         <Grid
           rows={2}
@@ -95,7 +105,7 @@ const Hero = () => {
                 variant: 'buttons.default'
               }}
             >
-              Donate
+              {content.mainButton}
             </Button>
           </Link>
           <Link
@@ -110,7 +120,7 @@ const Hero = () => {
                 justifySelf: 'center'
               }}
             >
-              Start raising funds for your project
+              {content.mainButtonText}
             </Text>
           </Link>
         </Grid>

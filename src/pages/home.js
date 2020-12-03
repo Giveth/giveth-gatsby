@@ -9,16 +9,12 @@ import UpdatesSection from '../components/home/UpdatesSection'
 import HomeTopProjects from '../components/home/HomeTopProjects'
 
 const IndexPage = ({ data }) => {
-  console.log(`data*** : ${JSON.stringify(data, null, 2)}`)
-
   const { markdownRemark } = data
-  const { frontmatter, html } = markdownRemark
-  const content = frontmatter
-
+  console.log(`graphql! ---> : ${markdownRemark}`)
   return (
     <Layout isHomePage='true'>
       <SEO title='home' />
-      <Hero content={content} />
+      <Hero />
       <HomeTopProjects />
       <InfoSection />
       <UpdatesSection />
@@ -26,16 +22,12 @@ const IndexPage = ({ data }) => {
   )
 }
 export const pageQuery = graphql`
-  query($site: String!) {
-    markdownRemark(frontmatter: { slug: { eq: $site } }) {
+  query {
+    markdownRemark(frontmatter: { slug: { eq: "home" } }) {
       html
       frontmatter {
         slug
         mainHead
-        headBold
-        mainText
-        mainButton
-        mainButtonText
       }
     }
   }
