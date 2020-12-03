@@ -68,6 +68,7 @@ export const ProjectCategoryInput = ({
       >
         <Text
           sx={{
+            color: 'background',
             fontFamily: 'body',
             fontWeight: 'bold',
             fontSize: 2,

@@ -331,7 +331,7 @@ const DonateWithoutSlug = () => {
               paddingBottom: '20px'
             }}
           >
-            <Text>Go see our projects</Text>
+            <Text sx={{ color: 'background' }}>Go see our projects</Text>
           </Button>
         </Link>
       </Content>

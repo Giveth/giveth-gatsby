@@ -1,7 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Web3 from 'web3'
 import PropTypes from 'prop-types'
-import { Box, Heading, Flex, Button, Progress, Link, Text } from 'theme-ui'
+import {
+  Box,
+  Heading,
+  Flex,
+  Button,
+  Spinner,
+  Progress,
+  Link,
+  Text
+} from 'theme-ui'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
@@ -25,6 +34,7 @@ import ConfirmationModal from '../confirmationModal'
 import { categoryList } from '../../utils/constants'
 
 const CreateProjectForm = props => {
+  const [loading, setLoading] = useState(true)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
   const APIKEY = process.env.GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
@@ -173,9 +183,18 @@ const CreateProjectForm = props => {
       } else {
         setWalletUsed(user?.addresses[0])
       }
+      setLoading(false)
     }
     checkProjectWallet()
   }, [])
+
+  if (loading) {
+    return (
+      <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+        <Spinner variant='spinner.medium' />
+      </Flex>
+    )
+  }
 
   // CHECKS USER
   if (JSON.stringify(user) === JSON.stringify({})) {

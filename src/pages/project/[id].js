@@ -38,7 +38,6 @@ const Projects = props => {
         setLoading(false)
       }
     }
-
     if (id) {
       getProject()
     } else {

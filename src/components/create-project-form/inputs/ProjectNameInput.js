@@ -51,6 +51,7 @@ export const ProjectNameInput = ({
       >
         <Text
           sx={{
+            color: 'background',
             fontFamily: 'body',
             fontWeight: 'bold',
             fontSize: 2,
