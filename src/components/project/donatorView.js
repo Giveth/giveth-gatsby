@@ -80,7 +80,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
             skip: 0
           }
         })
-        console.log({ updates })
 
         setCurrentProjectView({
           ...currentProjectView,
@@ -155,7 +154,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
       </Flex>
       <Flex
         sx={{
-          width: '80%',
+          width: '90%',
+          flexDirection: ['column-reverse', 'row', 'row'],
           margin: 'auto',
           justifyContent: 'space-around'
         }}
@@ -219,6 +219,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           <Flex
             sx={{
               width: ['100%', null, '60%'],
+              alignItems: 'flex-start',
               justifyContent: 'space-between',
               height: '60px',
               mt: '20px'
@@ -227,6 +228,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Button
               variant='nofill'
               type='button'
+              sx={{ width: ['25%', '100%'] }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('description')
@@ -248,6 +250,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Button
               variant='nofill'
               type='button'
+              sx={{ width: ['25%', '100%'] }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('updates')
@@ -262,10 +265,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   borderBottomStyle: currentTab === 'updates' ? 'solid' : null
                 }}
               >
-                Updates{' '}
+                Updates
                 {currentProjectView?.updates ? (
-                  <Badge variant='blueDot' sx={{ ml: 2 }}>
-                    {' '}
+                  <Badge variant='blueDot' sx={{ ml: [-2, 2] }}>
                     <Text sx={{ color: 'white', pt: -2 }}>
                       {currentProjectView?.updates.length}{' '}
                     </Text>
@@ -278,6 +280,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Button
               variant='nofill'
               type='button'
+              sx={{ width: ['25%', '100%'] }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('donation')
@@ -327,16 +330,18 @@ export const ProjectDonatorView = ({ pageContext }) => {
         </Box>
         <FloatingDonateView
           sx={{
-            left: '10%',
+            left: '-5%',
             p: 2,
             pb: 4,
             marginTop: '-2rem',
             borderRadius: '30px',
-            width: '20%',
+            width: ['100%', '50%', '20%'],
             flexDirection: 'column',
             alignContent: 'center',
             backgroundColor: 'white',
-            zIndex: 100
+            position: ['fixed', 'relative', 'relative'],
+            bottom: [0, null, null],
+            zIndex: [2, null]
           }}
         >
           <Button

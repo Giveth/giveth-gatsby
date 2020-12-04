@@ -31,6 +31,9 @@ const Container = styled.div`
   position: relative;
   background-color: inherit;
   width: 100%;
+  @media (max-width: 600px) {
+    padding: 10px 0 10px 40px;
+  }
 `
 const LeftInfo = styled(Flex)`
   flex-direction: column;

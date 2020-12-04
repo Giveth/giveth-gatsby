@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Avatar,
   Heading,
@@ -13,7 +13,10 @@ import {
   Textarea
 } from 'theme-ui'
 import dayjs from 'dayjs'
+import { GET_USER } from '../../../apollo/gql/auth'
+import { TOGGLE_UPDATE_REACTION } from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
+import { useApolloClient } from '@apollo/react-hooks'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
@@ -95,7 +98,43 @@ const RaisedHandsImg = styled.img`
 const TimelineCard = props => {
   const [newTitle, setNewTitle] = useState(null)
   const [newInput, setNewInput] = useState(null)
+  const [user, setUser] = useState(null)
   const { content, number } = props
+  const client = useApolloClient()
+  console.log({ props })
+  const react = async () => {
+    try {
+      const reaction = await client?.mutate({
+        mutation: TOGGLE_UPDATE_REACTION,
+        variables: {
+          reaction: 'heart',
+          updateId: parseFloat(props?.content?.id)
+        }
+      })
+      console.log({ reaction })
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
+  useEffect(() => {
+    const setup = async () => {
+      if (props?.specialContent) return
+      try {
+        const userInfo = await client?.query({
+          query: GET_USER,
+          variables: {
+            userId: parseInt(props?.content?.userId)
+          }
+        })
+        setUser(userInfo?.data?.user)
+      } catch (error) {
+        console.log({ error })
+      }
+    }
+    setup()
+  }, [])
+
   if (props.newUpdateOption) {
     return (
       <Box style={{ width: '100%' }}>
@@ -220,7 +259,12 @@ const TimelineCard = props => {
         <CardContent>
           <Creator>
             <CreatorName>
-              <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
+              <Avatar
+                src={
+                  user?.avatar ||
+                  'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
+                }
+              />
               <Text
                 sx={{
                   variant: 'text.paragraph',
@@ -228,9 +272,9 @@ const TimelineCard = props => {
                   mx: 2
                 }}
               >
-                {
-                  //here goes the creator name
-                }
+                {user?.firstName
+                  ? `${user?.firstName} ${user?.lastName || ''}`
+                  : user?.email}
               </Text>
             </CreatorName>
             <Badge variant='altOutline' sx={{ mt: [2, 0, 0] }}>
@@ -240,12 +284,12 @@ const TimelineCard = props => {
           <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
         </CardContent>
         <CardFooter>
-          <IconButton>
+          <IconButton onClick={react}>
             <img src={iconHeart} alt='' />
           </IconButton>
-          <IconButton>
+          {/* <IconButton>
             <img src={iconShare} alt='' />
-          </IconButton>
+          </IconButton> */}
         </CardFooter>
       </CardContainer>
       {
