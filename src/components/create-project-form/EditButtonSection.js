@@ -167,6 +167,37 @@ const EditButtonSection = ({ formData, setStep }) => {
           </Text>
         </Flex>
       ) : null}
+      {formData.projectWalletAddress ? (
+        <Flex sx={{ ml: '7%' }}>
+          <Button
+            type='button'
+            aria-label='edit project address'
+            sx={{
+              color: 'primary',
+              border: 0,
+              background: 'unset',
+              fontSize: 1,
+              p: 0
+            }}
+            onClick={() => setStep(6)}
+          >
+            <Text
+              sx={{
+                fontSize: 0,
+                textTransform: 'uppercase',
+                fontFamily: 'heading',
+                color: 'bodyLight'
+              }}
+            >
+              Eth Address
+            </Text>
+          </Button>
+
+          <Text sx={{ ml: '10px' }}>
+            <FaCheckCircle size='15px' color='green' />
+          </Text>
+        </Flex>
+      ) : null}
     </Flex>
   )
 }

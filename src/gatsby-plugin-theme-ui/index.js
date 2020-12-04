@@ -256,7 +256,8 @@ export default {
       fontWeight: 'medium',
       fontSize: 2,
       textTransform: 'capitalize',
-      borderRadius: '48px'
+      borderRadius: '48px',
+      outline: 'none'
     },
     tiny: {
       cursor: 'pointer',
@@ -350,6 +351,18 @@ export default {
       lineHeight: '150%',
       textAlign: 'center',
       color: '#3F91E4'
+    },
+    blueDot: {
+      width: '22px',
+      height: '22px',
+      fontFamily: 'body',
+      bg: 'secondary',
+      boxSizing: 'border-box',
+      borderRadius: '50%',
+      fontSize: '14px',
+      textAlign: 'center',
+      paddingTop: '1px',
+      color: 'white'
     }
   }
 }

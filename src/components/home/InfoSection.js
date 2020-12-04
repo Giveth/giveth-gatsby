@@ -2,17 +2,17 @@
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Text, jsx } from 'theme-ui'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../../gatsby-plugin-theme-ui/index'
 import styled from '@emotion/styled'
 
 // import graphics
-import decoratorCloud1 from '../images/decorator-cloud1.svg'
-import decoratorCloud2 from '../images/decorator-cloud2.svg'
-import decoratorFizzysquare from '../images/decorator-fizzy-square-rotated.svg'
-import DecoratorAltruistic from '../images/svg/general/decorators/a.svg'
-import DecoratorDecentralized from '../images/svg/general/decorators/b.svg'
-import DecoratorCommunity from '../images/svg/general/decorators/c.svg'
-import decoratorPuzzleguy from '../images/people-puzzle.svg'
+import decoratorCloud1 from '../../images/decorator-cloud1.svg'
+import decoratorCloud2 from '../../images/decorator-cloud2.svg'
+import decoratorFizzysquare from '../../images/decorator-fizzy-square-rotated.svg'
+import DecoratorAltruistic from '../../images/svg/general/decorators/a.svg'
+import DecoratorDecentralized from '../../images/svg/general/decorators/b.svg'
+import DecoratorCommunity from '../../images/svg/general/decorators/c.svg'
+import decoratorPuzzleguy from '../../images/people-puzzle.svg'
 
 const Main = styled(Grid)`
   position: relative;
@@ -45,11 +45,17 @@ const InfoSection = () => {
         backgroundColor: 'secondary'
       }}
     >
-      <Box pt='100px' sx={{ justifySelf: 'center', textAlign: 'center' }}>
-        <Text pb={3} sx={{ variant: 'headings.h2' }}>
+      <Box
+        pt='100px'
+        sx={{ justifySelf: 'center', textAlign: 'center', color: 'background' }}
+      >
+        <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
           What is Giveth?
         </Text>
-        <Text pb={5} sx={{ variant: 'text.large', maxWidth: '580px' }}>
+        <Text
+          pb={5}
+          sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}
+        >
           A Decentralized Altruistic Community using blockchain technology to
           make the world a better place.
         </Text>
@@ -69,8 +75,10 @@ const InfoSection = () => {
       >
         <Box sx={{ maxWidth: '320px' }}>
           <DecoratorAltruistic />
-          <Text sx={{ variant: 'headings.h4' }}>Altruistic</Text>
-          <Text sx={{ variant: 'text.paragraph' }}>
+          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+            Altruistic
+          </Text>
+          <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             We build tools for the common good and support others in doing so as
             well. On the Giveth DApp, 100% of the funds donated go to the cause
             the donor intended to support.
@@ -78,8 +86,10 @@ const InfoSection = () => {
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
           <DecoratorDecentralized />
-          <Text sx={{ variant: 'headings.h4' }}>Decentralized</Text>
-          <Text sx={{ variant: 'text.paragraph' }}>
+          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+            Decentralized
+          </Text>
+          <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             We are an open, non-hierarchical global initiative - empowering
             communities with novel decentralized technologies to address their
             collective needs.{' '}
@@ -87,8 +97,10 @@ const InfoSection = () => {
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
           <DecoratorCommunity />
-          <Text sx={{ variant: 'headings.h4' }}>Community</Text>
-          <Text sx={{ variant: 'text.paragraph' }}>
+          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+            Community
+          </Text>
+          <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             We build tools that can create strong bonds and alignment for people
             and the planet. We see donations as an opportunity to connect Givers
             to the people on the ground doing the good work.
@@ -113,10 +125,13 @@ const InfoSection = () => {
         </a>
       </Box>
       <Box sx={{ justifySelf: 'center', textAlign: 'center' }}>
-        <Text pb={3} sx={{ variant: 'headings.h2' }}>
+        <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
           How it works
         </Text>
-        <Text pb={5} sx={{ variant: 'text.large', maxWidth: '580px' }}>
+        <Text
+          pb={5}
+          sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}
+        >
           Our system connects the people on the ground directly to the Givers,
           and provides a level of transparency and accountability no other
           platform can offer.
@@ -134,8 +149,10 @@ const InfoSection = () => {
             maxHeight: '400px'
           }}
         >
-          <Text sx={{ variant: 'headings.h4' }}>For Makers</Text>
-          <Text pb={3} sx={{ variant: 'text.paragraph' }}>
+          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+            For Makers
+          </Text>
+          <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
             Create a Project and get donations in crypto.{' '}
             <Link to='/create' className='intextlink'>
               Create your project
@@ -165,7 +182,9 @@ const InfoSection = () => {
             maxWidth: '360px'
           }}
         >
-          <Text sx={{ variant: 'headings.h4' }}>For Givers</Text>
+          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+            For Givers
+          </Text>
           {/* <Text sx={{ variant: 'text.paragraph' }}>
             Send donations to the{' '}
             <Link to='/causes' className='intextlink'>

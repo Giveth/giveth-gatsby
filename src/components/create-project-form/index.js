@@ -1,7 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import Web3 from 'web3'
 import PropTypes from 'prop-types'
-import { Box, Heading, Flex, Button, Progress, Text } from 'theme-ui'
-
+import {
+  Box,
+  Heading,
+  Flex,
+  Button,
+  Spinner,
+  Progress,
+  Link,
+  Text
+} from 'theme-ui'
+import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
+import { useApolloClient } from '@apollo/react-hooks'
+import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
+import { TorusContext } from '../../contextProvider/torusProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 import { Helmet } from 'react-helmet'
@@ -12,43 +25,45 @@ import {
   ProjectDescriptionInput,
   ProjectCategoryInput,
   ProjectImpactLocationInput,
-  ProjectImageInput
+  ProjectImageInput,
+  ProjectEthAddressInput
 } from './inputs'
-import { CloseModal } from './modals'
 import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
+import ConfirmationModal from '../confirmationModal'
+import { categoryList } from '../../utils/constants'
 
 const CreateProjectForm = props => {
+  const [loading, setLoading] = useState(true)
+  const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
   const APIKEY = process.env.GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
-  const categoryList = [
-    { name: 'nonprofit', value: 'Non-profit' },
-    { name: 'covid19', value: 'COVID-19' },
-    { name: 'technology', value: 'Technology' },
-    { name: 'other', value: 'Other' }
-  ]
+  const [walletUsed, setWalletUsed] = useState(false)
+  const client = useApolloClient()
+  const { user } = React.useContext(TorusContext)
+
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
   const steps = [
     ({ animationStyle }) => (
       <ProjectNameInput
         animationStyle={animationStyle}
-        currentValue={formData.projectName}
+        currentValue={formData?.projectName}
         register={register}
       />
     ),
     ({ animationStyle }) => (
       <ProjectAdminInput
         animationStyle={animationStyle}
-        currentValue={formData.projectAdmin}
+        currentValue={formData?.projectAdmin}
         register={register}
       />
     ),
     ({ animationStyle }) => (
       <ProjectDescriptionInput
         animationStyle={animationStyle}
-        currentValue={formData.projectDescription}
+        currentValue={formData?.projectDescription}
         register={register}
       />
     ),
@@ -56,21 +71,34 @@ const CreateProjectForm = props => {
       <ProjectCategoryInput
         animationStyle={animationStyle}
         categoryList={categoryList}
-        currentValue={formData.projectCategory}
+        currentValue={formData?.projectCategory}
         register={register}
       />
     ),
     ({ animationStyle }) => (
       <ProjectImpactLocationInput
         animationStyle={animationStyle}
-        currentValue={formData.projectImpactLocation}
+        currentValue={formData?.projectImpactLocation}
+        register={register}
+      />
+    ),
+
+    ({ animationStyle }) => (
+      <ProjectImageInput
+        animationStyle={animationStyle}
+        currentValue={formData?.projectImage}
         register={register}
       />
     ),
     ({ animationStyle }) => (
-      <ProjectImageInput
+      <ProjectEthAddressInput
         animationStyle={animationStyle}
-        currentValue={formData.projectImage}
+        currentValue={
+          typeof walletUsed !== 'boolean'
+            ? walletUsed
+            : formData?.projectWalletAddress
+        }
+        walletUsed={walletUsed}
         register={register}
       />
     ),
@@ -88,6 +116,26 @@ const CreateProjectForm = props => {
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
+    console.log({ currentStep })
+    if (currentStep === 6) {
+      if (
+        data?.projectWalletAddress?.length !== 42 ||
+        !Web3.utils.isAddress(data?.projectWalletAddress)
+      ) {
+        return alert('eth address not valid')
+      }
+      // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
+      const res = await client.query({
+        query: GET_PROJECT_BY_ADDRESS,
+        variables: {
+          address: data?.projectWalletAddress
+        }
+      })
+      console.log({ res })
+      if (res?.data?.projectByAddress) {
+        return alert('this eth address is already being used for a project')
+      }
+    }
     if (currentStep === 3) {
       projectCategory = {
         ...data
@@ -102,6 +150,7 @@ const CreateProjectForm = props => {
         ...data
       })
     }
+    console.log({ formData })
     if (currentStep === steps.length - 1) {
       props.onSubmit(formData)
     }
@@ -119,6 +168,75 @@ const CreateProjectForm = props => {
   })
 
   const [showCloseModal, setShowCloseModal] = useState(false)
+
+  useEffect(() => {
+    const checkProjectWallet = async () => {
+      console.log({ user })
+      if (!user) return null
+      if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
+      // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
+      const { data } = await client.query({
+        query: GET_PROJECT_BY_ADDRESS,
+        variables: {
+          address: user?.addresses && user.addresses[0]
+        }
+      })
+      if (data?.projectByAddress) {
+        setWalletUsed(true)
+      } else {
+        setWalletUsed(user?.addresses && user.addresses[0])
+      }
+      setLoading(false)
+    }
+    checkProjectWallet()
+  }, [user])
+
+  if (loading) {
+    return (
+      <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+        <Spinner variant='spinner.medium' />
+      </Flex>
+    )
+  }
+
+  // CHECKS USER
+  if (JSON.stringify(user) === JSON.stringify({})) {
+    return (
+      <Flex sx={{ flexDirection: 'column' }}>
+        <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 6, mx: 6 }}>
+          You are not logged in yet...
+        </Text>
+        <Text
+          sx={{ variant: 'headings.h4', color: 'primary', mx: 6 }}
+          style={{
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
+          onClick={() => window.location.replace('/')}
+        >
+          go to our homepage
+        </Text>
+      </Flex>
+    )
+  }
+
+  if (!isWalletProved) {
+    return (
+      <Text sx={{ variant: 'headings.h2', color: 'secondary', m: 6 }}>
+        Let's first verify your wallet{' '}
+        <Link
+          sx={{
+            color: 'primary',
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
+          onClick={() => proveWallet()}
+        >
+          here
+        </Link>
+      </Text>
+    )
+  }
 
   return (
     <>
@@ -213,9 +331,14 @@ const CreateProjectForm = props => {
                   const Step = steps[item]
                   return <Step key={key} animationStyle={props} />
                 })}
-                <CloseModal
+                <ConfirmationModal
                   showModal={showCloseModal}
                   setShowModal={setShowCloseModal}
+                  title='Are you sure?'
+                  confirmation={{
+                    do: () => window.location.replace('/'),
+                    title: 'Yes'
+                  }}
                 />
               </>
             </form>

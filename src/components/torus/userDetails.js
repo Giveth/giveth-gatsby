@@ -58,10 +58,7 @@ const UserDetails = () => {
   const [active, setActive] = useState(false)
 
   const { logout, user, balance } = useContext(TorusContext)
-  const {
-    proveWallet,
-    isWalletProved
-  } = useContext(ProveWalletContext)
+  const { proveWallet, isWalletProved } = useContext(ProveWalletContext)
 
   const address = (user?.addresses && user.addresses[0]) || ''
   const truncAddress = `${address.substring(0, 5)} ... ${address.substring(
@@ -102,7 +99,14 @@ const UserDetails = () => {
           className='avatarimage'
         />
 
-        <Text p={1} sx={{ variant: 'text.default', fontWeight: 'normal' }}>
+        <Text
+          p={1}
+          sx={{
+            variant: 'text.default',
+            fontWeight: 'normal',
+            color: 'secondary'
+          }}
+        >
           {user?.name}
         </Text>
       </Button>

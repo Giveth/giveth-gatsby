@@ -1,19 +1,22 @@
 import React, { useState } from 'react'
-import { Label, Textarea, Button, Text, Flex } from 'theme-ui'
+import { Label, Input, Button, Text, Flex } from 'theme-ui'
 import { animated } from 'react-spring'
-import { DescriptionInstructionModal } from '../modals'
 
-export const ProjectDescriptionInput = ({
+export const ProjectEthAddressInput = ({
   register,
   currentValue,
+  walletUsed,
   animationStyle
 }) => {
-  const [showInstructions, setShowInstructions] = useState(false)
   const [characterLength, setCharacterLength] = useState(
     currentValue ? currentValue.length : 0
   )
-  const getLength = e => {
+  const [address, setAddress] = useState(null)
+
+  const onChangeAddress = e => {
+    e.preventDefault()
     setCharacterLength(e.target.value.length)
+    setAddress(true)
   }
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
@@ -23,46 +26,35 @@ export const ProjectDescriptionInput = ({
           fontFamily: 'heading',
           lineHeight: '61px'
         }}
-        htmlFor='projectDescription'
+        htmlFor='projectWalletAddress'
       >
-        What is your project about?
+        Set your eth address
       </Label>
-      <Button
-        type='button'
-        aria-label='How to write a good project description'
-        onClick={() => setShowInstructions(!showInstructions)}
+      <Text
         sx={{
-          background: 'unset',
-          cursor: 'pointer',
-          p: 0
+          fontSize: '3',
+          fontFamily: 'heading',
+          color: 'secondary',
+          mt: '8px',
+          lineHeight: '19px'
         }}
       >
-        <Text
-          sx={{
-            fontSize: '2',
-            fontFamily: 'heading',
-            color: 'primary',
-            mt: '8px',
-            lineHeight: '19px'
-          }}
-        >
-          How To Write A Good Project Description
-        </Text>
-      </Button>
+        You can set a custom ethereum address to receive donations
+      </Text>
       <Flex sx={{ width: '175%' }}>
-        <Textarea
+        <Input
           sx={{
-            width: '800px',
+            width: '100%',
             mt: '40px',
-            resize: 'none',
             fontFamily: 'body'
           }}
-          id='projectDescription'
-          name='projectDescription'
-          ref={register}
+          type='text'
+          id='projectWalletAddress'
+          name='projectWalletAddress'
+          ref={register()}
           defaultValue={currentValue}
-          rows={12}
-          onChange={e => getLength(e)}
+          placeholder='0x00000...'
+          onChange={e => onChangeAddress(e)}
         />
         <Text
           sx={{
@@ -72,9 +64,24 @@ export const ProjectDescriptionInput = ({
             color: 'muted'
           }}
         >
-          {characterLength}/2000
+          {characterLength}/42
         </Text>
       </Flex>
+      {walletUsed !== true && !address && (
+        <Text
+          sx={{
+            fontSize: '3',
+            fontFamily: 'heading',
+            color: 'attention',
+            mt: '8px',
+            lineHeight: '19px'
+          }}
+        >
+          This is your torus wallet address, you can choose another one if
+          desired*
+        </Text>
+      )}
+
       <Button
         aria-label='Next'
         sx={{
@@ -98,12 +105,6 @@ export const ProjectDescriptionInput = ({
           NEXT
         </Text>
       </Button>
-      {showInstructions ? (
-        <DescriptionInstructionModal
-          showModal={showInstructions}
-          setShowModal={setShowInstructions}
-        />
-      ) : null}
     </animated.section>
   )
 }

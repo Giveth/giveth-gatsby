@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { Heading, Grid, Button, Card, IconButton, Text } from 'theme-ui'
+import React from 'react'
+import { Heading, Grid, Button, Card, Text } from 'theme-ui'
 import { Link } from 'gatsby'
 import styled from '@emotion/styled'
 

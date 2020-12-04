@@ -1,30 +1,29 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
+import Web3 from 'web3'
 import SEO from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
-import { Text } from 'theme-ui'
+import { Text, Spinner } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
-import { Link } from 'gatsby'
+import Layout from '../components/layout'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import peoplePuzzle2 from '../images/people-puzzle2.svg'
 import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
-import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
+// import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
 const IndexPage = props => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
-  const [addedProject, setAddedProject] = useState({})
-  const [addProjectQuery, { data }] = useMutation(ADD_PROJECT)
-  const [formValues, setFormValues] = useState({})
+  const [addedProject, setAddedProject] = useState(null)
+  const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(props.location.search)
-  const onSubmit = async values => {
-    setFormValues(values)
+  const onSubmit = async (values, walletAddress) => {
     setProjectAdded(true)
 
     const projectCategories = []
@@ -48,11 +47,12 @@ const IndexPage = props => {
       description: values.projectDescription,
       admin: values.projectAdmin,
       impactLocation: values.projectImpactLocation,
-      categories: projectCategories
+      categories: projectCategories,
+      walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress)
     }
     if (values.projectImage.length === 1) {
       projectData.imageStatic = values.projectImage
-    } else {
+    } else if (values.projectImage) {
       const imageFile = await getImageFile(
         values.projectImage,
         values.projectName
@@ -63,7 +63,7 @@ const IndexPage = props => {
     try {
       const project = await addProjectQuery({
         variables: {
-          project: projectData
+          project: { ...projectData }
         },
         refetchQueries: [{ query: FETCH_PROJECTS }]
       })
@@ -152,13 +152,17 @@ const IndexPage = props => {
           }}
           className='hide'
         />
-        <HighFive
-          addedProject={addedProject}
-          projectId={projectId || addedProject.id}
-          projectImage={addedProject.image}
-          projectTitle={addedProject.title}
-          projectDescription={addedProject.description}
-        />
+        {addedProject ? (
+          <HighFive
+            addedProject={addedProject}
+            projectId={projectId || addedProject.id}
+            projectImage={addedProject.image}
+            projectTitle={addedProject.title}
+            projectDescription={addedProject.description}
+          />
+        ) : (
+          <Spinner variant='spinner.medium' />
+        )}
       </>
     )
   }
@@ -215,23 +219,23 @@ const IndexPage = props => {
   }
 
   return (
-    // <Layout>
-    <div
-      sx={{
-        // applies width 100% to all viewport widths,
-        // width 50% above the first breakpoint,
-        // and 25% above the next breakpoint
-        width: ['100%', '50%', '25%']
-      }}
-      style={{
-        maxWidth: '1440px'
-      }}
-    >
-      <SEO title='Create Project' />
+    <Layout noFooter noHeader>
+      <div
+        sx={{
+          // applies width 100% to all viewport widths,
+          // width 50% above the first breakpoint,
+          // and 25% above the next breakpoint
+          width: ['100%', '50%', '25%']
+        }}
+        style={{
+          maxWidth: '1440px'
+        }}
+      >
+        <SEO title='Create Project' />
 
-      <ProjectForm />
-    </div>
-    // </Layout>
+        <ProjectForm />
+      </div>
+    </Layout>
   )
 }
 

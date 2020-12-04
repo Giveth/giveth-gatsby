@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, Flex, Grid } from 'theme-ui'
-import { Link, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
 import SEO from '../components/seo'

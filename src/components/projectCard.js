@@ -4,7 +4,7 @@ import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
 import theme from '../gatsby-plugin-theme-ui/index'
-import Donate from '../components/donateForm'
+// import Donate from '../components/donateForm'
 
 import iconShare from '../images/icon-share.svg'
 import iconHeart from '../images/icon-heart.svg'
@@ -99,9 +99,9 @@ const Givers = styled.div`
   }
 `
 
-const Categories = () => {
-  const categories = ['covid-19', 'non-profit']
-  return categories.map((category, index) => (
+const Categories = categories => {
+  if (!categories || !categories.isArray || categories?.length <= 0) return null
+  return categories?.map((category, index) => (
     <Badge key={index}>
       <Text
         sx={{ variant: 'text.default' }}
@@ -111,13 +111,14 @@ const Categories = () => {
           fontWeight: '500'
         }}
       >
-        {category.toUpperCase()}
+        {category?.name?.toUpperCase()}
       </Text>
     </Badge>
   ))
 }
 const ProjectCard = props => {
-  const { balance } = useContext(TorusContext)
+  // const { balance } = useContext(TorusContext)
+  const { project } = props
   const [altStyle, setAltStyle] = useState(false)
   return (
     <Box
@@ -157,12 +158,22 @@ const ProjectCard = props => {
           >
             {props.raised === 0 ? (
               <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>NEW</Text>
+                <Text
+                  sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                >
+                  NEW
+                </Text>
               </DotInner>
             ) : (
               <DotInner>
-                <Text sx={{ variant: 'text.overlineSmall' }}>RAISED</Text>
-                <Text sx={{ variant: 'text.microbold' }}>${props.raised}</Text>
+                <Text
+                  sx={{ variant: 'text.overlineSmall', color: 'background' }}
+                >
+                  RAISED
+                </Text>
+                <Text sx={{ variant: 'text.microbold', color: 'background' }}>
+                  ${props.raised}
+                </Text>
               </DotInner>
             )}
           </Dot>
@@ -198,14 +209,14 @@ const ProjectCard = props => {
               paddingTop: '4px'
             }}
           >
-            This is a description
+            {''}
           </Text>
         </Heading>
         {altStyle && (
           <AltCardContent>
             <Givers>
-              <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
-              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text>
+              {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
+              <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
             </Givers>
             <Button
               sx={{ variant: 'buttons.default', mt: 2 }}
@@ -226,13 +237,13 @@ const ProjectCard = props => {
               onClick={() => {
                 !props.disabled &&
                   // navigate(
-                  //   `/projects/${
+                  //   `/project/${
                   //     props?.slug ||
                   //     'COVID-19:-ICRC-global-response-to-the-coronavirus'
                   //   }`,
                   //   { replace: true }
                   // )
-                  (window.location.href = `/projects/${props?.slug || ''}`)
+                  (window.location.href = `/project/${props?.slug || ''}`)
               }}
             >
               Learn More
@@ -259,12 +270,12 @@ const ProjectCard = props => {
             {
               /* Description String */
 
-              props.description
+              project?.description
             }
           </Text>
         </CardContent>
         <CardFooter>
-          <Categories />
+          <Categories categories={project?.categories} />
         </CardFooter>
       </CardContainer>
       {

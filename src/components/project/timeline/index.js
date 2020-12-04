@@ -51,8 +51,14 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
       {newUpdateOption && isOwner && (
         <Container>
           <LeftInfo sx={{ left: '-23px' }}>
-            <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>NEW</Text>
-            <Text sx={{ variant: 'text.small', color: 'bodyDark' }}>
+            <Text
+              sx={{ variant: 'text.small', color: 'bodyDark', color: 'white' }}
+            >
+              NEW
+            </Text>
+            <Text
+              sx={{ variant: 'text.small', color: 'bodyDark', color: 'white' }}
+            >
               UPDATE
             </Text>
           </LeftInfo>
@@ -78,7 +84,10 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
                   {date?.format('YYYY') || ''}
                 </Text>
               </LeftInfo>
-              <Card content={i?.projectUpdate} />
+              <Card
+                content={i?.projectUpdate}
+                number={content.length - index}
+              />
             </Container>
           )
         })}

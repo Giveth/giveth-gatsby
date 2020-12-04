@@ -1,6 +1,9 @@
 /** @jsx jsx */
 import React from 'react'
+import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
+import { useApolloClient } from '@apollo/react-hooks'
+import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
@@ -27,7 +30,6 @@ const Table = styled.table`
   margin: 4rem 0;
   padding: 0;
   width: 100%;
-  table-layout: fixed;
 
   thead {
     text-align: left;
@@ -166,6 +168,7 @@ const CustomTable = () => {
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
+  const client = useApolloClient()
 
   React.useEffect(() => {
     const setup = async () => {
@@ -179,12 +182,12 @@ const CustomTable = () => {
   const searching = search => {
     const donations = currentProjectView?.donations
     if (!search || search === '') {
-      return setCurrentDonations(donations)
+      return setCurrentDonations(donations.filter(true))
     }
-    const some = donations.filter(donation => {
+    const some = donations?.filter(donation => {
       return (
-        donation.donor
-          .toString()
+        donation?.donor
+          ?.toString()
           .toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
       )
@@ -197,9 +200,9 @@ const CustomTable = () => {
       case 'All Donations':
         return items
       case 'Fiat':
-        return items?.filter(item => item.currency === 'USD')
+        return items?.filter(item => item?.currency === 'USD')
       case 'Crypto':
-        return []
+        return items?.filter(item => item?.currency === 'ETH')
       default:
         return items
     }
@@ -213,7 +216,7 @@ const CustomTable = () => {
     const [activeItem, setCurrentItem] = React.useState(1)
 
     // Data to be rendered using pagination.
-    const itemsPerPage = 6
+    const itemsPerPage = 10
 
     // Logic for displaying current items
     const indexOfLastItem = activeItem * itemsPerPage
@@ -227,6 +230,22 @@ const CustomTable = () => {
       setCurrentItem(pageNumber)
     }
 
+    // const filterTx = async () => {
+    //   // ADAPT THIS
+    //   try {
+    //     const { data } = await client.query({
+    //       query: GET_PROJECT_BY_ADDRESS,
+    //       variables: {
+    //         address: '0xDED8DAE93e585977BC09e1Fd857a97D997b71fCD'
+    //       }
+    //     })
+    //     console.log('BO', { data })
+    //   } catch (error) {
+    //     console.log({ error })
+    //   }
+    // }
+
+    // filterTx()
     return (
       <>
         <Table>
@@ -250,7 +269,8 @@ const CustomTable = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((i, key) => {
+            {currentItems.reverse().map((i, key) => {
+              if (!i) return null
               return (
                 <tr key={key}>
                   <td
@@ -258,35 +278,46 @@ const CustomTable = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {dayjs(i.createdAt).format('ll')}
+                      {i?.createdAt
+                        ? dayjs.unix(i.createdAt).format('ll')
+                        : 'null'}
                     </Text>
                   </td>
                   <DonorBox
                     data-label='Donor'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
-                    <Avatar src='https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M' />
+                    <Avatar
+                      src={
+                        i?.extra?.userByAddress?.avatar ||
+                        'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
+                      }
+                    />
                     <Text
                       sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
                     >
-                      {i.donor}
+                      {i?.extra?.userByAddress?.firstName
+                        ? `${i?.extra?.userByAddress?.firstName} ${i?.extra?.userByAddress?.lastName}`
+                        : i?.extra?.userByAddress?.email || i?.donor}
                     </Text>
                   </DonorBox>
                   <td
                     data-label='Currency'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
-                    <Badge variant='green'>{i.currency}</Badge>
+                    <Badge variant='green'>{i?.currency}</Badge>
                   </td>
                   <td
                     data-label='Amount'
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.amount?.toLocaleString('en-US', {
-                        style: 'currency',
-                        currency: 'USD'
-                      })}
+                      {i?.currency === 'ETH' && i?.value
+                        ? parseFloat(ethers.utils.formatEther(i?.value))
+                        : i?.amount?.toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD'
+                          })}
                     </Text>
                   </td>
                 </tr>

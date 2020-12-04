@@ -66,7 +66,7 @@ const DropdownInput = ({ current, setCurrent, options }) => {
               <DropItem
                 key={index}
                 onClick={() => {
-                  setCurrent(index)
+                  setCurrent && setCurrent(index)
                   ListRef.current.style.display = 'none'
                 }}
               >

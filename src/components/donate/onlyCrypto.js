@@ -1,13 +1,16 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
+import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
+import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
+import Modal from '../modal'
+import QRCode from 'qrcode.react'
 import { initOnboard, initNotify } from '../../services/onBoard'
+import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
-import Tooltip from '../../components/tooltip'
+// import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
-import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 
 let provider
 
@@ -79,12 +82,13 @@ const OnlyCrypto = props => {
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
   const [notify, setNotify] = useState(null)
-
   const { project } = props
   const [ethPrice, setEthPrice] = useState(1)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [anonymous, setAnonymous] = useState(false)
+  const [modalIsOpen, setIsOpen] = useState(false)
+
   const client = useApolloClient()
 
   useEffect(() => {
@@ -128,8 +132,6 @@ const OnlyCrypto = props => {
     }
   }, [onboard])
 
-  console.log({ project })
-
   const donation = parseFloat(amountTyped)
   const givethFee =
     Math.round((GIVETH_DONATION_AMOUNT * 100.0) / ethPrice) / 100
@@ -143,7 +145,15 @@ const OnlyCrypto = props => {
   const SummaryRow = ({ title, amount, style }) => {
     return (
       <SmRow style={style}>
-        <Text sx={{ variant: 'text.medium' }}>{title}</Text>
+        <Text
+          sx={{
+            variant: 'text.medium',
+            textAlign: 'left',
+            width: ['50%', '70%']
+          }}
+        >
+          {title}
+        </Text>
         {amount?.length === 2 ? (
           <Flex sx={{ alignItems: 'center' }}>
             <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
@@ -152,7 +162,15 @@ const OnlyCrypto = props => {
             <Text sx={{ variant: 'text.medium' }}> {amount[1]}</Text>
           </Flex>
         ) : (
-          <Text sx={{ variant: 'text.medium' }}> {amount}</Text>
+          <Text
+            sx={{
+              variant: 'text.small',
+              textAlign: 'right',
+              color: 'anotherGrey'
+            }}
+          >
+            {amount}
+          </Text>
         )}
       </SmRow>
     )
@@ -164,26 +182,41 @@ const OnlyCrypto = props => {
   }
 
   const readyToTransact = async () => {
-    if (!provider) {
-      const walletSelected = await onboard.walletSelect()
-      if (!walletSelected) return false
-    }
-
+    onboard.walletReset()
+    const walletSelected = await onboard.walletSelect()
+    if (!walletSelected) return false
     const ready = await onboard.walletCheck()
+    console.log({ ready })
     return ready
   }
 
   // FOR REGULAR TX
   const sendTx = async () => {
     try {
-      await setProvider()
       const signer = getSigner(provider)
       console.log(ethers.utils.parseEther(subtotal.toString()))
       const { hash } = await signer.sendTransaction({
-        to: '0x3Db054B9a0D6A76db171542bb049999dC191B817',
+        to: project?.walletAddress,
         value: ethers.utils.parseEther(subtotal.toString())
       })
-      console.log({ hash })
+      props.setHashSent({ hash, subtotal })
+      console.log({ txId: hash?.toString(), anonymous: false })
+      // Send tx hash to our graph
+      // try {
+      //   const { data } = await client.mutate({
+      //     mutation: REGISTER_PROJECT_DONATION,
+      //     variables: {
+      //       txId: hash?.toString(),
+      //       anonymous: false
+      //     }
+      //   })
+      //   console.log('BO', { data })
+      // } catch (error) {
+      //   console.log({ error })
+      // }
+
+      // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
+      if (process.env.GATSBY_NETWORK === 'ropsten') return
 
       notify.config({ desktopPosition: 'topRight' })
       const { emitter } = notify.hash(hash)
@@ -207,11 +240,12 @@ const OnlyCrypto = props => {
         console.log('ALLLLLLL', event)
       })
     } catch (error) {
+      alert(error?.message)
       console.log({ error })
     }
   }
 
-  // Contract Call
+  // Contract call example
   // const sendTx = async () => {
   //   try {
   //     await setProvider()
@@ -306,9 +340,52 @@ const OnlyCrypto = props => {
 
   return (
     <Content>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setIsOpen(false)}
+        contentLabel='QR Modal'
+      >
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            pt: 5,
+            px: 4,
+            maxWidth: ['85vw', '60vw', '60vw'],
+            textAlign: 'center'
+          }}
+        >
+          <QRCode value={project?.walletAddress} size={250} />
+          <Text sx={{ variant: ['headings.h5', 'headings.h5'], mt: 4, mb: 2 }}>
+            Donate to {project?.title}
+          </Text>
+          <Text sx={{ variant: ['headings.h6', 'headings.h6'] }}>
+            send ETH or ERC20 tokens using this address
+          </Text>
+          <Text
+            sx={{
+              variant: ['text.medium', 'text.large'],
+              fontWeight: 'bold',
+              py: 4
+            }}
+          >
+            {project?.walletAddress}
+          </Text>
+          <Button
+            onClick={() => setIsOpen(false)}
+            sx={{
+              variant: 'buttons.default',
+              padding: '1.063rem 7.375rem',
+              mt: 2
+            }}
+          >
+            Close
+          </Button>
+        </Flex>
+      </Modal>
       <AmountSection>
-        <AmountContainer>
-          <Text sx={{ variant: 'text.large', mb: 1 }}>
+        <AmountContainer sx={{ width: ['100%', '100%'] }}>
+          <Text sx={{ variant: 'text.large', mb: 1, color: 'background' }}>
             Enter your Ether amount
           </Text>
           <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
@@ -339,13 +416,19 @@ const OnlyCrypto = props => {
               value={amountTyped}
               onChange={e => {
                 e.preventDefault()
+                if (
+                  parseFloat(e.target.value) !== 0 &&
+                  parseFloat(e.target.value) < 0.001
+                ) {
+                  return
+                }
                 setAmountTyped(e.target.value)
               }}
             />
           </OpenAmount>
         </AmountContainer>
         <>
-          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+          {/* <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
             <>
               <Checkbox
                 defaultChecked={donateToGiveth}
@@ -362,9 +445,9 @@ const OnlyCrypto = props => {
               </Text>
             </>
             <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
-          </CheckboxLabel>
+          </CheckboxLabel> */}
           {/* <CheckboxLabel
-            sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
+            sx={{ mb: '12px', alignItems: 'center', color: 'background' }}
           >
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <Checkbox
@@ -401,7 +484,7 @@ const OnlyCrypto = props => {
               )}
               <SummaryRow
                 title='Processing Fee'
-                amount={['Network Fee Only', '']}
+                amount={['Network Fee Only']}
                 style={{
                   borderBottom: '1px solid #6B7087',
                   padding: '0 0 18px 0'
@@ -415,13 +498,21 @@ const OnlyCrypto = props => {
         </>
         <Flex
           sx={{
-            flexDirection: 'column',
-            alignItems: 'flex-start',
+            flexDirection: 'row',
+            alignItems: 'center',
             textAlign: 'center'
           }}
         >
           <Button
             onClick={async () => {
+              if (!project?.walletAddress) {
+                return alert(
+                  'There is no eth address assigned for this project'
+                )
+              }
+              if (!amountTyped || parseFloat(amountTyped) <= 0) {
+                return alert('Please set an amount')
+              }
               const ready = await readyToTransact()
               if (!ready) return
               sendTx()
@@ -432,8 +523,12 @@ const OnlyCrypto = props => {
               mt: 2
             }}
           >
-            Donate
+            DONATE
           </Button>
+          <SVGLogo
+            onClick={() => setIsOpen(true)}
+            sx={{ cursor: 'pointer', ml: 3 }}
+          />
         </Flex>
       </AmountSection>
     </Content>

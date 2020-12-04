@@ -37,60 +37,60 @@ const IconSearch = styled(SearchIcon)`
   margin-left: -2.5rem;
 `
 
-const SelectMenu = props => {
-  const { caption, options = {}, onChange = () => {}, defaultValue } = props
-  return (
-    <div
-      style={{
-        flexGrow: 1,
-        margin: '10px'
-      }}
-    >
-      <Text
-        pl={3}
-        sx={{
-          variant: 'text.default',
-          color: 'secondary',
-          fontSize: 3,
-          fontWeight: 'medium',
-          textDecoration: 'none',
-          textTransform: 'uppercase'
-        }}
-      >
-        {caption}
-      </Text>
-      <Select
-        pl={3}
-        sx={{
-          variant: 'text.default',
-          color: 'secondary',
-          fontSize: 3,
-          fontWeight: 'medium',
-          textDecoration: 'none',
-          width: '100%'
-        }}
-        defaultValue={defaultValue}
-        onChange={e => onChange(e.target.value)}
-        mb={3}
-        name='cars'
-        id='cars'
-      >
-        {Object.entries(options).map(([key, value]) => (
-          <option key={key} value={key}>
-            {value}
-          </option>
-        ))}
-      </Select>
-    </div>
-  )
-}
+// const SelectMenu = props => {
+//   const { caption, options = {}, onChange = () => {}, defaultValue } = props
+//   return (
+//     <div
+//       style={{
+//         flexGrow: 1,
+//         margin: '10px'
+//       }}
+//     >
+//       <Text
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           textTransform: 'uppercase'
+//         }}
+//       >
+//         {caption}
+//       </Text>
+//       <Select
+//         pl={3}
+//         sx={{
+//           variant: 'text.default',
+//           color: 'secondary',
+//           fontSize: 3,
+//           fontWeight: 'medium',
+//           textDecoration: 'none',
+//           width: '100%'
+//         }}
+//         defaultValue={defaultValue}
+//         onChange={e => onChange(e.target.value)}
+//         mb={3}
+//         name='cars'
+//         id='cars'
+//       >
+//         {Object.entries(options).map(([key, value]) => (
+//           <option key={key} value={key}>
+//             {value}
+//           </option>
+//         ))}
+//       </Select>
+//     </div>
+//   )
+// }
 
 const orderBySelectOptions = {}
 orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
-  const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
+  const { projects, totalCount, loadMore, hasMore } = props
   return (
     <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
       <div
@@ -221,51 +221,21 @@ const ProjectsList = props => {
           }}
         >
           <Grid p={4} columns={[1, 2, 3]} style={{ justifyItems: 'center' }}>
-            <ProjectCard
-              name='Giveth DAC'
-              image='https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
-              raised={1223}
-              category='Blockchain 4 Good'
-              listingId='key1'
-              key='key1'
-            />
-            <ProjectCard
-              name='Aragon DAC'
-              image='https://feathers.beta.giveth.io/uploads/3aa88b6ed3a6e0f54542086886194696a21c06b756864b97a1c1a0dcf58d4e17.png'
-              raised={423}
-              category='Blockchain 4 Good'
-              listingId='key2'
-              key='key2'
-            />
-            <ProjectCard
-              name='Fairdata Society'
-              image='https://ipfs.giveth.io/ipfs/QmUCepVMUhCHhZ5mSEXqWgL3taxPU5gaUhczTZgA4JLyPk'
-              raised={0}
-              category='Social Technology'
-              listingId='key3'
-              key='key3'
-            />
-            <ProjectCard
-              name='Unicorn DAC'
-              image='https://feathers.beta.giveth.io/uploads/5906e1be14c47c0a18b44a29fe8873ddfb6440a8a212cf42bacb84b7e2e1c0c1.png'
-              raised={10004}
-              category='All the things'
-              listingId='key4'
-              key='key4'
-            />
-            {projects &&
-              projects.map((project, index) => (
-                <ProjectCard
-                  id={project.id}
-                  listingId={project.title + '-' + index}
-                  key={project.title + '-' + index}
-                  name={project.title}
-                  slug={project.slug}
-                  donateAddress={project.donateAddress}
-                  image={project.image || NoImage}
-                  raised={project.balance}
-                />
-              ))}
+            {projects
+              ? projects.map((project, index) => (
+                  <ProjectCard
+                    id={project.id}
+                    listingId={project.title + '-' + index}
+                    key={project.title + '-' + index}
+                    name={project.title}
+                    slug={project.slug}
+                    donateAddress={project.donateAddress}
+                    image={project.image || NoImage}
+                    raised={project.balance}
+                    project={project}
+                  />
+                ))
+              : null}
           </Grid>
         </div>
         {hasMore && (
@@ -289,7 +259,7 @@ ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
   totalCount: PropTypes.number.isRequired,
   loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired,
-  selectOrderByField: PropTypes.func.isRequired
+  hasMore: PropTypes.bool.isRequired
+  // selectOrderByField: PropTypes.func.isRequired
 }
 export default ProjectsList

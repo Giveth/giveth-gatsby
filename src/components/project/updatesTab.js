@@ -1,22 +1,20 @@
-import React from 'react'
-import styled from '@emotion/styled'
-import { ProjectContext } from '../../contextProvider/projectProvider'
+import React, { useEffect } from 'react'
 import {
   GET_PROJECT_UPDATES,
   ADD_PROJECT_UPDATE
 } from '../../apollo/gql/projects'
-import { useApolloClient, useMutation, useQuery } from '@apollo/react-hooks'
-import { Button, Flex, Text } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui'
+import { useMutation, useQuery } from '@apollo/react-hooks'
+import { ProjectContext } from '../../contextProvider/projectProvider'
 
 import Timeline from './timeline'
 
-export const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
-  const client = useApolloClient()
+const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
   const [addUpdateMutation] = useMutation(ADD_PROJECT_UPDATE)
-  const [updates, setUpdates] = React.useState(null)
+  const { currentProjectView, setCurrentProjectView } = React.useContext(
+    ProjectContext
+  )
 
-  const { data, loading } = useQuery(GET_PROJECT_UPDATES, {
+  const { data } = useQuery(GET_PROJECT_UPDATES, {
     variables: {
       projectId: parseInt(project?.id),
       take: 100,
@@ -24,11 +22,14 @@ export const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     }
   })
 
-  console.log({ data })
-
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
+  useEffect(() => {
+    if (data) {
+      setCurrentProjectView({
+        ...currentProjectView,
+        updates: data?.getProjectUpdates
+      })
+    }
+  }, [data])
 
   const addUpdate = async ({ title, content }) => {
     try {
@@ -56,7 +57,7 @@ export const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
   return (
     <>
       <Timeline
-        content={data?.getProjectUpdates}
+        content={currentProjectView?.updates}
         addUpdate={addUpdate}
         project={project}
         isOwner={isOwner}
@@ -64,3 +65,5 @@ export const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     </>
   )
 }
+
+export default UpdatesTab
