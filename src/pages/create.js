@@ -75,10 +75,11 @@ const IndexPage = props => {
       }
     } catch (error) {
       console.log(`Error adding project: ---> : ${error}`)
+      console.log(`${JSON.stringify(projectData, null, 2)}`)
     }
   }
 
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -167,7 +168,7 @@ const IndexPage = props => {
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (isLoggedIn === true) {
       if (!projectAdded && !projectId) {
         return (

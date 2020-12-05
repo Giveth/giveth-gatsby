@@ -18,7 +18,6 @@ import {
   GET_PROJECT_UPDATES
 } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
-import Tokenize from '../Tokenize'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
@@ -312,7 +311,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 >
                   {pageContext?.project?.description}
                 </Text>
-                <Tokenize />
               </>
             ) : currentTab === 'updates' && !isSSR ? (
               <React.Suspense fallback={<div />}>
