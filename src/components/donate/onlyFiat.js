@@ -195,8 +195,12 @@ const OnlyFiat = props => {
   const SummaryRow = ({ title, amount, style }) => {
     return (
       <SmRow style={style}>
-        <Text sx={{ variant: 'text.medium', color: 'white' }}>{title}</Text>
-        <Text sx={{ variant: 'text.medium', color: 'white' }}>${amount}</Text>
+        <Text sx={{ variant: 'text.medium', color: 'background' }}>
+          {title}
+        </Text>
+        <Text sx={{ variant: 'text.medium', color: 'background' }}>
+          ${amount}
+        </Text>
       </SmRow>
     )
   }

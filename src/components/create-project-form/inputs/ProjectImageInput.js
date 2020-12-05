@@ -172,6 +172,7 @@ export const ProjectImageInput = ({
       >
         <Text
           sx={{
+            color: 'background',
             fontFamily: 'body',
             fontWeight: 'bold',
             fontSize: 2,

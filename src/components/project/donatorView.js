@@ -98,7 +98,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
     firstFetch()
   }, [])
-  console.log('AA')
+
   const setImage = img => {
     if (/^\d+$/.test(img)) {
       // Is not url
