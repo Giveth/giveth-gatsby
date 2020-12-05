@@ -1,7 +1,7 @@
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`
 })
-
+const { siteMetaData } = require('./siteMetaData')
 global.Buffer = global.Buffer || require('buffer').Buffer
 
 if (typeof btoa === 'undefined') {
@@ -17,11 +17,7 @@ if (typeof atob === 'undefined') {
 }
 
 module.exports = {
-  siteMetadata: {
-    title: 'Giveth Simple Donation Application',
-    description: 'The future of giving',
-    author: '@giveth'
-  },
+  siteMetadata: siteMetaData,
   plugins: [
     'gatsby-plugin-theme-ui',
     'gatsby-plugin-react-helmet',
