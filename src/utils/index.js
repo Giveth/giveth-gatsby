@@ -76,7 +76,9 @@ export async function getEtherscanTxs(
             ? await apolloClient?.query({
                 query: isDonor ? GET_USER_BY_ADDRESS : GET_PROJECT_BY_ADDRESS,
                 variables: {
-                  address: Web3.utils.toChecksumAddress(t?.to)
+                  address: isDonor
+                    ? Web3.utils.toChecksumAddress(t?.from)
+                    : Web3.utils.toChecksumAddress(t?.to)
                 }
               })
             : null
