@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
 import { jsx, Text, Flex, Box } from 'theme-ui'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 import { TorusContext } from '../../contextProvider/torusProvider'

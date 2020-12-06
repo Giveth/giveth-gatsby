@@ -1,13 +1,11 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import { useQuery } from '@apollo/react-hooks'
 import { useApolloClient } from '@apollo/react-hooks'
-import { ProjectDonatorView } from '../components/project'
 import { FETCH_PROJECTS, FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
-import { Flex, Spinner } from 'theme-ui'
 import ProjectsList, {
   OrderByDirection,
   OrderByField
@@ -63,7 +61,7 @@ const Projects = props => {
     } else {
       setLoading(false)
     }
-  }, [])
+  })
 
   const AllProjects = () => (
     <>
