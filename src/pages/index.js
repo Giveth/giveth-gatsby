@@ -12,13 +12,16 @@ const IndexPage = ({ data }) => {
   const { markdownRemark } = data
   const { frontmatter, html } = markdownRemark
   const content = frontmatter
-
+  const hideInfo = process.env.HIDE_INFO_SECTION
+    ? process.env.HIDE_INFO_SECTION
+    : false
   return (
     <Layout isHomePage='true'>
       <SEO title='home' />
       <Hero content={content} />
       <HomeTopProjects />
-      <InfoSection />
+      {!hideInfo === true ? <InfoSection /> : null}
+
       <UpdatesSection />
     </Layout>
   )
