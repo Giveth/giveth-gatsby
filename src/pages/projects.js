@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 import { useQuery } from '@apollo/react-hooks'
