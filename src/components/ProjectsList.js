@@ -8,7 +8,6 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import DropdownInput from '../components/dropdownInput'
 import theme from '../gatsby-plugin-theme-ui'
-import React from 'react'
 
 const ProjectSection = styled(Box)``
 
