@@ -1,21 +1,24 @@
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react'
-import { useStaticQuery } from 'gatsby'
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
+import HeroImage from '../content/HeroImage'
+import HeroSideImage from '../content/HeroSideImage'
+import givethHeroMain from '../../images/people-header.svg'
+import co2kenHeroMain from '../../images/tree-planting.jpg'
+// const siteId = process.env.GATSBY_SITE_ID
 
+// console.log(`HeroImages : ${JSON.stringify(HeroImages, null, 2)}`)
+// let heroMain
+// if (siteId === 'giveth') {
+//   heroMain = givethHeroMain
+// } else if (siteId === 'co2ken') {
+//   heroMain = co2kenHeroMain
+// }
 // import decorative graphics
 import decoratorLeaf from '../../images/decorator-leaf.svg'
-import imgPeopleHeader from '../../images/people-header.svg'
-
-//Dynamic import https://v8.dev/features/dynamic-import
-// ;(async loadContent () => {
-//   const contentFile = `../content/${process.env.GATSBY_SITE_ID}.js`
-//   const content = await import(contentFile)
-//   console.log(`content.mainHead ---> : ${content.mainHead}`)
-// })()
+// import imgPeopleHeader from '../../images/people-header.svg'
 
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
@@ -26,31 +29,18 @@ const HeroSection = styled(Grid)`
   }
 `
 
-const HeroImage = styled.div`
-  width: 50vw;
-  height: 80vh;
-  background: url(${imgPeopleHeader});
-  background-position: left top;
-  background-repeat: no-repeat;
-`
-
 const HeroText = styled(Box)`
   position: absolute;
   @media (max-width: '850px') {
     position: static;
   }
 `
-let x = 0
 const Hero = ({ content }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 850px)' })
 
   return (
     <HeroSection>
-      <img
-        src={decoratorLeaf}
-        alt=''
-        sx={{ position: 'absolute', bottom: '10vh', left: '-70px' }}
-      />
+      <HeroSideImage></HeroSideImage>
       <div id='placeholder' />
       <HeroText p={['10px', null, '80px']}>
         {' '}

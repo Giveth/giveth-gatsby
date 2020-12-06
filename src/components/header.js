@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { navigate, Link } from 'gatsby'
 import Loadable from '@loadable/component'
@@ -7,7 +7,7 @@ import { IconButton, Text, jsx, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
-import Logo from './Logo'
+import Logo from './content/Logo'
 // import graphics
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
