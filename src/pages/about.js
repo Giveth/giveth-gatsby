@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
-import useState from 'react'
+import React, { useState } from 'react'
 import { graphql } from 'gatsby'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
@@ -19,6 +19,7 @@ const DonateButton = styled(Button)`
 
 const AboutPage = ({ data }) => {
   const [currentTab, setCurrentTab] = useState('mission')
+
   return (
     <Layout>
       <Flex>
