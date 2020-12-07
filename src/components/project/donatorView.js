@@ -181,9 +181,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   color: 'primary',
                   mt: '10px'
                 }}
-              >
-                Project organization
-              </Text>
+              ></Text>
             </Box>
           </Flex>
           {/*
@@ -304,17 +302,19 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
           <Box sx={{ mt: '30px' }}>
             {currentTab === 'description' ? (
-              <Text
-                sx={{
-                  mb: 4,
-                  fontSize: 3,
-                  fontFamily: 'body',
-                  fontWeight: 'body',
-                  color: 'black'
-                }}
-              >
-                {pageContext?.project?.description}
-              </Text>
+              <>
+                <Text
+                  sx={{
+                    mb: 4,
+                    fontSize: 3,
+                    fontFamily: 'body',
+                    fontWeight: 'body',
+                    color: 'black'
+                  }}
+                >
+                  {pageContext?.project?.description}
+                </Text>
+              </>
             ) : currentTab === 'updates' && !isSSR ? (
               <React.Suspense fallback={<div />}>
                 <UpdatesTab project={project} isOwner={isOwner} />

@@ -2,11 +2,10 @@
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
 import { jsx, Text, Flex, Box } from 'theme-ui'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/react-hooks'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 import { TorusContext } from '../../contextProvider/torusProvider'
-import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import { getEtherscanTxs } from '../../utils'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../../gatsby-plugin-theme-ui/index'
@@ -45,7 +44,6 @@ const CreateLink = styled(Link)`
 
 const AccountPage = props => {
   const { user, isLoggedIn } = React.useContext(TorusContext)
-  const { isWalletProved } = React.useContext(ProveWalletContext)
   const [projects, setProjects] = React.useState(null)
   const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -124,7 +122,7 @@ const AccountPage = props => {
     }
 
     setup()
-  }, [user])
+  }, [user, isLoggedIn, client])
 
   if (!isLoggedIn) {
     return (
