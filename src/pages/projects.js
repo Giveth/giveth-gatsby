@@ -15,7 +15,7 @@ const Projects = props => {
   const { location } = props
   const client = useApolloClient()
 
-  const [limit, setLimit] = useState(2)
+  const [limit, setLimit] = useState(3)
   const [loading, setLoading] = useState(true)
   const [slugProject, setSlugProject] = useState(null)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)

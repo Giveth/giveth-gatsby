@@ -141,12 +141,14 @@ const Decorator = styled.div`
 
 const Login = Loadable(() => import('./torus/login'))
 const siteId = process.env.SITE_ID
+const projectSearch = process.env.PROJECT_SEARCH
+
 const Header = ({ siteTitle, isHomePage }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
 
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
 
       if (scrollTop > 50) {
@@ -156,7 +158,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -246,9 +248,11 @@ const Header = ({ siteTitle, isHomePage }) => {
           {isMobile ? null : (
             <Flex>
               <CreateLink onClick={goCreate}>Create a project</CreateLink>
-              <IconButton>
-                <img src={iconSearch} alt='' />
-              </IconButton>
+              {projectSearch === 'true' && (
+                <IconButton>
+                  <img src={iconSearch} alt='' />
+                </IconButton>
+              )}
             </Flex>
           )}
           <img src={iconVerticalLine} alt='' />
