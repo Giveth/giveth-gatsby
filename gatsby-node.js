@@ -53,7 +53,7 @@ exports.createPages = async ({ graphql, actions }) => {
   if (projectResults.data) {
     projectResults.data.giveth.projects.forEach(project => {
       createPage({
-        path: `/projects/${project.slug}`,
+        path: `/project/${project.slug}`,
         component: projectPageTemplate,
         context: {
           // entire project is passed down as context

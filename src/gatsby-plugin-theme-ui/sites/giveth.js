@@ -1,7 +1,7 @@
 export default {
   breakpoints: ['850px', '1024px', '1280px'],
   colors: {
-    text: 'green',
+    text: '#2C0B3F',
     background: '#fff',
     headerbackground: '#ffffffcc',
     primary: '#C2449F',
