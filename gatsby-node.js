@@ -52,8 +52,9 @@ exports.createPages = async ({ graphql, actions }) => {
   const projectPageTemplate = require.resolve('./src/templates/project.js')
   if (projectResults.data) {
     projectResults.data.giveth.projects.forEach(project => {
+      console.log(`createpage for project ---> : ${project.slug}`)
       createPage({
-        path: `/projects/${project.slug}`,
+        path: `/project/${project.slug}`,
         component: projectPageTemplate,
         context: {
           // entire project is passed down as context
@@ -66,6 +67,6 @@ exports.createPages = async ({ graphql, actions }) => {
 
 exports.onCreateNode = ({ node }) => {
   if (node.internal.type === `File`) {
-    //console.log(node)
+    // console.log(node)
   }
 }
