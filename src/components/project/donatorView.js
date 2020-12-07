@@ -98,6 +98,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
     firstFetch()
   }, [])
+  const showMap = process.env.OPEN_FOREST_MAP
+    ? process.env.OPEN_FOREST_MAP
+    : false
 
   const setImage = img => {
     if (/^\d+$/.test(img)) {
@@ -411,6 +414,15 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
         </FloatingDonateView>
       </Flex>
+      {showMap ? (
+        <iframe
+          width='100%'
+          height='600'
+          src='https://explorer.land/embed/project/balam1'
+          frameborder='0'
+          allowfullscreen
+        ></iframe>
+      ) : null}
       {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre> */}
     </>
   )
