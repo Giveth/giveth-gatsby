@@ -9,9 +9,3 @@
   to = "/donate"
   status = 200
   force = true
-
-[[redirects]]
-  from = "/project/*"
-  to = "/project"
-  status = 200
-  force = true
