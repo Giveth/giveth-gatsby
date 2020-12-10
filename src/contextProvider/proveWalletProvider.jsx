@@ -18,7 +18,11 @@ const ProveWalletProvider = props => {
   }, [isLoggedIn])
 
   const proveWallet = async () => {
-    console.log('proveWallet:', isLoggedIn && !localStorage.getItem('token'))
+    console.log(
+      'proveWallet:',
+      isLoggedIn && !localStorage.getItem('token'),
+      user
+    )
     if (isLoggedIn && !localStorage.getItem('token')) {
       const signedMessage = await signMessage('our_secret')
       if (signMessage) {
@@ -28,7 +32,8 @@ const ProveWalletProvider = props => {
               walletAddress: user?.addresses[0],
               signature: signedMessage,
               email: user?.email,
-              avatar: user?.profileImage
+              avatar: user?.profileImage,
+              name: user?.name
             }
           })
 

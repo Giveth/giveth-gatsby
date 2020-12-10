@@ -6,12 +6,14 @@ const DO_LOGIN = gql`
     $signature: String!
     $email: String!
     $avatar: String!
+    $name: String!
   ) {
     loginWallet(
       walletAddress: $walletAddress
       signature: $signature
       email: $email
       avatar: $avatar
+      name: $name
     ) {
       token
       user {
@@ -26,7 +28,7 @@ const DO_LOGIN = gql`
 `
 
 const GET_USER = gql`
-  query User($userId: String!) {
+  query User($userId: Int!) {
     user(userId: $userId) {
       id
       firstName
