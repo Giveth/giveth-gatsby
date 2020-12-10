@@ -22,7 +22,6 @@ const authLink = setContext((_, { headers }) => {
     if (userAddress) mutation['wallet-address'] = userAddress
   }
 
-  console.log('mutation:', mutation)
   return {
     headers: {
       ...headers,

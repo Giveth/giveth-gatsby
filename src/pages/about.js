@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
 import React, { useState } from 'react'
-import { Link, graphql } from 'gatsby'
+import { graphql } from 'gatsby'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
 import styled from '@emotion/styled'
@@ -19,42 +19,7 @@ const DonateButton = styled(Button)`
 
 const AboutPage = ({ data }) => {
   const [currentTab, setCurrentTab] = useState('mission')
-  const richTextOptions = {
-    renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: node => {
-        const { title, description, file } = node.data.target.fields
-        const mimeType = file['en-US'].contentType
-        const mimeGroup = mimeType.split('/')[0]
 
-        switch (mimeGroup) {
-          case 'image':
-            return (
-              <img
-                title={title ? title['en-US'] : null}
-                alt={description ? description['en-US'] : null}
-                src={file['en-US'].url}
-              />
-            )
-          case 'application':
-            return (
-              <a
-                alt={description ? description['en-US'] : null}
-                href={file['en-US'].url}
-              >
-                {title ? title['en-US'] : file['en-US'].details.fileName}
-              </a>
-            )
-          default:
-            return (
-              <span style={{ backgroundColor: 'black', color: 'white' }}>
-                {' '}
-                {mimeType} embedded asset{' '}
-              </span>
-            )
-        }
-      }
-    }
-  }
   return (
     <Layout>
       <Flex>

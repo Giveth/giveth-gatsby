@@ -5,9 +5,7 @@ import Layout from '../components/layout'
 import SEO from '../components/seo'
 import { useQuery } from '@apollo/react-hooks'
 import { useApolloClient } from '@apollo/react-hooks'
-import { ProjectDonatorView } from '../components/project'
 import { FETCH_PROJECTS, FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
-import { Flex, Spinner } from 'theme-ui'
 import ProjectsList, {
   OrderByDirection,
   OrderByField
@@ -45,10 +43,12 @@ const Projects = props => {
             slug: slug.toString()
           }
         })
+        console.log(`data is ---> : ${data}`)
+
         setSlugProject(data?.projectBySlug)
         setLoading(false)
       } catch (error) {
-        console.log({ error })
+        console.log('error is', { error })
         setLoading(false)
       }
     }
@@ -56,12 +56,12 @@ const Projects = props => {
     const slug = pathname[2]
     if (slug) {
       // redirect
-      console.log({ slug })
+      console.log('slug', { slug })
       getProject(slug)
     } else {
       setLoading(false)
     }
-  }, [])
+  })
 
   const AllProjects = () => (
     <>
