@@ -66,6 +66,6 @@ exports.createPages = async ({ graphql, actions }) => {
 
 exports.onCreateNode = ({ node }) => {
   if (node.internal.type === `File`) {
-    //console.log(node)
+    // console.log(node)
   }
 }
