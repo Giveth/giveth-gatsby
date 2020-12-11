@@ -70,8 +70,8 @@ module.exports = {
       resolve: 'gatsby-plugin-google-fonts',
       options: {
         fonts: [
-          'red hat display',
-          'red hat text' // you can also specify font weights and styles
+          `red hat display\:400,500,700,900`,
+          `red hat text\:400,500,700,900`
         ]
       }
     },

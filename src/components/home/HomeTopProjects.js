@@ -15,7 +15,7 @@ const HomeTopProjects = () => {
   }
 
   const { data } = useQuery(FETCH_PROJECTS, {
-    variables: { limit: 2, orderBy }
+    variables: { limit: 3, orderBy }
   })
 
   const { topProjects } = data || {}

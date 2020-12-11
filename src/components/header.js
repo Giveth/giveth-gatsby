@@ -8,6 +8,7 @@ import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Logo from './content/Logo'
+import { useLocation } from '@reach/router'
 // import graphics
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
@@ -73,8 +74,8 @@ const LogoSpan = styled.span`
   justify-content: start;
 
   img {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     transform: scale(1);
     transition: 0.8s all ease;
   }
@@ -92,7 +93,7 @@ const LogoSpan = styled.span`
 const MiddleSpan = styled.span`
   display: grid;
   grid-template-columns: repeat(3, auto);
-  grid-gap: 1em;
+  grid-gap: 3em;
   justify-self: center;
   max-width: 290px;
   @media (max-width: 1030px) {
@@ -104,6 +105,7 @@ const MiddleSpan = styled.span`
 const UserSpan = styled.span`
   position: relative;
   display: grid;
+  grid-gap: 1.2em;
   grid-template-columns: repeat(4, auto);
   align-items: center;
   justify-self: end;
@@ -114,9 +116,10 @@ const UserSpan = styled.span`
 `
 
 const NavLink = styled(Link)`
-  text-decoration: none;
   font-family: 'Red Hat Display', sans-serif;
-  color: ${theme.colors.primary};
+  font-weight: 500;
+  line-height: 21px;
+  text-decoration: none;
   :hover {
     color: ${theme.colors.accent};
   }
@@ -125,9 +128,11 @@ const NavLink = styled(Link)`
 const CreateLink = styled.div`
   cursor: pointer;
   text-decoration: none;
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: 'Red Hat Text', sans serif;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: bold;
+  line-height: 18px;
+  letter-spacing: 0.04em;
   color: ${theme.colors.primary};
   align-self: center;
   :hover {
@@ -140,13 +145,16 @@ const Decorator = styled.div`
 `
 
 const Login = Loadable(() => import('./torus/login'))
-const siteId = process.env.SITE_ID
+const siteId = process.env.GATSBY_SITE_ID
+const projectSearch = process.env.PROJECT_SEARCH
+
 const Header = ({ siteTitle, isHomePage }) => {
+  const location = useLocation()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
-
+  const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
 
       if (scrollTop > 50) {
@@ -156,7 +164,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -215,16 +223,19 @@ const Header = ({ siteTitle, isHomePage }) => {
             <LogoSpan
               className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
             >
-              <Logo alt='' width='auto' height='auto' />
+              <Logo alt='' />
               {siteId === 'giveth' ? (
                 <Text
                   pl={3}
                   sx={{
                     variant: 'text.default',
                     color: 'secondary',
+                    fontFamily: 'fonts.body',
                     fontSize: 3,
                     fontWeight: 'medium',
-                    textDecoration: 'none'
+                    textDecoration: 'none',
+                    lineHeights: 'tallest',
+                    letterSpacing: '0.32px'
                   }}
                 >
                   THE FUTURE OF GIVING
@@ -237,18 +248,27 @@ const Header = ({ siteTitle, isHomePage }) => {
         </Link>
 
         <MiddleSpan>
-          <NavLink to='/'>Home</NavLink>
+          <NavLink to='/' sx={{ color: isHomePage ? 'secondary' : 'primary' }}>
+            Home
+          </NavLink>
           {/* <NavLink to='/causes'>Causes</NavLink> */}
-          <NavLink to='/projects'>Projects</NavLink>
+          <NavLink
+            to='/projects'
+            sx={{ color: pathname === 'projects' ? 'secondary' : 'primary' }}
+          >
+            Projects
+          </NavLink>
         </MiddleSpan>
 
         <UserSpan>
           {isMobile ? null : (
             <Flex>
               <CreateLink onClick={goCreate}>Create a project</CreateLink>
-              <IconButton>
-                <img src={iconSearch} alt='' />
-              </IconButton>
+              {projectSearch === 'true' && (
+                <IconButton>
+                  <img src={iconSearch} alt='' />
+                </IconButton>
+              )}
             </Flex>
           )}
           <img src={iconVerticalLine} alt='' />

@@ -12,7 +12,7 @@ const Logo = props => {
   } else if (siteId === 'co2ken') {
     siteLogo = coTookenLogo
   }
-  return <img src={siteLogo} alt='logo' />
+  return <img src={siteLogo} alt='logo' {...props} />
 }
 
 export default Logo

@@ -132,7 +132,7 @@ const ProjectsList = props => {
           <CreateLink to='/create'>Create a project</CreateLink>
         </div>
 
-        {projectSearch ? (
+        {projectSearch === 'true' ? (
           <Flex
             sx={{
               width: '100%',
@@ -217,10 +217,15 @@ const ProjectsList = props => {
         ) : null}
         <div
           style={{
-            width: '100%'
+            width: '100%',
+            margin: 0
           }}
         >
-          <Grid p={4} columns={[1, 2, 3]} style={{ justifyItems: 'center' }}>
+          <Grid
+            p={4}
+            columns={[1, 2, 3]}
+            style={{ margin: 0, justifyItems: 'center' }}
+          >
             {projects
               ? projects.map((project, index) => (
                   <ProjectCard
