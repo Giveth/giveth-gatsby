@@ -4,7 +4,7 @@
 `staging`
 [![Netlify Status](https://api.netlify.com/api/v1/badges/2f325b5b-e159-443e-bac7-c5e15f3578c0/deploy-status)](https://app.netlify.com/sites/giveth-website-staging/deploys)
 <br />
-<p align="center"><a href="https://giveth.io"><img alt="Giveth.io" src="https://github.com/Giveth/giveth-design-assets/blob/master/02-logos/Giveth%20logo/giveth-symbol-logo-purple.png" width="80"/></a></p><h1 align="center">
+<p align="center"><a href="https://giveth.io"><img alt="Giveth.io" src="https://raw.githubusercontent.com/Giveth/giveth-design-assets/master/02-logos/Giveth%20logo/giveth-symbol-logo-purple.png" width="80"/></a></p><h1 align="center">
   Giveth v2
 </h1>
 
