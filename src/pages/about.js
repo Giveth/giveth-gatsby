@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
-import React, { useState } from 'react'
+import React from 'react'
 import { graphql } from 'gatsby'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
@@ -18,7 +18,7 @@ const DonateButton = styled(Button)`
 `
 
 const AboutPage = ({ data }) => {
-  const [currentTab, setCurrentTab] = useState('mission')
+  const [currentTab, setCurrentTab] = React.useState('mission')
   const richTextOptions = {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: node => {
@@ -65,15 +65,20 @@ const AboutPage = ({ data }) => {
             objectPosition: 'top',
             width: '85%',
             margin: 'auto',
-            height: '600px',
+            height: ['50vh', '300px', '600px'],
             borderRadius: '10px'
           }}
         />
       </Flex>
       <Flex
-        sx={{ width: '80%', justifyContent: 'space-between', margin: 'auto' }}
+        sx={{
+          width: ['90%', '90%', '80%'],
+          flexDirection: ['column', 'row', 'row'],
+          justifyContent: 'space-between',
+          margin: 'auto'
+        }}
       >
-        <Grid sx={{ width: '50%' }}>
+        <Grid rows={['2', '1', '1']} sx={{ width: ['100%', '100%', '50%'] }}>
           <Flex>
             <Box sx={{ mt: '20px' }}>
               <Text
@@ -98,7 +103,7 @@ const AboutPage = ({ data }) => {
 
           <Flex
             sx={{
-              width: '60%',
+              width: ['100%', '100%', '60%'],
               justifyContent: 'space-between',
               height: '60px',
               mt: '20px'
@@ -165,7 +170,7 @@ const AboutPage = ({ data }) => {
               </Text>
             </Button>
           </Flex>
-          <Grid sx={{ mt: '30px' }}>
+          <Grid sx={{ mt: '30px', mb: '60px' }}>
             {currentTab === 'mission' ? (
               <Text sx={{ variant: 'text.default' }}>
                 {documentToReactComponents(
@@ -203,7 +208,8 @@ const AboutPage = ({ data }) => {
         </Grid>
         <Flex
           sx={{
-            width: '30%',
+            mb: '30px',
+            width: ['100%', '100%', '30%'],
             flexDirection: 'column',
             alignContent: 'center'
           }}
@@ -253,10 +259,10 @@ const AboutPage = ({ data }) => {
               }
             }}
           >
-            <FaTwitter size={'30px'} />
-            <FaLinkedin size={'30px'} />
-            <FaMediumM size={'30px'} />
-            <FaGithub size={'30px'} />
+            <FaTwitter size='30px' />
+            <FaLinkedin size='30px' />
+            <FaMediumM size='30px' />
+            <FaGithub size='30px' />
           </Grid>
         </Flex>
       </Flex>

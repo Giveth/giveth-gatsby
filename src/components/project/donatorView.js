@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import SEO from '../seo'
+import Seo from '../seo'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
@@ -134,7 +134,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   console.log({ currentProjectView })
   return (
     <>
-      <SEO title={project?.title} />
+      <Seo title={project?.title} />
       <Flex>
         {setImage(project?.image) || (
           <Image
@@ -157,7 +157,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
       <Flex
         sx={{
           width: '90%',
-          flexDirection: ['column-reverse', 'row', 'row'],
+          flexDirection: ['column', 'row', 'row'],
           margin: 'auto',
           justifyContent: 'space-around'
         }}
@@ -332,7 +332,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         </Box>
         <FloatingDonateView
           sx={{
-            left: '-5%',
+            left: [null, null, '-5%'],
             p: 2,
             pb: 4,
             marginTop: '-2rem',
@@ -341,7 +341,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             flexDirection: 'column',
             alignContent: 'center',
             backgroundColor: 'white',
-            position: ['fixed', 'relative', 'relative'],
+            position: 'relative',
             bottom: [0, null, null],
             zIndex: [2, null]
           }}

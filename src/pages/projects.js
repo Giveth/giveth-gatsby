@@ -2,9 +2,8 @@
 import { jsx } from 'theme-ui'
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout'
-import SEO from '../components/seo'
-import { useQuery } from '@apollo/react-hooks'
-import { useApolloClient } from '@apollo/react-hooks'
+import Seo from '../components/seo'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { FETCH_PROJECTS, FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
 import ProjectsList, {
   OrderByDirection,
@@ -64,8 +63,8 @@ const Projects = props => {
   })
 
   const AllProjects = () => (
-    <>
-      <SEO title='Projects' />
+    <React.Fragment>
+      <Seo title='Projects' />
       <ProjectsList
         projects={showingProjects}
         totalCount={totalCount}
@@ -78,7 +77,7 @@ const Projects = props => {
           setOrderByField(orderByField)
         }}
       />
-    </>
+    </React.Fragment>
   )
 
   return (

@@ -3,17 +3,22 @@ import { jsx, Flex, Grid } from 'theme-ui'
 import { graphql } from 'gatsby'
 
 import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Seo from '../components/seo'
 import Hero from '../components/content/JoinPageHero'
 import JoinChatCard from '../components/content/JoinPageCard'
 
 const JoinPage = ({ data }) => {
   return (
     <Layout>
-      <SEO title='join' />
+      <Seo title='join' />
       <Hero />
       <Flex sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}>
-        <Grid p={6} columns={2} sx={{ maxWidth: '80vw' }}>
+        <Grid
+          mt='2rem'
+          p={[1, 2, 6]}
+          columns={[1, 1, 2]}
+          sx={{ maxWidth: '80vw' }}
+        >
           <JoinChatCard data={data.contentChats.edges} />
         </Grid>
       </Flex>

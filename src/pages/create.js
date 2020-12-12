@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
 import Web3 from 'web3'
-import SEO from '../components/seo'
+import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
 import { Text, Spinner } from 'theme-ui'
@@ -232,7 +232,7 @@ const IndexPage = props => {
           maxWidth: '1440px'
         }}
       >
-        <SEO title='Create Project' />
+        <Seo title='Create Project' />
 
         <ProjectForm />
       </div>

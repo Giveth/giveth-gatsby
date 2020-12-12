@@ -76,7 +76,6 @@ const CreditsSection = styled(Grid)`
     justify-content: center;
     padding-left: 0;
     padding: 0.5rem;
-    background-color: ${theme.colors.secondaryDark};
   }
 `
 

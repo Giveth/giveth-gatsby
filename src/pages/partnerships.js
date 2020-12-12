@@ -18,7 +18,11 @@ import RaisedHands from '../images/decorator-raised-one-hand.png'
 
 const Main = styled(Grid)`
   justify-content: start;
-  padding-left: 140px;
+  padding: 10vw;
+  @media (max-width: 500px) {
+    margin: 1rem;
+    padding: 0vw;
+  }
 `
 const ContentItem = styled(Grid)`
   grid-template-rows: auto auto 1fr;
@@ -33,6 +37,9 @@ const ContentItem = styled(Grid)`
 
 const Decorator = styled.div`
   position: absolute;
+  @media (max-width: 500px) {
+    display: none;
+  }
 `
 const RaisedHandsImg = styled.img`
   position: absolute;
@@ -112,7 +119,7 @@ const Partnerships = ({ data }) => {
           />
         </Decorator>
       ) : null}
-      <Main sx={{ width: '70%' }}>
+      <Main sx={{ width: ['90%', '90%', '70%'] }}>
         <Text sx={{ variant: 'headings.h2' }}>
           {data.contentPartnerships.nodes[0].title}
         </Text>
@@ -140,7 +147,11 @@ const Partnerships = ({ data }) => {
         >
           Our partners and friends{' '}
         </Text>
-        <Grid columns={3} gap={4} sx={{ maxWidth: '800px' }}>
+        <Grid
+          columns={[1, 2, 3]}
+          gap={4}
+          sx={{ justifySelf: ['center', 'auto', 'auto'], maxWidth: '800px' }}
+        >
           {data.contentFriends.edges.map(edges => (
             <ContentItem key={edges.node.id}>
               <Link
