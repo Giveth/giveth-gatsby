@@ -19,7 +19,42 @@ const DonateButton = styled(Button)`
 
 const AboutPage = ({ data }) => {
   const [currentTab, setCurrentTab] = useState('mission')
+  const richTextOptions = {
+    renderNode: {
+      [BLOCKS.EMBEDDED_ASSET]: node => {
+        const { title, description, file } = node.data.target.fields
+        const mimeType = file['en-US'].contentType
+        const mimeGroup = mimeType.split('/')[0]
 
+        switch (mimeGroup) {
+          case 'image':
+            return (
+              <img
+                title={title ? title['en-US'] : null}
+                alt={description ? description['en-US'] : null}
+                src={file['en-US'].url}
+              />
+            )
+          case 'application':
+            return (
+              <a
+                alt={description ? description['en-US'] : null}
+                href={file['en-US'].url}
+              >
+                {title ? title['en-US'] : file['en-US'].details.fileName}
+              </a>
+            )
+          default:
+            return (
+              <span style={{ backgroundColor: 'black', color: 'white' }}>
+                {' '}
+                {mimeType} embedded asset{' '}
+              </span>
+            )
+        }
+      }
+    }
+  }
   return (
     <Layout>
       <Flex>
@@ -134,7 +169,8 @@ const AboutPage = ({ data }) => {
             {currentTab === 'mission' ? (
               <Text sx={{ variant: 'text.default' }}>
                 {documentToReactComponents(
-                  data.contentAboutUs.edges[0].node.missionandvision.json
+                  data.contentAboutUs.edges[0].node.missionandvision.json,
+                  richTextOptions
                 )}
               </Text>
             ) : currentTab === 'history' ? (
@@ -147,7 +183,8 @@ const AboutPage = ({ data }) => {
                 }}
               >
                 {documentToReactComponents(
-                  data.contentAboutUs.edges[0].node.history.json
+                  data.contentAboutUs.edges[0].node.history.json,
+                  richTextOptions
                 )}
               </Text>
             ) : (

@@ -114,7 +114,7 @@ const UserDetails = () => {
       {active ? (
         <AccountDetails>
           <MenuItem sx={{ variant: 'text.overlineSmall', color: 'bodyDark' }}>
-            WALLET ADDRESS
+            Wallet Address
           </MenuItem>
           <MenuItem sx={{ variant: 'text.microbold', color: 'bodyDark' }}>
             {truncAddress}
@@ -128,18 +128,16 @@ const UserDetails = () => {
             to='/account'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
-            <a>
-              <MenuItem
-                sx={{
-                  variant: 'text.medium',
-                  color: 'secondary',
-                  fontWeight: 'bold'
-                }}
-                className='shadow boxheight'
-              >
-                My Account
-              </MenuItem>
-            </a>
+            <MenuItem
+              sx={{
+                variant: 'text.medium',
+                color: 'secondary',
+                fontWeight: 'bold'
+              }}
+              className='shadow boxheight'
+            >
+              My Account
+            </MenuItem>
           </Link>
           {!isWalletProved && (
             <MenuItem
@@ -190,16 +188,22 @@ const UserDetails = () => {
               Report a bug
             </MenuItem>
           </MenuLink>
-          <MenuItem
-            sx={{
-              variant: 'text.medium',
-              color: 'secondary',
-              fontWeight: 'bold'
-            }}
-            className='shadow boxheight'
+          <MenuLink
+            href='https://discord.gg/JYNBDuFUpG'
+            target='_blank'
+            rel='noopener noreferrer'
           >
-            Support
-          </MenuItem>
+            <MenuItem
+              sx={{
+                variant: 'text.medium',
+                color: 'secondary',
+                fontWeight: 'bold'
+              }}
+              className='shadow boxheight'
+            >
+              Support
+            </MenuItem>
+          </MenuLink>
           <MenuItem
             sx={{
               variant: 'text.medium',
