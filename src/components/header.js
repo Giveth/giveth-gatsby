@@ -263,7 +263,9 @@ const Header = ({ siteTitle, isHomePage }) => {
         <UserSpan>
           {isMobile ? null : (
             <Flex>
-              <CreateLink onClick={goCreate}>Create a project</CreateLink>
+              {pathname !== 'projects' && (
+                <CreateLink onClick={goCreate}>Create a project</CreateLink>
+              )}
               {projectSearch === 'true' && (
                 <IconButton>
                   <img src={iconSearch} alt='' />
