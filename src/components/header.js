@@ -9,6 +9,7 @@ import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Logo from './content/Logo'
 import { useLocation } from '@reach/router'
+import Headroom from 'react-headroom'
 // import graphics
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
@@ -18,6 +19,8 @@ import decoratorCloud2 from '../images/decorator-cloud2.svg'
 const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
   height: 140px;
+  position: relative;
+  z-index: 10;
   @media (max-width: 700) {
     height: 160px;
   }
@@ -116,7 +119,7 @@ const UserSpan = styled.span`
 `
 
 const NavLink = styled(Link)`
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: ${theme.fonts.heading}, sans-serif;
   font-weight: 500;
   line-height: 21px;
   text-decoration: none;
@@ -128,7 +131,7 @@ const NavLink = styled(Link)`
 const CreateLink = styled.div`
   cursor: pointer;
   text-decoration: none;
-  font-family: 'Red Hat Text', sans serif;
+  font-family: ${theme.fonts.body}, sans serif;
   text-transform: uppercase;
   font-weight: bold;
   line-height: 18px;
@@ -152,19 +155,21 @@ const Header = ({ siteTitle, isHomePage }) => {
   const location = useLocation()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
+  const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
-
-      if (scrollTop > 50) {
-        setScrollState(true)
-      } else {
-        setScrollState(false)
+      {
+        if (scrollTop >= 50) {
+          setScrollState(true)
+        } else {
+          setScrollState(false)
+        }
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -174,108 +179,115 @@ const Header = ({ siteTitle, isHomePage }) => {
   }
 
   return (
-    <HeaderContainer
-      style={{
-        marginBottom: '1.45rem'
-      }}
-    >
-      <HeaderSpan
-        className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
+    <Headroom>
+      <HeaderContainer
+        style={{
+          marginBottom: '1.45rem'
+        }}
       >
-        {!isMobile ? (
-          <Decorator>
-            <img
-              src={decoratorCloud1}
-              alt=''
-              sx={{
-                position: 'absolute',
-                top: '-70px',
-                left: '300px'
-              }}
-              className='hide'
-            />
-            <img
-              src={decoratorCloud2}
-              alt=''
-              sx={{
-                position: 'absolute',
-                top: '-80px',
-                left: '92vw'
-              }}
-              className='hide'
-            />
-          </Decorator>
-        ) : null}
-        <Link
-          to='/'
-          sx={{
-            textDecoration: 'none'
-          }}
+        <HeaderSpan
+          className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
         >
-          {isMobile ? (
-            <Logo
-              siteId={process.env.GATSBY_SITE_ID}
-              alt=''
-              width='40px'
-              height='40px'
-            />
-          ) : (
-            <LogoSpan
-              className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
-            >
-              <Logo alt='' />
-              {siteId === 'giveth' ? (
-                <Text
-                  pl={3}
-                  sx={{
-                    variant: 'text.default',
-                    color: 'secondary',
-                    fontFamily: 'fonts.body',
-                    fontSize: 3,
-                    fontWeight: 'medium',
-                    textDecoration: 'none',
-                    lineHeights: 'tallest',
-                    letterSpacing: '0.32px'
-                  }}
-                >
-                  THE FUTURE OF GIVING
-                </Text>
-              ) : (
-                ''
-              )}
-            </LogoSpan>
-          )}
-        </Link>
-
-        <MiddleSpan>
-          <NavLink to='/' sx={{ color: isHomePage ? 'secondary' : 'primary' }}>
-            Home
-          </NavLink>
-          {/* <NavLink to='/causes'>Causes</NavLink> */}
-          <NavLink
-            to='/projects'
-            sx={{ color: pathname === 'projects' ? 'secondary' : 'primary' }}
+          {!isMobile ? (
+            <Decorator>
+              <img
+                src={decoratorCloud1}
+                alt=''
+                sx={{
+                  position: 'absolute',
+                  top: '-70px',
+                  left: '300px'
+                }}
+                className='hide'
+              />
+              <img
+                src={decoratorCloud2}
+                alt=''
+                sx={{
+                  position: 'absolute',
+                  top: '-80px',
+                  left: '92vw'
+                }}
+                className='hide'
+              />
+            </Decorator>
+          ) : null}
+          <Link
+            to='/'
+            sx={{
+              textDecoration: 'none'
+            }}
           >
-            Projects
-          </NavLink>
-        </MiddleSpan>
+            {isMobile ? (
+              <Logo
+                siteId={process.env.GATSBY_SITE_ID}
+                alt=''
+                width='40px'
+                height='40px'
+              />
+            ) : (
+              <LogoSpan
+                className={
+                  hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''
+                }
+              >
+                <Logo alt='' />
+                {siteId === 'giveth' ? (
+                  <Text
+                    pl={3}
+                    sx={{
+                      variant: 'text.default',
+                      color: 'secondary',
+                      fontFamily: 'fonts.body',
+                      fontSize: 3,
+                      fontWeight: 'medium',
+                      textDecoration: 'none',
+                      lineHeights: 'tallest',
+                      letterSpacing: '0.32px'
+                    }}
+                  >
+                    THE FUTURE OF GIVING
+                  </Text>
+                ) : (
+                  ''
+                )}
+              </LogoSpan>
+            )}
+          </Link>
 
-        <UserSpan>
-          {isMobile ? null : (
-            <Flex>
-              <CreateLink onClick={goCreate}>Create a project</CreateLink>
-              {projectSearch === 'true' && (
-                <IconButton>
-                  <img src={iconSearch} alt='' />
-                </IconButton>
-              )}
-            </Flex>
-          )}
-          <img src={iconVerticalLine} alt='' />
-          <Login />
-        </UserSpan>
-      </HeaderSpan>
-    </HeaderContainer>
+          <MiddleSpan>
+            <NavLink
+              to='/'
+              sx={{ color: isHomePage ? 'secondary' : 'primary' }}
+            >
+              Home
+            </NavLink>
+            {/* <NavLink to='/causes'>Causes</NavLink> */}
+            <NavLink
+              to='/projects'
+              sx={{ color: pathname === 'projects' ? 'secondary' : 'primary' }}
+            >
+              Projects
+            </NavLink>
+          </MiddleSpan>
+
+          <UserSpan>
+            {isMobile ? null : (
+              <Flex>
+                <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                {projectSearch === 'true' && (
+                  <IconButton>
+                    <img src={iconSearch} alt='' />
+                  </IconButton>
+                )}
+              </Flex>
+            )}
+            <img src={iconVerticalLine} alt='' />
+            <Login />
+          </UserSpan>
+        </HeaderSpan>
+      </HeaderContainer>
+    </Headroom>
   )
 }
 

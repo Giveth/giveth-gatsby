@@ -13,7 +13,6 @@ const IconDrop = styled(DropIcon)`
 const Dropdown = styled(Box)`
   position: relative;
   display: inline-block;
-  z-index: 1;
 `
 
 const DropdownContent = styled.div`
