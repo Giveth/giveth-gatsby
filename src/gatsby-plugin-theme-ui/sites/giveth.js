@@ -228,6 +228,8 @@ export default {
     default: {
       cursor: 'pointer',
       fontFamily: 'body',
+      py: '1rem',
+      px: '1.5rem',
       fontSize: 3,
       fontWeight: 'bold',
       lineHeight: 'button',
@@ -251,6 +253,17 @@ export default {
       cursor: 'pointer',
       background: 'unset',
       border: ['2px', 'solid', 'colors.anotherGray'],
+      fontFamily: 'body',
+      fontWeight: 'medium',
+      fontSize: 2,
+      textTransform: 'capitalize',
+      borderRadius: '48px',
+      outline: 'none'
+    },
+    nofillGray: {
+      cursor: 'pointer',
+      background: 'unset',
+      border: ['2px', 'solid', 'colors.bodyLight'],
       fontFamily: 'body',
       fontWeight: 'medium',
       fontSize: 2,

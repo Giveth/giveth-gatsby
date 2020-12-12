@@ -1,4 +1,5 @@
 /** @jsx jsx */
+import React from 'react'
 import { Box, Button, Grid, Flex, jsx, Text, Input } from 'theme-ui'
 import ProjectCard from './projectCard'
 import NoImage from '../images/no-image-available.jpg'
@@ -91,172 +92,182 @@ const projectSearch = process.env.PROJECT_SEARCH
 const ProjectsList = props => {
   const { projects, totalCount, loadMore, hasMore } = props
   return (
-    <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
+    <>
       <div
         style={{
-          margin: '0 auto',
-          maxWidth: '1440px',
-          padding: '0 1.0875rem 1.45rem'
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          margin: '1.5em 0',
+          padding: '0 5em'
         }}
       >
-        <div
+        <Text
           style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between'
+            width: '50%'
           }}
         >
-          <Text
-            style={{
-              width: '50%'
-            }}
-          >
-            <span
-              sx={{
-                variant: 'headings.h1',
-                width: ['100%', null, null],
-                fontWeight: 'regular',
-                fontSize: ['8', '11', '11'],
-                color: 'secondaryDark'
-              }}
-            >
-              Projects
-            </span>{' '}
-            <span
-              sx={{
-                variant: 'headings.h4',
-                color: 'bodyDark'
-              }}
-            >{`(${totalCount})`}</span>
-          </Text>
-          <CreateLink to='/create'>Create a project</CreateLink>
-        </div>
-
-        {projectSearch === 'true' ? (
-          <Flex
+          <span
             sx={{
-              width: '100%',
-              flexDirection: ['column-reverse', null, 'row'],
-              mt: 2
+              variant: 'headings.h1',
+              width: ['100%', null, null],
+              fontWeight: '500',
+              fontSize: ['8', '3.25rem', '3.25rem'],
+              color: 'secondary'
             }}
           >
+            Projects{' '}
+          </span>
+          <span
+            sx={{
+              variant: 'headings.h5',
+              color: 'bodyLight'
+            }}
+          >{`(${totalCount})`}</span>
+        </Text>
+        <CreateLink to='/create'>Create a project</CreateLink>
+      </div>
+      <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
+        <div
+          style={{
+            margin: '0 auto',
+            maxWidth: '1440px',
+            padding: '0 1.0875rem 1.45rem'
+          }}
+        >
+          {projectSearch === 'true' ? (
             <Flex
               sx={{
                 width: '100%',
-                flexDirection: ['row', null, 'row'],
-                justifyContent: ['space-around', null, null]
+                flexDirection: ['column-reverse', null, 'row'],
+                mt: 2
               }}
             >
               <Flex
                 sx={{
-                  width: ['30%'],
-                  alignItems: 'center',
-                  mt: [4, 0, 0]
+                  width: '100%',
+                  flexDirection: ['row', null, 'row'],
+                  justifyContent: ['space-around', null, null]
                 }}
               >
-                <DropdownInput
-                  options={['COVID-19']}
-                  current={0}
-                  // setCurrent={i => setFilter(i)}
-                />
-              </Flex>
-              <Flex
-                sx={{
-                  width: ['30%'],
-                  alignItems: 'center',
-                  mt: [4, 0, 0]
-                }}
-              >
-                <DropdownInput
-                  options={['World Wide']}
-                  current={0}
-                  // setCurrent={i => setFilter(i)}
-                />
-              </Flex>
-              <Flex
-                sx={{
-                  width: ['30%'],
-                  alignItems: 'center',
-                  mt: [4, 0, 0]
-                }}
-              >
-                <DropdownInput
-                  options={['Amount Raised']}
-                  current={0}
-                  // setCurrent={i => setFilter(i)}
-                />
-              </Flex>
-              {/* <SelectMenu
+                <Flex
+                  sx={{
+                    width: ['30%'],
+                    alignItems: 'center',
+                    mt: [4, 0, 0]
+                  }}
+                >
+                  <DropdownInput
+                    options={['COVID-19']}
+                    current={0}
+                    // setCurrent={i => setFilter(i)}
+                  />
+                </Flex>
+                <Flex
+                  sx={{
+                    width: ['30%'],
+                    alignItems: 'center',
+                    mt: [4, 0, 0]
+                  }}
+                >
+                  <DropdownInput
+                    options={['World Wide']}
+                    current={0}
+                    // setCurrent={i => setFilter(i)}
+                  />
+                </Flex>
+                <Flex
+                  sx={{
+                    width: ['30%'],
+                    alignItems: 'center',
+                    mt: [4, 0, 0]
+                  }}
+                >
+                  <DropdownInput
+                    options={['Amount Raised']}
+                    current={0}
+                    // setCurrent={i => setFilter(i)}
+                  />
+                </Flex>
+                {/* <SelectMenu
             caption='sort by'
             options={orderBySelectOptions}
             onChange={selectOrderByField}
           /> */}
-            </Flex>
-            <Flex
-              sx={{
-                flexGrow: 3,
-                alignItems: 'center',
-                display: 'flex',
-                width: ['100%', '100%', '50%'],
-                padding: '0 3% 0 0',
-                mt: [4, 0, 0],
-                mb: [0, 4, 0]
-              }}
-            >
-              <Input
-                placeholder='Search Projects'
-                variant='forms.search'
-                style={{
-                  width: '100%',
-                  margin: 'auto'
+              </Flex>
+              <Flex
+                sx={{
+                  flexGrow: 3,
+                  alignItems: 'center',
+                  display: 'flex',
+                  width: ['100%', '100%', '50%'],
+                  padding: '0 3% 0 0',
+                  mt: [4, 0, 0],
+                  mb: [0, 4, 0]
                 }}
-              />
-              <IconSearch />
+              >
+                <Input
+                  placeholder='Search Projects'
+                  variant='forms.search'
+                  style={{
+                    width: '100%',
+                    margin: 'auto'
+                  }}
+                />
+                <IconSearch />
+              </Flex>
             </Flex>
-          </Flex>
-        ) : null}
-        <div
-          style={{
-            width: '100%',
-            margin: 0
-          }}
-        >
-          <Grid
-            p={4}
-            columns={[1, 2, 3]}
-            style={{ margin: 0, justifyItems: 'center' }}
+          ) : null}
+          <div
+            style={{
+              width: '100%',
+              margin: 0
+            }}
           >
-            {projects
-              ? projects.map((project, index) => (
-                  <ProjectCard
-                    id={project.id}
-                    listingId={project.title + '-' + index}
-                    key={project.title + '-' + index}
-                    name={project.title}
-                    slug={project.slug}
-                    donateAddress={project.donateAddress}
-                    image={project.image || NoImage}
-                    raised={project.balance}
-                    project={project}
-                  />
-                ))
-              : null}
-          </Grid>
-        </div>
-        {hasMore && (
-          <div sx={{ justifySelf: 'center', textAlign: 'center' }}>
-            <Button
-              sx={{
-                variant: 'buttons.tiny'
+            <Grid
+              p={4}
+              columns={[1, 2, 3]}
+              style={{
+                margin: 0,
+                columnGap: '2.375em',
+                justifyItems: 'center'
               }}
-              onClick={() => loadMore()}
             >
-              Show more Projects
-            </Button>
+              {projects
+                ? projects.map((project, index) => (
+                    <ProjectCard
+                      id={project.id}
+                      listingId={project.title + '-' + index}
+                      key={project.title + '-' + index}
+                      name={project.title}
+                      slug={project.slug}
+                      donateAddress={project.donateAddress}
+                      image={project.image || NoImage}
+                      raised={project.balance}
+                      project={project}
+                    />
+                  ))
+                : null}
+            </Grid>
           </div>
-        )}
-      </div>
-    </ProjectSection>
+          {hasMore && (
+            <div sx={{ justifySelf: 'center', textAlign: 'center' }}>
+              <Button
+                sx={{
+                  variant: 'buttons.nofillGray',
+                  color: 'bodyLight',
+                  fontSize: 14,
+                  mb: '3rem'
+                }}
+                onClick={() => loadMore()}
+              >
+                Show more Projects
+              </Button>
+            </div>
+          )}
+        </div>
+      </ProjectSection>
+    </>
   )
 }
 

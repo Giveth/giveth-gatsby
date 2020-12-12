@@ -42,19 +42,29 @@ const InfoSection = () => {
       rows={5}
       sx={{
         color: 'background',
-        backgroundColor: 'secondary'
+        backgroundColor: 'secondary',
+        alignItems: 'center',
+        px: '8.75rem'
       }}
     >
       <Box
-        pt='100px'
-        sx={{ justifySelf: 'center', textAlign: 'center', color: 'background' }}
+        sx={{
+          justifySelf: 'center',
+          textAlign: 'center',
+          pt: '100px',
+          px: '14rem',
+          color: 'background'
+        }}
       >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
           What is Giveth?
         </Text>
         <Text
           pb={5}
-          sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}
+          sx={{
+            variant: 'text.large',
+            color: 'background'
+          }}
         >
           A Decentralized Altruistic Community using blockchain technology to
           make the world a better place.
@@ -64,7 +74,17 @@ const InfoSection = () => {
           target='_blank'
           rel='noopener noreferrer'
         >
-          <Button sx={{ variant: 'buttons.nofill', background: 'unset' }}>
+          <Button
+            sx={{
+              variant: 'buttons.nofillGray',
+              color: 'bodyLight',
+              fontSize: 14,
+              background: 'unset',
+              px: '3rem',
+              py: '0.875rem',
+              mb: '6rem'
+            }}
+          >
             Read our story on the future of giving
           </Button>
         </a>
@@ -75,10 +95,21 @@ const InfoSection = () => {
       >
         <Box sx={{ maxWidth: '320px' }}>
           <DecoratorAltruistic />
-          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+          <Text
+            sx={{
+              variant: 'headings.h4',
+              color: 'background',
+              py: '1.5rem'
+            }}
+          >
             Altruistic
           </Text>
-          <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
+          <Text
+            sx={{
+              variant: 'text.paragraph',
+              color: 'background'
+            }}
+          >
             We build tools for the common good and support others in doing so as
             well. On the Giveth DApp, 100% of the funds donated go to the cause
             the donor intended to support.
@@ -86,7 +117,13 @@ const InfoSection = () => {
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
           <DecoratorDecentralized />
-          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+          <Text
+            sx={{
+              variant: 'headings.h4',
+              color: 'background',
+              py: '1.5rem'
+            }}
+          >
             Decentralized
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
@@ -97,7 +134,13 @@ const InfoSection = () => {
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
           <DecoratorCommunity />
-          <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+          <Text
+            sx={{
+              variant: 'headings.h4',
+              color: 'background',
+              py: '1.5rem'
+            }}
+          >
             Community
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
@@ -160,7 +203,9 @@ const InfoSection = () => {
             and start raising funds.
           </Text>
           <Link to='/create'>
-            <Button sx={{ variant: 'buttons.default' }}>
+            <Button
+              sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
+            >
               Create a project
             </Button>
           </Link>
@@ -185,15 +230,18 @@ const InfoSection = () => {
           <Text sx={{ variant: 'headings.h4', color: 'background' }}>
             For Givers
           </Text>
-          {/* <Text sx={{ variant: 'text.paragraph' }}>
-            Send donations to the{' '}
-            <Link to='/causes' className='intextlink'>
-              Cause
+          <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
+            Use our platform to give donations to a cause or a project. Easily
+            donate to the{' '}
+            <Link to='/projects' className='intextlink'>
+              project
             </Link>{' '}
-            or Project you most care about.
-          </Text> */}
+            you most care about.
+          </Text>
           <Link to='/donate'>
-            <Button sx={{ variant: 'buttons.default' }}>
+            <Button
+              sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
+            >
               Donate to a project
             </Button>
           </Link>

@@ -273,23 +273,25 @@ const Header = ({ siteTitle, isHomePage }) => {
             </NavLink>
           </MiddleSpan>
 
-          <UserSpan>
-            {isMobile ? null : (
-              <Flex>
+        <UserSpan>
+          {isMobile ? null : (
+            <Flex>
+              {pathname !== 'projects' && (
                 <CreateLink onClick={goCreate}>Create a project</CreateLink>
-                {projectSearch === 'true' && (
-                  <IconButton>
-                    <img src={iconSearch} alt='' />
-                  </IconButton>
-                )}
-              </Flex>
-            )}
-            <img src={iconVerticalLine} alt='' />
-            <Login />
-          </UserSpan>
-        </HeaderSpan>
-      </HeaderContainer>
-    </Headroom>
+              )}
+              {projectSearch === 'true' && (
+                <IconButton>
+                  <img src={iconSearch} alt='' />
+                </IconButton>
+              )}
+            </Flex>
+          )}
+          <img src={iconVerticalLine} alt='' />
+          <Login />
+        </UserSpan>
+      </HeaderSpan>
+    </HeaderContainer>
+  </Headroom>
   )
 }
 
