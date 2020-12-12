@@ -12,6 +12,7 @@ import { TorusContext } from '../contextProvider/torusProvider'
 
 const CardContainer = styled(Card)`
   position: relative;
+  z-index: 0;
   background-color: ${theme.colors.background};
   margin-bottom: 30px;
   border-radius: 12px;

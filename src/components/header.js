@@ -20,14 +20,14 @@ const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
   height: 140px;
   position: relative;
-  z-index: 10;
   @media (max-width: 700) {
     height: 160px;
   }
 `
 
 const HeaderSpan = styled.nav`
-  position: fixed;
+  position: absolute;
+  z-index: 2;
   margin: 0 auto;
   padding: 80px 80px 0 80px;
   max-width: 100vw;
@@ -38,7 +38,6 @@ const HeaderSpan = styled.nav`
   background-color: ${theme.colors.background};
   width: 100%;
   transition: padding 0.8s ease-out;
-  z-index: 200;
   backdrop-filter: blur(30px);
   .hide {
     transition: 0.8s;
@@ -100,8 +99,9 @@ const MiddleSpan = styled.span`
   justify-self: center;
   max-width: 290px;
   @media (max-width: 1030px) {
+    grid-gap: 10px;
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
   }
 `
 
@@ -113,6 +113,8 @@ const UserSpan = styled.span`
   align-items: center;
   justify-self: end;
   @media (max-width: 1030px) {
+    justify-items: end;
+    grid-gap: 0;
     grid-row: 1;
     grid-column: 3;
   }
