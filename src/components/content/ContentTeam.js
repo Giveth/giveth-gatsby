@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
+import { jsx, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import React from 'react'
 import styled from '@emotion/styled'
@@ -20,7 +20,7 @@ const Content = styled.div`
   display: grid;
   grid-template-columns: repeat(3, auto);
   justify-content: center;
-  grid-gap: 5rem;
+  grid-gap: 2rem;
 
   @media (max-width: 990px) {
     grid-template-columns: repeat(2, auto);
@@ -31,7 +31,6 @@ const Content = styled.div`
 `
 
 const ContentItem = styled.div`
-  max-width: 200px;
   margin: 1rem;
   display: grid;
   grid-template-rows: auto;
@@ -57,7 +56,6 @@ const Headline1 = styled(Text)`
 `
 const Badge = styled(Text)`
   grid-row: 2;
-  max-width: 70%;
   justify-self: center;
   padding: 3px 11.76px;
   margin: 0.3rem 0.2rem;
@@ -65,17 +63,6 @@ const Badge = styled(Text)`
   border: 1px solid ${theme.colors.bodyLight};
   border-radius: 48px;
   color: ${theme.colors.bodyLight};
-`
-
-const Headline2 = styled.h5`
-  justify-self: start;
-  align-self: end;
-  @media (max-width: 990px) {
-    justify-self: center;
-  }
-  @media (max-width: 640px) {
-    font-size: 1.5rem;
-  }
 `
 
 const ContentFooter = styled.div`
@@ -122,23 +109,28 @@ const Portrait = styled.img`
 `
 
 const ContentTeam = ({ headerdata }) => (
-  <ContentContainer>
-    <Content>
-      {headerdata.map(edges => (
-        <ContentItem key={edges.node.id}>
-          <PortraitHelper>
-            <Portrait src={edges.node.portrait.file.url} />
-          </PortraitHelper>
-          <ContentFooter className='placeholder'>
-            <Headline1 sx={{ variant: 'headings.h5', color: 'secondary' }}>
-              {edges.node.headline1}
-            </Headline1>
+  <React.Fragment>
+    <ContentContainer>
+      <Content>
+        {headerdata.map(edges => (
+          <ContentItem key={edges.node.id}>
+            <PortraitHelper>
+              <Portrait src={edges.node.portrait.file.url} />
+            </PortraitHelper>
+            <ContentFooter className='placeholder'>
+              <Headline1
+                pt={1}
+                sx={{ variant: 'headings.h6', color: 'secondary' }}
+              >
+                {edges.node.headline1}
+              </Headline1>
 
-            <Badge sx={{ variant: 'text.overlineSmall' }}>
-              {edges.node.headline2}
-            </Badge>
+              <Badge sx={{ variant: 'text.overlineSmall' }}>
+                {edges.node.headline2}
+              </Badge>
 
-            <Text
+              {/** Hide short bio
+             <Text
               sx={{
                 variant: 'text.default',
                 width: '260px',
@@ -147,25 +139,28 @@ const ContentTeam = ({ headerdata }) => (
             >
               {edges.node.shortBio}
             </Text>
-            <Social1
-              href={edges.node.socialTwitter}
-              className='social'
-              target='blank'
-            >
-              <FaTwitter size={'24px'} />
-            </Social1>
-            <Social2
-              href={edges.node.socialMedium}
-              className='social'
-              target='blank'
-            >
-              <FaGithub size={'24px'} />
-            </Social2>
-          </ContentFooter>
-        </ContentItem>
-      ))}
-    </Content>
-  </ContentContainer>
+            */}
+
+              <Social1
+                href={edges.node.socialTwitter}
+                className='social'
+                target='blank'
+              >
+                <FaTwitter size='24px' />
+              </Social1>
+              <Social2
+                href={edges.node.socialMedium}
+                className='social'
+                target='blank'
+              >
+                <FaGithub size='24px' />
+              </Social2>
+            </ContentFooter>
+          </ContentItem>
+        ))}
+      </Content>
+    </ContentContainer>
+  </React.Fragment>
 )
 
 export default ContentTeam
