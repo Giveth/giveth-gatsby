@@ -43,7 +43,7 @@ const CreateLink = styled(Link)`
 `
 
 const AccountPage = props => {
-  const { user, isLoggedIn } = React.useContext(TorusContext)
+  const { user, isLoggedIn, logout } = React.useContext(TorusContext)
   const [projects, setProjects] = React.useState(null)
   const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -52,6 +52,10 @@ const AccountPage = props => {
   const options = ['My Account', 'My Projects', 'My Donations']
   const isSSR = typeof window === 'undefined'
   const projectsList = projects?.data?.projects
+
+  const handleLogout = () => {
+    logout()
+  }
 
   const SetView = () => {
     switch (selectedView) {
@@ -138,23 +142,21 @@ const AccountPage = props => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Flex sx={{ justifyContent: 'space-between', mx: '5%', height: '128px' }}>
         <Link
           to='/'
-          sx={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
+          sx={{
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            width: '80px',
+            justifyContent: 'space-between',
+            variant: 'links.default'
+          }}
         >
-          <a
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '80px',
-              justifyContent: 'space-between'
-            }}
-          >
-            <BsArrowLeft size='24px' />
-            <Text sx={{ fontFamily: 'body' }}>Giveth</Text>
-          </a>
+          <BsArrowLeft size='24px' />
+          Giveth
         </Link>
         <Flex>
           <UserSpan>
@@ -182,7 +184,8 @@ const AccountPage = props => {
               color: 'secondary',
               fontSize: 8,
               mt: '40px',
-              mb: '68px'
+              mb: '68px',
+              variant: 'links.secondary'
             }}
           >
             My Account
@@ -208,27 +211,36 @@ const AccountPage = props => {
             })}
           </Box>
           <Box sx={{ mt: ['35px', '70px', '70px'] }}>
-            <Link to='/' sx={{ textDecoration: 'none' }}>
-              <a>
-                <Text sx={{ mb: '8px', color: 'bodyDark' }}>
-                  Wallet Settings
-                </Text>
-              </a>
+            <Link
+              href='https://app.tor.us'
+              target='_blank'
+              rel='noopener noreferrer'
+              sx={{ textDecoration: 'none' }}
+            >
+              <Text sx={{ mb: '8px', variant: 'links.grey' }}>
+                Wallet Settings
+              </Text>
             </Link>
-            <Link to='/' sx={{ textDecoration: 'none' }}>
-              <a>
-                <Text sx={{ mb: '8px', color: 'bodyDark' }}>Report A Bug</Text>
-              </a>
+            <Link
+              href='https://github.com/Giveth/giveth-2/issues/new/choose'
+              target='_blank'
+              rel='noopener noreferrer'
+              sx={{ textDecoration: 'none' }}
+            >
+              <Text sx={{ mb: '8px', variant: 'links.grey' }}>
+                Report A Bug
+              </Text>
             </Link>
-            <Link to='/' sx={{ textDecoration: 'none' }}>
-              <a>
-                <Text sx={{ mb: '8px', color: 'bodyDark' }}>Support</Text>
-              </a>
+            <Link
+              href='https://discord.gg/JYNBDuFUpG'
+              target='_blank'
+              rel='noopener noreferrer'
+              sx={{ textDecoration: 'none' }}
+            >
+              <Text sx={{ mb: '8px', variant: 'links.grey' }}>Support</Text>
             </Link>
-            <Link to='/' sx={{ textDecoration: 'none' }}>
-              <a>
-                <Text sx={{ mb: '8px', color: 'bodyDark' }}>Sign Out</Text>
-              </a>
+            <Link to='/' sx={{ textDecoration: 'none' }} onClick={handleLogout}>
+              <Text sx={{ mb: '8px', variant: 'links.grey' }}>Sign Out</Text>
             </Link>
           </Box>
         </Box>
@@ -241,7 +253,7 @@ const AccountPage = props => {
           <SetView />
         </Box>
       </Flex>
-    </>
+    </React.Fragment>
   )
 }
 

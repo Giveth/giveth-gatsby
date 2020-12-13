@@ -13,14 +13,14 @@ const IconDrop = styled(DropIcon)`
 const Dropdown = styled(Box)`
   position: relative;
   display: inline-block;
-  z-index: 1;
 `
 
 const DropdownContent = styled.div`
   display: none;
   position: absolute;
+  z-index: 1;
   width: 100%;
-  background: #ffffff;
+  background: ${theme.colors.background};
   border: 1px solid #f5f5f5;
   box-sizing: border-box;
   box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);

@@ -283,11 +283,32 @@ export default {
     }
   },
   links: {
+    default: {
+      fontFamily: 'heading',
+      textDecoration: 'none',
+      color: 'primary',
+      cursor: 'pointer',
+      '&:hover': {
+        color: 'accent'
+      }
+    },
+    secondary: {
+      fontFamily: 'heading',
+      textDecoration: 'none',
+      color: 'secondary',
+      cursor: 'pointer',
+      '&:hover': {
+        color: 'primary'
+      }
+    },
     nav: {
       fontFamily: 'heading',
       textDecoration: 'none',
       color: 'primary',
-      cursor: 'pointer'
+      cursor: 'pointer',
+      '&:hover': {
+        color: 'accent'
+      }
     },
     readmore: {
       fontFamily: 'heading',
@@ -298,14 +319,29 @@ export default {
       letterSpacing: 'more',
       textTransform: 'uppercase',
       fontSize: '2',
-      lineHeight: '18px'
+      lineHeight: '18px',
+      '&:hover': {
+        color: 'accent'
+      }
     },
     light: {
       fontFamily: 'body',
       textDecoration: 'none',
       color: 'bodyLight',
       cursor: 'pointer',
-      fontWeight: 'medium'
+      fontWeight: 'medium',
+      '&:hover': {
+        color: 'accent'
+      }
+    },
+    grey: {
+      fontFamily: 'body',
+      textDecoration: 'none',
+      color: 'bodyDark',
+      cursor: 'pointer',
+      '&:hover': {
+        color: 'accent'
+      }
     }
   },
   images: {

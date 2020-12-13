@@ -1,11 +1,10 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
+import { jsx, Flex, Spinner } from 'theme-ui'
 import Layout from '../components/layout'
 import { Router } from '@reach/router'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProjectDonatorView } from '../components/project'
 import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
-import { Flex, Spinner } from 'theme-ui'
 import { useEffect, useState } from 'react'
 
 const Project = props => {

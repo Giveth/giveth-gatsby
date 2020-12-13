@@ -185,7 +185,7 @@ const InfoSection = () => {
           p={2}
           rows={3}
           sx={{
-            justifySelf: 'end',
+            justifySelf: ['center', 'end', 'end'],
             alignContent: 'start',
             textAlign: 'center',
             maxWidth: '360px',
@@ -221,7 +221,7 @@ const InfoSection = () => {
           p={2}
           rows={3}
           sx={{
-            justifySelf: 'start',
+            justifySelf: ['center', 'start', 'start'],
             alignContent: 'start',
             textAlign: 'center',
             maxWidth: '360px'

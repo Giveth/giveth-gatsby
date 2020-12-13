@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import { useStaticQuery } from 'gatsby'
+import { graphql } from 'gatsby'
 import Layout from '../components/layout'
-import SEO from '../components/seo'
+import Seo from '../components/seo'
 import Hero from '../components/home/HeroSection'
 import InfoSection from '../components/home/InfoSection'
 import UpdatesSection from '../components/home/UpdatesSection'
@@ -17,11 +17,10 @@ const IndexPage = ({ data }) => {
     : false
   return (
     <Layout isHomePage='true'>
-      <SEO title='home' />
+      <Seo title='home' />
       <Hero content={content} />
       <HomeTopProjects />
       {!hideInfo === true ? <InfoSection /> : null}
-
       <UpdatesSection />
     </Layout>
   )
