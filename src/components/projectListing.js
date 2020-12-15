@@ -139,9 +139,7 @@ const ProjectListing = props => {
       }}
       onClick={() => {
         !props.disabled &&
-          (props?.action
-            ? props.action()
-            : navigate(`/donate/${props?.id || '1'}`))
+          (props?.action ? props.action() : navigate(`/donate/${props?.id}`))
       }}
     >
       <ProjectCard key={props.listingId + '_card'}>

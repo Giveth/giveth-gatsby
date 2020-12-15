@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
 import Web3 from 'web3'
-import SEO from '../components/seo'
+import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/react-hooks'
 import { Text, Spinner } from 'theme-ui'
@@ -75,10 +75,11 @@ const IndexPage = props => {
       }
     } catch (error) {
       console.log(`Error adding project: ---> : ${error}`)
+      console.log(`${JSON.stringify(projectData, null, 2)}`)
     }
   }
 
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -167,7 +168,7 @@ const IndexPage = props => {
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (isLoggedIn === true) {
       if (!projectAdded && !projectId) {
         return (
@@ -231,7 +232,7 @@ const IndexPage = props => {
           maxWidth: '1440px'
         }}
       >
-        <SEO title='Create Project' />
+        <Seo title='Create Project' />
 
         <ProjectForm />
       </div>

@@ -29,7 +29,7 @@ const LinkBox = styled(Box)`
 
 const FooterLink = styled(Link)`
   text-decoration: none;
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: ${theme.fonts.heading}, sans-serif;
   color: ${theme.colors.bodyDark};
   :hover {
     color: ${theme.colors.accent};
@@ -38,7 +38,7 @@ const FooterLink = styled(Link)`
 
 const FooterExternalLink = styled.a`
   text-decoration: none;
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: ${theme.fonts.heading}, sans-serif;
   color: ${theme.colors.bodyDark};
   :hover {
     color: ${theme.colors.accent};
@@ -76,7 +76,6 @@ const CreditsSection = styled(Grid)`
     justify-content: center;
     padding-left: 0;
     padding: 0.5rem;
-    background-color: ${theme.colors.secondaryDark};
   }
 `
 
@@ -172,8 +171,7 @@ const Footer = () => {
       <CreditsSection
         pt={[1, 3, 6]}
         sx={{
-          alignContent: 'center',
-          variant: 'links.light'
+          alignContent: 'center'
         }}
       >
         <Text sx={{ justifySelf: ['center', 'start', 'start'] }}>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import SEO from '../seo'
+import Seo from '../seo'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
@@ -21,7 +21,6 @@ import styled from '@emotion/styled'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
-
 const FloatingDonateView = styled(Flex)`
   @media screen and (max-width: 800px) {
     width: 80%;
@@ -80,7 +79,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
             skip: 0
           }
         })
-        console.log({ updates })
 
         setCurrentProjectView({
           ...currentProjectView,
@@ -98,6 +96,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
     firstFetch()
   }, [])
+  const showMap = process.env.OPEN_FOREST_MAP
+    ? process.env.OPEN_FOREST_MAP
+    : false
 
   const setImage = img => {
     if (/^\d+$/.test(img)) {
@@ -133,7 +134,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   console.log({ currentProjectView })
   return (
     <>
-      <SEO title={project?.title} />
+      <Seo title={project?.title} />
       <Flex>
         {setImage(project?.image) || (
           <Image
@@ -155,7 +156,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
       </Flex>
       <Flex
         sx={{
-          width: '80%',
+          width: '90%',
+          flexDirection: ['column', 'row', 'row'],
           margin: 'auto',
           justifyContent: 'space-around'
         }}
@@ -181,9 +183,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   color: 'primary',
                   mt: '10px'
                 }}
-              >
-                Project organization
-              </Text>
+              ></Text>
             </Box>
           </Flex>
           {/*
@@ -219,6 +219,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           <Flex
             sx={{
               width: ['100%', null, '60%'],
+              alignItems: 'flex-start',
               justifyContent: 'space-between',
               height: '60px',
               mt: '20px'
@@ -227,6 +228,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Button
               variant='nofill'
               type='button'
+              sx={{ width: ['25%', '100%'] }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('description')
@@ -248,6 +250,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Button
               variant='nofill'
               type='button'
+              sx={{ width: ['25%', '100%'] }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('updates')
@@ -262,10 +265,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   borderBottomStyle: currentTab === 'updates' ? 'solid' : null
                 }}
               >
-                Updates{' '}
+                Updates
                 {currentProjectView?.updates ? (
-                  <Badge variant='blueDot' sx={{ ml: 2 }}>
-                    {' '}
+                  <Badge variant='blueDot' sx={{ ml: [-2, 2] }}>
                     <Text sx={{ color: 'white', pt: -2 }}>
                       {currentProjectView?.updates.length}{' '}
                     </Text>
@@ -278,6 +280,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Button
               variant='nofill'
               type='button'
+              sx={{ width: ['25%', '100%'] }}
               onClick={e => {
                 e.preventDefault()
                 setCurrentTab('donation')
@@ -301,17 +304,19 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
           <Box sx={{ mt: '30px' }}>
             {currentTab === 'description' ? (
-              <Text
-                sx={{
-                  mb: 4,
-                  fontSize: 3,
-                  fontFamily: 'body',
-                  fontWeight: 'body',
-                  color: 'black'
-                }}
-              >
-                {pageContext?.project?.description}
-              </Text>
+              <>
+                <Text
+                  sx={{
+                    mb: 4,
+                    fontSize: 3,
+                    fontFamily: 'body',
+                    fontWeight: 'body',
+                    color: 'black'
+                  }}
+                >
+                  {pageContext?.project?.description}
+                </Text>
+              </>
             ) : currentTab === 'updates' && !isSSR ? (
               <React.Suspense fallback={<div />}>
                 <UpdatesTab project={project} isOwner={isOwner} />
@@ -327,16 +332,18 @@ export const ProjectDonatorView = ({ pageContext }) => {
         </Box>
         <FloatingDonateView
           sx={{
-            left: '10%',
+            left: [null, null, '-5%'],
             p: 2,
             pb: 4,
             marginTop: '-2rem',
             borderRadius: '30px',
-            width: '20%',
+            width: ['100%', '50%', '20%'],
             flexDirection: 'column',
             alignContent: 'center',
             backgroundColor: 'white',
-            zIndex: 100
+            position: 'relative',
+            bottom: [0, null, null],
+            zIndex: [2, null]
           }}
         >
           <Button
@@ -411,6 +418,15 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
         </FloatingDonateView>
       </Flex>
+      {showMap ? (
+        <iframe
+          width='100%'
+          height='600'
+          src='https://explorer.land/embed/project/balam1'
+          frameborder='0'
+          allowfullscreen
+        ></iframe>
+      ) : null}
       {/* <pre>{JSON.stringify(pageContext, null, 2)}</pre> */}
     </>
   )

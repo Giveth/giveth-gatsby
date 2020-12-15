@@ -13,12 +13,20 @@ import Layout from '../components/layout'
 
 const Main = styled(Grid)`
   justify-content: start;
-  padding-left: 140px;
+  padding-left: 10vw;
+  @media (max-width: 500px) {
+    margin: 1rem;
+    padding: 0vw;
+  }
 `
 
 const FormStyled = styled(Grid)`
   grid-template-rows: repeat(5, auto);
   max-width: 50vw;
+
+  @media (max-width: 500px) {
+    max-width: 100%;
+  }
 
   & label {
     color: ${theme.colors.bodyLight};
@@ -33,6 +41,8 @@ const FormStyled = styled(Grid)`
 `
 
 const MessageStyled = styled(Textarea)`
+  font-family: ${theme.fonts.body};
+  padding-left: 1rem;
   &:focus {
     outline: none;
     border-color: ${theme.colors.primary};
@@ -43,22 +53,32 @@ const Contact = ({ data }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      <Main>
+      {!isMobile ? (
         <img
           src={decoratorCircles}
           alt=''
-          sx={{ position: 'absolute', top: '70px', right: '80px' }}
+          sx={{
+            position: 'absolute',
+            zIndex: '-1',
+            top: '20px',
+            right: '80px'
+          }}
         />
+      ) : null}
+      {!isMobile ? (
         <img
           src={decoratorSquare}
           alt=''
           sx={{
             position: 'absolute',
+            zIndex: '-1',
             bottom: '3vh',
             right: '20vw',
             width: '10vw'
           }}
         />
+      ) : null}
+      <Main>
         <Text sx={{ variant: 'headings.h2' }}>Contact us</Text>
         <Text pb={5} sx={{ variant: 'text.large' }}>
           Have a question, or just want to say hi? Please fill out the form

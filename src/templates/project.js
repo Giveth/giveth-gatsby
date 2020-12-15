@@ -1,13 +1,11 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
-import { Link } from 'gatsby'
+import { jsx, Flex, Spinner } from 'theme-ui'
 import Layout from '../components/layout'
 import { Router } from '@reach/router'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProjectDonatorView } from '../components/project'
 import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
-import { Flex, Text, Spinner } from 'theme-ui'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const Project = props => {
   console.log({ props })
@@ -39,7 +37,7 @@ const Project = props => {
     } else {
       setLoading(false)
     }
-  }, [])
+  })
 
   return (
     <Layout>

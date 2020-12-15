@@ -12,6 +12,7 @@ import { TorusContext } from '../contextProvider/torusProvider'
 
 const CardContainer = styled(Card)`
   position: relative;
+  z-index: 0;
   background-color: ${theme.colors.background};
   margin-bottom: 30px;
   border-radius: 12px;
@@ -22,7 +23,7 @@ const CardContent = styled.span`
   display: flex;
   flex: 1;
   word-wrap: break-word;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
 `
 
 const AltCardContent = styled.span`
@@ -33,7 +34,7 @@ const AltCardContent = styled.span`
   position: absolute;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 12px;
-  padding: 0.5rem 1.5rem 1rem 1.5rem;
+  padding: 0.5rem 1.5rem 0 1.5rem;
 `
 
 const Badge = styled.span`
@@ -55,7 +56,6 @@ const Dot = styled.span`
   position: absolute;
   bottom: -34px;
   left: 24px;
-  z-index: 1;
   font-family: 'Red Hat Text', sans-serif;
   font-size: 10px;
 `
@@ -75,7 +75,6 @@ const Options = styled.span`
   align-items: center;
   bottom: -54px;
   right: 24px;
-  z-index: 1;
 `
 
 const CardFooter = styled.span`
@@ -97,6 +96,9 @@ const Givers = styled.div`
   div {
     padding: 0 1rem;
   }
+`
+const IconBtn = styled(IconButton)`
+  cursor: pointer;
 `
 
 const Categories = categories => {
@@ -178,12 +180,12 @@ const ProjectCard = props => {
             )}
           </Dot>
           <Options>
-            <IconButton>
+            <IconBtn>
               <img src={iconHeart} alt='' />
-            </IconButton>
-            <IconButton>
+            </IconBtn>
+            {/* <IconBtn>
               <img src={iconShare} alt='' />
-            </IconButton>
+            </IconBtn> */}
           </Options>
         </div>
         <Heading

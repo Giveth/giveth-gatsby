@@ -1,7 +1,7 @@
 require('dotenv').config({
   path: `.env.${process.env.NODE_ENV}`
 })
-
+const { siteMetaData } = require('./siteMetaData')
 global.Buffer = global.Buffer || require('buffer').Buffer
 
 if (typeof btoa === 'undefined') {
@@ -17,11 +17,10 @@ if (typeof atob === 'undefined') {
 }
 
 module.exports = {
-  siteMetadata: {
-    title: 'Giveth Simple Donation Application',
-    description: 'The future of giving',
-    author: '@giveth'
+  flags: {
+    PRESERVE_WEBPACK_CACHE: true
   },
+  siteMetadata: siteMetaData,
   plugins: [
     'gatsby-plugin-theme-ui',
     'gatsby-plugin-react-helmet',
@@ -71,8 +70,8 @@ module.exports = {
       resolve: 'gatsby-plugin-google-fonts',
       options: {
         fonts: [
-          'red hat display',
-          'red hat text' // you can also specify font weights and styles
+          `red hat display\:400,500,700,900`,
+          `red hat text\:400,500,700,900`
         ]
       }
     },
@@ -99,9 +98,13 @@ module.exports = {
       }
     },
     {
-      resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/project/*`, `/donate/*`] }
-    }
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: `content`,
+        path: `${__dirname}/src/content`
+      }
+    },
+    `gatsby-transformer-remark`
 
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline

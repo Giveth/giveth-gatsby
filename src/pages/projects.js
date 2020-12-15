@@ -2,12 +2,9 @@
 import { jsx } from 'theme-ui'
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/layout'
-import SEO from '../components/seo'
-import { useQuery } from '@apollo/react-hooks'
-import { useApolloClient } from '@apollo/react-hooks'
-import { ProjectDonatorView } from '../components/project'
+import Seo from '../components/seo'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import { FETCH_PROJECTS, FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
-import { Flex, Spinner } from 'theme-ui'
 import ProjectsList, {
   OrderByDirection,
   OrderByField
@@ -17,7 +14,7 @@ const Projects = props => {
   const { location } = props
   const client = useApolloClient()
 
-  const [limit, setLimit] = useState(2)
+  const [limit, setLimit] = useState(12)
   const [loading, setLoading] = useState(true)
   const [slugProject, setSlugProject] = useState(null)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
@@ -45,10 +42,12 @@ const Projects = props => {
             slug: slug.toString()
           }
         })
+        console.log(`data is ---> : ${data}`)
+
         setSlugProject(data?.projectBySlug)
         setLoading(false)
       } catch (error) {
-        console.log({ error })
+        console.log('error is', { error })
         setLoading(false)
       }
     }
@@ -56,16 +55,16 @@ const Projects = props => {
     const slug = pathname[2]
     if (slug) {
       // redirect
-      console.log({ slug })
+      console.log('slug', { slug })
       getProject(slug)
     } else {
       setLoading(false)
     }
-  }, [])
+  })
 
   const AllProjects = () => (
-    <>
-      <SEO title='Projects' />
+    <React.Fragment>
+      <Seo title='Projects' />
       <ProjectsList
         projects={showingProjects}
         totalCount={totalCount}
@@ -78,7 +77,7 @@ const Projects = props => {
           setOrderByField(orderByField)
         }}
       />
-    </>
+    </React.Fragment>
   )
 
   return (

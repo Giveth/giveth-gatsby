@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { navigate, Link } from 'gatsby'
 import Loadable from '@loadable/component'
@@ -7,9 +7,10 @@ import { IconButton, Text, jsx, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../gatsby-plugin-theme-ui/index'
-
+import Logo from './content/Logo'
+import { useLocation } from '@reach/router'
+import Headroom from 'react-headroom'
 // import graphics
-import logo from '../images/giveth-logo-blue.svg'
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
 import decoratorCloud1 from '../images/decorator-cloud1.svg'
@@ -18,13 +19,15 @@ import decoratorCloud2 from '../images/decorator-cloud2.svg'
 const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
   height: 140px;
+  position: relative;
   @media (max-width: 700) {
     height: 160px;
   }
 `
 
 const HeaderSpan = styled.nav`
-  position: fixed;
+  position: absolute;
+  z-index: 2;
   margin: 0 auto;
   padding: 80px 80px 0 80px;
   max-width: 100vw;
@@ -35,7 +38,6 @@ const HeaderSpan = styled.nav`
   background-color: ${theme.colors.background};
   width: 100%;
   transition: padding 0.8s ease-out;
-  z-index: 200;
   backdrop-filter: blur(30px);
   .hide {
     transition: 0.8s;
@@ -74,8 +76,8 @@ const LogoSpan = styled.span`
   justify-content: start;
 
   img {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     transform: scale(1);
     transition: 0.8s all ease;
   }
@@ -93,31 +95,36 @@ const LogoSpan = styled.span`
 const MiddleSpan = styled.span`
   display: grid;
   grid-template-columns: repeat(3, auto);
-  grid-gap: 1em;
+  grid-gap: 3em;
   justify-self: center;
   max-width: 290px;
   @media (max-width: 1030px) {
+    grid-gap: 10px;
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
   }
 `
 
 const UserSpan = styled.span`
   position: relative;
   display: grid;
+  grid-gap: 1.2em;
   grid-template-columns: repeat(4, auto);
   align-items: center;
   justify-self: end;
   @media (max-width: 1030px) {
+    justify-items: end;
+    grid-gap: 0;
     grid-row: 1;
     grid-column: 3;
   }
 `
 
 const NavLink = styled(Link)`
+  font-family: ${theme.fonts.heading}, sans-serif;
+  font-weight: 500;
+  line-height: 21px;
   text-decoration: none;
-  font-family: 'Red Hat Display', sans-serif;
-  color: ${theme.colors.primary};
   :hover {
     color: ${theme.colors.accent};
   }
@@ -126,9 +133,11 @@ const NavLink = styled(Link)`
 const CreateLink = styled.div`
   cursor: pointer;
   text-decoration: none;
-  font-family: 'Red Hat Display', sans-serif;
+  font-family: ${theme.fonts.body}, sans serif;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: bold;
+  line-height: 18px;
+  letter-spacing: 0.04em;
   color: ${theme.colors.primary};
   align-self: center;
   :hover {
@@ -141,23 +150,28 @@ const Decorator = styled.div`
 `
 
 const Login = Loadable(() => import('./torus/login'))
+const siteId = process.env.GATSBY_SITE_ID
+const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
+  const location = useLocation()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
-
+  const [navHidden, setHideNavbar] = useState(false)
+  const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
-
-      if (scrollTop > 50) {
-        setScrollState(true)
-      } else {
-        setScrollState(false)
+      {
+        if (scrollTop >= 50) {
+          setScrollState(true)
+        } else {
+          setScrollState(false)
+        }
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -167,80 +181,109 @@ const Header = ({ siteTitle, isHomePage }) => {
   }
 
   return (
-    <HeaderContainer
-      style={{
-        marginBottom: '1.45rem'
-      }}
-    >
-      <HeaderSpan
-        className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
+    <Headroom>
+      <HeaderContainer
+        style={{
+          marginBottom: '1.45rem'
+        }}
       >
-        {!isMobile ? (
-          <Decorator>
-            <img
-              src={decoratorCloud1}
-              alt=''
-              sx={{
-                position: 'absolute',
-                top: '-70px',
-                left: '300px'
-              }}
-              className='hide'
-            />
-            <img
-              src={decoratorCloud2}
-              alt=''
-              sx={{
-                position: 'absolute',
-                top: '-80px',
-                left: '92vw'
-              }}
-              className='hide'
-            />
-          </Decorator>
-        ) : null}
-        <Link
-          to='/'
-          sx={{
-            textDecoration: 'none'
-          }}
+        <HeaderSpan
+          className={hasScrolled || !isHomePage ? 'HeaderScrolled' : ''}
         >
-          {isMobile ? (
-            <img src={logo} alt='logo' width='40px' height='40px' />
-          ) : (
-            <LogoSpan
-              className={hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''}
-            >
-              <img src={logo} alt='logo' />
-              <Text
-                pl={3}
+          {!isMobile ? (
+            <Decorator>
+              <img
+                src={decoratorCloud1}
+                alt=''
                 sx={{
-                  variant: 'text.default',
-                  color: 'secondary',
-                  fontSize: 3,
-                  fontWeight: 'medium',
-                  textDecoration: 'none'
+                  position: 'absolute',
+                  top: '-70px',
+                  left: '300px'
                 }}
+                className='hide'
+              />
+              <img
+                src={decoratorCloud2}
+                alt=''
+                sx={{
+                  position: 'absolute',
+                  top: '-80px',
+                  left: '92vw'
+                }}
+                className='hide'
+              />
+            </Decorator>
+          ) : null}
+          <Link
+            to='/'
+            sx={{
+              textDecoration: 'none'
+            }}
+          >
+            {isMobile ? (
+              <Logo
+                siteId={process.env.GATSBY_SITE_ID}
+                alt=''
+                width='40px'
+                height='40px'
+              />
+            ) : (
+              <LogoSpan
+                className={
+                  hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''
+                }
               >
-                THE FUTURE OF GIVING
-              </Text>
-            </LogoSpan>
-          )}
-        </Link>
+                <Logo alt='' />
+                {siteId === 'giveth' ? (
+                  <Text
+                    pl={3}
+                    sx={{
+                      variant: 'text.default',
+                      color: 'secondary',
+                      fontFamily: 'fonts.body',
+                      fontSize: 3,
+                      fontWeight: 'medium',
+                      textDecoration: 'none',
+                      lineHeights: 'tallest',
+                      letterSpacing: '0.32px'
+                    }}
+                  >
+                    THE FUTURE OF GIVING
+                  </Text>
+                ) : (
+                  ''
+                )}
+              </LogoSpan>
+            )}
+          </Link>
 
-        <MiddleSpan>
-          <NavLink to='/'>Home</NavLink>
-          {/* <NavLink to='/causes'>Causes</NavLink> */}
-          <NavLink to='/projects'>Projects</NavLink>
-        </MiddleSpan>
+          <MiddleSpan>
+            <NavLink
+              to='/'
+              sx={{ color: isHomePage ? 'secondary' : 'primary' }}
+            >
+              Home
+            </NavLink>
+            {/* <NavLink to='/causes'>Causes</NavLink> */}
+            <NavLink
+              to='/projects'
+              sx={{ color: pathname === 'projects' ? 'secondary' : 'primary' }}
+            >
+              Projects
+            </NavLink>
+          </MiddleSpan>
 
         <UserSpan>
           {isMobile ? null : (
             <Flex>
-              <CreateLink onClick={goCreate}>Create a project</CreateLink>
-              <IconButton>
-                <img src={iconSearch} alt='' />
-              </IconButton>
+              {pathname !== 'projects' && (
+                <CreateLink onClick={goCreate}>Create a project</CreateLink>
+              )}
+              {projectSearch === 'true' && (
+                <IconButton>
+                  <img src={iconSearch} alt='' />
+                </IconButton>
+              )}
             </Flex>
           )}
           <img src={iconVerticalLine} alt='' />
@@ -248,6 +291,7 @@ const Header = ({ siteTitle, isHomePage }) => {
         </UserSpan>
       </HeaderSpan>
     </HeaderContainer>
+  </Headroom>
   )
 }
 
