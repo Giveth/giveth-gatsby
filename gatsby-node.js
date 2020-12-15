@@ -14,6 +14,11 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page.
     createPage(page)
   }
+  if (page.path.match(/^\/project/)) {
+    page.matchPath = '/project/:id'
+    // Update the page.
+    createPage(page)
+  }
   if (page.path.match(/^\//)) {
     page.context = {
       site: process.env.GATSBY_SITE_ID + '-home'
