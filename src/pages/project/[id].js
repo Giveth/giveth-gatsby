@@ -8,7 +8,6 @@ import { FETCH_PROJECT_BY_SLUG } from '../../apollo/gql/projects'
 import { useEffect, useState } from 'react'
 
 const Project = props => {
-  console.log({ props })
   const { id } = props
   const client = useApolloClient()
 
