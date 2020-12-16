@@ -12,6 +12,8 @@ import peoplePuzzle2 from '../images/people-puzzle2.svg'
 import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
+import fetch from 'isomorphic-fetch'
+
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
 const IndexPage = props => {
