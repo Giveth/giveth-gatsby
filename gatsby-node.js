@@ -14,6 +14,11 @@ exports.onCreatePage = async ({ page, actions }) => {
     // Update the page.
     createPage(page)
   }
+  if (page.path.match(/^\/project/)) {
+    page.matchPath = '/project/*'
+    // Update the page.
+    createPage(page)
+  }
   if (page.path.match(/^\//)) {
     page.context = {
       site: process.env.GATSBY_SITE_ID + '-home'
@@ -28,41 +33,41 @@ exports.onCreatePage = async ({ page, actions }) => {
   }
 }
 
-exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions
-  const projectResults = await graphql(`
-    query {
-      giveth {
-        projects {
-          id
-          title
-          description
-          slug
-          creationDate
-          admin
-          image
-          walletAddress
-          categories {
-            name
-          }
-        }
-      }
-    }
-  `)
-  const projectPageTemplate = require.resolve('./src/templates/project.js')
-  if (projectResults.data) {
-    projectResults.data.giveth.projects.forEach(project => {
-      createPage({
-        path: `/project/${project.slug}`,
-        component: projectPageTemplate,
-        context: {
-          // entire project is passed down as context
-          project: project
-        }
-      })
-    })
-  }
-}
+// exports.createPages = async ({ graphql, actions }) => {
+//   const { createPage } = actions
+//   const projectResults = await graphql(`
+//     query {
+//       giveth {
+//         projects {
+//           id
+//           title
+//           description
+//           slug
+//           creationDate
+//           admin
+//           image
+//           walletAddress
+//           categories {
+//             name
+//           }
+//         }
+//       }
+//     }
+//   `)
+//   const projectPageTemplate = require.resolve('./src/templates/project.js')
+//   if (projectResults.data) {
+//     projectResults.data.giveth.projects.forEach(project => {
+//       createPage({
+//         path: `/project/${project.slug}`,
+//         component: projectPageTemplate,
+//         context: {
+//           // entire project is passed down as context
+//           project: project
+//         }
+//       })
+//     })
+//   }
+// }
 
 exports.onCreateNode = ({ node }) => {
   if (node.internal.type === `File`) {
