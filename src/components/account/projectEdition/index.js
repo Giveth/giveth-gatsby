@@ -11,11 +11,13 @@ import {
   Textarea
 } from 'theme-ui'
 import Web3 from 'web3'
+import { BiArrowBack } from 'react-icons/bi'
 import theme from '../../../gatsby-plugin-theme-ui/index'
 import { useApolloClient } from '@apollo/react-hooks'
 import {
   GET_LINK_BANK_CREATION,
-  EDIT_PROJECT
+  EDIT_PROJECT,
+  GET_PROJECT_BY_ADDRESS
 } from '../../../apollo/gql/projects'
 import { useDropzone } from 'react-dropzone'
 import { getImageFile } from '../../../utils/index'
@@ -47,6 +49,17 @@ function ProjectEdition(props) {
       ) {
         return alert('eth address not valid')
       }
+      // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
+      const res = await client.query({
+        query: GET_PROJECT_BY_ADDRESS,
+        variables: {
+          address: data?.editWalletAddress
+        }
+      })
+      console.log({ res })
+      if (res?.data?.projectByAddress) {
+        return alert('this eth address is already being used for a project')
+      }
     }
 
     const projectCategories = []
@@ -61,7 +74,7 @@ function ProjectEdition(props) {
       title: data.editTitle,
       description: data.editDescription,
       admin: project.admin,
-      // impactLocation: project.,
+      // impactLocation: project,
       categories: projectCategories,
       walletAddress: Web3.utils.toChecksumAddress(data.editWalletAddress)
     }
@@ -129,9 +142,18 @@ function ProjectEdition(props) {
   }
   return (
     <>
-      <a onClick={goBack}>
-        <h3>go back</h3>
-      </a>
+      <Flex sx={{ alignItems: 'center' }}>
+        <BiArrowBack
+          color={theme.colors.secondary}
+          style={{ marginRight: 2 }}
+        />
+        <Text
+          onClick={goBack}
+          sx={{ fontFamily: 'body', color: 'secondary', cursor: 'pointer' }}
+        >
+          My Projects
+        </Text>
+      </Flex>
       <form onSubmit={handleSubmit(onSubmit)}>
         <>
           <ImageSection image={project?.image} register={register} />
@@ -197,7 +219,7 @@ function ProjectEdition(props) {
               })}
             </Box>
             {/* <CustomLabel title='Impact' htmlFor='editImpactLocation' /> */}
-            <CustomLabel title='Bank Account' htmlFor='addBankAccount' />
+            {/* <CustomLabel title='Bank Account' htmlFor='addBankAccount' />
             <Text
               onClick={connectBankAccount}
               sx={{
@@ -208,7 +230,7 @@ function ProjectEdition(props) {
               }}
             >
               Connect your bank account
-            </Text>
+            </Text> */}
             <CustomLabel title='Donation Address' htmlFor='editWalletAddress' />
             <CustomInput
               name='editWalletAddress'

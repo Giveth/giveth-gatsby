@@ -75,29 +75,18 @@ const CardFooter = styled.span`
 
 const setImage = img => {
   if (/^\d+$/.test(img)) {
-    // Is not url
-    let svg = null
-    const style = {
-      width: '100%',
-      height: '100%',
-      zIndex: -1,
-      borderRadius: '12px 12px 0px 0px'
-    }
-    switch (parseInt(img)) {
-      case 1:
-        svg = <ProjectImageGallery1 style={style} />
-        break
-      case 2:
-        svg = <ProjectImageGallery2 style={style} />
-        break
-      case 3:
-        svg = <ProjectImageGallery3 style={style} />
-        break
-      case 4:
-        svg = <ProjectImageGallery4 style={style} />
-        break
-    }
-    return svg
+    return (
+      <div
+        style={{
+          width: '100%',
+          height: '186px',
+          borderRadius: '12px 12px 0px 0px',
+          backgroundImage: `url('/assets/create/projectImageGallery${img.toString()}.svg')`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
+    )
   } else {
     return false
   }
@@ -153,7 +142,7 @@ const ProjectListing = props => {
                 height: '186px',
                 borderRadius: '12px 12px 0px 0px',
                 backgroundImage: `url(${props.image})`,
-                backgroundSize: 'cover',
+                backgroundSize: 'contain',
                 backgroundRepeat: 'no-repeat'
               }}
               alt={props.name}
