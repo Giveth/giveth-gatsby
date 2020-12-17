@@ -10,6 +10,7 @@ import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 const AccountDetails = styled.div`
   width: 200px;
   position: absolute;
+  padding: 5px 0;
   background: ${theme.colors.background};
   border: 1px solid ${theme.colors.background};
   box-sizing: border-box;
@@ -40,29 +41,40 @@ const MenuItem = styled(Text)`
   padding-left: 16px;
   cursor: pointer;
   align-content: center;
+  color: ${theme.colors.secondary};
   :hover {
     color: ${theme.colors.primary};
   }
+`
+
+const MenuTitle = styled(Text)`
+  align-self: center;
+  padding-left: 16px;
+  align-content: center;
+  color: ${theme.colors.secondary};
 `
 
 const MenuLink = styled.a`
   text-decoration: none;
 `
 
-const Balance = styled.div`
-  opacity: 0;
-  padding: 0 0.5rem;
+const Dot = styled.div`
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 4px 0 0;
 `
 
 const UserDetails = () => {
   const [active, setActive] = useState(false)
 
-  const { logout, user, balance } = useContext(TorusContext)
+  const { logout, user, balance, network } = useContext(TorusContext)
   const { proveWallet, isWalletProved } = useContext(ProveWalletContext)
 
   const address = (user?.addresses && user.addresses[0]) || ''
-  const truncAddress = `${address.substring(0, 5)} ... ${address.substring(
-    address.length - 5,
+  const truncAddress = `${address.substring(0, 14)}...${address.substring(
+    address.length - 4,
     address.length
   )}`
 
@@ -77,6 +89,7 @@ const UserDetails = () => {
   const handleLogout = () => {
     logout()
   }
+
   return (
     <div>
       <Button
@@ -113,26 +126,51 @@ const UserDetails = () => {
       </Button>
       {active ? (
         <AccountDetails>
-          <MenuItem sx={{ variant: 'text.overlineSmall', color: 'bodyDark' }}>
+          <MenuTitle
+            sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
+          >
             Wallet Address
-          </MenuItem>
-          <MenuItem sx={{ variant: 'text.microbold', color: 'bodyDark' }}>
+          </MenuTitle>
+          <MenuItem
+            sx={{ variant: 'text.medium', color: 'secondary' }}
+            onClick={() => navigator.clipboard.writeText(address)}
+          >
             {truncAddress}
           </MenuItem>
-          <Balance className='balance'>
-            <MenuItem sx={{ variant: 'text.small' }} className='balance'>
-              Balance: {balance}
-            </MenuItem>
-          </Balance>
+          <MenuTitle
+            sx={{
+              variant: 'text.small',
+              pb: 2,
+              '&:focus': { color: 'red' }
+            }}
+            className='balance'
+          >
+            Balance: {balance ? `${balance} ETH` : ''}
+          </MenuTitle>
+          <MenuTitle
+            sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
+          >
+            Torus Network
+          </MenuTitle>
+          <MenuTitle
+            sx={{
+              variant: 'text.medium',
+              pb: 2,
+              color: 'secondary',
+              textTransform: 'capitalize'
+            }}
+            onClick={() => navigator.clipboard.writeText(address)}
+          >
+            <Dot sx={{ backgroundColor: network ? 'greenishBlue' : 'red' }} />
+            {network || 'No network'}
+          </MenuTitle>
           <Link
             to='/account'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
             <MenuItem
               sx={{
-                variant: 'text.medium',
-                color: 'secondary',
-                fontWeight: 'bold'
+                variant: 'text.medium'
               }}
               className='shadow boxheight'
             >
@@ -142,9 +180,7 @@ const UserDetails = () => {
           {!isWalletProved && (
             <MenuItem
               sx={{
-                variant: 'text.medium',
-                color: 'secondary',
-                fontWeight: 'bold'
+                variant: 'text.medium'
               }}
               onClick={proveWallet}
               className='boxheight'
@@ -154,9 +190,7 @@ const UserDetails = () => {
           )}
           <MenuItem
             sx={{
-              variant: 'text.medium',
-              color: 'secondary',
-              fontWeight: 'bold'
+              variant: 'text.medium'
             }}
             className='shadow boxheight'
           >
@@ -164,9 +198,7 @@ const UserDetails = () => {
           </MenuItem>
           <MenuItem
             sx={{
-              variant: 'text.medium',
-              color: 'secondary',
-              fontWeight: 'bold'
+              variant: 'text.medium'
             }}
             className='shadow boxheight'
           >
@@ -179,9 +211,7 @@ const UserDetails = () => {
           >
             <MenuItem
               sx={{
-                variant: 'text.medium',
-                color: 'secondary',
-                fontWeight: 'bold'
+                variant: 'text.medium'
               }}
               className='shadow boxheight'
             >
@@ -195,9 +225,7 @@ const UserDetails = () => {
           >
             <MenuItem
               sx={{
-                variant: 'text.medium',
-                color: 'secondary',
-                fontWeight: 'bold'
+                variant: 'text.medium'
               }}
               className='shadow boxheight'
             >
@@ -206,9 +234,7 @@ const UserDetails = () => {
           </MenuLink>
           <MenuItem
             sx={{
-              variant: 'text.medium',
-              color: 'secondary',
-              fontWeight: 'bold'
+              variant: 'text.medium'
             }}
             onClick={handleLogout}
             className='boxheight'
