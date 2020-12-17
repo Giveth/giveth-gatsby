@@ -36,7 +36,7 @@ import { categoryList } from '../../utils/constants'
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
-  const APIKEY = process.env.GOOGLE_MAPS_API_KEY
+  const APIKEY = process.env.GATSBY_GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
