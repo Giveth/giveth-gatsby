@@ -89,7 +89,9 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
               </LeftInfo>
               <Card
                 content={i?.projectUpdate}
+                reactions={i?.reactions}
                 number={content.length - index}
+                project={project}
               />
             </Container>
           )
