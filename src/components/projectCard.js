@@ -34,7 +34,7 @@ const AltCardContent = styled.span`
   position: absolute;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 12px;
-  padding: 0.5rem 1.5rem 0 1.5rem;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
 `
 
 const Badge = styled.span`
@@ -82,7 +82,7 @@ const CardFooter = styled.span`
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 1rem 0;
-  padding: 0rem 1rem;
+  padding: 1rem;
 `
 
 const Givers = styled.div`

@@ -300,7 +300,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 Updates
                 {currentProjectView?.updates ? (
                   <Badge variant='blueDot' sx={{ ml: [-2, 2] }}>
-                    <Text sx={{ color: 'white', pt: -2 }}>
+                    <Text sx={{ color: 'white', mt: '-2px' }}>
                       {currentProjectView?.updates.length}{' '}
                     </Text>
                   </Badge>
@@ -375,7 +375,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             backgroundColor: 'white',
             position: 'relative',
             bottom: [0, null, null],
-            zIndex: [2, null]
+            zIndex: [2, 0, 0]
           }}
         >
           <Button

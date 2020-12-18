@@ -48,7 +48,7 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
         >
           {`${parseFloat(
             ethers.utils.formatEther(currentProjectView?.ethBalance)
-          )} ETH` ||
+          ).toFixed(2)} ETH` ||
             (total?.amount / 10)?.toLocaleString('en-US', {
               style: 'currency',
               currency: 'USD'

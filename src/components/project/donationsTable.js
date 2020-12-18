@@ -296,9 +296,7 @@ const CustomTable = () => {
                     <Text
                       sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
                     >
-                      {i?.extra?.userByAddress?.firstName
-                        ? `${i?.extra?.userByAddress?.firstName} ${i?.extra?.userByAddress?.lastName}`
-                        : i?.extra?.userByAddress?.email || i?.donor}
+                      {i?.extra?.userByAddress?.name || i?.donor}
                     </Text>
                   </DonorBox>
                   <td
