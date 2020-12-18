@@ -138,7 +138,9 @@ const ProjectCard = props => {
             height: '186px',
             margin: '0 auto',
             borderRadius: '12px 12px 0px 0px',
-            backgroundImage: `url(${props.image})`,
+            backgroundImage: /^\d+$/.test(props.image)
+              ? `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`
+              : `url(${props.image})`,
             boxShadow: altStyle
               ? 'inset 0 0 0 100vmax rgba(48, 59, 114, 0.6)'
               : null,

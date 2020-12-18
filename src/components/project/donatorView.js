@@ -4,6 +4,7 @@ import Seo from '../seo'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
+import { ImLocation } from 'react-icons/im'
 
 import testImg from '../../images/giveth-test-image.png'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
@@ -18,6 +19,7 @@ import {
   GET_PROJECT_UPDATES
 } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
+import theme from '../../gatsby-plugin-theme-ui'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
@@ -163,27 +165,57 @@ export const ProjectDonatorView = ({ pageContext }) => {
         }}
       >
         <Box sx={{ width: ['100%', null, '70%'] }}>
-          <Flex>
-            <Box sx={{ mt: '20px' }}>
+          <Flex
+            sx={{
+              mt: '20px',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <Box sx={{ flex: 1 }}>
               <Text
                 sx={{
                   fontSize: 9,
                   fontFamily: 'heading',
                   fontWeight: 'bold',
-                  color: 'secondary'
+                  color: 'secondary',
+                  wordBreak: 'break-all'
                 }}
               >
                 {pageContext?.project?.title}
               </Text>
-              <Text
+              <Flex
                 sx={{
-                  fontSize: 6,
-                  fontFamily: 'body',
-                  fontWeight: 'body',
-                  color: 'primary',
-                  mt: '10px'
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
                 }}
-              ></Text>
+              >
+                <Text
+                  sx={{
+                    fontSize: 6,
+                    fontFamily: 'body',
+                    fontWeight: 'body',
+                    color: 'primary',
+                    mt: '10px'
+                  }}
+                ></Text>
+                {pageContext?.project?.impactLocation && (
+                  <Flex>
+                    <ImLocation size='24px' color={theme.colors.secondary} />
+                    <Text
+                      sx={{
+                        color: 'secondary',
+                        fontWeight: '500',
+                        wordBreak: 'break-all',
+                        px: 2
+                      }}
+                    >
+                      {pageContext?.project?.impactLocation}
+                    </Text>
+                  </Flex>
+                )}
+              </Flex>
             </Box>
           </Flex>
           {/*
@@ -332,7 +364,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         </Box>
         <FloatingDonateView
           sx={{
-            left: [null, null, '-5%'],
+            left: [null, null, '-1%'],
             p: 2,
             pb: 4,
             marginTop: '-2rem',
@@ -374,7 +406,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               Donations: {totalDonations}
             </Text>
           </Flex>
-          <Flex sx={{ justifyContent: 'space-evenly' }}>
+          <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
             {project?.categories.length > 0 &&
               project?.categories.map((category, index) => {
                 return (
