@@ -124,6 +124,7 @@ const TimelineCard = props => {
   useEffect(() => {
     const setup = async () => {
       if (props?.specialContent) return
+      console.log('LLLL', { props })
       try {
         const userInfo = await client?.query({
           query: GET_USER,
@@ -131,6 +132,7 @@ const TimelineCard = props => {
             userId: parseInt(props?.content?.userId)
           }
         })
+        console.log({ userInfo })
         setUser(userInfo?.data?.user)
       } catch (error) {
         console.log({ error })
@@ -261,37 +263,33 @@ const TimelineCard = props => {
           {content?.title}
         </Heading>
         <CardContent>
-          <Creator>
-            <CreatorName>
-              <Avatar
-                src={
-                  user?.avatar ||
-                  'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
-                }
-              />
-              <Text
-                sx={{
-                  variant: 'text.paragraph',
-                  color: 'secondary',
-                  mx: 2
-                }}
-              >
-                {user?.firstName
-                  ? `${user?.firstName} ${user?.lastName || ''}`
-                  : user?.email}
-              </Text>
-            </CreatorName>
-            <Badge variant='altOutline' sx={{ mt: [2, 0, 0] }}>
-              Creator
-            </Badge>
-          </Creator>
+          {user && (
+            <Creator>
+              <CreatorName>
+                <Avatar
+                  src={
+                    user?.avatar ||
+                    'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
+                  }
+                />
+                <Text
+                  sx={{
+                    variant: 'text.paragraph',
+                    color: 'secondary',
+                    mx: 2
+                  }}
+                >
+                  {user?.name || ''}
+                </Text>
+              </CreatorName>
+              <Badge variant='altOutline' sx={{ mt: [2, 0, 0] }}>
+                Creator
+              </Badge>
+            </Creator>
+          )}
           <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
         </CardContent>
         <CardFooter>
-          <Text sx={{ variant: 'text.default' }}>
-            {' '}
-            {reactions?.length > 0 ? reactions?.length : ''}{' '}
-          </Text>
           <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
             <img
               src={iconHeart}
@@ -304,6 +302,10 @@ const TimelineCard = props => {
               }}
             />
           </IconButton>
+          <Text sx={{ variant: 'text.default', ml: -2 }}>
+            {' '}
+            {reactions?.length > 0 ? reactions?.length : ''}{' '}
+          </Text>
           {/* <IconButton>
             <img src={iconShare} alt='' />
           </IconButton> */}

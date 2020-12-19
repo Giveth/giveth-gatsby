@@ -73,25 +73,6 @@ const CardFooter = styled.span`
   padding: 0rem 1rem;
 `
 
-const setImage = img => {
-  if (/^\d+$/.test(img)) {
-    return (
-      <div
-        style={{
-          width: '100%',
-          height: '186px',
-          borderRadius: '12px 12px 0px 0px',
-          backgroundImage: `url('/assets/create/projectImageGallery${img.toString()}.svg')`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-    )
-  } else {
-    return false
-  }
-}
-
 const Categories = ({ categories }) => {
   if (!categories || !categories.isArray || categories?.length <= 0) return null
   return categories?.map((category, index) => {
@@ -134,24 +115,25 @@ const ProjectListing = props => {
       <ProjectCard key={props.listingId + '_card'}>
         {/* need to add options from the gallery. */}
         <div key={props.listingId + '_div'}>
-          {setImage(props.image) || (
-            <Image
-              src={props.image}
-              style={{
-                width: '100%',
-                height: '186px',
-                borderRadius: '12px 12px 0px 0px',
-                backgroundImage: `url(${props.image})`,
-                backgroundSize: 'contain',
-                backgroundRepeat: 'no-repeat'
-              }}
-              alt={props.name}
-              onError={ev =>
-                (ev.target.src =
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT17JlsfL6JrGYQ2Ze5ptTTuawx5J4axpWkIw&usqp=CAU')
-              }
-            />
-          )}
+          <div
+            src={props.image}
+            style={{
+              width: '100%',
+              height: '186px',
+              borderRadius: '12px 12px 0px 0px',
+              backgroundImage: /^\d+$/.test(props.image)
+                ? `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`
+                : `url(${props.image})`,
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat'
+            }}
+            alt={props.name}
+            onError={ev =>
+              (ev.target.src =
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT17JlsfL6JrGYQ2Ze5ptTTuawx5J4axpWkIw&usqp=CAU')
+            }
+          />
+
           <div style={{ position: 'absolute', marginTop: '-2.5%' }}>
             <Dot
               key={props.listingId + '_card'}
@@ -187,7 +169,6 @@ const ProjectListing = props => {
               )}
             </Dot>
           </div>
-
           {/* <Options>
             <IconButton>
               <img src={iconHeart} alt='' />
