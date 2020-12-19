@@ -149,7 +149,8 @@ const OnlyCrypto = props => {
           sx={{
             variant: 'text.medium',
             textAlign: 'left',
-            width: ['50%', '70%']
+            width: ['50%', '70%'],
+            color: 'background'
           }}
         >
           {title}
@@ -159,7 +160,10 @@ const OnlyCrypto = props => {
             <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
               {amount[0]}
             </Text>
-            <Text sx={{ variant: 'text.medium' }}> {amount[1]}</Text>
+            <Text sx={{ variant: 'text.medium', color: 'background' }}>
+              {' '}
+              {amount[1]}
+            </Text>
           </Flex>
         ) : (
           <Text
@@ -490,7 +494,13 @@ const OnlyCrypto = props => {
                   padding: '0 0 18px 0'
                 }}
               />
-              <Text sx={{ variant: 'text.medium', textAlign: 'right' }}>
+              <Text
+                sx={{
+                  variant: 'text.medium',
+                  color: 'background',
+                  textAlign: 'right'
+                }}
+              >
                 ETH {parseFloat(subtotal)}
               </Text>
             </Summary>

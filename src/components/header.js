@@ -160,7 +160,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -171,7 +171,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -273,25 +273,25 @@ const Header = ({ siteTitle, isHomePage }) => {
             </NavLink>
           </MiddleSpan>
 
-        <UserSpan>
-          {isMobile ? null : (
-            <Flex>
-              {pathname !== 'projects' && (
-                <CreateLink onClick={goCreate}>Create a project</CreateLink>
-              )}
-              {projectSearch === 'true' && (
-                <IconButton>
-                  <img src={iconSearch} alt='' />
-                </IconButton>
-              )}
-            </Flex>
-          )}
-          <img src={iconVerticalLine} alt='' />
-          <Login />
-        </UserSpan>
-      </HeaderSpan>
-    </HeaderContainer>
-  </Headroom>
+          <UserSpan>
+            {isMobile ? null : (
+              <Flex>
+                {pathname !== 'projects' && (
+                  <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                )}
+                {projectSearch === 'true' && (
+                  <IconButton>
+                    <img src={iconSearch} alt='' />
+                  </IconButton>
+                )}
+              </Flex>
+            )}
+            <img src={iconVerticalLine} alt='' />
+            <Login />
+          </UserSpan>
+        </HeaderSpan>
+      </HeaderContainer>
+    </Headroom>
   )
 }
 

@@ -20,6 +20,7 @@ const DO_LOGIN = gql`
         id
         firstName
         lastName
+        name
         email
         avatar
       }
@@ -33,6 +34,7 @@ const GET_USER = gql`
       id
       firstName
       lastName
+      name
       email
       avatar
     }
@@ -45,6 +47,7 @@ const GET_USER_BY_ADDRESS = gql`
       id
       firstName
       lastName
+      name
       email
       avatar
       walletAddress

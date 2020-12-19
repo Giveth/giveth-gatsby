@@ -55,12 +55,20 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
         <Container>
           <LeftInfo sx={{ left: '-23px' }}>
             <Text
-              sx={{ variant: 'text.small', color: 'bodyDark', color: 'white' }}
+              sx={{
+                variant: 'text.small',
+                fontWeight: '500',
+                color: 'secondary'
+              }}
             >
               NEW
             </Text>
             <Text
-              sx={{ variant: 'text.small', color: 'bodyDark', color: 'white' }}
+              sx={{
+                variant: 'text.small',
+                fontWeight: '500',
+                color: 'secondary'
+              }}
             >
               UPDATE
             </Text>
@@ -89,7 +97,9 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
               </LeftInfo>
               <Card
                 content={i?.projectUpdate}
+                reactions={i?.reactions}
                 number={content.length - index}
+                project={project}
               />
             </Container>
           )

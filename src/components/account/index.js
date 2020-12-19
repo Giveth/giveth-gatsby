@@ -113,7 +113,14 @@ const AccountPage = props => {
           })
         )
       }
-      // setup projects
+    }
+
+    setup()
+  }, [])
+
+  React.useEffect(() => {
+    const setup = async () => {
+      if (!isLoggedIn) return
       if (!user?.userIDFromDB) return
       const projects = await client.query({
         query: FETCH_USER_PROJECTS,
@@ -121,7 +128,6 @@ const AccountPage = props => {
           admin: parseFloat(user?.userIDFromDB)
         }
       })
-
       setProjects(projects)
     }
 

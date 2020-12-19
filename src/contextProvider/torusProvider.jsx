@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
+import LoadingModal from '../components/loadingModal'
 import * as Auth from '../services/auth'
 
 const TORUS_POLLING_DELAY = 100
@@ -33,12 +34,14 @@ const TorusProvider = props => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
   const [balance, setBalance] = useState(0)
-
+  const [network, setNetwork] = useState('')
+  const [loading, setLoading] = useState(false)
   function updateBalance () {
     if (web3 && user?.addresses && isLoggedIn) {
       web3.eth
         .getBalance(user?.addresses[0])
         .then(result => setBalance(Number(Web3.utils.fromWei(result))))
+      getNetwork()
     }
   }
 
@@ -55,6 +58,10 @@ const TorusProvider = props => {
         updateBalance()
       }, BALANCE_POLLING_DELAY)
     }
+  }
+
+  async function getNetwork () {
+    web3.eth.net.getNetworkType((_, net) => setNetwork(net))
   }
 
   const torusNotLoadedMessage = () => console.log('torus is not loaded')
@@ -102,55 +109,76 @@ const TorusProvider = props => {
   }, [isLoggedIn])
 
   async function logout () {
-    if (torusLoaded) {
-      if (isLoggedIn) {
-        try {
-          await torus.logout()
-        } catch (e) {
-          console.error(e)
+    try {
+      setLoading(true)
+      if (torusLoaded) {
+        if (isLoggedIn) {
+          try {
+            await torus.logout()
+          } catch (e) {
+            console.error(e)
+          }
         }
+      } else {
+        torusNotLoadedMessage()
       }
-    } else {
-      torusNotLoadedMessage()
-    }
-    Auth.handleLogout()
-    setIsLoggedIn(false)
-    if (balancePolling) {
-      clearInterval(balancePolling)
-      balancePolling = 0
+      Auth.handleLogout()
+      setIsLoggedIn(false)
+      if (balancePolling) {
+        clearInterval(balancePolling)
+        balancePolling = 0
+      }
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
     }
   }
 
   async function login () {
-    if (!torusLoaded) {
-      torusNotLoadedMessage()
-      return
-    }
-
-    if (!isLoggedIn) {
-      await initTorus()
-      const addresses = await torus.login()
-      if (addresses.length > 0) {
-        user = await torus.getUserInfo()
-        user.addresses = addresses
-        Auth.setUser(user)
-        setIsLoggedIn(true)
+    try {
+      if (!torusLoaded) {
+        torusNotLoadedMessage()
+        return
       }
+
+      if (!isLoggedIn) {
+        setLoading(true)
+        await initTorus()
+        const addresses = await torus.login()
+        if (addresses.length > 0) {
+          user = await torus.getUserInfo()
+          user.addresses = addresses
+          Auth.setUser(user)
+          setIsLoggedIn(true)
+        }
+        setLoading(false)
+      }
+    } catch (error) {
+      setLoading(false)
     }
   }
 
   async function signMessage (message) {
-    let signedMessage = null
+    try {
+      setLoading(true)
 
-    if (isLoggedIn) {
-      signedMessage = await web3.eth.personal.sign(
-        message,
-        user.addresses[0],
-        ''
-      )
+      if (!torusLoaded) {
+        await initTorus()
+      }
+      let signedMessage = null
+
+      if (isLoggedIn) {
+        signedMessage = await web3.eth.personal.sign(
+          message,
+          user.addresses[0],
+          ''
+        )
+      }
+      setLoading(false)
+      return signedMessage
+    } catch (error) {
+      setLoading(false)
     }
-
-    return signedMessage
   }
 
   return (
@@ -161,9 +189,11 @@ const TorusProvider = props => {
         logout,
         balance,
         user,
-        signMessage
+        signMessage,
+        network
       }}
     >
+      {loading && <LoadingModal isOpen={loading} />}
       {props.children}
     </torusContext.Provider>
   )

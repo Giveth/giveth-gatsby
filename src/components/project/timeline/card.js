@@ -14,7 +14,10 @@ import {
 } from 'theme-ui'
 import dayjs from 'dayjs'
 import { GET_USER } from '../../../apollo/gql/auth'
-import { TOGGLE_UPDATE_REACTION } from '../../../apollo/gql/projects'
+import {
+  TOGGLE_UPDATE_REACTION,
+  GET_PROJECT_UPDATES
+} from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/react-hooks'
 import { navigate } from 'gatsby'
@@ -62,6 +65,7 @@ const CardContent = styled(Flex)`
 const CardFooter = styled.span`
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: flex-start;
   margin: 1rem 0 0.5rem 0;
   padding: 0rem 1rem;
@@ -99,7 +103,7 @@ const TimelineCard = props => {
   const [newTitle, setNewTitle] = useState(null)
   const [newInput, setNewInput] = useState(null)
   const [user, setUser] = useState(null)
-  const { content, number } = props
+  const { content, reactions, number } = props
   const client = useApolloClient()
   console.log({ props })
   const react = async () => {
@@ -120,6 +124,7 @@ const TimelineCard = props => {
   useEffect(() => {
     const setup = async () => {
       if (props?.specialContent) return
+      console.log('LLLL', { props })
       try {
         const userInfo = await client?.query({
           query: GET_USER,
@@ -127,6 +132,7 @@ const TimelineCard = props => {
             userId: parseInt(props?.content?.userId)
           }
         })
+        console.log({ userInfo })
         setUser(userInfo?.data?.user)
       } catch (error) {
         console.log({ error })
@@ -257,36 +263,49 @@ const TimelineCard = props => {
           {content?.title}
         </Heading>
         <CardContent>
-          <Creator>
-            <CreatorName>
-              <Avatar
-                src={
-                  user?.avatar ||
-                  'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
-                }
-              />
-              <Text
-                sx={{
-                  variant: 'text.paragraph',
-                  color: 'secondary',
-                  mx: 2
-                }}
-              >
-                {user?.firstName
-                  ? `${user?.firstName} ${user?.lastName || ''}`
-                  : user?.email}
-              </Text>
-            </CreatorName>
-            <Badge variant='altOutline' sx={{ mt: [2, 0, 0] }}>
-              Creator
-            </Badge>
-          </Creator>
+          {user && (
+            <Creator>
+              <CreatorName>
+                <Avatar
+                  src={
+                    user?.avatar ||
+                    'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
+                  }
+                />
+                <Text
+                  sx={{
+                    variant: 'text.paragraph',
+                    color: 'secondary',
+                    mx: 2
+                  }}
+                >
+                  {user?.name || ''}
+                </Text>
+              </CreatorName>
+              <Badge variant='altOutline' sx={{ mt: [2, 0, 0] }}>
+                Creator
+              </Badge>
+            </Creator>
+          )}
           <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
         </CardContent>
         <CardFooter>
-          <IconButton onClick={react}>
-            <img src={iconHeart} alt='' />
+          <IconButton onClick={react} sx={{ cursor: 'pointer' }}>
+            <img
+              src={iconHeart}
+              alt=''
+              style={{
+                '-webkit-filter':
+                  reactions?.length > 0
+                    ? 'invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2)'
+                    : null
+              }}
+            />
           </IconButton>
+          <Text sx={{ variant: 'text.default', ml: -2 }}>
+            {' '}
+            {reactions?.length > 0 ? reactions?.length : ''}{' '}
+          </Text>
           {/* <IconButton>
             <img src={iconShare} alt='' />
           </IconButton> */}

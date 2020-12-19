@@ -15,7 +15,9 @@ export default {
     bodyLight: '#AAAFCA',
     anotherGrey: '#C9D0E8',
     lightestBlue: '#EDF0FA',
-    yellow: '#FFEF9D'
+    yellow: '#FFEF9D',
+    greenishBlue: '#36CDD7',
+    red: '#D74036'
   },
   fonts: {
     body: 'Red Hat Text, sans serif',

@@ -34,7 +34,7 @@ const AltCardContent = styled.span`
   position: absolute;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 12px;
-  padding: 0.5rem 1.5rem 0 1.5rem;
+  padding: 0.5rem 1.5rem 1rem 1.5rem;
 `
 
 const Badge = styled.span`
@@ -82,7 +82,7 @@ const CardFooter = styled.span`
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 1rem 0;
-  padding: 0rem 1rem;
+  padding: 1rem;
 `
 
 const Givers = styled.div`
@@ -138,7 +138,9 @@ const ProjectCard = props => {
             height: '186px',
             margin: '0 auto',
             borderRadius: '12px 12px 0px 0px',
-            backgroundImage: `url(${props.image})`,
+            backgroundImage: /^\d+$/.test(props.image)
+              ? `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`
+              : `url(${props.image})`,
             boxShadow: altStyle
               ? 'inset 0 0 0 100vmax rgba(48, 59, 114, 0.6)'
               : null,

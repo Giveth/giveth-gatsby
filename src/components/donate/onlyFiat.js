@@ -172,14 +172,20 @@ const OnlyFiat = props => {
                 setAmountSelect(i)
               }}
               style={{
-                backgroundColor: isSelected ? 'white' : 'transparent',
-                color: isSelected ? theme.colors.secondary : 'white'
+                backgroundColor: isSelected
+                  ? theme.colors.background
+                  : 'transparent',
+                color: isSelected
+                  ? theme.colors.secondary
+                  : theme.colors.background
               }}
             >
               <Text
                 sx={{
                   variant: 'text.large',
-                  color: isSelected ? theme.colors.secondary : 'white',
+                  color: isSelected
+                    ? theme.colors.secondary
+                    : theme.colors.background,
                   fontWeight: '700'
                 }}
               >
@@ -210,11 +216,11 @@ const OnlyFiat = props => {
       <AmountSection>
         <AmountSelection />
         <AmountContainer>
-          <Text sx={{ variant: 'text.medium', color: 'white' }}>
+          <Text sx={{ variant: 'text.medium', color: 'background' }}>
             Or enter your amount:
           </Text>
           <OpenAmount>
-            <Text sx={{ variant: 'text.large', color: 'white' }}>$</Text>
+            <Text sx={{ variant: 'text.large', color: 'background' }}>$</Text>
             <InputComponent
               sx={{
                 variant: 'text.large',
@@ -301,7 +307,7 @@ const OnlyFiat = props => {
                 sx={{
                   variant: 'text.medium',
                   textAlign: 'right',
-                  color: 'white'
+                  color: 'background'
                 }}
               >
                 ${parseFloat(subtotal).toFixed(2)}
