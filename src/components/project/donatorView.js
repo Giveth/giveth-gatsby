@@ -387,7 +387,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
             }}
             onClick={() =>
               isOwner
-                ? window.location.replace('/account')
+                ? window.location.replace(
+                    `/account?data=${project?.slug}&view=projects`
+                  )
                 : window.location.replace(`/donate/${project?.slug}`)
             }
           >

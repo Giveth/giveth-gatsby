@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Flex,
@@ -17,7 +17,8 @@ import { useApolloClient } from '@apollo/react-hooks'
 import {
   GET_LINK_BANK_CREATION,
   EDIT_PROJECT,
-  GET_PROJECT_BY_ADDRESS
+  GET_PROJECT_BY_ADDRESS,
+  FETCH_PROJECT_BY_SLUG
 } from '../../../apollo/gql/projects'
 import { useDropzone } from 'react-dropzone'
 import { getImageFile } from '../../../utils/index'
@@ -31,8 +32,9 @@ const CustomInput = styled(Input)`
 `
 
 function ProjectEdition(props) {
-  const { project, goBack } = props
-
+  const { goBack } = props
+  const [project, setProject] = useState(props?.project)
+  const [loading, setLoading] = useState(false)
   const { title, admin, description, walletAddress } = project
   const [categories, setCategories] = useState(project?.categories)
 
@@ -89,7 +91,6 @@ function ProjectEdition(props) {
         projectData.imageUpload = imageFile
       }
     }
-    console.log({ projectData })
     try {
       const edit = await client.mutate({
         mutation: EDIT_PROJECT,
@@ -140,6 +141,30 @@ function ProjectEdition(props) {
       </Label>
     )
   }
+
+  useEffect(() => {
+    const setup = async () => {
+      try {
+        if (typeof project === 'string' && !loading) {
+          // fetch
+          setLoading(true)
+          const { data } = await client.query({
+            query: FETCH_PROJECT_BY_SLUG,
+            variables: {
+              slug: project
+            }
+          })
+          setProject(data?.projectBySlug)
+          setLoading(false)
+          console.log({ data })
+        }
+      } catch (error) {
+        console.log({ error })
+      }
+    }
+    setup()
+  }, [project])
+
   return (
     <>
       <Flex sx={{ alignItems: 'center' }}>

@@ -2,6 +2,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { Link } from 'gatsby'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
+import { useQueryParams, StringParam } from 'use-query-params'
 import ProjectCard from '../projectListing'
 import ProjectEdition from './projectEdition/index'
 import styled from '@emotion/styled'
@@ -38,19 +39,27 @@ const RaisedHandImg = styled.img`
 `
 
 const MyProjects = props => {
-  const { projects } = props
-  const [editProject, setEditProject] = useState(null)
+  const { projects, edit } = props
+  const [editProject, setEditProject] = useState(edit)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
-
+  const [query, setQuery] = useQueryParams({
+    view: StringParam,
+    data: StringParam
+  })
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
+  const setProject = val => {
+    setQuery({ view: 'projects', data: val.slug })
+    setEditProject(val)
+  }
+  console.log({ editProject })
   if (editProject) {
     return (
       <ProjectEdition
         project={editProject}
-        goBack={() => setEditProject(null)}
+        goBack={() => setQuery({ view: 'projects', data: 'all' })}
       />
     )
   }
@@ -80,7 +89,7 @@ const MyProjects = props => {
         {projects?.map((item, index) => {
           return (
             <ProjectCard
-              action={() => setEditProject(item)}
+              action={() => setProject(item)}
               name={item?.title}
               image={item?.image}
               raised={111}
