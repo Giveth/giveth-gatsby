@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Heading, Box, Card, Image, Text } from 'theme-ui'
+import { Heading, Box, Flex, Image, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
@@ -15,11 +15,14 @@ import ProjectImageGallery2 from '../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../images/svg/create/projectImageGallery4.svg'
 
-const ProjectCard = styled(Card)`
+const ProjectCard = styled(Flex)`
+  flex-direction: column;
+  justify-content: space-around;
+  width: 100%;
+  min-height: 400px;
+  border-radius: 12px;
   background-color: ${theme.colors.background};
   margin-bottom: 30px;
-  border-radius: 12px;
-  width: 100%;
 `
 
 const CardContent = styled.span`
@@ -69,50 +72,57 @@ const CardFooter = styled.span`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin: 1rem 0;
   padding: 0rem 1rem;
 `
 
 const Categories = ({ categories }) => {
-  if (!categories || !categories.isArray || categories?.length <= 0) return null
-  return categories?.map((category, index) => {
-    console.log({ category })
-    return (
-      <Badge key={index}>
-        <Text
-          sx={{ variant: 'text.default' }}
-          style={{
-            fontSize: '10px',
-            color: theme.colors.bodyLight,
-            fontWeight: '500'
-          }}
-        >
-          {category}
-        </Text>
-      </Badge>
-    )
-  })
+  return categories.length
+    ? categories.map((category, index) => {
+        if (!category) return null
+        return (
+          <Badge key={index}>
+            <Text
+              sx={{ variant: 'text.default' }}
+              style={{
+                fontSize: '10px',
+                color: theme.colors.bodyLight,
+                fontWeight: '500',
+                textTransform: 'uppercase'
+              }}
+            >
+              {category?.name}
+            </Text>
+          </Badge>
+        )
+      })
+    : null
 }
 
 const ProjectListing = props => {
   // const { balance } = useContext(TorusContext)
+  console.log({ props })
   return (
     <Box
       key={props.listingId + '_box'}
       style={{
         width: '100%',
-        flexDirection: 'row',
-        cursor: props.disabled ? 'default' : 'pointer',
-        border: props.disabled ? null : `1px solid ${theme.colors.muted}`,
-        borderRadius: '12px',
-        boxShadow: props.shadowed ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
-      }}
-      onClick={() => {
-        !props.disabled &&
-          (props?.action ? props.action() : navigate(`/donate/${props?.id}`))
+        flexDirection: 'row'
       }}
     >
-      <ProjectCard key={props.listingId + '_card'}>
+      <ProjectCard
+        key={props.listingId + '_card'}
+        onClick={() => {
+          !props.disabled &&
+            (props?.action ? props.action() : navigate(`/donate/${props?.id}`))
+        }}
+        style={{
+          cursor: props.disabled ? 'default' : 'pointer',
+          border: props.disabled ? null : `1px solid ${theme.colors.muted}`,
+          boxShadow: props.shadowed
+            ? '0px 28px 52px rgba(44, 13, 83, 0.2)'
+            : null
+        }}
+      >
         {/* need to add options from the gallery. */}
         <div key={props.listingId + '_div'}>
           <div
@@ -201,7 +211,7 @@ const ProjectListing = props => {
               paddingTop: '4px'
             }}
           >
-            {props?.descripcion}
+            {/* {props?.description} */}
           </Text>
         </Heading>
         <CardContent>
@@ -228,9 +238,11 @@ const ProjectListing = props => {
             }
           </Text>
         </CardContent>
-        <CardFooter>
-          <Categories categories={props?.categories} />
-        </CardFooter>
+        {props?.categories && props.categories.length > 0 && (
+          <CardFooter>
+            <Categories categories={props?.categories} />
+          </CardFooter>
+        )}
       </ProjectCard>
       {
         // <Donate

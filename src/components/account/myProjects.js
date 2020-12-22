@@ -54,7 +54,6 @@ const MyProjects = props => {
     setQuery({ view: 'projects', data: val.slug })
     setEditProject(val)
   }
-  console.log({ editProject })
   if (editProject) {
     return (
       <ProjectEdition
@@ -91,6 +90,7 @@ const MyProjects = props => {
             <ProjectCard
               action={() => setProject(item)}
               name={item?.title}
+              description={item?.description}
               image={item?.image}
               raised={111}
               categories={item?.categories}

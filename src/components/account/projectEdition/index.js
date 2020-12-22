@@ -20,10 +20,10 @@ import {
   GET_PROJECT_BY_ADDRESS,
   FETCH_PROJECT_BY_SLUG
 } from '../../../apollo/gql/projects'
-import { useDropzone } from 'react-dropzone'
+import LoadingModal from '../../loadingModal'
+import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
-import { toBase64 } from '../../../utils'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 
@@ -33,16 +33,18 @@ const CustomInput = styled(Input)`
 
 function ProjectEdition(props) {
   const { goBack } = props
+  const [showModal, setShowModal] = useState(false)
+  const [showCancelModal, setCancelModal] = useState(false)
   const [project, setProject] = useState(props?.project)
   const [loading, setLoading] = useState(false)
   const { title, admin, description, walletAddress } = project
-  const [categories, setCategories] = useState(project?.categories)
-
+  const [categories, setCategories] = useState(null)
   const client = useApolloClient()
   const { register, handleSubmit, errors } = useForm() // initialize the hook
 
   const onSubmit = async data => {
     console.log({ project, data })
+    setLoading(true)
     // Validate eth address
     if (project?.walletAddress !== data.editWalletAddress) {
       if (
@@ -82,7 +84,8 @@ function ProjectEdition(props) {
     }
 
     // Validate Image
-    if (project?.image !== data?.editImage) {
+    console.log({ data })
+    if (data?.editImage && project?.image !== data?.editImage) {
       if (data?.editImage.length === 1) {
         projectData.imageStatic = data.editImage
       } else {
@@ -100,6 +103,8 @@ function ProjectEdition(props) {
         }
       })
       console.log({ edit })
+      setLoading(false)
+      setShowModal(true)
     } catch (error) {
       console.log({ error })
     }
@@ -154,6 +159,7 @@ function ProjectEdition(props) {
               slug: project
             }
           })
+          setCategories(data?.projectBySlug?.categories)
           setProject(data?.projectBySlug)
           setLoading(false)
           console.log({ data })
@@ -167,6 +173,7 @@ function ProjectEdition(props) {
 
   return (
     <>
+      {loading && <LoadingModal isOpen={loading} />}
       <Flex sx={{ alignItems: 'center' }}>
         <BiArrowBack
           color={theme.colors.secondary}
@@ -224,19 +231,22 @@ function ProjectEdition(props) {
                       name={category.name}
                       ref={register}
                       onClick={() => {
-                        const update = categories
                         categoryFound
                           ? setCategories(
                               // remove
                               categories?.filter(i => i.name !== category.name)
                             )
-                          : setCategories([
-                              // add
-                              ...categories,
-                              { name: category.name }
-                            ])
+                          : setCategories(
+                              categories?.length > 0
+                                ? [
+                                    // add
+                                    ...categories,
+                                    { name: category.name }
+                                  ]
+                                : [{ name: category.name }]
+                            )
                       }}
-                      defaultChecked={categoryFound ? 1 : 0}
+                      checked={categoryFound ? 1 : 0}
                     />
                     <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
                   </Label>
@@ -297,7 +307,7 @@ function ProjectEdition(props) {
           <Button
             type='button'
             aria-label='Cancel'
-            onClick={goBack}
+            onClick={() => setCancelModal(true)}
             sx={{
               fontSize: '3',
               fontFamily: 'body',
@@ -310,6 +320,32 @@ function ProjectEdition(props) {
           </Button>
         </>
       </form>
+      <ConfirmationModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        title='Saved!'
+        confirmation={{
+          do: () => window.location.replace(`/project/${project?.slug}`),
+          title: 'View Project'
+        }}
+        secondary={{
+          do: () => window.location.replace('/account'),
+          title: 'My Account'
+        }}
+      />
+      <ConfirmationModal
+        showModal={showCancelModal}
+        setShowModal={setCancelModal}
+        title='Close without saving?'
+        confirmation={{
+          do: () => goBack(),
+          title: 'Yes'
+        }}
+        secondary={{
+          do: () => setCancelModal(false),
+          title: 'No'
+        }}
+      />
     </>
   )
 }

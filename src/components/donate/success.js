@@ -75,13 +75,20 @@ const Success = props => {
 
   return (
     <Content>
-      <Text sx={{ variant: 'headings.h3', my: 3, textAlign: 'left' }}>
+      <Text
+        sx={{
+          variant: 'headings.h3',
+          color: 'background',
+          my: 3,
+          textAlign: 'left'
+        }}
+      >
         You're a giver now!
       </Text>
-      <Text sx={{ variant: 'headings.h5' }}>
+      <Text sx={{ variant: 'headings.h5', color: 'background' }}>
         Thank you for supporting <strong> {project?.title} </strong>.
       </Text>
-      <Text sx={{ variant: 'headings.h5', pt: -1 }}>
+      <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
         Your <strong> {hash && `${hash.subtotal} ETH`} </strong> contribution
         goes a long way!
       </Text>
@@ -117,7 +124,7 @@ const Success = props => {
         </Receipt>
       )}
 
-      <Text sx={{ variant: 'headings.h5', pt: 4 }}>
+      <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
         Stay a Giver?{' '}
         <span
           sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}

@@ -225,10 +225,11 @@ const ProjectCard = props => {
             <Button
               sx={{ variant: 'buttons.default', mt: 2 }}
               onClick={() => {
-                !props.disabled && navigate(`/donate/${props?.slug}`)
+                !props.disabled &&
+                  (window.location.href = `/project/${props?.slug || ''}`)
               }}
             >
-              Donate
+              Learn More
             </Button>
             <Text
               sx={{
@@ -239,18 +240,10 @@ const ProjectCard = props => {
                 color: theme.colors.primary
               }}
               onClick={() => {
-                !props.disabled &&
-                  // navigate(
-                  //   `/project/${
-                  //     props?.slug ||
-                  //     'COVID-19:-ICRC-global-response-to-the-coronavirus'
-                  //   }`,
-                  //   { replace: true }
-                  // )
-                  (window.location.href = `/project/${props?.slug || ''}`)
+                !props.disabled && navigate(`/donate/${props?.slug}`)
               }}
             >
-              Learn More
+              Donate
             </Text>
           </AltCardContent>
         )}

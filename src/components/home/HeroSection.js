@@ -90,7 +90,7 @@ const Hero = ({ content }) => {
               p={4}
               sx={{
                 width: '290px',
-                variant: 'buttons.default'
+                variant: 'buttons.big'
               }}
             >
               {content.mainButton}
