@@ -73,6 +73,7 @@
     "react-responsive": "^8.2.0",
     "react-share": "^4.3.1",
     "react-spring": "^8.0.27",
+    "react-toastify": "^6.2.0",
     "sharp": "^0.26.3",
     "theme-ui": "^0.3.4",
     "use-query-params": "^1.1.9",

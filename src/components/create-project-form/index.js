@@ -32,6 +32,7 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import { categoryList } from '../../utils/constants'
+import Toast from '../toast'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
@@ -122,7 +123,7 @@ const CreateProjectForm = props => {
         data?.projectWalletAddress?.length !== 42 ||
         !Web3.utils.isAddress(data?.projectWalletAddress)
       ) {
-        return alert('eth address not valid')
+        return Toast({ content: 'Eth address not valid', type: 'error' })
       }
       // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
       const res = await client.query({
@@ -133,7 +134,10 @@ const CreateProjectForm = props => {
       })
       console.log({ res })
       if (res?.data?.projectByAddress) {
-        return alert('this eth address is already being used for a project')
+        return Toast({
+          content: 'This eth address is already being used for a project',
+          type: 'error'
+        })
       }
     }
     if (currentStep === 3) {

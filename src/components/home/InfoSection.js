@@ -44,7 +44,9 @@ const InfoSection = () => {
         color: 'background',
         backgroundColor: 'secondary',
         alignItems: 'center',
-        px: '8.75rem'
+        px: ['2rem', '8.75rem', '8.75rem'],
+        pb: ['5rem', 0, 0],
+        mb: ['2rem', 0, 0]
       }}
     >
       <Box
@@ -52,7 +54,7 @@ const InfoSection = () => {
           justifySelf: 'center',
           textAlign: 'center',
           pt: '100px',
-          px: '14rem',
+          px: [0, '14rem', '14rem'],
           color: 'background'
         }}
       >
