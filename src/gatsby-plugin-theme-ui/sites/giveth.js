@@ -244,6 +244,23 @@ export default {
         scale: '1.1'
       }
     },
+    big: {
+      cursor: 'pointer',
+      fontFamily: 'body',
+      py: '2rem',
+      px: '1.5rem',
+      fontSize: 4,
+      fontWeight: 'bold',
+      lineHeight: 'button',
+      textTransform: ['capitalize', 'uppercase'],
+      borderRadius: '88px',
+      '&:focus': {
+        outline: 'none'
+      },
+      '&:hover': {
+        scale: '1.1'
+      }
+    },
     small: {
       cursor: 'pointer',
       fontFamily: 'body',

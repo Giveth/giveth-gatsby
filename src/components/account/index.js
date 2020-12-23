@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { Link } from 'gatsby'
 import { jsx, Text, Flex, Box } from 'theme-ui'
+import { useQueryParams, StringParam } from 'use-query-params'
 import { useApolloClient } from '@apollo/react-hooks'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
@@ -47,9 +48,16 @@ const AccountPage = props => {
   const [projects, setProjects] = React.useState(null)
   const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-  const [selectedView, setSelectedView] = useState('My Account')
   const [userDonations, setUserDonations] = useState(null)
-  const options = ['My Account', 'My Projects', 'My Donations']
+  const options = [
+    { route: 'account', name: 'My Account' },
+    { route: 'projects', name: 'My Projects' },
+    { route: 'donations', name: 'My Donations' }
+  ]
+  const [query, setQuery] = useQueryParams({
+    view: StringParam,
+    data: StringParam
+  })
   const isSSR = typeof window === 'undefined'
   const projectsList = projects?.data?.projects
 
@@ -58,8 +66,24 @@ const AccountPage = props => {
   }
 
   const SetView = () => {
-    switch (selectedView) {
-      case 'My Account':
+    const { view, data } = query
+    switch (view) {
+      case 'projects':
+        switch (data) {
+          case 'all':
+            return <MyProjects projects={projectsList} />
+          default:
+            return <MyProjects projects={projectsList} edit={data} />
+        }
+      case 'donations':
+        return (
+          !isSSR && (
+            <React.Suspense fallback={<div />}>
+              <MyDonations donations={userDonations} />
+            </React.Suspense>
+          )
+        )
+      default:
         return (
           !isSSR && (
             <React.Suspense fallback={<div />}>
@@ -72,18 +96,6 @@ const AccountPage = props => {
             </React.Suspense>
           )
         )
-      case 'My Projects':
-        return <MyProjects projects={projectsList} />
-      case 'My Donations':
-        return (
-          !isSSR && (
-            <React.Suspense fallback={<div />}>
-              <MyDonations donations={userDonations} />
-            </React.Suspense>
-          )
-        )
-      default:
-        return null
     }
   }
 
@@ -202,15 +214,28 @@ const AccountPage = props => {
                 <a
                   key={index}
                   style={{ textDecoration: 'none', cursor: 'pointer' }}
-                  onClick={() => setSelectedView(i)}
+                  onClick={() => {
+                    switch (i.route) {
+                      case 'projects':
+                        return setQuery({ view: 'projects', data: 'all' })
+                      case 'account':
+                        return setQuery({ view: undefined, data: undefined })
+                      default:
+                        return setQuery({ view: i.route, data: undefined })
+                    }
+                  }}
                 >
                   <Text
                     sx={{
                       mb: '8px',
-                      color: selectedView === i ? 'secondary' : 'primary'
+                      color:
+                        query?.view === i.route ||
+                        (!query?.view && i.route === 'account')
+                          ? 'secondary'
+                          : 'primary'
                     }}
                   >
-                    {formatTitle(i)}
+                    {formatTitle(i.name)}
                   </Text>
                 </a>
               )

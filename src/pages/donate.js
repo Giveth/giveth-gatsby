@@ -155,8 +155,7 @@ const ShowProject = props => {
       return (
         <OptionTypesBox
           onClick={() => {
-            if (title === 'Credit Card') return alert('coming soon')
-            // setPaymentType(title)
+            setPaymentType(title)
           }}
           style={{
             backgroundColor: isSelected ? 'white' : theme.colors.secondary,
@@ -280,7 +279,7 @@ const ShowProject = props => {
             'https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
           }
           raised={1223}
-          category={project?.categories || 'Blockchain 4 Good'}
+          categories={project?.categories}
           listingId='key1'
           key='key1'
         />
