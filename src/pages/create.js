@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
+import { navigate } from 'gatsby'
 import Web3 from 'web3'
 import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
@@ -13,12 +14,13 @@ import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
 import fetch from 'isomorphic-fetch'
+import { TorusContext } from '../contextProvider/torusProvider'
 
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
 const IndexPage = props => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
-  const [isLoggedIn] = useState(true)
+  // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState(null)
   const [addProjectQuery] = useMutation(ADD_PROJECT)
@@ -172,6 +174,8 @@ const IndexPage = props => {
   }
 
   function ProjectForm() {
+    const { isLoggedIn } = React.useContext(TorusContext)
+
     if (isLoggedIn === true) {
       if (!projectAdded && !projectId) {
         return (
@@ -207,18 +211,8 @@ const IndexPage = props => {
         )
       }
     } else {
-      return (
-        <Text
-          sx={{
-            fontSize: 6,
-            fontFamily: 'body',
-            color: 'secondary',
-            mt: '16px'
-          }}
-        >
-          Please log in to create a project.
-        </Text>
-      )
+      navigate('/', { state: { welcome: true } })
+      return null
     }
   }
 

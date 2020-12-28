@@ -16,9 +16,11 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 import TorusProvider from '../contextProvider/torusProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
+import { PopupProvider } from '../contextProvider/popupProvider'
 
 import Dialog from './dialog'
 import Footer from './footer'
+import Popup from './popup'
 import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -162,7 +164,10 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           <GlobalProvider>
             <ThemeProvider theme={theme}>
               <Provider template={AlertTemplate} {...AlertOptions}>
-                <Template />
+                <PopupProvider>
+                  <Template />
+                  <Popup />
+                </PopupProvider>
               </Provider>
             </ThemeProvider>
           </GlobalProvider>
