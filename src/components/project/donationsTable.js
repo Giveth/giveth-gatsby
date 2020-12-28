@@ -19,6 +19,7 @@ import {
   Text,
   jsx
 } from 'theme-ui'
+import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
@@ -44,7 +45,6 @@ const Table = styled.table`
     border-bottom: 1px solid #eaebee;
     padding: 0.35em;
   }
-
   th,
   td {
     padding: 0.625em;
@@ -271,6 +271,7 @@ const CustomTable = () => {
           <tbody>
             {currentItems.reverse().map((i, key) => {
               if (!i) return null
+              console.log({ i })
               return (
                 <tr key={key}>
                   <td
@@ -285,14 +286,17 @@ const CustomTable = () => {
                   </td>
                   <DonorBox
                     data-label='Donor'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
+                    sx={{
+                      variant: 'text.small',
+                      color: 'secondary',
+                      svg: { borderRadius: '50%' }
+                    }}
                   >
-                    <Avatar
-                      src={
-                        i?.extra?.userByAddress?.avatar ||
-                        'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
-                      }
-                    />
+                    {i?.extra?.userByAddress?.avatar ? (
+                      <Avatar src={i?.extra?.userByAddress?.avatar} />
+                    ) : (
+                      <Jdenticon size='32' value={i?.donor || 'Giveth'} />
+                    )}
                     <Text
                       sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
                     >
