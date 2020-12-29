@@ -11,6 +11,7 @@ import {
   Link,
   Text
 } from 'theme-ui'
+import { navigate } from 'gatsby'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
@@ -37,12 +38,12 @@ import Toast from '../toast'
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
+  const { user, isLoggedIn } = useContext(TorusContext)
   const APIKEY = process.env.GATSBY_GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
   const client = useApolloClient()
-  const { user } = React.useContext(TorusContext)
 
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
@@ -192,7 +193,11 @@ const CreateProjectForm = props => {
       }
       setLoading(false)
     }
-    checkProjectWallet()
+    if (!isLoggedIn) {
+      navigate('/', { state: { welcome: true } })
+    } else {
+      checkProjectWallet()
+    }
   }, [user])
 
   if (loading) {
@@ -203,28 +208,28 @@ const CreateProjectForm = props => {
     )
   }
 
-  // CHECKS USER
-  if (JSON.stringify(user) === JSON.stringify({})) {
-    return (
-      <Flex sx={{ flexDirection: 'column' }}>
-        <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 6, mx: 6 }}>
-          You are not logged in yet...
-        </Text>
-        <Text
-          sx={{ variant: 'headings.h4', color: 'primary', mx: 6 }}
-          style={{
-            textDecoration: 'underline',
-            cursor: 'pointer'
-          }}
-          onClick={() => window.location.replace('/')}
-        >
-          go to our homepage
-        </Text>
-      </Flex>
-    )
-  }
+  // // CHECKS USER
+  // if (JSON.stringify(user) === JSON.stringify({})) {
+  //   return (
+  //     <Flex sx={{ flexDirection: 'column' }}>
+  //       <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 6, mx: 6 }}>
+  //         You are not logged in yet...
+  //       </Text>
+  //       <Text
+  //         sx={{ variant: 'headings.h4', color: 'primary', mx: 6 }}
+  //         style={{
+  //           textDecoration: 'underline',
+  //           cursor: 'pointer'
+  //         }}
+  //         onClick={() => window.location.replace('/')}
+  //       >
+  //         go to our homepage
+  //       </Text>
+  //     </Flex>
+  //   )
+  // }
 
-  if (!isWalletProved) {
+  if (!isWalletProved && !loading) {
     return (
       <Text sx={{ variant: 'headings.h2', color: 'secondary', m: 6 }}>
         Let's first verify your wallet{' '}

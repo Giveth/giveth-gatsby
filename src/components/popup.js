@@ -7,7 +7,8 @@ import decoratorClouds from '../images/decorator-clouds.svg'
 import signupBg from '../images/popup1.png'
 
 function WelcomePopup({ close }) {
-  const { login } = React.useContext(TorusContext)
+  const { login, isLoggedIn } = React.useContext(TorusContext)
+  if (isLoggedIn) return null
   return (
     <Flex sx={{ flexDirection: 'column', width: '645px' }}>
       <img

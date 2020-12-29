@@ -174,48 +174,36 @@ const IndexPage = props => {
   }
 
   function ProjectForm() {
-    const { isLoggedIn } = React.useContext(TorusContext)
-
-    if (isLoggedIn === true) {
-      if (!projectAdded && !projectId) {
-        return (
-          <>
-            <img
-              src={decoratorClouds}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '57px',
-                right: '434px'
-              }}
-              className='hide'
-            />
-            <img
-              src={peoplePuzzle2}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '417px',
-                right: '0px'
-              }}
-              className='hide'
-            />
-            <CreateProjectForm onSubmit={onSubmit} />
-          </>
-        )
-      } else {
-        return (
-          <>
-            <AfterCreation />
-          </>
-        )
-      }
+    if (!projectAdded && !projectId) {
+      return (
+        <>
+          <img
+            src={decoratorClouds}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '57px',
+              right: '434px'
+            }}
+            className='hide'
+          />
+          <img
+            src={peoplePuzzle2}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '417px',
+              right: '0px'
+            }}
+            className='hide'
+          />
+          <CreateProjectForm onSubmit={onSubmit} />
+        </>
+      )
     } else {
-      navigate('/', { state: { welcome: true } })
-      return null
+      return <AfterCreation />
     }
   }
-
   return (
     <Layout noFooter noHeader>
       <div
