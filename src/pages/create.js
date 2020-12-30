@@ -46,13 +46,25 @@ const IndexPage = props => {
       return imageFile
     }
 
+    const siteId = process.env.GATSBY_SITE_ID
+    let organisationId
+    if (siteId === 'giveth') {
+      organisationId = 1
+    } else if (siteId === 'gaia-giveth') {
+      organisationId = 2
+    } else {
+      throw new Error(
+        `Invalid siteId ${process.env.GATSBY_SITE_ID}, checking GATSBY_SITE_ID in the .env config, it should be either 'giveth' or 'gaia-giveth'`
+      )
+    }
     const projectData = {
       title: values.projectName,
       description: values.projectDescription,
       admin: values.projectAdmin,
       impactLocation: values.projectImpactLocation,
       categories: projectCategories,
-      walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress)
+      walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress),
+      organisationId
     }
     if (values.projectImage.length === 1) {
       projectData.imageStatic = values.projectImage
@@ -83,7 +95,7 @@ const IndexPage = props => {
     }
   }
 
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -173,7 +185,7 @@ const IndexPage = props => {
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (!projectAdded && !projectId) {
       return (
         <>
