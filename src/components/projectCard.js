@@ -185,9 +185,10 @@ const ProjectCard = props => {
             <IconBtn>
               <img src={iconHeart} alt='' />
             </IconBtn>
-            {/* <IconBtn>
+            <IconBtn>
               <img src={iconShare} alt='' />
-            </IconBtn> */}
+            </IconBtn>{' '}
+            */}
           </Options>
         </div>
         <Heading
