@@ -14,8 +14,12 @@ export default {
     bodyDark: '#6B7087',
     bodyLight: '#AAAFCA',
     anotherGrey: '#C9D0E8',
+    blue: '#3F91E4',
+    lightBlue: '#F0F6FC',
     lightestBlue: '#EDF0FA',
     yellow: '#FFEF9D',
+    warnYellow: '#F6AB2F',
+    green: '#37B4A9',
     greenishBlue: '#36CDD7',
     red: '#D74036'
   },

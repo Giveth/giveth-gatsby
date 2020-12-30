@@ -26,6 +26,7 @@ import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
+import Toast from '../../toast'
 
 const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
@@ -51,7 +52,7 @@ function ProjectEdition(props) {
         data?.editWalletAddress?.length !== 42 ||
         !Web3.utils.isAddress(data?.editWalletAddress)
       ) {
-        return alert('eth address not valid')
+        return Toast({ content: 'Eth address not valid', type: 'error' })
       }
       // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
       const res = await client.query({
@@ -62,7 +63,10 @@ function ProjectEdition(props) {
       })
       console.log({ res })
       if (res?.data?.projectByAddress) {
-        return alert('this eth address is already being used for a project')
+        return Toast({
+          content: 'this eth address is already being used for a project',
+          type: 'error'
+        })
       }
     }
 

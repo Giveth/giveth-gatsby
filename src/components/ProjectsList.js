@@ -93,13 +93,11 @@ const ProjectsList = props => {
   const { projects, totalCount, loadMore, hasMore } = props
   return (
     <>
-      <div
-        style={{
-          width: '100%',
-          display: 'flex',
+      <Flex
+        sx={{
+          p: ['0 1em', '0 5em', '0 5em'],
           justifyContent: 'space-between',
-          margin: '1.5em 0',
-          padding: '0 5em'
+          margin: '1.5em 0'
         }}
       >
         <Text
@@ -126,7 +124,7 @@ const ProjectsList = props => {
           >{`(${totalCount})`}</span>
         </Text>
         <CreateLink to='/create'>Create a project</CreateLink>
-      </div>
+      </Flex>
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
           style={{

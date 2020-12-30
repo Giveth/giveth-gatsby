@@ -10,6 +10,7 @@ import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
+import Toast from '../../components/toast'
 import styled from '@emotion/styled'
 
 let provider
@@ -244,8 +245,8 @@ const OnlyCrypto = props => {
         console.log('ALLLLLLL', event)
       })
     } catch (error) {
-      alert(error?.message)
       console.log({ error })
+      return Toast({ content: error?.message, type: 'error' })
     }
   }
 
@@ -516,12 +517,13 @@ const OnlyCrypto = props => {
           <Button
             onClick={async () => {
               if (!project?.walletAddress) {
-                return alert(
-                  'There is no eth address assigned for this project'
-                )
+                return Toast({
+                  content: 'There is no eth address assigned for this project',
+                  type: 'error'
+                })
               }
               if (!amountTyped || parseFloat(amountTyped) <= 0) {
-                return alert('Please set an amount')
+                return Toast({ content: 'Please set an amount', type: 'warn' })
               }
               const ready = await readyToTransact()
               if (!ready) return
