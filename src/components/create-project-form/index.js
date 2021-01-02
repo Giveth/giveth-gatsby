@@ -32,7 +32,6 @@ import {
 import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
-import { categoryList } from '../../utils/constants'
 import Toast from '../toast'
 
 const CreateProjectForm = props => {
@@ -72,7 +71,7 @@ const CreateProjectForm = props => {
     ({ animationStyle }) => (
       <ProjectCategoryInput
         animationStyle={animationStyle}
-        categoryList={categoryList}
+        categoryList={props.categoryList}
         currentValue={formData?.projectCategory}
         register={register}
       />
@@ -109,7 +108,7 @@ const CreateProjectForm = props => {
         animationStyle={animationStyle}
         formData={formData}
         setStep={setCurrentStep}
-        categoryList={categoryList}
+        categoryList={props.categoryList}
       />
     )
   ]

@@ -33,41 +33,42 @@ exports.onCreatePage = async ({ page, actions }) => {
   }
 }
 
-// exports.createPages = async ({ graphql, actions }) => {
-//   const { createPage } = actions
-//   const projectResults = await graphql(`
-//     query {
-//       giveth {
-//         projects {
-//           id
-//           title
-//           description
-//           slug
-//           creationDate
-//           admin
-//           image
-//           walletAddress
-//           categories {
-//             name
-//           }
-//         }
-//       }
-//     }
-//   `)
-//   const projectPageTemplate = require.resolve('./src/templates/project.js')
-//   if (projectResults.data) {
-//     projectResults.data.giveth.projects.forEach(project => {
-//       createPage({
-//         path: `/project/${project.slug}`,
-//         component: projectPageTemplate,
-//         context: {
-//           // entire project is passed down as context
-//           project: project
-//         }
-//       })
-//     })
-//   }
-// }
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  // Mateo: This is being done on the client for now, not generated on the server.
+  // const projectResults = await graphql(`
+  //   query {
+  //     giveth {
+  //       projects {
+  //         id
+  //         title
+  //         description
+  //         slug
+  //         creationDate
+  //         admin
+  //         image
+  //         walletAddress
+  //         categories {
+  //           name
+  //         }
+  //       }
+  //     }
+  //   }
+  // `)
+  // const projectPageTemplate = require.resolve('./src/templates/project.js')
+  // if (projectResults.data) {
+  //   projectResults.data.giveth.projects.forEach(project => {
+  //     createPage({
+  //       path: `/project/${project.slug}`,
+  //       component: projectPageTemplate,
+  //       context: {
+  //         // entire project is passed down as context
+  //         project: project
+  //       }
+  //     })
+  //   })
+  // }
+}
 
 exports.onCreateNode = ({ node }) => {
   if (node.internal.type === `File`) {
