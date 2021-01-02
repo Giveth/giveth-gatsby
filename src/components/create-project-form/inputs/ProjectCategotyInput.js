@@ -58,7 +58,7 @@ export const ProjectCategoryInput = ({
       <Button
         aria-label='Next'
         sx={{
-          mt: '200px',
+          mt: '20px',
           width: '180px',
           height: '52px',
           borderRadius: '48px',
