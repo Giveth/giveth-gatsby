@@ -33,6 +33,7 @@ export const ProjectNameInput = ({
         ref={register({ required: true })}
         defaultValue={currentValue}
         placeholder='Project Name'
+        maxLength={55}
         onChange={e => setCharacterLength(e.target.value.length)}
       />
       <Text sx={{ float: 'right', fontFamily: 'body', color: 'muted' }}>

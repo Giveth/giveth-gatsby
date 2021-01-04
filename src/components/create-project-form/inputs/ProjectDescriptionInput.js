@@ -62,6 +62,7 @@ export const ProjectDescriptionInput = ({
           ref={register}
           defaultValue={currentValue}
           rows={12}
+          maxLength={2000}
           onChange={e => getLength(e)}
         />
         <Text
