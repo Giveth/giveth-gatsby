@@ -252,6 +252,12 @@ const TOGGLE_UPDATE_REACTION = gql`
   }
 `
 
+const TOGGLE_PROJECT_REACTION = gql`
+  mutation ToggleProjectReaction($reaction: String!, $projectId: Float!) {
+    toggleProjectReaction(reaction: $reaction, projectId: $projectId)
+  }
+`
+
 const GET_PROJECT_BY_ADDRESS = gql`
   query ProjectByAddress($address: String!) {
     projectByAddress(address: $address) {
@@ -309,6 +315,7 @@ export {
   GET_STRIPE_PROJECT_DONATIONS,
   ADD_PROJECT_UPDATE,
   GET_PROJECT_UPDATES,
+  TOGGLE_PROJECT_REACTION,
   TOGGLE_UPDATE_REACTION,
   GET_PROJECT_BY_ADDRESS,
   REGISTER_PROJECT_DONATION,

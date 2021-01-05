@@ -62,6 +62,7 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
         addUpdate={addUpdate}
         project={project}
         isOwner={isOwner}
+        refreshQuery={GET_PROJECT_UPDATES}
       />
     </>
   )

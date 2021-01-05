@@ -2,10 +2,10 @@ import React, { useState, useContext } from 'react'
 import { Heading, Box, Button, Card, IconButton, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
-
+import { useApolloClient } from '@apollo/react-hooks'
 import theme from '../gatsby-plugin-theme-ui/index'
 // import Donate from '../components/donateForm'
-
+import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
 import iconShare from '../images/icon-share.svg'
 import iconHeart from '../images/icon-heart.svg'
 import { TorusContext } from '../contextProvider/torusProvider'
@@ -121,7 +121,25 @@ const Categories = categories => {
 const ProjectCard = props => {
   // const { balance } = useContext(TorusContext)
   const { project } = props
+  const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
+
+  const reactToProject = async () => {
+    try {
+      console.log({ project })
+      const reaction = await client?.mutate({
+        mutation: TOGGLE_PROJECT_REACTION,
+        variables: {
+          reaction: 'heart',
+          projectId: parseFloat(project?.id)
+        }
+      })
+      console.log({ reaction })
+    } catch (error) {
+      console.log({ error })
+    }
+  }
+
   return (
     <Box
       key={props.listingId + '_box'}
@@ -182,7 +200,7 @@ const ProjectCard = props => {
             )}
           </Dot>
           <Options>
-            <IconBtn>
+            <IconBtn onClick={() => reactToProject()}>
               <img src={iconHeart} alt='' />
             </IconBtn>
             {/* <IconBtn>
