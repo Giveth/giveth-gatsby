@@ -40,7 +40,7 @@ const IndexPage = props => {
 
   return (
     <Layout isHomePage='true'>
-      <Seo title='home' />
+      <Seo title='Home' />
       <IndexContent hideInfo={hideInfo} content={content} location={location} />
     </Layout>
   )

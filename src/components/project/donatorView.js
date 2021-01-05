@@ -136,7 +136,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
   console.log({ currentProjectView })
   return (
     <>
-      <Seo title={project?.title} />
       <Flex>
         {setImage(project?.image) || (
           <Image

@@ -1,6 +1,8 @@
 /** @jsx jsx */
+import React from 'react'
 import { jsx, Flex, Spinner } from 'theme-ui'
 import Layout from '../components/layout'
+import Seo from '../components/seo'
 import { Router } from '@reach/router'
 import { useApolloClient } from '@apollo/react-hooks'
 import { ProjectDonatorView } from '../components/project'
@@ -24,6 +26,7 @@ const Project = props => {
             slug: slug.toString()
           }
         })
+        console.log({ data })
         setSlugProject(data?.projectBySlug)
         setLoading(false)
       } catch (error) {
@@ -45,7 +48,10 @@ const Project = props => {
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : slugProject ? (
-        <ProjectDonatorView pageContext={{ project: slugProject }} />
+        <>
+          <Seo title={`Donate to ${slugProject?.title}`} />
+          <ProjectDonatorView pageContext={{ project: slugProject }} />
+        </>
       ) : null}
     </Layout>
   )
