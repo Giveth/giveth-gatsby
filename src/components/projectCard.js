@@ -203,9 +203,10 @@ const ProjectCard = props => {
             <IconBtn onClick={() => reactToProject()}>
               <img src={iconHeart} alt='' />
             </IconBtn>
-            {/* <IconBtn>
+            <IconBtn>
               <img src={iconShare} alt='' />
-            </IconBtn> */}
+            </IconBtn>{' '}
+            */}
           </Options>
         </div>
         <Heading

@@ -18,7 +18,7 @@ import { TorusContext } from '../contextProvider/torusProvider'
 
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
-const IndexPage = props => {
+const IndexPage = ({ data, location }) => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
@@ -26,7 +26,7 @@ const IndexPage = props => {
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
-  const { projectId } = queryString.parse(props.location.search)
+  const { projectId } = queryString.parse(location.search)
   const onSubmit = async (values, walletAddress) => {
     setProjectAdded(true)
 
@@ -209,7 +209,10 @@ const IndexPage = props => {
             }}
             className='hide'
           />
-          <CreateProjectForm onSubmit={onSubmit} />
+          <CreateProjectForm
+            onSubmit={onSubmit}
+            categoryList={data.giveth.categories}
+          />
         </>
       )
     } else {
@@ -236,5 +239,14 @@ const IndexPage = props => {
     </Layout>
   )
 }
-
+export const pageQuery = graphql`
+  query {
+    giveth {
+      categories {
+        name
+        value
+      }
+    }
+  }
+`
 export default IndexPage
