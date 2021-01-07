@@ -24,6 +24,7 @@ import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
+import useIsClient from '../../../utils/useIsClient'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
@@ -34,11 +35,13 @@ const CustomInput = styled(Input)`
 
 function ProjectEdition(props) {
   const { goBack } = props
+  const { isClient } = useIsClient()
   const [showModal, setShowModal] = useState(false)
   const [showCancelModal, setCancelModal] = useState(false)
   const [project, setProject] = useState(props?.project)
   const [loading, setLoading] = useState(false)
-  const { title, admin, description, walletAddress } = project
+  const { title, description, walletAddress, impactLocation } = project
+  const [mapLocation, setMapLocation] = useState(null)
   const [categories, setCategories] = useState(null)
   const client = useApolloClient()
   const { register, handleSubmit, errors } = useForm() // initialize the hook
@@ -82,7 +85,7 @@ function ProjectEdition(props) {
       title: data.editTitle,
       description: data.editDescription,
       admin: project.admin,
-      // impactLocation: project,
+      impactLocation: mapLocation || impactLocation,
       categories: projectCategories,
       walletAddress: Web3.utils.toChecksumAddress(data.editWalletAddress)
     }
@@ -172,6 +175,7 @@ function ProjectEdition(props) {
         console.log({ error })
       }
     }
+    isClient && window.initMap(setMapLocation)
     setup()
   }, [project])
 
@@ -257,7 +261,57 @@ function ProjectEdition(props) {
                 )
               })}
             </Box>
-            {/* <CustomLabel title='Impact' htmlFor='editImpactLocation' /> */}
+            <CustomLabel title='Impact' htmlFor='editImpactLocation' />
+            {mapLocation || impactLocation ? (
+              <Text
+                sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}
+              >
+                {mapLocation || impactLocation}
+              </Text>
+            ) : null}
+            <div id='locationField'>
+              <Input
+                id='autocomplete'
+                placeholder='Search a Location'
+                type='text'
+                sx={{ fontFamily: 'body', width: '400px', mr: '35px', mt: 4 }}
+                onChange={e => setMapLocation(e.target.value)}
+              />
+            </div>
+            <Label
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+                mt: 4
+              }}
+            >
+              <Checkbox
+                defaultChecked={
+                  mapLocation === 'Global' || impactLocation === 'Global'
+                }
+                onChange={() => {
+                  mapLocation === 'Global'
+                    ? setMapLocation('')
+                    : setMapLocation('Global')
+                }}
+              />
+              <Text sx={{ fontFamily: 'body', fontSize: 2 }}>
+                This project has a global impact
+              </Text>
+            </Label>
+            <div
+              css={{
+                display: 'flex',
+                flexDirection: 'column',
+                width: '600px',
+                backgroundColor: 'white',
+                borderRadius: '2px',
+                margin: '2rem 0 0 0'
+              }}
+            >
+              <div id='map' style={{ height: '250px' }} />
+            </div>
             {/* <CustomLabel title='Bank Account' htmlFor='addBankAccount' />
             <Text
               onClick={connectBankAccount}

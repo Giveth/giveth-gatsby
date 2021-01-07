@@ -5,6 +5,7 @@ import { useApolloClient } from '@apollo/react-hooks'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
+import { ensRegex } from '../../utils'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
@@ -119,7 +120,7 @@ const OnlyCrypto = props => {
       )
       setNotify(initNotify())
     }
-    console.log(ethers.utils.parseEther('1.0'))
+    // console.log(ethers.utils.parseEther('1.0'))
     init()
   }, [])
 
@@ -181,11 +182,6 @@ const OnlyCrypto = props => {
     )
   }
 
-  const setProvider = async () => {
-    await onboard.walletSelect()
-    await onboard.walletCheck()
-  }
-
   const readyToTransact = async () => {
     onboard.walletReset()
     const walletSelected = await onboard.walletSelect()
@@ -198,10 +194,16 @@ const OnlyCrypto = props => {
   // FOR REGULAR TX
   const sendTx = async () => {
     try {
+      // CHECK ADDRESS
+      let toAddress = project?.walletAddress
+      if (ensRegex(project?.walletAddress)) {
+        toAddress = await provider.resolveName(project?.walletAddress)
+      }
       const signer = getSigner(provider)
-      console.log(ethers.utils.parseEther(subtotal.toString()))
+      // console.log(ethers.utils.parseEther(subtotal.toString()))
+
       const { hash } = await signer.sendTransaction({
-        to: project?.walletAddress,
+        to: toAddress,
         value: ethers.utils.parseEther(subtotal.toString())
       })
       props.setHashSent({ hash, subtotal })

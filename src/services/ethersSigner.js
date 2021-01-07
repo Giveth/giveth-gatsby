@@ -29,7 +29,11 @@ class UncheckedJsonRpcSigner extends ethers.Signer {
 }
 
 function getSigner(provider) {
-  return new UncheckedJsonRpcSigner(provider.getSigner())
+  try {
+    return new ethers.providers.Web3Provider(provider.provider).getSigner()
+  } catch (error) {
+    console.log({ error })
+  }
 }
 
 export default getSigner

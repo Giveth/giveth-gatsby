@@ -32,6 +32,7 @@ export const ProjectAdminInput = ({
         name='projectAdmin'
         ref={register}
         defaultValue={currentValue}
+        maxLength={55}
         placeholder='Project Admin'
         onChange={e => setCharacterLength(e.target.value.length)}
       />

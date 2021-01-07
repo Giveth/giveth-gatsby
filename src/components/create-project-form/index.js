@@ -18,7 +18,6 @@ import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
-import { Helmet } from 'react-helmet'
 
 import {
   ProjectNameInput,
@@ -38,7 +37,6 @@ const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
   const { user, isLoggedIn } = useContext(TorusContext)
-  const APIKEY = process.env.GATSBY_GOOGLE_MAPS_API_KEY
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
@@ -253,55 +251,6 @@ const CreateProjectForm = props => {
       </Progress>
       <Box sx={{ mx: '140px', mt: '50px', position: 'relative' }}>
         <>
-          <Helmet>
-            <script
-              src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
-              defer
-            />
-            <script type='text/javascript'>
-              {`
-          let map;
-          function initMap(setLocation) {
-              map = new google.maps.Map(document.getElementById('map'), {
-                  center: {lat: 0, lng: 0 },
-                  zoom: 1,
-                  mapTypeControl: false,
-                  panControl: false,
-                  zoomControl: false,
-                  streetViewControl: false
-              });
-              // Create the autocomplete object and associate it with the UI input control.
-              autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById("autocomplete"),
-                {
-                  types: ["geocode"],
-                }  
-              );
-              places = new google.maps.places.PlacesService(map);
-              autocomplete.addListener("place_changed",function(e){
-                onPlaceChanged(setLocation);
-              });
-          }
-          function onPlaceChanged(setLocation) {
-            const place = autocomplete.getPlace();
-            if (place) {
-              if (place.geometry) {
-                map.panTo(place.geometry.location);
-                var marker = new google.maps.Marker({
-                  position: place.geometry.location,
-                  map: map,
-                  title: place.formatted_address
-                });
-                map.setZoom(13);
-                setLocation(place.formatted_address)
-              } else {
-                document.getElementById("autocomplete").placeholder = "Search a Location";
-              }
-            }
-          }
-        `}
-            </script>
-          </Helmet>
           <Flex
             sx={{
               alignItems: 'center',
