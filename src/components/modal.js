@@ -28,7 +28,6 @@ const customStyles = {
 }
 
 function CustomModal(props) {
-  console.log(props)
   return (
     <Modal
       isOpen={props.isOpen}

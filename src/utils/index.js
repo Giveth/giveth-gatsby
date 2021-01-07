@@ -99,3 +99,9 @@ export async function getEtherscanTxs(
     console.log({ error })
   }
 }
+
+export function ensRegex(ens) {
+  return /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/.test(
+    ens
+  )
+}
