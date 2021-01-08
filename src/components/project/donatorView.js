@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import Seo from '../seo'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
@@ -41,10 +40,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const isSSR = typeof window === 'undefined'
   const client = useApolloClient()
 
-  const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
-    variables: { projectId: pageContext?.project?.id }
-  })
-
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
@@ -61,16 +56,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
           client,
           true
         )
-        console.log({ cryptoTxs, data })
+
         let donations = []
-        if (cryptoTxs) {
-          donations = [
-            data?.getStripeProjectDonations || null,
-            ...cryptoTxs.txs
-          ].filter(function (e) {
-            return e
-          })
-        }
 
         // Get Updates
         const updates = await client?.query({
@@ -88,7 +75,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           donations,
           updates: updates?.data?.getProjectUpdates
         })
-        setTotalDonations(donations?.length)
+
         setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
         setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
       } catch (error) {

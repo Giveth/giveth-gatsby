@@ -52,27 +52,6 @@ const Success = props => {
     link.dispatchEvent(event)
   }
 
-  useEffect(() => {
-    const getData = async () => {
-      // get session ID
-      try {
-        const { data, error } = await client.query({
-          query: GET_STRIPE_DONATION_PDF,
-          variables: {
-            sessionId: parseInt(sessionId)
-          }
-        })
-        console.log({ data, error }, data?.getStripeDonationPDF?.pdf?.length)
-        setPdfBase64(data?.getStripeDonationPDF?.pdf)
-      } catch (error) {
-        console.log({ error })
-      }
-    }
-    getData()
-  }, [])
-
-  console.log({ hash })
-
   return (
     <Content>
       <Text
