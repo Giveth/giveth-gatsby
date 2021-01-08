@@ -4,5 +4,20 @@ const SAVE_DONATION = gql`
     saveDonation(transactionId: $transactionId, anonymous: $anonymous)
   }
 `
-
-export { SAVE_DONATION }
+const USERS_DONATIONS = gql`
+  query DonationsByDonor {
+    donationsByDonor {
+      transactionId
+      walletAddress
+      anonymous
+      amount
+      userId
+      project {
+        title
+      }
+      createdAt
+      currency
+    }
+  }
+`
+export { SAVE_DONATION, USERS_DONATIONS }
