@@ -30,7 +30,7 @@ export const ProjectCategoryInput = ({
       >
         You can select multiple categories
       </Text>
-      <Box sx={{ mt: '50px' }}>
+      <Box sx={{ my: '50px', height: '320px', overflow: 'scroll' }}>
         {categoryList.map(category => {
           return (
             <Label

@@ -36,7 +36,7 @@ import Toast from '../toast'
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
-  const { user, isLoggedIn } = useContext(TorusContext)
+  const { user, isLoggedIn, web3 } = useContext(TorusContext)
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
@@ -117,17 +117,24 @@ const CreateProjectForm = props => {
       : {}
     console.log({ currentStep })
     if (currentStep === 6) {
-      if (
-        data?.projectWalletAddress?.length !== 42 ||
-        !Web3.utils.isAddress(data?.projectWalletAddress)
-      ) {
+      // CHECK IF STRING IS ENS AND VALID
+      console.log({ web3 })
+      let ethAddress = data?.projectWalletAddress
+      const ens = await web3.eth.ens.getOwner(ethAddress)
+      if (ens !== '0x0000000000000000000000000000000000000000') {
+        ethAddress = ens
+        data.projectWalletAddress = ethAddress
+      }
+      console.log({ ens, ethAddress })
+
+      if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
         return Toast({ content: 'Eth address not valid', type: 'error' })
       }
       // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
       const res = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
-          address: data?.projectWalletAddress
+          address: ethAddress
         }
       })
       console.log({ res })
