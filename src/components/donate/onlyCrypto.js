@@ -1,8 +1,11 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
+import { useMutation } from '@apollo/react-hooks'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/react-hooks'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
+import { SAVE_DONATION } from '../../apollo/gql/donations'
+
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
 import { ensRegex } from '../../utils'
@@ -206,21 +209,21 @@ const OnlyCrypto = props => {
         to: toAddress,
         value: ethers.utils.parseEther(subtotal.toString())
       })
+
       props.setHashSent({ hash, subtotal })
-      console.log({ txId: hash?.toString(), anonymous: false })
+
       // Send tx hash to our graph
-      // try {
-      //   const { data } = await client.mutate({
-      //     mutation: REGISTER_PROJECT_DONATION,
-      //     variables: {
-      //       txId: hash?.toString(),
-      //       anonymous: false
-      //     }
-      //   })
-      //   console.log('BO', { data })
-      // } catch (error) {
-      //   console.log({ error })
-      // }
+      try {
+        const { data } = await client.mutate({
+          mutation: SAVE_DONATION,
+          variables: {
+            transactionId: hash?.toString(),
+            anonymous: false
+          }
+        })
+      } catch (error) {
+        console.log({ error })
+      }
 
       // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
       if (process.env.GATSBY_NETWORK === 'ropsten') return
