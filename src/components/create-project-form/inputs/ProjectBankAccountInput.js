@@ -9,7 +9,8 @@ export const ProjectBankAccountInput = ({
   currentValue,
   animationStyle,
   projectId,
-  finalize
+  finalize,
+  goBack
 }) => {
   const { data, loading, error } = useQuery(GET_LINK_BANK_CREATION, {
     variables: {
@@ -110,6 +111,28 @@ export const ProjectBankAccountInput = ({
           }}
         >
           SKIP
+        </Text>
+      </Button>
+      <Button
+        aria-label='Back'
+        variant='nofill'
+        sx={{
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px',
+          cursor: 'pointer'
+        }}
+        onClick={goBack}
+      >
+        <Text
+          sx={{
+            color: 'secondary',
+            fontFamily: 'body',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          Back
         </Text>
       </Button>
     </animated.section>

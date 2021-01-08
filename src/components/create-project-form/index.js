@@ -44,6 +44,8 @@ const CreateProjectForm = props => {
 
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
+  const goBack = () => setCurrentStep(currentStep - 1)
+
   const steps = [
     ({ animationStyle }) => (
       <ProjectNameInput
@@ -57,6 +59,7 @@ const CreateProjectForm = props => {
         animationStyle={animationStyle}
         currentValue={formData?.projectAdmin}
         register={register}
+        goBack={goBack}
       />
     ),
     ({ animationStyle }) => (
@@ -64,6 +67,7 @@ const CreateProjectForm = props => {
         animationStyle={animationStyle}
         currentValue={formData?.projectDescription}
         register={register}
+        goBack={goBack}
       />
     ),
     ({ animationStyle }) => (
@@ -72,6 +76,7 @@ const CreateProjectForm = props => {
         categoryList={props.categoryList}
         currentValue={formData?.projectCategory}
         register={register}
+        goBack={goBack}
       />
     ),
     ({ animationStyle }) => (
@@ -79,6 +84,7 @@ const CreateProjectForm = props => {
         animationStyle={animationStyle}
         currentValue={formData?.projectImpactLocation}
         register={register}
+        goBack={goBack}
       />
     ),
 
@@ -87,6 +93,7 @@ const CreateProjectForm = props => {
         animationStyle={animationStyle}
         currentValue={formData?.projectImage}
         register={register}
+        goBack={goBack}
       />
     ),
     ({ animationStyle }) => (
@@ -99,6 +106,7 @@ const CreateProjectForm = props => {
         }
         walletUsed={walletUsed}
         register={register}
+        goBack={goBack}
       />
     ),
     ({ animationStyle }) => (
@@ -118,7 +126,6 @@ const CreateProjectForm = props => {
     console.log({ currentStep })
     if (currentStep === 6) {
       // CHECK IF STRING IS ENS AND VALID
-      console.log({ web3 })
       let ethAddress = data?.projectWalletAddress
       const ens = await web3.eth.ens.getOwner(ethAddress)
       if (ens !== '0x0000000000000000000000000000000000000000') {

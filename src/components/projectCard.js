@@ -206,7 +206,6 @@ const ProjectCard = props => {
             <IconBtn>
               <img src={iconShare} alt='' />
             </IconBtn>{' '}
-            */}
           </Options>
         </div>
         <Heading

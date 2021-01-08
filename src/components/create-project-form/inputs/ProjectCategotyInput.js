@@ -6,7 +6,8 @@ export const ProjectCategoryInput = ({
   register,
   currentValue,
   categoryList,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
@@ -76,6 +77,28 @@ export const ProjectCategoryInput = ({
           }}
         >
           NEXT
+        </Text>
+      </Button>
+      <Button
+        aria-label='Back'
+        variant='nofill'
+        sx={{
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px',
+          cursor: 'pointer'
+        }}
+        onClick={goBack}
+      >
+        <Text
+          sx={{
+            color: 'secondary',
+            fontFamily: 'body',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          Back
         </Text>
       </Button>
     </animated.section>

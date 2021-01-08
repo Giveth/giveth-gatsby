@@ -25,7 +25,8 @@ const Selection = styled(Button)`
 export const ProjectImageInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [image, setImage] = useState()
   const [displayImage, setDisplayImage] = useState(currentValue)
@@ -180,6 +181,28 @@ export const ProjectImageInput = ({
           }}
         >
           NEXT
+        </Text>
+      </Button>
+      <Button
+        aria-label='Back'
+        variant='nofill'
+        sx={{
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px',
+          cursor: 'pointer'
+        }}
+        onClick={goBack}
+      >
+        <Text
+          sx={{
+            color: 'secondary',
+            fontFamily: 'body',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          Back
         </Text>
       </Button>
     </animated.section>

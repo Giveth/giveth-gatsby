@@ -6,7 +6,8 @@ import { DescriptionInstructionModal } from '../modals'
 export const ProjectDescriptionInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [showInstructions, setShowInstructions] = useState(false)
   const [characterLength, setCharacterLength] = useState(
@@ -97,6 +98,28 @@ export const ProjectDescriptionInput = ({
           }}
         >
           NEXT
+        </Text>
+      </Button>
+      <Button
+        aria-label='Back'
+        variant='nofill'
+        sx={{
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px',
+          cursor: 'pointer'
+        }}
+        onClick={goBack}
+      >
+        <Text
+          sx={{
+            color: 'secondary',
+            fontFamily: 'body',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          Back
         </Text>
       </Button>
       {showInstructions ? (

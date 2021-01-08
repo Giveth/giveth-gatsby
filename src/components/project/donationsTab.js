@@ -54,6 +54,22 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
               currency: 'USD'
             })}
         </Text>
+        <Text
+          sx={{
+            variant: 'text.medium',
+            color: 'bodyLight',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            mt: -3
+          }}
+          onClick={() =>
+            window.open(
+              `https://etherscan.io/address/${project?.walletAddress}`
+            )
+          }
+        >
+          {project?.walletAddress}
+        </Text>
       </Funds>
       <Table donations={currentProjectView?.donations} />
     </div>
