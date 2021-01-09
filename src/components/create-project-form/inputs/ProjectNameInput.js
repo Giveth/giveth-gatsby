@@ -42,6 +42,7 @@ export const ProjectNameInput = ({
       <Button
         aria-label='Next'
         sx={{
+          mt: '200px',
           width: '180px',
           height: '52px',
           borderRadius: '48px',

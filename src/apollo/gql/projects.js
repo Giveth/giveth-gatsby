@@ -258,6 +258,17 @@ const TOGGLE_PROJECT_REACTION = gql`
   }
 `
 
+const GET_PROJECT_REACTIONS = gql`
+  query GetProjectReactions($projectId: Float!) {
+    getProjectReactions(projectId: $projectId) {
+      id
+      projectUpdateId
+      userId
+      reaction
+    }
+  }
+`
+
 const GET_PROJECT_BY_ADDRESS = gql`
   query ProjectByAddress($address: String!) {
     projectByAddress(address: $address) {
@@ -317,6 +328,7 @@ export {
   GET_PROJECT_UPDATES,
   TOGGLE_PROJECT_REACTION,
   TOGGLE_UPDATE_REACTION,
+  GET_PROJECT_REACTIONS,
   GET_PROJECT_BY_ADDRESS,
   REGISTER_PROJECT_DONATION,
   EDIT_PROJECT

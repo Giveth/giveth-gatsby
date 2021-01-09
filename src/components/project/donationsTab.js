@@ -60,7 +60,7 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
             color: 'bodyLight',
             fontWeight: 'bold',
             cursor: 'pointer',
-            mt: -3
+            mt: -2
           }}
           onClick={() =>
             window.open(

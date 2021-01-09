@@ -1,14 +1,19 @@
 import React, { useState, useContext } from 'react'
-import { Heading, Box, Button, Card, IconButton, Text } from 'theme-ui'
+import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import theme from '../gatsby-plugin-theme-ui/index'
 // import Donate from '../components/donateForm'
-import { TOGGLE_PROJECT_REACTION } from '../apollo/gql/projects'
+import {
+  TOGGLE_PROJECT_REACTION,
+  GET_PROJECT_REACTIONS
+} from '../apollo/gql/projects'
 import iconShare from '../images/icon-share.svg'
-import iconHeart from '../images/icon-heart.svg'
+// import iconHeart from '../images/icon-heart.svg'
+import { BsHeartFill } from 'react-icons/bs'
 import { TorusContext } from '../contextProvider/torusProvider'
+import { usePopup } from '../contextProvider/popupProvider'
 
 const CardContainer = styled(Card)`
   position: relative;
@@ -19,9 +24,8 @@ const CardContainer = styled(Card)`
   width: 100%;
 `
 
-const CardContent = styled.span`
-  display: flex;
-  flex: 1;
+const CardContent = styled(Flex)`
+  flex-direction: column;
   word-wrap: break-word;
   padding: 1rem;
 `
@@ -39,7 +43,7 @@ const AltCardContent = styled.span`
 
 const Badge = styled.span`
   padding: 3px 11.76px;
-  margin: 1rem 0.2rem;
+  margin: 0 0.2rem;
   align-items: center;
   border: 1px solid ${theme.colors.bodyLight};
   border-radius: 48px;
@@ -82,7 +86,7 @@ const CardFooter = styled.span`
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 1rem 0;
-  padding: 1rem;
+  padding: 0 1rem;
 `
 
 const Givers = styled.div`
@@ -101,38 +105,57 @@ const IconBtn = styled(IconButton)`
   cursor: pointer;
 `
 
-const Categories = categories => {
-  if (!categories || !categories.isArray || categories?.length <= 0) return null
-  return categories?.map((category, index) => (
-    <Badge key={index}>
-      <Text
-        sx={{ variant: 'text.default' }}
-        style={{
-          fontSize: '10px',
-          color: theme.colors.bodyLight,
-          fontWeight: '500'
-        }}
-      >
-        {category?.name?.toUpperCase()}
-      </Text>
-    </Badge>
-  ))
+const Categories = ({ categories }) => {
+  const BadgeContent = ({ index, name }) => {
+    return (
+      <Badge key={index}>
+        <Text
+          sx={{ variant: 'text.default' }}
+          style={{
+            fontSize: '10px',
+            color: theme.colors.bodyLight,
+            fontWeight: '500',
+            textTransform: 'uppercase'
+          }}
+        >
+          {name}
+        </Text>
+      </Badge>
+    )
+  }
+  return categories.length
+    ? categories.map((category, index) => {
+        if (!category) return null
+        return <BadgeContent index={index} name={category?.name} />
+      })
+    : null
 }
+
 const ProjectCard = props => {
   // const { balance } = useContext(TorusContext)
   const { project } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
+  const { triggerPopup } = usePopup()
+  const reactions = useQuery(GET_PROJECT_REACTIONS, {
+    variables: { projectId: parseFloat(project?.id) }
+  })
+  const reactionAmount = reactions?.data?.getProjectReactions?.length
 
   const reactToProject = async () => {
     try {
-      console.log({ project })
       const reaction = await client?.mutate({
         mutation: TOGGLE_PROJECT_REACTION,
         variables: {
           reaction: 'heart',
           projectId: parseFloat(project?.id)
-        }
+        },
+        refetchQueries: [
+          {
+            query: GET_PROJECT_REACTIONS,
+            variables: { projectId: parseFloat(project?.id) }
+          }
+        ]
       })
       console.log({ reaction })
     } catch (error) {
@@ -200,14 +223,36 @@ const ProjectCard = props => {
             )}
           </Dot>
           <Options>
-            <IconBtn onClick={() => reactToProject()}>
-              <img src={iconHeart} alt='' />
-            </IconBtn>
-            <IconBtn>
+            <Flex sx={{ alignItems: 'center' }}>
+              <BsHeartFill
+                style={{ cursor: 'pointer' }}
+                size='18px'
+                color={
+                  reactionAmount > 0 ? theme.colors.red : theme.colors.muted
+                }
+                onClick={() => reactToProject()}
+              />
+              {reactionAmount && reactionAmount > 0 && (
+                <Text sx={{ variant: 'text.default', ml: 2 }}>
+                  {reactionAmount}
+                </Text>
+              )}
+            </Flex>
+
+            <IconBtn
+              onClick={() =>
+                triggerPopup('share', {
+                  title: project?.title,
+                  description: project?.description,
+                  slug: project?.slug
+                })
+              }
+            >
               <img src={iconShare} alt='' />
-            </IconBtn>{' '}
+            </IconBtn>
           </Options>
         </div>
+
         <Heading
           sx={{ variant: 'headings.h6' }}
           style={{
@@ -284,14 +329,13 @@ const ProjectCard = props => {
           >
             {
               /* Description String */
-
               project?.description
             }
           </Text>
+          <CardFooter>
+            <Categories categories={project?.categories} />
+          </CardFooter>
         </CardContent>
-        <CardFooter>
-          <Categories categories={project?.categories} />
-        </CardFooter>
       </CardContainer>
       {
         // <Donate

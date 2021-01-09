@@ -56,8 +56,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
           client,
           true
         )
-
-        let donations = []
+        // TODO: SET IMPACT GRAPH QUERY TO GET DONATIONS
+        let donations = cryptoTxs?.txs || []
 
         // Get Updates
         const updates = await client?.query({
