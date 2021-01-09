@@ -188,9 +188,10 @@ const OnlyCrypto = props => {
   const readyToTransact = async () => {
     onboard.walletReset()
     const walletSelected = await onboard.walletSelect()
+
     if (!walletSelected) return false
     const ready = await onboard.walletCheck()
-    console.log({ ready })
+
     return ready
   }
 
@@ -221,6 +222,15 @@ const OnlyCrypto = props => {
             anonymous: false
           }
         })
+        const ob = onboard.getState()
+
+        const storageWallets = localStorage.getItem('giveth_donation_wallets')
+
+        const donatingWallets = storageWallets ? storageWallets.split(',') : []
+        if (donatingWallets.indexOf(ob.address) === -1) {
+          donatingWallets.push(ob.address)
+        }
+        localStorage.setItem('giveth_donation_wallets', donatingWallets)
       } catch (error) {
         console.log({ error })
       }

@@ -1,12 +1,12 @@
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Box, Link, Text, jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { useApolloClient } from '@apollo/react-hooks'
 import { base64ToBlob } from '../../utils'
 import styled from '@emotion/styled'
 import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
-
+import { TorusContext } from '../../contextProvider/torusProvider'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
 const Content = styled.div`
@@ -34,12 +34,11 @@ const DownloadReceipt = styled(Box)`
 `
 
 const Success = props => {
+  const { isLoggedIn, login } = useContext(TorusContext)
   const { project, sessionId, hash } = props
   const [pdfBase64, setPdfBase64] = useState(null)
 
   const client = useApolloClient()
-
-  console.log({ sessionId })
 
   const downloadPDF = () => {
     const blob = base64ToBlob(pdfBase64)
@@ -103,15 +102,27 @@ const Success = props => {
         </Receipt>
       )}
 
-      <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
-        Stay a Giver?{' '}
-        <span
-          sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
-          onClick={() => navigate('/')}
-        >
-          Register an account.
-        </span>
-      </Text>
+      {!isLoggedIn ? (
+        <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
+          Stay a Giver?{' '}
+          <span
+            sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
+            onClick={login}
+          >
+            Register an account.
+          </span>
+        </Text>
+      ) : (
+        <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
+          Thank you for your support{' '}
+          <span
+            sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
+            onClick={() => navigate('/account?view=donations')}
+          >
+            View your donations
+          </span>
+        </Text>
+      )}
     </Content>
   )
 }
