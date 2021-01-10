@@ -82,6 +82,25 @@ const FETCH_PROJECT_BY_SLUG = gql`
       categories {
         name
       }
+      donations {
+        transactionId
+        toWalletAddress
+        fromWalletAddress
+        anonymous
+        amount
+        valueUsd
+        user {
+          id
+          firstName
+          lastName
+          avatar
+        }
+        project {
+          title
+        }
+        createdAt
+        currency
+      }
     }
   }
 `

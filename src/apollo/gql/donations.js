@@ -12,8 +12,11 @@ const USERS_DONATIONS = gql`
       fromWalletAddress
       anonymous
       amount
+      valueUsd
       user {
         id
+        firstName
+        lastName
       }
       project {
         title

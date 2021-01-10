@@ -33,7 +33,7 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEdition(props) {
+function ProjectEdition (props) {
   const { goBack } = props
   const { isClient } = useIsClient()
   const [showModal, setShowModal] = useState(false)
@@ -47,7 +47,6 @@ function ProjectEdition(props) {
   const { register, handleSubmit, errors } = useForm() // initialize the hook
 
   const onSubmit = async data => {
-    console.log({ project, data })
     setLoading(true)
     // Validate eth address
     if (project?.walletAddress !== data.editWalletAddress) {

@@ -126,7 +126,6 @@ const ProjectCard = props => {
 
   const reactToProject = async () => {
     try {
-      console.log({ project })
       const reaction = await client?.mutate({
         mutation: TOGGLE_PROJECT_REACTION,
         variables: {
@@ -134,7 +133,6 @@ const ProjectCard = props => {
           projectId: parseFloat(project?.id)
         }
       })
-      console.log({ reaction })
     } catch (error) {
       console.log({ error })
     }

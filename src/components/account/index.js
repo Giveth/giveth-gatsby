@@ -52,7 +52,10 @@ const AccountPage = props => {
   const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const fromWalletAddress = user?.addresses && user.addresses[0]
-  const storageWallets = localStorage.getItem('giveth_donation_wallets')
+  const storageWallets =
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('giveth_donation_wallets')
+      : ''
 
   const userWallets = storageWallets
     ? storageWallets.split(',').concat(fromWalletAddress)
