@@ -34,7 +34,7 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEdition(props) {
+function ProjectEdition (props) {
   const { goBack } = props
   const { isClient } = useIsClient()
   const { web3 } = useContext(TorusContext)
@@ -49,7 +49,6 @@ function ProjectEdition(props) {
   const { register, handleSubmit, errors } = useForm() // initialize the hook
 
   const onSubmit = async data => {
-    console.log({ project, data })
     setLoading(true)
     // Validate eth address
     let ethAddress = data.editWalletAddress

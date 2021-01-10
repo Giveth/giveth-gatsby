@@ -157,7 +157,6 @@ const ProjectCard = props => {
           }
         ]
       })
-      console.log({ reaction })
     } catch (error) {
       usePopup?.triggerPopup('Welcome')
       console.log({ error })

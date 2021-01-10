@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { Spinner, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui'
-import Table from './donationsTable'
+import DonationsTable from './donationsTable'
 
 const Funds = styled.div`
   padding: 2rem;
@@ -17,7 +17,13 @@ const Funds = styled.div`
 const DonationsTab = ({ project, showModal, setShowModal }) => {
   const [loading, setLoading] = React.useState(true)
   const { currentProjectView } = React.useContext(ProjectContext)
-  const total = currentProjectView?.ethBalance
+  // james const total = currentProjectView?.ethBalance
+  const donations = project.donations
+
+  const totalDonations = donations.reduce(
+    (total, donation) => total + donation.amount,
+    0
+  )
 
   React.useEffect(() => {
     setLoading(false)
@@ -27,7 +33,7 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
     return <Spinner variant='spinner.medium' />
   }
 
-  if (!total)
+  if (!totalDonations)
     return (
       <Text sx={{ variant: 'text.large', color: 'secondary' }}>
         No donations yet :(
@@ -49,7 +55,7 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
           {`${parseFloat(
             ethers.utils.formatEther(currentProjectView?.ethBalance)
           ).toFixed(4)} ETH` ||
-            (total?.amount / 10)?.toLocaleString('en-US', {
+            (totalDonations / 10)?.toLocaleString('en-US', {
               style: 'currency',
               currency: 'USD'
             })}
@@ -71,7 +77,7 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
           {project?.walletAddress}
         </Text>
       </Funds>
-      <Table donations={currentProjectView?.donations} />
+      <DonationsTable donations={donations} />
     </div>
   )
 }

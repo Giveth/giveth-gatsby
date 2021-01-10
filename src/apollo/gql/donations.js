@@ -5,13 +5,19 @@ const SAVE_DONATION = gql`
   }
 `
 const USERS_DONATIONS = gql`
-  query DonationsByDonor {
-    donationsByDonor {
+  query donationsFromWallets($fromWalletAddresses: [String!]!) {
+    donationsFromWallets(fromWalletAddresses: $fromWalletAddresses) {
       transactionId
-      walletAddress
+      toWalletAddress
+      fromWalletAddress
       anonymous
       amount
-      userId
+      valueUsd
+      user {
+        id
+        firstName
+        lastName
+      }
       project {
         title
       }

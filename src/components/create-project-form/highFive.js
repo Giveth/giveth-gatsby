@@ -20,19 +20,6 @@ const HighFive = ({
   projectTitle,
   projectDescription
 }) => {
-  // console.log({ projectImage })
-  // This will be useful when we need to handle the route on webhook
-
-  // const { loading, error, data } = useQuery(FETCH_PROJECT, {
-  //   variables: { id: projectId }
-  // })
-
-  // console.log({ loading, error, data })
-  // if (loading) return <h3>loading</h3>
-
-  // const project = data?.project
-  // console.log({ data, project })
-
   const shareTitle = `Make a donation today to ${project?.title}!`
   const url = window.location.href
 

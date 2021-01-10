@@ -100,7 +100,6 @@ const Categories = ({ categories }) => {
 
 const ProjectListing = props => {
   // const { balance } = useContext(TorusContext)
-  console.log({ props })
   return (
     <Box
       key={props.listingId + '_box'}

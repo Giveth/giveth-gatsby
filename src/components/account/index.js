@@ -51,9 +51,22 @@ const AccountPage = props => {
   const [projects, setProjects] = React.useState(null)
   const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-  const { data } = useQuery(USERS_DONATIONS)
-  const { donationsByDonor } = data || {}
-  const userDonations = donationsByDonor
+  const fromWalletAddress = user?.addresses && user.addresses[0]
+  const storageWallets =
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('giveth_donation_wallets')
+      : ''
+
+  const userWallets = storageWallets
+    ? storageWallets.split(',').concat(fromWalletAddress)
+    : [fromWalletAddress]
+
+  const { data } = useQuery(USERS_DONATIONS, {
+    variables: { fromWalletAddresses: userWallets }
+  })
+
+  const { donationsFromWallets } = data || {}
+  const userDonations = donationsFromWallets
 
   const options = [
     { route: 'account', name: 'My Account' },
