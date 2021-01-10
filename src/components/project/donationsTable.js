@@ -160,27 +160,23 @@ const FilterBox = styled(Flex)`
   justify-content: space-between;
 `
 
-const CustomTable = () => {
+const DonationsTable = ({ donations }) => {
   const options = ['All Donations', 'Fiat', 'Crypto']
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
   const client = useApolloClient()
 
   React.useEffect(() => {
     const setup = async () => {
-      setCurrentDonations(currentProjectView?.donations)
+      setCurrentDonations(donations)
       setLoading(false)
     }
 
     setup()
-  }, [currentProjectView])
+  }, [donations])
 
   const searching = search => {
-    const donations = currentProjectView?.donations
     if (!search || search === '') {
       return setCurrentDonations(donations.filter(true))
     }
@@ -221,6 +217,7 @@ const CustomTable = () => {
     // Logic for displaying current items
     const indexOfLastItem = activeItem * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
+
     const currentItems = paginationItems?.slice(
       indexOfFirstItem,
       indexOfLastItem
@@ -271,7 +268,7 @@ const CustomTable = () => {
           <tbody>
             {currentItems.reverse().map((i, key) => {
               if (!i) return null
-              console.log({ i })
+
               return (
                 <tr key={key}>
                   <td
@@ -279,9 +276,7 @@ const CustomTable = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.createdAt
-                        ? dayjs.unix(i.createdAt).format('ll')
-                        : 'null'}
+                      {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
                     </Text>
                   </td>
                   <DonorBox
@@ -292,15 +287,19 @@ const CustomTable = () => {
                       svg: { borderRadius: '50%' }
                     }}
                   >
-                    {i?.extra?.userByAddress?.avatar ? (
-                      <Avatar src={i?.extra?.userByAddress?.avatar} />
+                    {i?.user?.avatar ? (
+                      <Avatar src={i?.user?.avatar} />
                     ) : (
-                      <Jdenticon size='32' value={i?.donor || 'Giveth'} />
+                      <Jdenticon size='32' value={'Giveth'} />
                     )}
                     <Text
                       sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
                     >
-                      {i?.extra?.userByAddress?.name || i?.donor}
+                      {i?.user?.firstName
+                        ? i?.user?.lastName
+                          ? i?.user?.firstName + ' ' + i?.user?.lastName
+                          : i?.user?.firstName
+                        : ''}
                     </Text>
                   </DonorBox>
                   <td
@@ -314,8 +313,8 @@ const CustomTable = () => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH' && i?.value
-                        ? parseFloat(ethers.utils.formatEther(i?.value))
+                      {i?.currency === 'ETH' && i?.valueUsd
+                        ? i?.valueUsd
                         : i?.amount?.toLocaleString('en-US', {
                             style: 'currency',
                             currency: 'USD'
@@ -382,4 +381,4 @@ const CustomTable = () => {
   )
 }
 
-export default CustomTable
+export default DonationsTable

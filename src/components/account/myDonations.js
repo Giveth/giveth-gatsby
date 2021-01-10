@@ -15,8 +15,6 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
-import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
-
 dayjs.extend(localizedFormat)
 
 const Table = styled.table`
@@ -173,10 +171,6 @@ const MyDonations = props => {
     ProjectContext
   )
 
-  const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
-    variables: { projectId: 1 }
-  })
-
   React.useEffect(() => {
     const setup = async () => {
       window.scrollTo(0, 0)
@@ -187,7 +181,7 @@ const MyDonations = props => {
     }
 
     setup()
-  }, [currentProjectView, data])
+  }, [currentProjectView])
 
   const searching = search => {
     const donations = currentDonations
@@ -195,9 +189,9 @@ const MyDonations = props => {
       return setCurrentDonations(props?.donations)
     }
     const some = donations.filter(donation => {
-      if (!donation?.donor) return null
+      if (!donation?.project.title) return null
       return (
-        donation?.donor
+        donation?.project.title
           ?.toString()
           ?.toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
@@ -278,9 +272,7 @@ const MyDonations = props => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.createdAt
-                        ? dayjs.unix(i.createdAt).format('ll')
-                        : 'null'}
+                      {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
                     </Text>
                   </td>
                   <DonorBox
@@ -294,7 +286,7 @@ const MyDonations = props => {
                         ml: 2
                       }}
                     >
-                      {titleCase(i?.extra?.projectByAddress?.title) || i?.donor}
+                      {titleCase(i?.project.title) || i?.donor}
                     </Text>
                   </DonorBox>
                   <td
@@ -308,8 +300,8 @@ const MyDonations = props => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH' && i?.value
-                        ? parseFloat(ethers.utils.formatEther(i?.value))
+                      {i?.currency === 'ETH' && i?.valueUsd
+                        ? i?.valueUsd
                         : i?.amount?.toLocaleString('en-US', {
                             style: 'currency',
                             currency: 'USD'
@@ -339,7 +331,7 @@ const MyDonations = props => {
                           color: 'secondary'
                         }}
                       >
-                        {i?.hash}
+                        {i?.transactionId}
                       </Text>
                     </div>
                     <FiCopy

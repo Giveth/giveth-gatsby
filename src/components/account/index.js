@@ -4,6 +4,7 @@ import { Link } from 'gatsby'
 import { jsx, Text, Flex, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useApolloClient } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 import { TorusContext } from '../../contextProvider/torusProvider'
@@ -12,6 +13,8 @@ import { useMediaQuery } from 'react-responsive'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import iconVerticalLine from '../../images/icon-vertical-line.svg'
 import { BsArrowLeft } from 'react-icons/bs'
+import { USERS_DONATIONS } from '../../apollo/gql/donations'
+import { FETCH_PROJECTS } from '../../apollo/gql/projects'
 
 import MyProjects from './myProjects'
 const MyAccount = React.lazy(() => import('../../components/account/myAccount'))
@@ -48,7 +51,23 @@ const AccountPage = props => {
   const [projects, setProjects] = React.useState(null)
   const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-  const [userDonations, setUserDonations] = useState(null)
+  const fromWalletAddress = user?.addresses && user.addresses[0]
+  const storageWallets =
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('giveth_donation_wallets')
+      : ''
+
+  const userWallets = storageWallets
+    ? storageWallets.split(',').concat(fromWalletAddress)
+    : [fromWalletAddress]
+
+  const { data } = useQuery(USERS_DONATIONS, {
+    variables: { fromWalletAddresses: userWallets }
+  })
+
+  const { donationsFromWallets } = data || {}
+  const userDonations = donationsFromWallets
+
   const options = [
     { route: 'account', name: 'My Account' },
     { route: 'projects', name: 'My Projects' },
@@ -113,38 +132,6 @@ const AccountPage = props => {
         return title
     }
   }
-
-  React.useEffect(() => {
-    const setup = async () => {
-      if (!isLoggedIn) return
-      const cryptoTxs = await getEtherscanTxs(user?.addresses[0], client)
-      if (cryptoTxs) {
-        setUserDonations(
-          [...cryptoTxs.txs].filter(function (e) {
-            return e
-          })
-        )
-      }
-    }
-
-    setup()
-  }, [])
-
-  React.useEffect(() => {
-    const setup = async () => {
-      if (!isLoggedIn) return
-      if (!user?.userIDFromDB) return
-      const projects = await client.query({
-        query: FETCH_USER_PROJECTS,
-        variables: {
-          admin: parseFloat(user?.userIDFromDB)
-        }
-      })
-      setProjects(projects)
-    }
-
-    setup()
-  }, [user, isLoggedIn, client])
 
   if (!isLoggedIn) {
     return (
