@@ -123,7 +123,7 @@ const Categories = ({ categories }) => {
       </Badge>
     )
   }
-  return categories.length
+  return categories?.length
     ? categories.map((category, index) => {
         if (!category) return null
         return <BadgeContent index={index} name={category?.name} />
