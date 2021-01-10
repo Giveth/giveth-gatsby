@@ -8,14 +8,14 @@ import Hero from '../components/home/HeroSection'
 import InfoSection from '../components/home/InfoSection'
 import UpdatesSection from '../components/home/UpdatesSection'
 import HomeTopProjects from '../components/home/HomeTopProjects'
-import { usePopup } from '../contextProvider/popupProvider'
+import { PopupContext } from '../contextProvider/popupProvider'
 
 const IndexContent = ({ hideInfo, content, location }) => {
-  const { triggerPopup } = usePopup()
+  const popup = React.useContext(PopupContext)
 
   React.useEffect(() => {
     if (location?.state?.welcome) {
-      triggerPopup('Welcome')
+      popup.triggerPopup('Welcome')
     }
   }, [])
 

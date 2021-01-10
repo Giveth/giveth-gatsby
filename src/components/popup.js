@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, Button, Flex, Text } from 'theme-ui'
 import Modal from './modal'
 import { TorusContext } from '../contextProvider/torusProvider'
-import { usePopup } from '../contextProvider/popupProvider'
+import { PopupContext } from '../contextProvider/popupProvider'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import signupBg from '../images/popup1.png'
 import {
@@ -103,7 +103,8 @@ function SharePopup({ title, description, slug }) {
 }
 
 function Popup() {
-  const { value, clearPopup } = usePopup()
+  const usePopup = React.useContext(PopupContext)
+  const { value, clearPopup } = usePopup
   console.log({ value })
   const setView = () => {
     switch (value?.type) {

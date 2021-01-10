@@ -13,7 +13,7 @@ import iconShare from '../images/icon-share.svg'
 // import iconHeart from '../images/icon-heart.svg'
 import { BsHeartFill } from 'react-icons/bs'
 import { TorusContext } from '../contextProvider/torusProvider'
-import { usePopup } from '../contextProvider/popupProvider'
+import { PopupContext } from '../contextProvider/popupProvider'
 
 const CardContainer = styled(Card)`
   position: relative;
@@ -133,10 +133,12 @@ const Categories = ({ categories }) => {
 
 const ProjectCard = props => {
   // const { balance } = useContext(TorusContext)
+  console.log({ props })
   const { project } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
-  const { triggerPopup } = usePopup()
+  const usePopup = useContext(PopupContext)
+  const { triggerPopup } = usePopup
   const reactions = useQuery(GET_PROJECT_REACTIONS, {
     variables: { projectId: parseFloat(project?.id) }
   })
