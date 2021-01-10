@@ -57,6 +57,7 @@ const AlertOptions = {
 
 const CookieBanner = styled(Flex)`
   position: fixed;
+  z-index: 4;
   left: 0;
   right: 0;
   bottom: 0;
@@ -125,13 +126,10 @@ const GithubIssue = () => {
         href='https://github.com/Giveth/giveth-2/issues/new/choose'
         target='_blank'
         rel='noopener noreferrer'
-        sx={{
-          variant: 'links.light',
-          justifySelf: ['center', 'end', 'end']
-        }}
+        style={{ textDecoration: 'none' }}
       >
         <Box sx={{ display: 'flex', alignContent: 'center' }}>
-          <FaGithub size='28px' />
+          <FaGithub size='28px' color={theme.colors.secondary} />
           <Text pl={2}>Report an issue</Text>
         </Box>
       </a>

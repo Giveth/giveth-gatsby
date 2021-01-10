@@ -78,7 +78,7 @@ const Options = styled.span`
   position: absolute;
   align-items: center;
   bottom: -54px;
-  right: 24px;
+  right: 12px;
 `
 
 const CardFooter = styled.span`
@@ -159,6 +159,7 @@ const ProjectCard = props => {
       })
       console.log({ reaction })
     } catch (error) {
+      usePopup?.triggerPopup('Welcome')
       console.log({ error })
     }
   }
