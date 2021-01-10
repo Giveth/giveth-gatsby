@@ -133,12 +133,10 @@ const Categories = ({ categories }) => {
 
 const ProjectCard = props => {
   // const { balance } = useContext(TorusContext)
-  console.log({ props })
   const { project } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
-  const { triggerPopup } = usePopup
   const reactions = useQuery(GET_PROJECT_REACTIONS, {
     variables: { projectId: parseFloat(project?.id) }
   })
@@ -243,7 +241,7 @@ const ProjectCard = props => {
 
             <IconBtn
               onClick={() =>
-                triggerPopup('share', {
+                usePopup?.triggerPopup('share', {
                   title: project?.title,
                   description: project?.description,
                   slug: project?.slug
