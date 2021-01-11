@@ -19,12 +19,10 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
   const { currentProjectView } = React.useContext(ProjectContext)
   // james const total = currentProjectView?.ethBalance
   const donations = project.donations
-
   const totalDonations = donations.reduce(
     (total, donation) => total + donation.amount,
     0
   )
-
   React.useEffect(() => {
     setLoading(false)
   }, [])
@@ -52,13 +50,29 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
             color: 'secondary'
           }}
         >
-          {`${parseFloat(
-            ethers.utils.formatEther(currentProjectView?.ethBalance)
-          ).toFixed(4)} ETH` ||
-            (totalDonations / 10)?.toLocaleString('en-US', {
-              style: 'currency',
-              currency: 'USD'
-            })}
+          {currentProjectView?.ethBalance
+            ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
+            : totalDonations &&
+              (totalDonations / 10)?.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              })}
+        </Text>
+        <Text
+          sx={{
+            variant: 'text.medium',
+            color: 'bodyLight',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            mt: -2
+          }}
+          onClick={() =>
+            window.open(
+              `https://etherscan.io/address/${project?.walletAddress}`
+            )
+          }
+        >
+          {project?.walletAddress}
         </Text>
       </Funds>
       <DonationsTable donations={donations} />

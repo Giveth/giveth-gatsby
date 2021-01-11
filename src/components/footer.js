@@ -183,7 +183,7 @@ const Footer = () => {
             The Giveth DAC
           </a>
         </Text>
-        <a
+        {/* <a
           href='https://github.com/Giveth/giveth-2/issues/new/choose'
           target='_blank'
           rel='noopener noreferrer'
@@ -196,7 +196,7 @@ const Footer = () => {
             <FaGithub size='21px' />
             <Text pl={2}>Report an issue</Text>
           </Box>
-        </a>
+        </a> */}
       </CreditsSection>
     </Container>
   )

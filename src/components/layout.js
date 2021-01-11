@@ -8,12 +8,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
-import { ThemeProvider, Flex, Image, Text } from 'theme-ui'
+import { ThemeProvider, Box, Flex, Image, Text } from 'theme-ui'
 import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 import InfoIcon from '../images/info_outline.png'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
+import { FaGithub } from 'react-icons/fa'
 import TorusProvider from '../contextProvider/torusProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
@@ -56,6 +57,7 @@ const AlertOptions = {
 
 const CookieBanner = styled(Flex)`
   position: fixed;
+  z-index: 4;
   left: 0;
   right: 0;
   bottom: 0;
@@ -102,6 +104,36 @@ const CookiesBanner = () => {
         Ok
       </Text>
     </CookieBanner>
+  )
+}
+
+const GithubIssue = () => {
+  return (
+    <Flex
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        right: 0,
+        zIndex: 2,
+        padding: 2,
+        borderTopLeftRadius: '10px',
+        backgroundColor: 'background',
+        alignItems: 'center',
+        boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.5)'
+      }}
+    >
+      <a
+        href='https://github.com/Giveth/giveth-2/issues/new/choose'
+        target='_blank'
+        rel='noopener noreferrer'
+        style={{ textDecoration: 'none' }}
+      >
+        <Box sx={{ display: 'flex', alignContent: 'center' }}>
+          <FaGithub size='28px' color={theme.colors.secondary} />
+          <Text pl={2}>Report an issue</Text>
+        </Box>
+      </a>
+    </Flex>
   )
 }
 
@@ -213,6 +245,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
             <ThemeProvider theme={theme}>
               <Provider template={AlertTemplate} {...AlertOptions}>
                 <PopupProvider>
+                  <GithubIssue />
                   <Template />
                   <Popup />
                 </PopupProvider>

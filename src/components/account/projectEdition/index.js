@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Flex,
@@ -24,6 +24,7 @@ import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
+import { TorusContext } from '../../../contextProvider/torusProvider'
 import useIsClient from '../../../utils/useIsClient'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
@@ -36,6 +37,7 @@ const CustomInput = styled(Input)`
 function ProjectEdition (props) {
   const { goBack } = props
   const { isClient } = useIsClient()
+  const { web3 } = useContext(TorusContext)
   const [showModal, setShowModal] = useState(false)
   const [showCancelModal, setCancelModal] = useState(false)
   const [project, setProject] = useState(props?.project)
@@ -49,18 +51,21 @@ function ProjectEdition (props) {
   const onSubmit = async data => {
     setLoading(true)
     // Validate eth address
+    let ethAddress = data.editWalletAddress
     if (project?.walletAddress !== data.editWalletAddress) {
-      if (
-        data?.editWalletAddress?.length !== 42 ||
-        !Web3.utils.isAddress(data?.editWalletAddress)
-      ) {
+      // CHECK IF STRING IS ENS AND VALID
+      const ens = await web3.eth.ens.getOwner(ethAddress)
+      if (ens !== '0x0000000000000000000000000000000000000000') {
+        ethAddress = ens
+      }
+      if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
         return Toast({ content: 'Eth address not valid', type: 'error' })
       }
       // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
       const res = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
-          address: data?.editWalletAddress
+          address: ethAddress
         }
       })
       console.log({ res })
@@ -86,7 +91,7 @@ function ProjectEdition (props) {
       admin: project.admin,
       impactLocation: mapLocation || impactLocation,
       categories: projectCategories,
-      walletAddress: Web3.utils.toChecksumAddress(data.editWalletAddress)
+      walletAddress: Web3.utils.toChecksumAddress(ethAddress)
     }
 
     // Validate Image
@@ -260,7 +265,7 @@ function ProjectEdition (props) {
                 )
               })}
             </Box>
-            <CustomLabel title='Impact' htmlFor='editImpactLocation' />
+            <CustomLabel title='Impact Location' htmlFor='editImpactLocation' />
             {mapLocation || impactLocation ? (
               <Text
                 sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}
@@ -332,7 +337,7 @@ function ProjectEdition (props) {
             <CustomLabel
               variant='text.caption'
               style={{ margin: '5px 0 0 5px', color: theme.colors.bodyLight }}
-              title='Receiving Ethereum supported wallet address.'
+              title='Receiving Ethereum supported wallet address or ENS domain.'
               htmlFor={null}
             />
           </Flex>

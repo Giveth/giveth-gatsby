@@ -190,7 +190,8 @@ const TorusProvider = props => {
         balance,
         user,
         signMessage,
-        network
+        network,
+        web3
       }}
     >
       {loading && <LoadingModal isOpen={loading} />}

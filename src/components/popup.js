@@ -2,9 +2,17 @@ import React from 'react'
 import { Box, Button, Flex, Text } from 'theme-ui'
 import Modal from './modal'
 import { TorusContext } from '../contextProvider/torusProvider'
-import { usePopup } from '../contextProvider/popupProvider'
+import { PopupContext } from '../contextProvider/popupProvider'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import signupBg from '../images/popup1.png'
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  LinkedinShareButton,
+  LinkedinIcon,
+  TwitterShareButton,
+  TwitterIcon
+} from 'react-share'
 
 function WelcomePopup({ close }) {
   const { login, isLoggedIn } = React.useContext(TorusContext)
@@ -56,12 +64,61 @@ function WelcomePopup({ close }) {
   )
 }
 
+function SharePopup() {
+  const usePopup = React.useContext(PopupContext)
+  const { value } = usePopup
+  const { title, description, slug } = value?.extra
+  const shareTitle = `Make a donation today to ${title}!`
+  const url = `${window.location.origin}/project/${slug}`
+
+  return (
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        p: 4,
+        textAlign: 'center'
+      }}
+    >
+      <Text sx={{ variant: 'text.large', color: 'secondary' }}>
+        Share this project!
+      </Text>
+      <Flex
+        sx={{
+          pt: 4,
+          justifyContent: 'space-around',
+          '*': {
+            outline: 'none'
+          }
+        }}
+      >
+        <TwitterShareButton title={shareTitle} url={url} hashtags={['giveth']}>
+          <TwitterIcon size={40} round />
+        </TwitterShareButton>
+        <LinkedinShareButton title={shareTitle} summary={description} url={url}>
+          <LinkedinIcon size={40} round />
+        </LinkedinShareButton>
+        <FacebookShareButton quote={shareTitle} url={url} hashtag='#giveth'>
+          <FacebookIcon size={40} round />
+        </FacebookShareButton>
+      </Flex>
+    </Flex>
+  )
+}
+
 function Popup() {
-  const { value, clearPopup } = usePopup()
+  const usePopup = React.useContext(PopupContext)
+  const { value, clearPopup } = usePopup
   const setView = () => {
-    switch (value) {
+    switch (value?.type) {
       case 'Welcome':
         return <WelcomePopup close={clearPopup} />
+      case 'share':
+        return (
+          <SharePopup
+            title={value?.extra?.title}
+            description={value?.extra?.description}
+          />
+        )
       default:
         return null
     }

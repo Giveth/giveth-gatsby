@@ -5,7 +5,8 @@ import { animated } from 'react-spring'
 export const ProjectImpactLocationInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [showLocationInput, setShowLocationInput] = useState(false)
   const [location, setLocation] = useState(
@@ -109,6 +110,28 @@ export const ProjectImpactLocationInput = ({
           }}
         >
           NEXT
+        </Text>
+      </Button>
+      <Button
+        aria-label='Back'
+        variant='nofill'
+        sx={{
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px',
+          cursor: 'pointer'
+        }}
+        onClick={goBack}
+      >
+        <Text
+          sx={{
+            color: 'secondary',
+            fontFamily: 'body',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          Back
         </Text>
       </Button>
     </animated.section>
