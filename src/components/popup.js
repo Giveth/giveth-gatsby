@@ -64,9 +64,12 @@ function WelcomePopup({ close }) {
   )
 }
 
-function SharePopup({ title, description, slug }) {
+function SharePopup() {
+  const usePopup = React.useContext(PopupContext)
+  const { value } = usePopup
+  const { title, description, slug } = value?.extra
   const shareTitle = `Make a donation today to ${title}!`
-  const url = `${window.location.href}project/${slug}`
+  const url = `${window.location.origin}/project/${slug}`
 
   return (
     <Flex
@@ -105,7 +108,6 @@ function SharePopup({ title, description, slug }) {
 function Popup() {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
-  console.log({ value })
   const setView = () => {
     switch (value?.type) {
       case 'Welcome':

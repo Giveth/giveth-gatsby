@@ -9,9 +9,8 @@ import {
   TOGGLE_PROJECT_REACTION,
   GET_PROJECT_REACTIONS
 } from '../apollo/gql/projects'
-import iconShare from '../images/icon-share.svg'
-// import iconHeart from '../images/icon-heart.svg'
 import { BsHeartFill } from 'react-icons/bs'
+import { FaShareAlt } from 'react-icons/fa'
 import { TorusContext } from '../contextProvider/torusProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 
@@ -77,8 +76,8 @@ const Options = styled.span`
   display: flex;
   position: absolute;
   align-items: center;
-  bottom: -54px;
-  right: 12px;
+  bottom: -42px;
+  right: 24px;
 `
 
 const CardFooter = styled.span`
@@ -239,17 +238,20 @@ const ProjectCard = props => {
               )}
             </Flex>
 
-            <IconBtn
-              onClick={() =>
-                usePopup?.triggerPopup('share', {
-                  title: project?.title,
-                  description: project?.description,
-                  slug: project?.slug
-                })
-              }
-            >
-              <img src={iconShare} alt='' />
-            </IconBtn>
+            <Flex sx={{ alignItems: 'center', ml: 3 }}>
+              <FaShareAlt
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  usePopup?.triggerPopup('share', {
+                    title: project?.title,
+                    description: project?.description,
+                    slug: project?.slug
+                  })
+                }
+                size='18px'
+                color={theme.colors.muted}
+              />
+            </Flex>
           </Options>
         </div>
 

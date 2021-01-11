@@ -178,11 +178,11 @@ const DonationsTable = ({ donations }) => {
 
   const searching = search => {
     if (!search || search === '') {
-      return setCurrentDonations(donations.filter(true))
+      return setCurrentDonations(donations)
     }
     const some = donations?.filter(donation => {
       return (
-        donation?.donor
+        donation?.fromWalletAddress
           ?.toString()
           .toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
@@ -266,9 +266,9 @@ const DonationsTable = ({ donations }) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.reverse().map((i, key) => {
+            {currentItems.map((i, key) => {
               if (!i) return null
-
+              console.log({ i })
               return (
                 <tr key={key}>
                   <td
@@ -290,7 +290,7 @@ const DonationsTable = ({ donations }) => {
                     {i?.user?.avatar ? (
                       <Avatar src={i?.user?.avatar} />
                     ) : (
-                      <Jdenticon size='32' value={'Giveth'} />
+                      <Jdenticon size='32' value={i?.fromWalletAddress} />
                     )}
                     <Text
                       sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
@@ -299,6 +299,8 @@ const DonationsTable = ({ donations }) => {
                         ? i?.user?.lastName
                           ? i?.user?.firstName + ' ' + i?.user?.lastName
                           : i?.user?.firstName
+                        : !i?.anonymous
+                        ? i?.fromWalletAddress
                         : ''}
                     </Text>
                   </DonorBox>
@@ -313,9 +315,9 @@ const DonationsTable = ({ donations }) => {
                     sx={{ variant: 'text.small', color: 'secondary' }}
                   >
                     <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH' && i?.valueUsd
-                        ? i?.valueUsd
-                        : i?.amount?.toLocaleString('en-US', {
+                      {i?.currency === 'ETH' && i?.amount
+                        ? i?.amount
+                        : i?.valueUsd?.toLocaleString('en-US', {
                             style: 'currency',
                             currency: 'USD'
                           })}
@@ -371,7 +373,7 @@ const DonationsTable = ({ donations }) => {
       ) : !filteredDonations || filteredDonations?.length === 0 ? (
         <Table>
           <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-            No donations :(
+            No donations yet :(
           </Text>
         </Table>
       ) : (
