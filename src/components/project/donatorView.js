@@ -84,7 +84,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         })
 
         setTotalGivers(
-          [...new Set(donations?.map(data => data?.toWalletAddress))].length
+          [...new Set(donations?.map(data => data?.fromWalletAddress))].length
         )
         setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
       } catch (error) {

@@ -266,66 +266,83 @@ const DonationsTable = ({ donations }) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((i, key) => {
-              if (!i) return null
-              console.log({ i })
-              return (
-                <tr key={key}>
-                  <td
-                    data-label='Account'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.createdAt ? dayjs(i.createdAt).format('ll') : 'null'}
-                    </Text>
-                  </td>
-                  <DonorBox
-                    data-label='Donor'
-                    sx={{
-                      variant: 'text.small',
-                      color: 'secondary',
-                      svg: { borderRadius: '50%' }
-                    }}
-                  >
-                    {i?.user?.avatar ? (
-                      <Avatar src={i?.user?.avatar} />
-                    ) : (
-                      <Jdenticon size='32' value={i?.fromWalletAddress} />
-                    )}
-                    <Text
-                      sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
+            {currentItems
+              ?.slice()
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((i, key) => {
+                if (!i) return null
+                console.log({ i })
+                return (
+                  <tr key={key}>
+                    <td
+                      data-label='Account'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
                     >
-                      {i?.user?.firstName
-                        ? i?.user?.lastName
-                          ? i?.user?.firstName + ' ' + i?.user?.lastName
-                          : i?.user?.firstName
-                        : !i?.anonymous
-                        ? i?.fromWalletAddress
-                        : ''}
-                    </Text>
-                  </DonorBox>
-                  <td
-                    data-label='Currency'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Badge variant='green'>{i?.currency}</Badge>
-                  </td>
-                  <td
-                    data-label='Amount'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH' && i?.amount
-                        ? i?.amount
-                        : i?.valueUsd?.toLocaleString('en-US', {
-                            style: 'currency',
-                            currency: 'USD'
-                          })}
-                    </Text>
-                  </td>
-                </tr>
-              )
-            })}
+                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                        {i?.createdAt
+                          ? dayjs(i.createdAt).format('ll')
+                          : 'null'}
+                      </Text>
+                    </td>
+                    <DonorBox
+                      data-label='Donor'
+                      sx={{
+                        variant: 'text.small',
+                        color: 'secondary',
+                        svg: { borderRadius: '50%' }
+                      }}
+                    >
+                      {i?.user?.avatar ? (
+                        <Avatar src={i?.user?.avatar} />
+                      ) : (
+                        <Jdenticon size='32' value={i?.fromWalletAddress} />
+                      )}
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          color: 'secondary',
+                          ml: 2
+                        }}
+                      >
+                        {i?.user?.firstName
+                          ? i?.user?.lastName
+                            ? i?.user?.firstName + ' ' + i?.user?.lastName
+                            : i?.user?.firstName
+                          : !i?.anonymous
+                          ? i?.fromWalletAddress
+                          : ''}
+                      </Text>
+                    </DonorBox>
+                    <td
+                      data-label='Currency'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Badge variant='green'>{i?.currency}</Badge>
+                    </td>
+                    <td
+                      data-label='Amount'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          // whiteSpace: 'pre-wrap',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i?.currency === 'ETH' && i?.valueUsd
+                          ? `${
+                              i?.amount ? `${i?.amount} ETH` : ''
+                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
+                          : i?.amount?.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD'
+                            })}
+                      </Text>
+                    </td>
+                  </tr>
+                )
+              })}
           </tbody>
         </Table>
         <PagesStyle>

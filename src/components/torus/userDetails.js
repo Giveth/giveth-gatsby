@@ -86,7 +86,7 @@ const UserDetails = () => {
   const handleLogout = () => {
     logout()
   }
-
+  console.log({ user })
   return (
     <div ref={ref}>
       <Button
@@ -116,7 +116,9 @@ const UserDetails = () => {
             color: 'secondary'
           }}
         >
-          {user?.name}
+          {/(.+)@(.+){2,}\.(.+){2,}/.test(user?.name)
+            ? user?.name?.toUpperCase()
+            : user?.name}
         </Text>
       </Button>
       {isComponentVisible ? (

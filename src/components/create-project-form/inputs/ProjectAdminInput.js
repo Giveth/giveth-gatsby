@@ -48,6 +48,28 @@ export const ProjectAdminInput = ({
         {characterLength}/55
       </Text>
       <Button
+        aria-label='Back'
+        variant='nofill'
+        sx={{
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px',
+          cursor: 'pointer'
+        }}
+        onClick={goBack}
+      >
+        <Text
+          sx={{
+            color: 'secondary',
+            fontFamily: 'body',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          Back
+        </Text>
+      </Button>
+      <Button
         aria-label='Next'
         sx={{
           mt: '200px',
@@ -68,28 +90,6 @@ export const ProjectAdminInput = ({
           }}
         >
           NEXT
-        </Text>
-      </Button>
-      <Button
-        aria-label='Back'
-        variant='nofill'
-        sx={{
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
-        }}
-        onClick={goBack}
-      >
-        <Text
-          sx={{
-            color: 'secondary',
-            fontFamily: 'body',
-            fontSize: 2,
-            letterSpacing: '4%'
-          }}
-        >
-          Back
         </Text>
       </Button>
     </animated.section>

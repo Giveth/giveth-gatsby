@@ -31,7 +31,13 @@ export const ProjectCategoryInput = ({
       >
         You can select multiple categories
       </Text>
-      <Box sx={{ my: '50px', height: '320px', overflow: 'scroll' }}>
+      <Box
+        sx={{
+          my: '50px'
+          // height: '320px',
+          // overflow: 'scroll'
+        }}
+      >
         {categoryList.map(category => {
           return (
             <Label
@@ -57,6 +63,29 @@ export const ProjectCategoryInput = ({
         })}
       </Box>
       <Button
+        aria-label='Back'
+        variant='nofill'
+        sx={{
+          width: '180px',
+          height: '52px',
+          borderRadius: '48px',
+          cursor: 'pointer',
+          mb: 5
+        }}
+        onClick={goBack}
+      >
+        <Text
+          sx={{
+            color: 'secondary',
+            fontFamily: 'body',
+            fontSize: 2,
+            letterSpacing: '4%'
+          }}
+        >
+          Back
+        </Text>
+      </Button>
+      <Button
         aria-label='Next'
         sx={{
           mt: '20px',
@@ -77,28 +106,6 @@ export const ProjectCategoryInput = ({
           }}
         >
           NEXT
-        </Text>
-      </Button>
-      <Button
-        aria-label='Back'
-        variant='nofill'
-        sx={{
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
-        }}
-        onClick={goBack}
-      >
-        <Text
-          sx={{
-            color: 'secondary',
-            fontFamily: 'body',
-            fontSize: 2,
-            letterSpacing: '4%'
-          }}
-        >
-          Back
         </Text>
       </Button>
     </animated.section>
