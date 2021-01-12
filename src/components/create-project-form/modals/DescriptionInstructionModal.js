@@ -37,7 +37,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
     <Text
       sx={{ mt: '10px', fontSize: 7, textAlign: 'center', fontFamily: 'body' }}
     >
-      How to write a good project description
+      How to write a great project description
     </Text>
     <Text
       sx={{ mt: '80px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}
@@ -64,20 +64,24 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
     <Text
       sx={{ mt: '20px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}
     >
-      See how others have done it.
-      <Link css={{ textDecoration: 'none' }} to='/projects'>
+      See how others have done it -{' '}
+      <a target='_blank' href='/projects' css={{ textDecoration: 'none' }}>
         <Text sx={{ color: 'primary' }}>Browse examples.</Text>
-      </Link>
+      </a>
     </Text>
-    {/* Don't think this blog post exists yet <Text
+    <Text
       sx={{ mt: '20px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}
     >
-      Want to learn more? Read our blog post tutorial <br />
-      <Link css={{ textDecoration: 'none' }} to='/'>
+      Read this blog post tutorial: <br />
+      <a
+        target='_blank'
+        css={{ textDecoration: 'none' }}
+        href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization#'
+      >
         <Text sx={{ color: 'primary' }}>
           "How to write a fundraising project description to increase donations"
         </Text>
-      </Link>
-    </Text> */}
+      </a>
+    </Text>
   </div>
 )
