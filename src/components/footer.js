@@ -161,7 +161,10 @@ const Footer = () => {
             }}
           >
             Support us with your Donation -{' '}
-            <FooterLink to='/donate' sx={{ variant: 'links.nav' }}>
+            <FooterLink
+              to={`/donate/${theme.donationSlug}`}
+              sx={{ variant: 'links.nav' }}
+            >
               revolution.eth
             </FooterLink>
           </Text>

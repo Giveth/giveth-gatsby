@@ -21,7 +21,7 @@ const HighFive = ({
   projectDescription
 }) => {
   const shareTitle = `Make a donation today to ${project?.title}!`
-  const url = window.location.href
+  const url = `${window.location.origin}/project/${addedProject?.slug}`
 
   return (
     <Flex
