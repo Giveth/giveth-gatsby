@@ -65,11 +65,11 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
       sx={{ mt: '20px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}
     >
       See how others have done it.
-      <Link css={{ textDecoration: 'none' }} to='/'>
+      <Link css={{ textDecoration: 'none' }} to='/projects'>
         <Text sx={{ color: 'primary' }}>Browse examples.</Text>
       </Link>
     </Text>
-    <Text
+    {/* Don't think this blog post exists yet <Text
       sx={{ mt: '20px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}
     >
       Want to learn more? Read our blog post tutorial <br />
@@ -78,6 +78,6 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
           "How to write a fundraising project description to increase donations"
         </Text>
       </Link>
-    </Text>
+    </Text> */}
   </div>
 )
