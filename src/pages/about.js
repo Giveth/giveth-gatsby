@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { jsx, Flex, Image, Grid, Text, Box, Button } from 'theme-ui'
+import { jsx, Flex, Image, Grid, Text, Box, Link, Button } from 'theme-ui'
 import React from 'react'
-import { graphql } from 'gatsby'
+import { graphql, navigate } from 'gatsby'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
 import styled from '@emotion/styled'
@@ -10,6 +10,7 @@ import SocialNetworks from '../components/content/SocialNetworks'
 import Layout from '../components/layout'
 import ContentTeam from '../components/content/ContentTeam'
 import teamImg from '../images/giveth-team-image.png'
+import theme from '../gatsby-plugin-theme-ui/index'
 
 const DonateButton = styled(Button)`
   position: relative;
@@ -220,9 +221,11 @@ const AboutPage = ({ data }) => {
               paddingTop: '20px',
               paddingBottom: '20px'
             }}
+            onClick={() => navigate(`/donate/${theme.donationSlug}`)}
           >
             <Text sx={{ color: 'background' }}>Support Giveth</Text>
           </DonateButton>
+
           {/* <Flex
             sx={{
               justifyContent: 'space-around',

@@ -160,12 +160,12 @@ const Footer = () => {
               fontWeight: 'bold'
             }}
           >
-            Support us with your Donation -{' '}
+            Support us{' '}
             <FooterLink
               to={`/donate/${theme.donationSlug}`}
               sx={{ variant: 'links.nav' }}
             >
-              revolution.eth
+              with your donation
             </FooterLink>
           </Text>
         </DonateSection>

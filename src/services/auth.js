@@ -6,11 +6,11 @@ export const getUser = () =>
     ? JSON.parse(window.localStorage.getItem(gatsbyUser))
     : {}
 
-export function setUser (user) {
+export function setUser(user) {
   return window.localStorage.setItem(gatsbyUser, JSON.stringify(user))
 }
 
-export function handleLogout () {
+export function handleLogout() {
   logout()
 }
 
@@ -24,6 +24,7 @@ export const logout = (callback = () => {}) => {
   if (isBrowser()) {
     window.localStorage.removeItem(gatsbyUser)
     window.localStorage.removeItem('token')
+    window.localStorage.clear()
   }
   callback()
 }

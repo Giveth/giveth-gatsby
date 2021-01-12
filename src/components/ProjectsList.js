@@ -232,19 +232,25 @@ const ProjectsList = props => {
               }}
             >
               {projects
-                ? projects.map((project, index) => (
-                    <ProjectCard
-                      id={project.id}
-                      listingId={project.title + '-' + index}
-                      key={project.title + '-' + index}
-                      name={project.title}
-                      slug={project.slug}
-                      donateAddress={project.donateAddress}
-                      image={project.image || NoImage}
-                      raised={project.balance}
-                      project={project}
-                    />
-                  ))
+                ? projects
+                    ?.slice()
+                    .sort(
+                      (a, b) =>
+                        new Date(a.creationDate) - new Date(b.creationDate)
+                    )
+                    .map((project, index) => (
+                      <ProjectCard
+                        id={project.id}
+                        listingId={project.title + '-' + index}
+                        key={project.title + '-' + index}
+                        name={project.title}
+                        slug={project.slug}
+                        donateAddress={project.donateAddress}
+                        image={project.image || NoImage}
+                        raised={project.balance}
+                        project={project}
+                      />
+                    ))
                 : null}
             </Grid>
           </div>

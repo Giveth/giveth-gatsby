@@ -2,7 +2,7 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { Spinner, Text } from 'theme-ui'
+import { Spinner, Flex, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui'
 import DonationsTable from './donationsTable'
 
@@ -21,6 +21,10 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
   const donations = project.donations
   const totalDonations = donations.reduce(
     (total, donation) => total + donation.amount,
+    0
+  )
+  const totalUSDonations = donations.reduce(
+    (total, donation) => total + donation.valueUsd,
     0
   )
   React.useEffect(() => {
@@ -44,20 +48,42 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
         <Text sx={{ variant: 'text.medium', color: 'secondary' }}>
           TOTAL FUNDS RAISED:
         </Text>
-        <Text
+        <Flex
           sx={{
-            variant: ['headings.h3', null, 'headings.display'],
-            color: 'secondary'
+            flexDirection: 'row',
+            alignItems: 'flex-end'
           }}
         >
-          {currentProjectView?.ethBalance
-            ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
-            : totalDonations &&
-              (totalDonations / 10)?.toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD'
-              })}
-        </Text>
+          <Text
+            sx={{
+              variant: ['headings.h3', null, 'headings.display'],
+              color: 'secondary'
+            }}
+          >
+            {totalUSDonations
+              ? totalUSDonations?.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                })
+              : null}
+          </Text>
+          <Text
+            sx={{
+              variant: ['headings.h6', null, 'headings.h5'],
+              pl: 4,
+              pb: 3,
+              color: 'secondary'
+            }}
+          >
+            {currentProjectView?.ethBalance
+              ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
+              : totalDonations &&
+                (totalDonations / 10)?.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                })}
+          </Text>
+        </Flex>
         <Text
           sx={{
             variant: 'text.medium',
