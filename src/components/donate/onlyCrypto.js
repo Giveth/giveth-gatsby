@@ -215,6 +215,7 @@ const OnlyCrypto = props => {
 
       // Send tx hash to our graph
       try {
+        console.log(`SAVE_DONATION --->`)
         const { data } = await client.mutate({
           mutation: SAVE_DONATION,
           variables: {
