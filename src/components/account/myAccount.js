@@ -42,7 +42,7 @@ const MyAccount = ({ info }) => {
           Change
         </Button> */}
       </Flex>
-      <Text sx={{ mt: '14px', variant: 'text.medium' }}>
+      <Text sx={{ mt: '14px', variant: 'text.medium', color: 'secondary' }}>
         {user?.addresses?.length > 0 && user?.addresses[0]}
       </Text>
       <Flex sx={{ mt: '40px' }}>
@@ -89,7 +89,9 @@ const MyAccount = ({ info }) => {
           >
             My projects
           </Text>
-          <Text sx={{ color: 'primary', fontSize: 7 }}>{info?.myProjects}</Text>
+          <Text sx={{ color: 'primary', fontSize: 7 }}>
+            {info?.myProjects || 0}
+          </Text>
         </Box>
       </Flex>
       <Box

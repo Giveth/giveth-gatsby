@@ -5,7 +5,6 @@ import { jsx, Text, Flex, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useApolloClient } from '@apollo/react-hooks'
 import { useQuery } from '@apollo/react-hooks'
-import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import styled from '@emotion/styled'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { getEtherscanTxs } from '../../utils'
@@ -14,7 +13,7 @@ import theme from '../../gatsby-plugin-theme-ui/index'
 import iconVerticalLine from '../../images/icon-vertical-line.svg'
 import { BsArrowLeft } from 'react-icons/bs'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
-import { FETCH_PROJECTS } from '../../apollo/gql/projects'
+import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 
 import MyProjects from './myProjects'
 const MyAccount = React.lazy(() => import('../../components/account/myAccount'))
@@ -48,8 +47,6 @@ const CreateLink = styled(Link)`
 
 const AccountPage = props => {
   const { user, isLoggedIn, logout } = React.useContext(TorusContext)
-  const [projects, setProjects] = React.useState(null)
-  const client = useApolloClient()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const fromWalletAddress = user?.addresses && user.addresses[0]
   const storageWallets =
@@ -61,12 +58,15 @@ const AccountPage = props => {
     ? storageWallets.split(',').concat(fromWalletAddress)
     : [fromWalletAddress]
 
-  const { data } = useQuery(USERS_DONATIONS, {
+  const { data: donations } = useQuery(USERS_DONATIONS, {
     variables: { fromWalletAddresses: userWallets }
   })
+  const userDonations = donations?.donationsFromWallets
 
-  const { donationsFromWallets } = data || {}
-  const userDonations = donationsFromWallets
+  const { data: userProjects } = useQuery(FETCH_USER_PROJECTS, {
+    variables: { admin: parseFloat(user?.userIDFromDB) }
+  })
+  const projectsList = userProjects?.projects
 
   const options = [
     { route: 'account', name: 'My Account' },
@@ -78,7 +78,6 @@ const AccountPage = props => {
     data: StringParam
   })
   const isSSR = typeof window === 'undefined'
-  const projectsList = projects?.data?.projects
 
   const handleLogout = () => {
     logout()
@@ -138,10 +137,10 @@ const AccountPage = props => {
       <Text
         sx={{
           variant: 'headings.h3',
-          my: 20
+          m: 20
         }}
       >
-        unavailable
+        unavailable page
       </Text>
     )
   }
@@ -218,8 +217,8 @@ const AccountPage = props => {
                       color:
                         query?.view === i.route ||
                         (!query?.view && i.route === 'account')
-                          ? 'secondary'
-                          : 'primary'
+                          ? 'primary'
+                          : 'secondary'
                     }}
                   >
                     {formatTitle(i.name)}

@@ -34,7 +34,7 @@ const CardContent = styled.span`
 
 const Badge = styled.span`
   padding: 3px 11.76px;
-  margin: 1rem 0.2rem;
+  margin: 0.2rem;
   align-items: center;
   border: 1px solid ${theme.colors.bodyLight};
   border-radius: 48px;
@@ -72,7 +72,7 @@ const CardFooter = styled.span`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  padding: 0rem 1rem;
+  padding: 1rem 0.5rem;
 `
 
 const Categories = ({ categories }) => {
@@ -82,10 +82,10 @@ const Categories = ({ categories }) => {
         return (
           <Badge key={index}>
             <Text
-              sx={{ variant: 'text.default' }}
-              style={{
+              sx={{
+                variant: 'text.default',
                 fontSize: '10px',
-                color: theme.colors.bodyLight,
+                color: 'bodyLight',
                 fontWeight: '500',
                 textTransform: 'uppercase'
               }}
