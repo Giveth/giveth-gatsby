@@ -11,6 +11,7 @@ const ConfirmationModal = ({
 }) => (
   <div
     css={{
+      zIndex: 2,
       display: showModal ? 'flex' : 'none',
       position: 'fixed',
       right: '25%',

@@ -17,7 +17,12 @@ export const ProjectImpactLocationInput = ({
   }, [])
 
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <animated.section
+      style={{
+        ...animationStyle,
+        marginTop: '30px'
+      }}
+    >
       <Label
         sx={{
           fontSize: 8,

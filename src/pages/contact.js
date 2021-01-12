@@ -96,7 +96,7 @@ const Contact = ({ data }) => {
           <input type='hidden' name='form-name' value='contact' />
           <Label
             sx={{
-              variant: 'text.overlineSmall'
+              variant: 'text.medium'
             }}
           >
             Your full name
@@ -104,7 +104,7 @@ const Contact = ({ data }) => {
           </Label>
           <Label
             sx={{
-              variant: 'text.overlineSmall'
+              variant: 'text.medium'
             }}
           >
             Your Email address
@@ -117,7 +117,7 @@ const Contact = ({ data }) => {
           </Label>
           <Label
             sx={{
-              variant: 'text.overlineSmall'
+              variant: 'text.medium'
             }}
           >
             Message
