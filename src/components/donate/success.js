@@ -51,6 +51,13 @@ const Success = props => {
     link.dispatchEvent(event)
   }
 
+  const etherscanPrefix =
+    typeof process.env.ETHEREUM_NETWORK !== 'undefined'
+      ? process.env.ETHEREUM_NETWORK === 'mainnet'
+        ? ''
+        : process.env.ETHEREUM_NETWORK + '.'
+      : ''
+
   return (
     <Content>
       <Text
@@ -79,7 +86,8 @@ const Success = props => {
                 color: 'yellow',
                 cursor: 'pointer'
               }}
-              href={`https://etherscan.io/tx/${hash?.hash}`}
+              target='_blank'
+              href={`https://${etherscanPrefix}etherscan.io/tx/${hash?.hash}`}
             >
               View transaction details
             </Link>
