@@ -31,8 +31,8 @@ const FinalVerificationStep = ({
               fontSize: 0,
               textTransform: 'uppercase',
               fontFamily: 'heading',
-              fontWeight: 'bold',
-              color: 'bodyLight'
+              color: 'bodyLight',
+              mt: '18px'
             }}
           >
             Project Name
@@ -45,11 +45,13 @@ const FinalVerificationStep = ({
               background: 'unset',
               fontSize: 1,
               p: 0,
-              pl: 2
+              pl: 2,
+              mt: '16px',
+              cursor: 'pointer'
             }}
             onClick={() => setStep(0)}
           >
-            <Text>Edit</Text>
+            Edit
           </Button>
         </Flex>
         <Text
@@ -85,11 +87,12 @@ const FinalVerificationStep = ({
               fontSize: 1,
               p: 0,
               pl: 2,
-              mt: '18px'
+              mt: '16px',
+              cursor: 'pointer'
             }}
             onClick={() => setStep(1)}
           >
-            <Text>Edit</Text>
+            Edit
           </Button>
         </Flex>
         <Text
@@ -125,7 +128,8 @@ const FinalVerificationStep = ({
               fontSize: 1,
               p: 0,
               pl: 2,
-              mt: '16px'
+              mt: '16px',
+              cursor: 'pointer'
             }}
             onClick={() => setStep(2)}
           >
@@ -169,7 +173,8 @@ const FinalVerificationStep = ({
               fontSize: 1,
               p: 0,
               pl: 2,
-              mt: '18px'
+              mt: '18px',
+              cursor: 'pointer'
             }}
             onClick={() => setStep(3)}
           >
@@ -227,7 +232,8 @@ const FinalVerificationStep = ({
               fontSize: 1,
               p: 0,
               pl: 2,
-              mt: '18px'
+              mt: '18px',
+              cursor: 'pointer'
             }}
             onClick={() => setStep(4)}
           >
@@ -268,11 +274,12 @@ const FinalVerificationStep = ({
               fontSize: 1,
               p: 0,
               pl: 2,
-              mt: '18px'
+              mt: '16px',
+              cursor: 'pointer'
             }}
             onClick={() => setStep(6)}
           >
-            <Text>Edit</Text>
+            Edit
           </Button>
         </Flex>
         <Text
@@ -322,7 +329,8 @@ const FinalVerificationStep = ({
             background: 'unset',
             fontSize: 1,
             p: 0,
-            pl: 2
+            pl: 2,
+            cursor: 'pointer'
           }}
           onClick={() => setStep(5)}
         >
