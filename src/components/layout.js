@@ -74,12 +74,11 @@ const CookieBanner = styled(Flex)`
 const CookiesBanner = () => {
   const [cookiesAccepted, setCookiesAccepted] = React.useState('')
 
-  const isSSR = typeof window === 'undefined'
-
-  React.useState(() => {
+  React.useEffect(() => {
     const accepted =
       typeof window !== 'undefined' &&
       window.localStorage.getItem('cookiesAccepted')
+    console.log({ accepted })
     setCookiesAccepted(accepted)
   }, [])
   if (cookiesAccepted) return null
