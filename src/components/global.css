@@ -1,0 +1,4 @@
+.pac-item {  
+  /* For Google Autocomplete container*/  
+  cursor: pointer !important;  
+}

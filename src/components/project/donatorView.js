@@ -334,6 +334,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 <Text
                   sx={{
                     mb: 4,
+                    wordWrap: 'break-word',
+                    width: '100%',
                     fontSize: 3,
                     fontFamily: 'body',
                     fontWeight: 'body',

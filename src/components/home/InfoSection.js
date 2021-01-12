@@ -240,7 +240,7 @@ const InfoSection = () => {
             </Link>{' '}
             you most care about.
           </Text>
-          <Link to='/donate'>
+          <Link to='/projects'>
             <Button
               sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
             >

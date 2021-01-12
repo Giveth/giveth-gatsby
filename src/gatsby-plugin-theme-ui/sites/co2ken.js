@@ -2,6 +2,7 @@ const green = '#00F7A9' // green
 const orange = '#FFAB5E' // orange
 
 export default {
+  donationSlug: 'co2ken',
   breakpoints: ['850px', '1024px', '1280px'],
   colors: {
     text: 'green',
