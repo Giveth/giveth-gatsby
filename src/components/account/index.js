@@ -64,7 +64,7 @@ const AccountPage = props => {
   const userDonations = donations?.donationsFromWallets
 
   const { data: userProjects } = useQuery(FETCH_USER_PROJECTS, {
-    variables: { admin: parseFloat(user?.userIDFromDB) }
+    variables: { admin: parseFloat(user?.userIDFromDB || -1) }
   })
   const projectsList = userProjects?.projects
 
