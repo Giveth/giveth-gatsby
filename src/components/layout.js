@@ -72,7 +72,7 @@ const CookieBanner = styled(Flex)`
 `
 
 const CookiesBanner = () => {
-  const [cookiesAccepted, setCookiesAccepted] = React.useState('')
+  const [cookiesAccepted, setCookiesAccepted] = React.useState('none')
 
   React.useEffect(() => {
     const accepted =
@@ -81,7 +81,7 @@ const CookiesBanner = () => {
     console.log({ accepted })
     setCookiesAccepted(accepted)
   }, [])
-  if (cookiesAccepted) return null
+  if (cookiesAccepted || cookiesAccepted === 'none') return null
   // TODO: We may build this reusable for possible future banners on the app
   return (
     <CookieBanner
