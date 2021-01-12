@@ -3,6 +3,8 @@ import { Box, Button, Flex, Text } from 'theme-ui'
 import Modal from './modal'
 import { TorusContext } from '../contextProvider/torusProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
+import { ProveWalletContext } from '../contextProvider/proveWalletProvider'
+
 import decoratorClouds from '../images/decorator-clouds.svg'
 import signupBg from '../images/popup1.png'
 import {
@@ -16,7 +18,29 @@ import {
 
 function WelcomePopup({ close }) {
   const { login, isLoggedIn } = React.useContext(TorusContext)
-  if (isLoggedIn) return null
+  const { proveWallet, isWalletProved } = React.useContext(ProveWalletContext)
+
+  if (isLoggedIn && !isWalletProved) {
+    return (
+      <Flex sx={{ flexDirection: 'column', p: 4 }}>
+        <Text
+          sx={{
+            variant: 'headings.h4',
+            color: 'primary',
+            textDecoration: 'underline',
+            cursor: 'pointer'
+          }}
+          onClick={proveWallet}
+        >
+          Please first verify your wallet
+        </Text>
+      </Flex>
+    )
+  }
+  if (isLoggedIn) {
+    close()
+    return null
+  }
   return (
     <Flex sx={{ flexDirection: 'column', width: '645px' }}>
       <img

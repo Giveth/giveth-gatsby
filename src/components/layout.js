@@ -6,6 +6,7 @@
  */
 
 import React from 'react'
+import './global.css'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
 import { ThemeProvider, Box, Flex, Image, Text } from 'theme-ui'

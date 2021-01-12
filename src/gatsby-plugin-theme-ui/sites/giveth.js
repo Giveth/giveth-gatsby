@@ -1,4 +1,5 @@
 export default {
+  donationSlug: 'giveth',
   breakpoints: ['850px', '1024px', '1280px'],
   colors: {
     text: '#2C0B3F',

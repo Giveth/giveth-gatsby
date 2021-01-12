@@ -83,7 +83,7 @@ function ImageSection({ image, register }) {
               src={placeHolder}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
-          ) : displayImage.startsWith('data:') ? (
+          ) : displayImage?.startsWith('data:') ? (
             <Image
               src={displayImage}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}

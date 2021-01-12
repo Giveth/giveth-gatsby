@@ -6,7 +6,7 @@ import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
 import styled from '@emotion/styled'
 import { FaMediumM, FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa'
-
+import SocialNetworks from '../components/content/SocialNetworks'
 import Layout from '../components/layout'
 import ContentTeam from '../components/content/ContentTeam'
 import teamImg from '../images/giveth-team-image.png'
@@ -221,9 +221,9 @@ const AboutPage = ({ data }) => {
               paddingBottom: '20px'
             }}
           >
-            <Text>Support Giveth</Text>
+            <Text sx={{ color: 'background' }}>Support Giveth</Text>
           </DonateButton>
-          <Flex
+          {/* <Flex
             sx={{
               justifyContent: 'space-around',
               fontFamily: 'heading',
@@ -234,7 +234,7 @@ const AboutPage = ({ data }) => {
           >
             <Text>Givers: 24</Text>
             <Text>Donations: 65</Text>
-          </Flex>
+          </Flex> */}
           <Flex pt={3} sx={{ justifyContent: 'center' }}>
             <Text
               sx={{
@@ -259,10 +259,7 @@ const AboutPage = ({ data }) => {
               }
             }}
           >
-            <FaTwitter size='30px' />
-            <FaLinkedin size='30px' />
-            <FaMediumM size='30px' />
-            <FaGithub size='30px' />
+            <SocialNetworks compressed />
           </Grid>
         </Flex>
       </Flex>
