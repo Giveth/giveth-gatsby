@@ -3,6 +3,7 @@ import { Button, Text, jsx } from 'theme-ui'
 import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
+import useComponentVisible from '../../utils/useComponentVisible'
 import { Link } from 'gatsby'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
@@ -67,7 +68,11 @@ const Dot = styled.div`
 `
 
 const UserDetails = () => {
-  const [active, setActive] = useState(false)
+  const {
+    ref,
+    isComponentVisible,
+    setIsComponentVisible
+  } = useComponentVisible(false)
 
   const { logout, user, balance, network } = useContext(TorusContext)
   const { proveWallet, isWalletProved } = useContext(ProveWalletContext)
@@ -78,20 +83,12 @@ const UserDetails = () => {
     address.length
   )}`
 
-  const handleMenu = e => {
-    if (active) {
-      setActive(false)
-    } else {
-      setActive(true)
-    }
-  }
-
   const handleLogout = () => {
     logout()
   }
 
   return (
-    <div>
+    <div ref={ref}>
       <Button
         sx={{ variant: 'buttons.nofill' }}
         style={{
@@ -101,9 +98,7 @@ const UserDetails = () => {
           padding: '0.5rem',
           border: '0'
         }}
-        onClick={() => {
-          handleMenu()
-        }}
+        onClick={() => setIsComponentVisible(!isComponentVisible)}
       >
         <img
           alt=''
@@ -124,7 +119,7 @@ const UserDetails = () => {
           {user?.name}
         </Text>
       </Button>
-      {active ? (
+      {isComponentVisible ? (
         <AccountDetails>
           <MenuTitle
             sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
@@ -196,14 +191,19 @@ const UserDetails = () => {
           >
             Settings
           </MenuItem>
-          <MenuItem
-            sx={{
-              variant: 'text.medium'
-            }}
-            className='shadow boxheight'
+          <Link
+            to='/account?data=all&view=projects'
+            sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
-            My Projects
-          </MenuItem>
+            <MenuItem
+              sx={{
+                variant: 'text.medium'
+              }}
+              className='shadow boxheight'
+            >
+              My Projects
+            </MenuItem>
+          </Link>
           <MenuLink
             href='https://github.com/Giveth/giveth-2/issues/new/choose'
             target='_blank'

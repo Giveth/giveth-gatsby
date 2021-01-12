@@ -123,7 +123,6 @@ const CreateProjectForm = props => {
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
-    console.log({ currentStep })
     if (currentStep === 6) {
       // CHECK IF STRING IS ENS AND VALID
       let ethAddress = data?.projectWalletAddress

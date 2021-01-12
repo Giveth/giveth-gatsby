@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Flex,
@@ -13,7 +13,7 @@ import {
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
 import theme from '../../../gatsby-plugin-theme-ui/index'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/react-hooks'
 import {
   GET_LINK_BANK_CREATION,
   EDIT_PROJECT,
@@ -34,78 +34,79 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEdition (props) {
-  const { goBack } = props
-  const { isClient } = useIsClient()
+function ProjectEditionForm(props) {
+  const { goBack, setCancelModal, setShowModal } = props
   const { web3 } = useContext(TorusContext)
-  const [showModal, setShowModal] = useState(false)
-  const [showCancelModal, setCancelModal] = useState(false)
-  const [project, setProject] = useState(props?.project)
   const [loading, setLoading] = useState(false)
-  const { title, description, walletAddress, impactLocation } = project
   const [mapLocation, setMapLocation] = useState(null)
-  const [categories, setCategories] = useState(null)
+  const [categories, setCategories] = useState(props?.loadedProject?.categories)
   const client = useApolloClient()
   const { register, handleSubmit, errors } = useForm() // initialize the hook
+  const project = props?.loadedProject
+
+  console.log({ categories })
+
+  useEffect(() => {
+    window?.google && window.initMap(setMapLocation)
+  }, [])
 
   const onSubmit = async data => {
-    setLoading(true)
-    // Validate eth address
-    let ethAddress = data.editWalletAddress
-    if (project?.walletAddress !== data.editWalletAddress) {
-      // CHECK IF STRING IS ENS AND VALID
-      const ens = await web3.eth.ens.getOwner(ethAddress)
-      if (ens !== '0x0000000000000000000000000000000000000000') {
-        ethAddress = ens
-      }
-      if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
-        return Toast({ content: 'Eth address not valid', type: 'error' })
-      }
-      // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
-      const res = await client.query({
-        query: GET_PROJECT_BY_ADDRESS,
-        variables: {
-          address: ethAddress
-        }
-      })
-      console.log({ res })
-      if (res?.data?.projectByAddress) {
-        return Toast({
-          content: 'this eth address is already being used for a project',
-          type: 'error'
-        })
-      }
-    }
-
-    const projectCategories = []
-    for (const category in categoryList) {
-      const name = categoryList[category]?.name
-      if (data[name]) {
-        projectCategories.push(categoryList[category].name)
-      }
-    }
-
-    const projectData = {
-      title: data.editTitle,
-      description: data.editDescription,
-      admin: project.admin,
-      impactLocation: mapLocation || impactLocation,
-      categories: projectCategories,
-      walletAddress: Web3.utils.toChecksumAddress(ethAddress)
-    }
-
-    // Validate Image
-    console.log({ data })
-    if (data?.editImage && project?.image !== data?.editImage) {
-      if (data?.editImage.length === 1) {
-        projectData.imageStatic = data.editImage
-      } else {
-        //download image to send
-        const imageFile = await getImageFile(data.editImage, data?.editTitle)
-        projectData.imageUpload = imageFile
-      }
-    }
     try {
+      // Validate eth address
+      let ethAddress = data.editWalletAddress
+      if (project?.walletAddress !== data.editWalletAddress) {
+        // CHECK IF STRING IS ENS AND VALID
+        const ens = await web3.eth.ens.getOwner(ethAddress)
+        if (ens !== '0x0000000000000000000000000000000000000000') {
+          ethAddress = ens
+        }
+        if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
+          return Toast({ content: 'Eth address not valid', type: 'error' })
+        }
+        // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
+        const res = await client.query({
+          query: GET_PROJECT_BY_ADDRESS,
+          variables: {
+            address: ethAddress
+          }
+        })
+        console.log({ res })
+        if (res?.data?.projectByAddress) {
+          return Toast({
+            content: 'this eth address is already being used for a project',
+            type: 'error'
+          })
+        }
+      }
+
+      const projectCategories = []
+      for (const category in categoryList) {
+        const name = categoryList[category]?.name
+        if (data[name]) {
+          projectCategories.push(categoryList[category].name)
+        }
+      }
+
+      const projectData = {
+        title: data.editTitle,
+        description: data.editDescription,
+        admin: project.admin,
+        impactLocation: mapLocation || project?.impactLocation,
+        categories: projectCategories,
+        walletAddress: Web3.utils.toChecksumAddress(ethAddress)
+      }
+
+      // Validate Image
+      console.log({ data })
+      if (data?.editImage && project?.image !== data?.editImage) {
+        if (data?.editImage.length === 1) {
+          projectData.imageStatic = data.editImage
+        } else {
+          //download image to send
+          const imageFile = await getImageFile(data.editImage, data?.editTitle)
+          projectData.imageUpload = imageFile
+        }
+      }
       const edit = await client.mutate({
         mutation: EDIT_PROJECT,
         variables: {
@@ -113,10 +114,11 @@ function ProjectEdition (props) {
           projectId: parseFloat(project?.id)
         }
       })
-      console.log({ edit })
-      setLoading(false)
+      // setLoading(false)
       setShowModal(true)
+      console.log({ edit })
     } catch (error) {
+      setLoading(false)
       console.log({ error })
     }
   }
@@ -158,31 +160,6 @@ function ProjectEdition (props) {
     )
   }
 
-  useEffect(() => {
-    const setup = async () => {
-      try {
-        if (typeof project === 'string' && !loading) {
-          // fetch
-          setLoading(true)
-          const { data } = await client.query({
-            query: FETCH_PROJECT_BY_SLUG,
-            variables: {
-              slug: project
-            }
-          })
-          setCategories(data?.projectBySlug?.categories)
-          setProject(data?.projectBySlug)
-          setLoading(false)
-          console.log({ data })
-        }
-      } catch (error) {
-        console.log({ error })
-      }
-    }
-    isClient && window.initMap(setMapLocation)
-    setup()
-  }, [project])
-
   return (
     <>
       {loading && <LoadingModal isOpen={loading} />}
@@ -206,7 +183,7 @@ function ProjectEdition (props) {
             <CustomInput
               name='editTitle'
               ref={register}
-              defaultValue={title}
+              defaultValue={project?.title}
             />{' '}
             {/* <CustomLabel title='Project Admin' htmlFor='editAdmin' />
             <CustomInput name='editAdmin' ref={register} defaultValue={admin} /> */}
@@ -222,12 +199,12 @@ function ProjectEdition (props) {
               }}
               id='editDescription'
               name='editDescription'
-              defaultValue={description}
+              defaultValue={project?.description}
               ref={register}
               rows={12}
             />
             <CustomLabel title='Category' htmlFor='editCategory' />
-            <Box>
+            <Box sx={{ height: '320px', overflow: 'scroll' }}>
               {categoryList.map(category => {
                 const categoryFound = categories?.find(
                   i => i.name === category.name
@@ -266,11 +243,9 @@ function ProjectEdition (props) {
               })}
             </Box>
             <CustomLabel title='Impact Location' htmlFor='editImpactLocation' />
-            {mapLocation || impactLocation ? (
-              <Text
-                sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}
-              >
-                {mapLocation || impactLocation}
+            {mapLocation || project?.impactLocation ? (
+              <Text sx={{ fontFamily: 'body', color: 'muted', fontSize: 8 }}>
+                {mapLocation || project?.impactLocation}
               </Text>
             ) : null}
             <div id='locationField'>
@@ -292,7 +267,8 @@ function ProjectEdition (props) {
             >
               <Checkbox
                 defaultChecked={
-                  mapLocation === 'Global' || impactLocation === 'Global'
+                  mapLocation === 'Global' ||
+                  project?.impactLocation === 'Global'
                 }
                 onChange={() => {
                   mapLocation === 'Global'
@@ -332,7 +308,7 @@ function ProjectEdition (props) {
             <CustomInput
               name='editWalletAddress'
               ref={register}
-              defaultValue={walletAddress}
+              defaultValue={project?.walletAddress}
             />
             <CustomLabel
               variant='text.caption'
@@ -382,12 +358,35 @@ function ProjectEdition (props) {
           </Button>
         </>
       </form>
+    </>
+  )
+}
+
+function ProjectEdition(props) {
+  const [showModal, setShowModal] = useState(false)
+  const [showCancelModal, setCancelModal] = useState(false)
+
+  const { data: fetchedProject, loading } = useQuery(FETCH_PROJECT_BY_SLUG, {
+    variables: { slug: props?.project }
+  })
+  if (loading) return <LoadingModal isOpen={loading} />
+  return (
+    <>
+      <ProjectEditionForm
+        {...props}
+        setShowModal={setShowModal}
+        setCancelModal={setCancelModal}
+        loadedProject={fetchedProject?.projectBySlug}
+      />
       <ConfirmationModal
         showModal={showModal}
         setShowModal={setShowModal}
         title='Saved!'
         confirmation={{
-          do: () => window.location.replace(`/project/${project?.slug}`),
+          do: () =>
+            window.location.replace(
+              `/project/${fetchedProject?.projectBySlug?.slug}`
+            ),
           title: 'View Project'
         }}
         secondary={{
@@ -400,7 +399,7 @@ function ProjectEdition (props) {
         setShowModal={setCancelModal}
         title='Close without saving?'
         confirmation={{
-          do: () => goBack(),
+          do: () => props?.goBack(),
           title: 'Yes'
         }}
         secondary={{

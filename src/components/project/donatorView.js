@@ -4,7 +4,6 @@ import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-import { ImLocation } from 'react-icons/im'
 
 import testImg from '../../images/giveth-test-image.png'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
@@ -12,6 +11,7 @@ import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.s
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 import { FaShareAlt } from 'react-icons/fa'
+import { ImLocation } from 'react-icons/im'
 
 import { Link } from 'gatsby'
 import { useQuery, useApolloClient } from '@apollo/react-hooks'
@@ -166,7 +166,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               alignItems: 'center'
             }}
           >
-            <Flex>
+            <Box sx={{ flex: 1 }}>
               <Text
                 sx={{
                   fontSize: 9,
@@ -176,9 +176,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   wordBreak: 'break-all'
                 }}
               >
-                {pageContext?.project?.title}{' '}
+                {pageContext?.project?.title}
               </Text>
-
               <Flex
                 sx={{
                   flexDirection: 'row',
@@ -211,7 +210,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   </Flex>
                 )}
               </Flex>
-            </Flex>
+            </Box>
           </Flex>
           {/*
           // NOTIFICATION BADGE
@@ -431,7 +430,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               })}
           </Flex>
 
-          <Flex sx={{ justifyContent: 'center' }}>
+          <Flex sx={{ justifyContent: 'center', mt: 2 }}>
             <Link to='/projects' style={{ textDecoration: 'none' }}>
               <Text
                 sx={{

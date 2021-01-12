@@ -30,6 +30,8 @@ const CardContent = styled(Flex)`
 `
 
 const AltCardContent = styled.span`
+  position: absolute;
+  bottom: 0;
   display: flex;
   flex: 1;
   width: 100%;
@@ -42,7 +44,7 @@ const AltCardContent = styled.span`
 
 const Badge = styled.span`
   padding: 3px 11.76px;
-  margin: 0 0.2rem;
+  margin: 0.4rem;
   align-items: center;
   border: 1px solid ${theme.colors.bodyLight};
   border-radius: 48px;
@@ -85,7 +87,6 @@ const CardFooter = styled.span`
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 1rem 0;
-  padding: 0 1rem;
 `
 
 const Givers = styled.div`

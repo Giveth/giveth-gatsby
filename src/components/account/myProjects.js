@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'gatsby'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import { useQueryParams, StringParam } from 'use-query-params'
@@ -46,9 +46,6 @@ const MyProjects = props => {
     view: StringParam,
     data: StringParam
   })
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
 
   const setProject = val => {
     setQuery({ view: 'projects', data: val.slug })
