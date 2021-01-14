@@ -33,7 +33,8 @@ const ProveWalletProvider = props => {
               signature: signedMessage,
               email: user?.email,
               avatar: user?.profileImage,
-              name: user?.name
+              name: user?.name,
+              hostname: window.location.hostname
             }
           })
 
