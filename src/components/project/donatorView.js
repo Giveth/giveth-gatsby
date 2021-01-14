@@ -339,7 +339,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                     fontSize: 3,
                     fontFamily: 'body',
                     fontWeight: 'body',
-                    color: 'black'
+                    color: 'black',
+                    whiteSpace: 'pre'
                   }}
                 >
                   {pageContext?.project?.description}
