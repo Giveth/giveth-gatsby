@@ -24,7 +24,7 @@ export const logout = (callback = () => {}) => {
   if (isBrowser()) {
     window.localStorage.removeItem(gatsbyUser)
     window.localStorage.removeItem('token')
-    window.localStorage.clear()
+    // window.localStorage.clear()
   }
   callback()
 }

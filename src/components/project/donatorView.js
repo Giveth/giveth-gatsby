@@ -48,7 +48,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   )
 
   const project = pageContext?.project
-
+  console.log({ project })
   useEffect(() => {
     const firstFetch = async () => {
       try {
@@ -334,13 +334,13 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 <Text
                   sx={{
                     mb: 4,
-                    wordWrap: 'break-word',
+                    wordBreak: 'break-word',
+                    whiteSpace: 'break-spaces',
                     width: '100%',
                     fontSize: 3,
                     fontFamily: 'body',
                     fontWeight: 'body',
-                    color: 'black',
-                    whiteSpace: 'pre'
+                    color: 'black'
                   }}
                 >
                   {pageContext?.project?.description}

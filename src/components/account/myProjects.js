@@ -107,7 +107,8 @@ const MyProjects = props => {
               pb: 2,
               pt: 4,
               textAlign: 'center',
-              alignSelf: 'center'
+              alignSelf: 'center',
+              textDecoration: 'none'
             }}
           >
             <Text
@@ -118,7 +119,12 @@ const MyProjects = props => {
             >
               Start raising funds
             </Text>
-            <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+            <Text
+              sx={{
+                variant: 'headings.h4',
+                color: 'background'
+              }}
+            >
               Create a Project
             </Text>
           </Box>

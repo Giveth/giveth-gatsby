@@ -162,17 +162,6 @@ const AccountPage = props => {
           <BsArrowLeft size='24px' />
           Giveth
         </Link>
-        <Flex>
-          <UserSpan>
-            {isMobile ? null : (
-              <span>
-                <CreateLink to='/create'>Create a project</CreateLink>
-              </span>
-            )}
-            <img src={iconVerticalLine} alt='' />
-            {/* <Login onLogin={onLogin} balance={balance} /> */}
-          </UserSpan>
-        </Flex>
       </Flex>
       <Flex
         sx={{
