@@ -127,7 +127,7 @@ const ShowProject = props => {
   }, [])
 
   // TODO: Implement this on a utils file
-  function getUrlParams (search) {
+  function getUrlParams(search) {
     let hashes = search.slice(search.indexOf('?') + 1).split('&')
     return hashes.reduce((params, hash) => {
       let [key, val] = hash.split('=')
@@ -135,7 +135,7 @@ const ShowProject = props => {
     }, {})
   }
 
-  function PaymentOptions () {
+  function PaymentOptions() {
     const isSSR = typeof window === 'undefined'
 
     const ShowPaymentOption = () => {
@@ -259,7 +259,7 @@ const ShowProject = props => {
         </ProjectContainer>
         <Payment>
           <Success sessionId={paymentSessionId} hash={hashSent} />
-          <div style={{ margin: '3rem 0' }}>
+          <div style={{ margin: '3rem 0', zIndex: 2 }}>
             <ShareIcons message='Share this with your friends!' />
           </div>
         </Payment>
