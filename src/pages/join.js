@@ -10,7 +10,7 @@ import JoinChatCard from '../components/content/JoinPageCard'
 const JoinPage = ({ data }) => {
   return (
     <Layout>
-      <Seo title='join' />
+      <Seo title='Join our community' />
       <Hero />
       <Flex sx={{ justifyContent: 'center', backgroundColor: 'lightestBlue' }}>
         <Grid

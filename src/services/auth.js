@@ -24,6 +24,8 @@ export const logout = (callback = () => {}) => {
   if (isBrowser()) {
     window.localStorage.removeItem(gatsbyUser)
     window.localStorage.removeItem('token')
+    window.localStorage.removeItem('create-form')
+    // TODO: let's check if we should remove everything or just be careful
     // window.localStorage.clear()
   }
   callback()

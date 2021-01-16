@@ -185,14 +185,21 @@ const UserDetails = () => {
               Verify Your Wallet
             </MenuItem>
           )}
-          <MenuItem
-            sx={{
-              variant: 'text.medium'
-            }}
-            className='shadow boxheight'
+          <Link
+            href='https://app.tor.us'
+            target='_blank'
+            rel='noopener noreferrer'
+            sx={{ textDecoration: 'none' }}
           >
-            Settings
-          </MenuItem>
+            <MenuItem
+              sx={{
+                variant: 'text.medium'
+              }}
+              className='shadow boxheight'
+            >
+              Settings
+            </MenuItem>
+          </Link>
           <Link
             to='/account?data=all&view=projects'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}

@@ -85,6 +85,7 @@ const MyProjects = props => {
         {projects?.map((item, index) => {
           return (
             <ProjectCard
+              withEditHover
               action={() => setProject(item)}
               name={item?.title}
               description={item?.description}
@@ -92,6 +93,7 @@ const MyProjects = props => {
               raised={111}
               categories={item?.categories}
               listingId={index}
+              slug={item?.slug}
               key={index}
             />
           )
