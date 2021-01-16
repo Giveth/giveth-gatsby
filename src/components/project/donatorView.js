@@ -173,7 +173,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   fontFamily: 'heading',
                   fontWeight: 'bold',
                   color: 'secondary',
-                  wordBreak: 'break-all'
+                  wordBreak: 'break-word'
                 }}
               >
                 {pageContext?.project?.title}

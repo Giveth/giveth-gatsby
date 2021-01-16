@@ -147,22 +147,23 @@ const AccountPage = props => {
 
   return (
     <React.Fragment>
-      <Flex sx={{ justifyContent: 'space-between', mx: '5%', height: '128px' }}>
-        <Link
-          to='/'
-          sx={{
-            textDecoration: 'none',
-            display: 'flex',
-            alignItems: 'center',
-            width: '80px',
-            justifyContent: 'space-between',
-            variant: 'links.default'
-          }}
-        >
-          <BsArrowLeft size='24px' />
-          Giveth
-        </Link>
-      </Flex>
+      <Link
+        to='/'
+        sx={{
+          textDecoration: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          width: '80px',
+          justifyContent: 'space-between',
+          // variant: 'links.default',
+          color: 'primary',
+          mx: '5%',
+          height: '128px'
+        }}
+      >
+        <BsArrowLeft size='24px' />
+        <Text color='primary'>Giveth</Text>
+      </Link>
       <Flex
         sx={{
           mx: '5%',

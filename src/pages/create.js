@@ -88,6 +88,7 @@ const IndexPage = ({ data, location }) => {
         console.log(`project : ${JSON.stringify(project, null, 2)}`)
         setAddedProject(project.data.addProject)
         setProjectAdded(true)
+        window?.localStorage.removeItem('create-form')
       }
     } catch (error) {
       console.log(`Error adding project: ---> : ${error}`)

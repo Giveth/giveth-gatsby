@@ -5,8 +5,8 @@ import { Router } from '@reach/router'
 import { Box, Button, Grid, Spinner, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
+import Seo from '../components/seo'
 import { useQuery } from '@apollo/react-hooks'
-
 import OnlyFiat from '../components/donate/onlyFiat'
 import Success from '../components/donate/success'
 import Layout from '../components/layout'
@@ -309,7 +309,13 @@ const Donate = props => {
         ) : loading ? (
           <Spinner variant='spinner.medium' />
         ) : data?.projectBySlug ? (
-          <ShowProject {...props} project={data.projectBySlug} />
+          <>
+            <Seo
+              title={`Make a donation to ${data?.projectBySlug?.title}!`}
+              image={data?.projectBySlug?.image}
+            />
+            <ShowProject {...props} project={data.projectBySlug} />
+          </>
         ) : (
           <ProjectNotFound />
         )}
