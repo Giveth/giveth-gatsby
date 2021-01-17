@@ -1,5 +1,4 @@
 /** @jsx jsx */
-import React from 'react'
 import { Box, Button, Grid, Flex, jsx, Text, Input } from 'theme-ui'
 import ProjectCard from './projectCard'
 import NoImage from '../images/no-image-available.jpg'
