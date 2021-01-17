@@ -7,6 +7,7 @@ const DO_LOGIN = gql`
     $email: String!
     $avatar: String!
     $name: String!
+    $hostname: String!
   ) {
     loginWallet(
       walletAddress: $walletAddress
@@ -14,6 +15,7 @@ const DO_LOGIN = gql`
       email: $email
       avatar: $avatar
       name: $name
+      hostname: $hostname
     ) {
       token
       user {

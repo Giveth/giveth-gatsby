@@ -247,7 +247,7 @@ const OnlyCrypto = props => {
           // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
           // or you could use onclick for when someone clicks on the notification itself
           onclick: () =>
-            window.open(`https://ropsten.etherscan.io/tx/${transaction.hash}`)
+            window.open(`https://etherscan.io/tx/${transaction.hash}`)
         }
       })
 

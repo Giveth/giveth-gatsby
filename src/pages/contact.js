@@ -2,6 +2,7 @@
 import { jsx, Label, Input, Grid, Text, Button, Textarea } from 'theme-ui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import React from 'react'
+import Seo from '../components/seo'
 import styled from '@emotion/styled'
 import useMediaQuery from 'react-responsive'
 
@@ -53,6 +54,7 @@ const Contact = ({ data }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
+      <Seo title='Contact us' />
       {!isMobile ? (
         <img
           src={decoratorCircles}

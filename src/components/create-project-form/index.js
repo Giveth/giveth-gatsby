@@ -151,21 +151,24 @@ const CreateProjectForm = props => {
         })
       }
     }
+    let content = null
     if (currentStep === 3) {
       projectCategory = {
         ...data
       }
-      setFormData({
+      content = {
         ...formData,
         projectCategory
-      })
+      }
     } else {
-      setFormData({
+      content = {
         ...formData,
         ...data
-      })
+      }
     }
-    console.log({ formData })
+    setFormData(content)
+    window?.localStorage.setItem('create-form', JSON.stringify(content))
+    console.log({ formData, content })
     if (currentStep === steps.length - 1) {
       props.onSubmit(formData)
     }
@@ -209,6 +212,13 @@ const CreateProjectForm = props => {
       checkProjectWallet()
     }
   }, [user])
+
+  useEffect(() => {
+    //Checks localstorage to reset form
+    const localCreateForm = window?.localStorage.getItem('create-form')
+    console.log({ localCreateForm })
+    localCreateForm && setFormData(JSON.parse(localCreateForm))
+  }, [])
 
   if (loading) {
     return (

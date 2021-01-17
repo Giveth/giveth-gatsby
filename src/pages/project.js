@@ -40,16 +40,19 @@ const Project = props => {
       setLoading(false)
     }
   })
-
   return (
     <Layout>
       {loading ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Seo title='Donate to this project' />
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : slugProject ? (
         <>
-          <Seo title={`Donate to ${slugProject?.title}`} />
+          <Seo
+            title={`Check ${slugProject?.title} in Giveth`}
+            image={slugProject?.image}
+          />
           <ProjectDonatorView pageContext={{ project: slugProject }} />
         </>
       ) : null}

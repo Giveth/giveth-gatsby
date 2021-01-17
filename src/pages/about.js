@@ -5,6 +5,7 @@ import { graphql, navigate } from 'gatsby'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
 import { BLOCKS } from '@contentful/rich-text-types'
 import styled from '@emotion/styled'
+import Seo from '../components/seo'
 import { FaMediumM, FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa'
 import SocialNetworks from '../components/content/SocialNetworks'
 import Layout from '../components/layout'
@@ -58,6 +59,7 @@ const AboutPage = ({ data }) => {
   }
   return (
     <Layout>
+      <Seo title='About us' />
       <Flex>
         <Image
           src={teamImg}

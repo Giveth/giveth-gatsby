@@ -85,6 +85,7 @@ const MyProjects = props => {
         {projects?.map((item, index) => {
           return (
             <ProjectCard
+              withEditHover
               action={() => setProject(item)}
               name={item?.title}
               description={item?.description}
@@ -92,6 +93,7 @@ const MyProjects = props => {
               raised={111}
               categories={item?.categories}
               listingId={index}
+              slug={item?.slug}
               key={index}
             />
           )
@@ -107,7 +109,8 @@ const MyProjects = props => {
               pb: 2,
               pt: 4,
               textAlign: 'center',
-              alignSelf: 'center'
+              alignSelf: 'center',
+              textDecoration: 'none'
             }}
           >
             <Text
@@ -118,7 +121,12 @@ const MyProjects = props => {
             >
               Start raising funds
             </Text>
-            <Text sx={{ variant: 'headings.h4', color: 'background' }}>
+            <Text
+              sx={{
+                variant: 'headings.h4',
+                color: 'background'
+              }}
+            >
               Create a Project
             </Text>
           </Box>
