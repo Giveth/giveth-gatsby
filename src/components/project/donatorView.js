@@ -133,7 +133,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   return (
     <>
       <Seo
-        title={project?.title && `Check ${project?.title} in Giveth`}
+        title={project?.title && `Check ${project?.title}`}
         image={project?.image}
       />
       <Flex>
