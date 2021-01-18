@@ -174,10 +174,14 @@ const ProjectCard = props => {
         <div
           key={props.listingId + '_div'}
           src={props.image}
+          onClick={() =>
+            (window.location.href = `/project/${props?.slug || ''}`)
+          }
           style={{
             width: '100%',
             height: '186px',
             margin: '0 auto',
+            cursor: 'pointer',
             borderRadius: '12px 12px 0px 0px',
             backgroundImage: /^\d+$/.test(props.image)
               ? `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`
@@ -191,7 +195,8 @@ const ProjectCard = props => {
             position: 'relative'
           }}
           alt={props.name}
-        >
+        />
+        <div style={{ position: 'relative' }}>
           <Dot
             key={props.listingId + '_card'}
             style={{
