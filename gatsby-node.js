@@ -15,9 +15,11 @@ exports.onCreatePage = async ({ page, actions }) => {
     createPage(page)
   }
   if (page.path.match(/^\/project/)) {
-    page.matchPath = '/project/*'
-    // Update the page.
-    createPage(page)
+    createPage({
+      path: '/project',
+      matchPath: '/project/:id',
+      component: require.resolve('./src/pages/project.js')
+    })
   }
   if (page.path.match(/^\//)) {
     page.context = {

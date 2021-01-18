@@ -11,7 +11,7 @@
   force = true
 
 [[redirects]]
-  from = "/project/*"
+  from = "/project/:id"
   to = "/project"
   status = 200
   force = true

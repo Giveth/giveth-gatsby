@@ -14,7 +14,6 @@ const Project = props => {
 
   const [loading, setLoading] = useState(true)
   const [slugProject, setSlugProject] = useState(null)
-
   useEffect(() => {
     const getProject = async () => {
       const slug = id
@@ -52,17 +51,4 @@ const Project = props => {
   )
 }
 
-const ProjectWithoutSlug = () => {
-  return <Layout />
-}
-
-const ProjectIndex = () => {
-  return (
-    <Router basepath='/'>
-      <ProjectWithoutSlug path='project' />
-      <Project path='project/:id' />
-    </Router>
-  )
-}
-
-export default ProjectIndex
+export default Project
