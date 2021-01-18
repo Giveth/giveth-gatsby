@@ -270,7 +270,11 @@ const ShowProject = props => {
   return (
     <>
       <Seo
-        title={project?.title && `Make a donation to ${project?.title}!`}
+        title={
+          project?.title
+            ? `Make a donation to ${project?.title}!`
+            : 'Make a donation today!'
+        }
         image={project?.image}
       />
       <ProjectContainer>
@@ -297,10 +301,10 @@ const ShowProject = props => {
 }
 
 const Donate = props => {
-  const { projectId } = props
+  const { id } = props
 
   const { loading, error, data } = useQuery(FETCH_PROJECT_BY_SLUG, {
-    variables: { slug: projectId }
+    variables: { slug: id }
   })
 
   // console.log({ data })
@@ -309,7 +313,7 @@ const Donate = props => {
     <Layout asDialog>
       <Content style={{ justifyItems: 'center' }}>
         {error ? (
-          <Text>Error</Text>
+          <Text sx={{ color: 'background' }}>Error</Text>
         ) : loading ? (
           <Spinner variant='spinner.medium' />
         ) : data?.projectBySlug ? (
@@ -322,33 +326,4 @@ const Donate = props => {
   )
 }
 
-const DonateWithoutSlug = () => {
-  return (
-    <Layout asDialog>
-      <Content style={{ justifyItems: 'center' }}>
-        {/* <Link to='/projects'>
-          <Button
-            variant='default'
-            sx={{
-              paddingTop: '20px',
-              paddingBottom: '20px'
-            }}
-          >
-            <Text sx={{ color: 'background' }}>Go see our projects</Text>
-          </Button>
-        </Link> */}
-      </Content>
-    </Layout>
-  )
-}
-
-const DonateIndex = () => {
-  return (
-    <Router basepath='/'>
-      <DonateWithoutSlug path='donate' />
-      <Donate path='donate/:projectId' />
-    </Router>
-  )
-}
-
-export default DonateIndex
+export default Donate

@@ -4,7 +4,6 @@ import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-import Seo from '../seo'
 
 import testImg from '../../images/giveth-test-image.png'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
@@ -49,7 +48,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
   )
 
   const project = pageContext?.project
-  console.log({ project })
   useEffect(() => {
     const firstFetch = async () => {
       try {
@@ -132,10 +130,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
   }
   return (
     <>
-      <Seo
-        title={project?.title && `Check ${project?.title}`}
-        image={project?.image}
-      />
       <Flex>
         {setImage(project?.image) || (
           <Image
@@ -463,7 +457,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
               mt: '5px'
             }}
             onClick={() => {
-              console.log({ project })
               usePopup?.triggerPopup('share', {
                 title: project?.title,
                 description: project?.description,

@@ -5,7 +5,7 @@
   package = "netlify-plugin-gatsby-cache"
 
 [[redirects]]
-  from = "/donate/*"
+  from = "/donate/:id"
   to = "/donate"
   status = 200
   force = true
