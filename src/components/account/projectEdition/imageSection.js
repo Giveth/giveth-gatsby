@@ -21,8 +21,8 @@ const Selection = styled(Button)`
   border-radius: 8px;
 `
 
-function ImageSection ({ image, register }) {
-  const [displayImage, setDisplayImage] = useState(image)
+function ImageSection({ image, register }) {
+  const [displayImage, setDisplayImage] = useState(null)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -31,6 +31,10 @@ function ImageSection ({ image, register }) {
       setDisplayImage(await toBase64(acceptedFile[0]))
     }
   })
+
+  useEffect(() => {
+    setDisplayImage(image)
+  }, [image])
 
   const ProjectImage = type => {
     return (
@@ -44,7 +48,6 @@ function ImageSection ({ image, register }) {
       />
     )
   }
-
   return (
     <>
       <Grid
@@ -86,7 +89,8 @@ function ImageSection ({ image, register }) {
               src={placeHolder}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
-          ) : displayImage?.startsWith('data:') ? (
+          ) : displayImage?.startsWith('data:') ||
+            displayImage?.startsWith('http') ? (
             <Image
               src={displayImage}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}

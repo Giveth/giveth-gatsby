@@ -34,7 +34,7 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEditionForm (props) {
+function ProjectEditionForm(props) {
   const {
     goBack,
     setCancelModal,
@@ -45,15 +45,19 @@ function ProjectEditionForm (props) {
     mapLocation,
     setMapLocation
   } = props
-  console.log(
-    `ProjectEditionForm -> project : ${JSON.stringify(project, null, 2)}`
-  )
 
   const [loading, setLoading] = useState(false)
-  const [categories, setCategories] = useState(props?.loadedProject?.categories)
+  const [categories, setCategories] = useState(null)
 
   const { register, handleSubmit, errors } = useForm() // initialize the hook
-  console.log({ categories })
+  // console.log(
+  //   `ProjectEditionForm -> project : ${JSON.stringify(project, null, 2)}`,
+  //   { project, categories }
+  // )
+
+  useEffect(() => {
+    setCategories(project?.categories)
+  }, [project])
 
   const connectBankAccount = async () => {
     try {
@@ -137,42 +141,45 @@ function ProjectEditionForm (props) {
             />
             <CustomLabel title='Category' htmlFor='editCategory' />
             <Box sx={{ height: '320px', overflow: 'scroll' }}>
-              {categoryList.map(category => {
-                const categoryFound = categories?.find(
-                  i => i.name === category.name
-                )
-                return (
-                  <Label
-                    sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
-                    key={`${category.name}-label`}
-                  >
-                    <Checkbox
-                      key={`${category.name}-checkbox`}
-                      id={category.name}
-                      name={category.name}
-                      ref={register}
-                      onClick={() => {
-                        categoryFound
-                          ? setCategories(
-                              // remove
-                              categories?.filter(i => i.name !== category.name)
-                            )
-                          : setCategories(
-                              categories?.length > 0
-                                ? [
-                                    // add
-                                    ...categories,
-                                    { name: category.name }
-                                  ]
-                                : [{ name: category.name }]
-                            )
-                      }}
-                      checked={categoryFound ? 1 : 0}
-                    />
-                    <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
-                  </Label>
-                )
-              })}
+              {categories &&
+                categoryList.map(category => {
+                  const categoryFound = categories?.find(
+                    i => i.name === category.name
+                  )
+                  return (
+                    <Label
+                      sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}
+                      key={`${category.name}-label`}
+                    >
+                      <Checkbox
+                        key={`${category.name}-checkbox`}
+                        id={category.name}
+                        name={category.name}
+                        ref={register}
+                        onClick={() => {
+                          categoryFound
+                            ? setCategories(
+                                // remove
+                                categories?.filter(
+                                  i => i.name !== category.name
+                                )
+                              )
+                            : setCategories(
+                                categories?.length > 0
+                                  ? [
+                                      // add
+                                      ...categories,
+                                      { name: category.name }
+                                    ]
+                                  : [{ name: category.name }]
+                              )
+                        }}
+                        checked={categoryFound ? 1 : 0}
+                      />
+                      <Text sx={{ fontFamily: 'body' }}>{category.value}</Text>
+                    </Label>
+                  )
+                })}
             </Box>
             <CustomLabel title='Impact Location' htmlFor='editImpactLocation' />
             {mapLocation || project?.impactLocation ? (
@@ -294,7 +301,7 @@ function ProjectEditionForm (props) {
   )
 }
 
-function ProjectEdition (props) {
+function ProjectEdition(props) {
   const { web3 } = useContext(TorusContext)
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
@@ -310,6 +317,8 @@ function ProjectEdition (props) {
       variables: { slug: props?.project }
     }
   )
+
+  // console.log({ project })
 
   useEffect(
     data => {
@@ -327,17 +336,18 @@ function ProjectEdition (props) {
   })
 
   useEffect(() => {
-    console.log(
-      `editProjectMutation effect : ${JSON.stringify(
-        { fetchedProject, project },
-        null,
-        2
-      )}`
-    )
+    // console.log(
+    //   `editProjectMutation effect : ${JSON.stringify(
+    //     { fetchedProject, project },
+    //     null,
+    //     2
+    //   )}`
+    // )
     if (project && updateProjectOnServer) {
       const projectId = fetchedProject.projectBySlug.id
 
       const editProjectMutation = async () => {
+        setLoading(true)
         const edit = await client.mutate({
           mutation: EDIT_PROJECT,
           variables: {
@@ -346,18 +356,18 @@ function ProjectEdition (props) {
           }
         })
         console.log(`debug > edit : ${JSON.stringify(edit, null, 2)}`)
-        // setLoading(false)
-        // setShowModal(true)
         console.log(`debug > after set Modal`)
         console.log({ edit })
         setUpdateProjectOnServer(false)
         setShowModal(true)
       }
       editProjectMutation()
+    } else {
+      setLoading(false)
     }
   }, [project])
 
-  async function updateProject (data) {
+  async function updateProject(data) {
     console.log(`updateProject!!!`)
     console.log(`data : ${JSON.stringify(data, null, 2)}`)
 
@@ -428,11 +438,11 @@ function ProjectEdition (props) {
     }
   }
 
-  if (loadingProject) return <LoadingModal isOpen={loading} />
-  console.log(`james render - project : ${JSON.stringify(project, null, 2)}`)
+  // console.log(`james render - project : ${JSON.stringify(project, null, 2)}`)
 
   return (
     <>
+      <LoadingModal isOpen={loadingProject || loading} />
       <ProjectEditionForm
         {...props}
         setShowModal={setShowModal}
