@@ -27,8 +27,8 @@ function Seo({ description, lang, meta, title, image }) {
 
   const metaDescription = description || site.siteMetadata.description
   const urlRegex = /([a-z]+\:\/+)([^\/\s]*)([a-z0-9\-@\^=%&;\/~\+]*)[\?]?([^ \#]*)#?([^ \#]*)/gi
-  const metaImage = urlRegex.image ? image : 'https://giveth.io/givethio.png'
-
+  const metaImage = 'https://giveth.io/givethio.png'
+  console.log('SEEOOO', { title, metaImage, metaDescription })
   return (
     <Helmet
       htmlAttributes={{
