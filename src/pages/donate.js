@@ -269,6 +269,10 @@ const ShowProject = props => {
 
   return (
     <>
+      <Seo
+        title={project?.title && `Make a donation to ${project?.title}!`}
+        image={project?.image}
+      />
       <ProjectContainer>
         <ProjectListing
           disabled
@@ -303,13 +307,6 @@ const Donate = props => {
 
   return (
     <Layout asDialog>
-      <Seo
-        title={
-          data?.projectBySlug?.title &&
-          `Make a donation to ${data?.projectBySlug?.title}!`
-        }
-        image={data?.projectBySlug?.image}
-      />
       <Content style={{ justifyItems: 'center' }}>
         {error ? (
           <Text>Error</Text>

@@ -2,7 +2,6 @@
 import React from 'react'
 import { jsx, Flex, Spinner } from 'theme-ui'
 import Layout from '../components/layout'
-import Seo from '../components/seo'
 import { Router } from '@reach/router'
 import { useApolloClient } from '@apollo/client'
 import { ProjectDonatorView } from '../components/project'
@@ -42,10 +41,6 @@ const Project = props => {
   })
   return (
     <Layout>
-      <Seo
-        title={slugProject?.title && `Check ${slugProject?.title} in Giveth`}
-        image={slugProject?.image}
-      />
       {loading ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Spinner variant='spinner.medium' />
