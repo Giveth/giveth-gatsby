@@ -303,19 +303,20 @@ const Donate = props => {
 
   return (
     <Layout asDialog>
+      <Seo
+        title={
+          data?.projectBySlug?.title &&
+          `Make a donation to ${data?.projectBySlug?.title}!`
+        }
+        image={data?.projectBySlug?.image}
+      />
       <Content style={{ justifyItems: 'center' }}>
         {error ? (
           <Text>Error</Text>
         ) : loading ? (
           <Spinner variant='spinner.medium' />
         ) : data?.projectBySlug ? (
-          <>
-            <Seo
-              title={`Make a donation to ${data?.projectBySlug?.title}!`}
-              image={data?.projectBySlug?.image}
-            />
-            <ShowProject {...props} project={data.projectBySlug} />
-          </>
+          <ShowProject {...props} project={data.projectBySlug} />
         ) : (
           <ProjectNotFound />
         )}

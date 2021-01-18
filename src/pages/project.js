@@ -42,19 +42,16 @@ const Project = props => {
   })
   return (
     <Layout>
+      <Seo
+        title={slugProject?.title && `Check ${slugProject?.title} in Giveth`}
+        image={slugProject?.image}
+      />
       {loading ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Seo title='Donate to this project' />
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : slugProject ? (
-        <>
-          <Seo
-            title={`Check ${slugProject?.title} in Giveth`}
-            image={slugProject?.image}
-          />
-          <ProjectDonatorView pageContext={{ project: slugProject }} />
-        </>
+        <ProjectDonatorView pageContext={{ project: slugProject }} />
       ) : null}
     </Layout>
   )
