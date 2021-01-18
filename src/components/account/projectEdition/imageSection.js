@@ -21,7 +21,7 @@ const Selection = styled(Button)`
   border-radius: 8px;
 `
 
-function ImageSection({ image, register }) {
+function ImageSection ({ image, register }) {
   const [displayImage, setDisplayImage] = useState(image)
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -57,7 +57,10 @@ function ImageSection({ image, register }) {
           minHeight: '270px',
           maxHeight: '270px',
           mt: '12px',
-          p: '20% 0'
+          p: '20% 0',
+          '&:hover': {
+            cursor: 'pointer'
+          }
         }}
       >
         <Flex
@@ -110,7 +113,11 @@ function ImageSection({ image, register }) {
               Upload from computer
             </Text>
           </Text>
-          <Text sx={{ marginTop: '8px' }}>
+          <Text
+            sx={{
+              marginTop: '8px'
+            }}
+          >
             Suggested image size min. 1200px width. Image size up to 16mb.
           </Text>
         </Flex>

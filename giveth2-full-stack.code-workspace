@@ -22,21 +22,24 @@
   "settings": {
     // Differentiate our giveth2 workspace from other open VSCode windows
     "workbench.colorCustomizations": {
-      "statusBar.background": "#c2449f",
-      "statusBarItem.hoverBackground": "#cf6ab3",
-      "titleBar.activeBackground": "#c2449f",
-      "titleBar.inactiveBackground": "#c2449f99",
-      "statusBar.foreground": "#e7e7e7",
-      "titleBar.activeForeground": "#e7e7e7",
-      "titleBar.inactiveForeground": "#e7e7e799",
-      "activityBar.activeBackground": "#cf6ab3",
-      "activityBar.activeBorder": "#4e601f",
-      "activityBar.background": "#cf6ab3",
-      "activityBar.foreground": "#15202b",
-      "activityBar.inactiveForeground": "#15202b99",
-      "activityBarBadge.background": "#4e601f",
-      "activityBarBadge.foreground": "#e7e7e7"
+      "titleBar.activeBackground": "#5144c2"   
     },
+    // "workbench.colorCustomizations": {
+    //   "statusBar.background": "#c2449f",
+    //   "statusBarItem.hoverBackground": "#cf6ab3",
+    //   "titleBar.activeBackground": "#c2449f",
+    //   "titleBar.inactiveBackground": "#c2449f99",
+    //   "statusBar.foreground": "#e7e7e7",
+    //   "titleBar.activeForeground": "#e7e7e7",
+    //   "titleBar.inactiveForeground": "#e7e7e799",
+    //   "activityBar.activeBackground": "#cf6ab3",
+    //   "activityBar.activeBorder": "#4e601f",
+    //   "activityBar.background": "#cf6ab3",
+    //   "activityBar.foreground": "#15202b",
+    //   "activityBar.inactiveForeground": "#15202b99",
+    //   "activityBarBadge.background": "#4e601f",
+    //   "activityBarBadge.foreground": "#e7e7e7"
+    // },
     "peacock.color": "#C2449F"
   }
 }

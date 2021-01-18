@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 

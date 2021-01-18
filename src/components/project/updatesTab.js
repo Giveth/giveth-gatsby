@@ -3,7 +3,7 @@ import {
   GET_PROJECT_UPDATES,
   ADD_PROJECT_UPDATE
 } from '../../apollo/gql/projects'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import Toast from '../toast'
 import Timeline from './timeline'

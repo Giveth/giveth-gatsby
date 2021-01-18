@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import * as Auth from '../services/auth'
 import { TorusContext } from './torusProvider'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { DO_LOGIN } from '../apollo/gql/auth'
 
 const proveWalletContext = React.createContext({})
