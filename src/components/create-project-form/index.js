@@ -13,7 +13,7 @@ import {
 } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { useForm } from 'react-hook-form'

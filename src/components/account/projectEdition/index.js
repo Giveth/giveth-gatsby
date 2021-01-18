@@ -13,7 +13,7 @@ import {
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
 import theme from '../../../gatsby-plugin-theme-ui/index'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/client'
 import {
   GET_LINK_BANK_CREATION,
   EDIT_PROJECT,

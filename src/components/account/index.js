@@ -3,7 +3,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { jsx, Text, Flex, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { BsArrowLeft } from 'react-icons/bs'
@@ -26,9 +26,9 @@ const UserSpan = styled.span`
 `
 
 const AccountPage = props => {
-  console.log('Render Account page')
+  console.log('Render AccountPage')
 
-  const { user, isLoggedIn, logout } = React.useContext(TorusContext)
+  const { user, isLoggedIn } = React.useContext(TorusContext)
   const fromWalletAddress = user?.addresses && user.addresses[0]
   const storageWallets =
     typeof localStorage !== 'undefined'
@@ -49,20 +49,11 @@ const AccountPage = props => {
   })
   const projectsList = userProjects?.projects
 
-  const options = [
-    { route: 'account', name: 'My Account' },
-    { route: 'projects', name: 'My Projects' },
-    { route: 'donations', name: 'My Donations' }
-  ]
   const [query, setQuery] = useQueryParams({
     view: StringParam,
     data: StringParam
   })
   const isSSR = typeof window === 'undefined'
-
-  const handleLogout = () => {
-    logout()
-  }
 
   if (!isLoggedIn) {
     return (
@@ -88,8 +79,6 @@ const AccountPage = props => {
         }}
       >
         <AccountNav
-          handleLogout={handleLogout}
-          options={options}
           setQuery={setQuery}
           query={query}
           userDonations={userDonations}

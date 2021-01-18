@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from '@apollo/react-hooks'
+import { useApolloClient, useQuery } from '@apollo/client'
 import theme from '../gatsby-plugin-theme-ui/index'
 // import Donate from '../components/donateForm'
 import {

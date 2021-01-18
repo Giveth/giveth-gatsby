@@ -14,7 +14,7 @@ import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 
 import { Link } from 'gatsby'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useQuery, useApolloClient } from '@apollo/client'
 import {
   GET_STRIPE_PROJECT_DONATIONS,
   GET_PROJECT_UPDATES
