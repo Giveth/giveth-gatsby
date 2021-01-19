@@ -13,10 +13,6 @@ const UserSpan = styled.span`
   grid-template-columns: repeat(4, auto);
   align-items: center;
   justify-self: end;
-  @media (max-width: 1030px) {
-    grid-row: 1;
-    grid-column: 3;
-  }
 `
 const CreateLink = styled(Link)`
   text-decoration: none;
@@ -32,7 +28,14 @@ const CreateLink = styled(Link)`
 const AccountTop = props => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
-    <Flex sx={{ justifyContent: 'space-between', mx: '5%', height: '128px' }}>
+    <Flex
+      sx={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        mx: '5%',
+        height: '128px'
+      }}
+    >
       <Link
         to='/'
         sx={{
@@ -45,13 +48,33 @@ const AccountTop = props => {
         }}
       >
         <BsArrowLeft size='24px' />
-        Giveth
+        <Text
+          sx={{
+            color: 'primary',
+            '&:hover': {
+              color: 'accent'
+            }
+          }}
+        >
+          Giveth
+        </Text>
       </Link>
       <Flex>
         <UserSpan>
           {isMobile ? null : (
             <span>
-              <CreateLink to='/create'>Create a project</CreateLink>
+              <CreateLink to='/create'>
+                <Text
+                  sx={{
+                    color: 'primary',
+                    '&:hover': {
+                      color: 'accent'
+                    }
+                  }}
+                >
+                  Create a project
+                </Text>
+              </CreateLink>
             </span>
           )}
           <img src={iconVerticalLine} alt='' />

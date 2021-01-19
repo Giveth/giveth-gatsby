@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React from 'react'
 import { Link } from 'gatsby'
-import { jsx, Text, Flex, Box } from 'theme-ui'
+import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
@@ -39,14 +39,17 @@ const AccountPage = props => {
     ? storageWallets.split(',').concat(fromWalletAddress)
     : [fromWalletAddress]
 
-  const { data: donations } = useQuery(USERS_DONATIONS, {
+  const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
     variables: { fromWalletAddresses: userWallets }
   })
   const userDonations = donations?.donationsFromWallets
 
-  const { data: userProjects } = useQuery(FETCH_USER_PROJECTS, {
-    variables: { admin: parseFloat(user?.userIDFromDB || -1) }
-  })
+  const { data: userProjects, loading: projectsLoading } = useQuery(
+    FETCH_USER_PROJECTS,
+    {
+      variables: { admin: parseFloat(user?.userIDFromDB || -1) }
+    }
+  )
   const projectsList = userProjects?.projects
 
   const [query, setQuery] = useQueryParams({
@@ -54,6 +57,14 @@ const AccountPage = props => {
     data: StringParam
   })
   const isSSR = typeof window === 'undefined'
+
+  if (dataLoading || projectsLoading) {
+    return (
+      <>
+        <Spinner variant='spinner.large' />
+      </>
+    )
+  }
 
   if (!isLoggedIn) {
     return (
