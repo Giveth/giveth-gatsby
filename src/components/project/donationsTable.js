@@ -2,7 +2,7 @@
 import React from 'react'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'

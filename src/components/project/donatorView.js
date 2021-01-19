@@ -14,7 +14,7 @@ import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 
 import { Link } from 'gatsby'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useQuery, useApolloClient } from '@apollo/client'
 import {
   GET_STRIPE_PROJECT_DONATIONS,
   GET_PROJECT_UPDATES
@@ -48,7 +48,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
   )
 
   const project = pageContext?.project
-  console.log({ project })
   useEffect(() => {
     const firstFetch = async () => {
       try {
@@ -458,7 +457,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
               mt: '5px'
             }}
             onClick={() => {
-              console.log({ project })
               usePopup?.triggerPopup('share', {
                 title: project?.title,
                 description: project?.description,

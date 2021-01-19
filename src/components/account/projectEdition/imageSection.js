@@ -22,7 +22,7 @@ const Selection = styled(Button)`
 `
 
 function ImageSection({ image, register }) {
-  const [displayImage, setDisplayImage] = useState(image)
+  const [displayImage, setDisplayImage] = useState(null)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
@@ -31,6 +31,10 @@ function ImageSection({ image, register }) {
       setDisplayImage(await toBase64(acceptedFile[0]))
     }
   })
+
+  useEffect(() => {
+    setDisplayImage(image)
+  }, [image])
 
   const ProjectImage = type => {
     return (
@@ -44,7 +48,6 @@ function ImageSection({ image, register }) {
       />
     )
   }
-
   return (
     <>
       <Grid
@@ -57,7 +60,10 @@ function ImageSection({ image, register }) {
           minHeight: '270px',
           maxHeight: '270px',
           mt: '12px',
-          p: '20% 0'
+          p: '20% 0',
+          '&:hover': {
+            cursor: 'pointer'
+          }
         }}
       >
         <Flex
@@ -83,7 +89,8 @@ function ImageSection({ image, register }) {
               src={placeHolder}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
-          ) : displayImage?.startsWith('data:') ? (
+          ) : displayImage?.startsWith('data:') ||
+            displayImage?.startsWith('http') ? (
             <Image
               src={displayImage}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}
@@ -110,7 +117,11 @@ function ImageSection({ image, register }) {
               Upload from computer
             </Text>
           </Text>
-          <Text sx={{ marginTop: '8px' }}>
+          <Text
+            sx={{
+              marginTop: '8px'
+            }}
+          >
             Suggested image size min. 1200px width. Image size up to 16mb.
           </Text>
         </Flex>

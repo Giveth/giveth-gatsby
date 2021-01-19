@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { jsx } from 'theme-ui'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { FETCH_PROJECTS } from '../../apollo/gql/projects'
 import { navigate } from 'gatsby'
 import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'

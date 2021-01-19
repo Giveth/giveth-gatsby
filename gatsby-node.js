@@ -10,14 +10,18 @@ exports.onCreatePage = async ({ page, actions }) => {
   // page.matchPath is a special key that's used for matching pages
   // only on the client.
   if (page.path.match(/^\/donate/)) {
-    page.matchPath = '/donate/*'
-    // Update the page.
-    createPage(page)
+    createPage({
+      path: '/donate',
+      matchPath: '/donate/:id',
+      component: require.resolve('./src/pages/donate.js')
+    })
   }
   if (page.path.match(/^\/project/)) {
-    page.matchPath = '/project/*'
-    // Update the page.
-    createPage(page)
+    createPage({
+      path: '/project',
+      matchPath: '/project/:id',
+      component: require.resolve('./src/pages/project.js')
+    })
   }
   if (page.path.match(/^\//)) {
     page.context = {

@@ -6,7 +6,6 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "@apollo/client": "^3.3.7",
-    "@apollo/react-hooks": "^4.0.0",
     "@contentful/rich-text-react-renderer": "^14.1.2",
     "@contentful/rich-text-types": "^14.1.2",
     "@emotion/core": "^10.1.1",

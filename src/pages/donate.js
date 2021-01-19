@@ -6,7 +6,7 @@ import { Box, Button, Grid, Spinner, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Seo from '../components/seo'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import OnlyFiat from '../components/donate/onlyFiat'
 import Success from '../components/donate/success'
 import Layout from '../components/layout'
@@ -293,29 +293,31 @@ const ShowProject = props => {
 }
 
 const Donate = props => {
-  const { projectId } = props
+  const { id } = props
 
   const { loading, error, data } = useQuery(FETCH_PROJECT_BY_SLUG, {
-    variables: { slug: projectId }
+    variables: { slug: id }
   })
 
   // console.log({ data })
 
   return (
     <Layout asDialog>
+      <Seo
+        title={
+          data?.projectBySlug?.title
+            ? `Make a donation to ${data?.projectBySlug?.title}!`
+            : 'Make a donation today!'
+        }
+        image={data?.projectBySlug?.image}
+      />
       <Content style={{ justifyItems: 'center' }}>
         {error ? (
-          <Text>Error</Text>
+          <Text sx={{ color: 'background' }}>Error</Text>
         ) : loading ? (
           <Spinner variant='spinner.medium' />
         ) : data?.projectBySlug ? (
-          <>
-            <Seo
-              title={`Make a donation to ${data?.projectBySlug?.title}!`}
-              image={data?.projectBySlug?.image}
-            />
-            <ShowProject {...props} project={data.projectBySlug} />
-          </>
+          <ShowProject {...props} project={data.projectBySlug} />
         ) : (
           <ProjectNotFound />
         )}
@@ -324,33 +326,4 @@ const Donate = props => {
   )
 }
 
-const DonateWithoutSlug = () => {
-  return (
-    <Layout asDialog>
-      <Content style={{ justifyItems: 'center' }}>
-        {/* <Link to='/projects'>
-          <Button
-            variant='default'
-            sx={{
-              paddingTop: '20px',
-              paddingBottom: '20px'
-            }}
-          >
-            <Text sx={{ color: 'background' }}>Go see our projects</Text>
-          </Button>
-        </Link> */}
-      </Content>
-    </Layout>
-  )
-}
-
-const DonateIndex = () => {
-  return (
-    <Router basepath='/'>
-      <DonateWithoutSlug path='donate' />
-      <Donate path='donate/:projectId' />
-    </Router>
-  )
-}
-
-export default DonateIndex
+export default Donate

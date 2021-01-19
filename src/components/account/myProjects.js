@@ -40,6 +40,8 @@ const RaisedHandImg = styled.img`
 
 const MyProjects = props => {
   const { projects, edit } = props
+  // console.log(`My projects : ${JSON.stringify(projects, null, 2)}`)
+
   const [editProject, setEditProject] = useState(edit)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
   const [query, setQuery] = useQueryParams({

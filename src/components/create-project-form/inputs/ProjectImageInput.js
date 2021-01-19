@@ -76,7 +76,10 @@ export const ProjectImageInput = ({
           maxHeight: '270px',
           mt: '12px',
           p: '2.5%',
-          gap: '20px'
+          gap: '20px',
+          '&:hover': {
+            cursor: 'pointer'
+          }
         }}
       >
         <Flex
@@ -130,7 +133,11 @@ export const ProjectImageInput = ({
               Upload from computer
             </Text>
           </Text>
-          <Text sx={{ marginTop: '8px' }}>
+          <Text
+            sx={{
+              marginTop: '8px'
+            }}
+          >
             Suggested image size min. 1200px width. Image size up to 16mb.
           </Text>
         </Flex>

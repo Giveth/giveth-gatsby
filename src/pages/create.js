@@ -4,7 +4,7 @@ import { navigate } from 'gatsby'
 import Web3 from 'web3'
 import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
-import { useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/client'
 import { Flex, Text, Spinner } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 import Layout from '../components/layout'
@@ -96,7 +96,7 @@ const IndexPage = ({ data, location }) => {
     }
   }
 
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -198,7 +198,7 @@ const IndexPage = ({ data, location }) => {
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (!projectAdded && !projectId) {
       return (
         <>
