@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { BsArrowLeft } from 'react-icons/bs'
+import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import AccountTop from '../../components/account/AccountTop'
@@ -61,7 +62,8 @@ const AccountPage = props => {
   if (dataLoading || projectsLoading) {
     return (
       <>
-        <Spinner variant='spinner.large' />
+        <AccountTop />
+        <LoadingModal isOpen={true} />
       </>
     )
   }
