@@ -173,6 +173,7 @@ const Footer = () => {
 
       <CreditsSection
         pt={[1, 3, 6]}
+        mb={[4, null, null]}
         sx={{
           alignContent: 'center'
         }}

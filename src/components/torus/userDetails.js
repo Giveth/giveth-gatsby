@@ -86,7 +86,6 @@ const UserDetails = () => {
   const handleLogout = () => {
     logout()
   }
-  console.log({ user })
   return (
     <div ref={ref}>
       <Button

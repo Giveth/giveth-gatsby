@@ -22,7 +22,20 @@
   "settings": {
     // Differentiate our giveth2 workspace from other open VSCode windows
     "workbench.colorCustomizations": {
-      "titleBar.activeBackground": "#5144c2"   
+      "titleBar.activeBackground": "#c2449f",
+      "activityBar.activeBackground": "#cf6ab3",
+      "activityBar.activeBorder": "#4e601f",
+      "activityBar.background": "#cf6ab3",
+      "activityBar.foreground": "#15202b",
+      "activityBar.inactiveForeground": "#15202b99",
+      "activityBarBadge.background": "#4e601f",
+      "activityBarBadge.foreground": "#e7e7e7",
+      "statusBar.background": "#c2449f",
+      "statusBar.foreground": "#e7e7e7",
+      "statusBarItem.hoverBackground": "#cf6ab3",
+      "titleBar.activeForeground": "#e7e7e7",
+      "titleBar.inactiveBackground": "#c2449f99",
+      "titleBar.inactiveForeground": "#e7e7e799"
     },
     // "workbench.colorCustomizations": {
     //   "statusBar.background": "#c2449f",
