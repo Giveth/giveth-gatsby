@@ -113,7 +113,7 @@ const Hero = ({ content }) => {
           </Link>
         </Grid>
       </HeroText>
-      <Box sx={{ minHeight: '80vh' }}>
+      <Box sx={{ minHeight: '100vh' }}>
         {isMobile ? null : <HeroImage alt='' />}
       </Box>
     </HeroSection>

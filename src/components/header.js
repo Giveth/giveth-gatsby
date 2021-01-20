@@ -233,6 +233,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                 alt=''
                 width='40px'
                 height='40px'
+                sx={{ mr: 3 }}
               />
             ) : (
               <LogoSpan
@@ -267,7 +268,10 @@ const Header = ({ siteTitle, isHomePage }) => {
           <MiddleSpan>
             <NavLink
               to='/'
-              sx={{ color: isHomePage ? 'secondary' : 'primary' }}
+              sx={{
+                display: ['none', 'block', 'block'],
+                color: isHomePage ? 'secondary' : 'primary'
+              }}
             >
               Home
             </NavLink>

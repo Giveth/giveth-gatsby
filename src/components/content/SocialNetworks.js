@@ -14,13 +14,20 @@ import {
 
 import theme from '../../gatsby-plugin-theme-ui/index'
 
-const SocialContainer = styled.div``
+const SocialContainer = styled.div`
+  @media (max-width: 850px) {
+    max-width: 100vw;
+  }
+`
 
 const LinkContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(24px, 1fr));
   justify-content: space-evenly;
   width: 344px;
+  @media (max-width: 850px) {
+    max-width: 100vw;
+  }
 `
 
 const SocialLink = styled.a`
