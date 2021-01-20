@@ -23,6 +23,8 @@ export const OrderByDirection = {
 }
 
 const CreateLink = styled(Link)`
+  width: 50%;
+  text-align: right;
   text-decoration: none;
   font-family: 'Red Hat Display', sans-serif;
   text-transform: uppercase;

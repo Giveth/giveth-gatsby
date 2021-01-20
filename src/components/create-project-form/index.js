@@ -189,7 +189,6 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     const checkProjectWallet = async () => {
-      console.log({ user })
       if (!user) return null
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
       // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
