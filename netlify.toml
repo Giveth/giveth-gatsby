@@ -16,3 +16,8 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/user/:address"
+  to = "/user"
+  status = 200
+  force = true

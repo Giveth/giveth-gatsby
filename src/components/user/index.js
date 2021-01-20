@@ -1,0 +1,1 @@
+export { PublicProfileView } from './profileView'

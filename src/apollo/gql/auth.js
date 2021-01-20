@@ -39,6 +39,7 @@ const GET_USER = gql`
       name
       email
       avatar
+      walletAddress
     }
   }
 `

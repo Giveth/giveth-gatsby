@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { jsx, Flex, Spinner } from 'theme-ui'
 import Layout from '../components/layout'
 import { Router } from '@reach/router'
@@ -7,7 +7,6 @@ import Seo from '../components/seo'
 import { useApolloClient } from '@apollo/client'
 import { ProjectDonatorView } from '../components/project'
 import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
-import { useEffect, useState } from 'react'
 
 const Project = props => {
   const { id } = props

@@ -23,6 +23,13 @@ exports.onCreatePage = async ({ page, actions }) => {
       component: require.resolve('./src/pages/project.js')
     })
   }
+  if (page.path.match(/^\/user/)) {
+    createPage({
+      path: '/user',
+      matchPath: '/user/:address',
+      component: require.resolve('./src/pages/user.js')
+    })
+  }
   if (page.path.match(/^\//)) {
     page.context = {
       site: process.env.GATSBY_SITE_ID + '-home'
