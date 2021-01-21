@@ -163,6 +163,8 @@ const ProjectCard = props => {
     }
   }
 
+  const image = props.image || project?.image
+
   return (
     <Box
       key={props.listingId + '_box'}
@@ -171,14 +173,14 @@ const ProjectCard = props => {
       onMouseLeave={() => setAltStyle(false)}
     >
       <CardContainer
-        key={props.listingId + '_card'}
+        key={props.listingId || project?.title + '_card'}
         sx={{
           boxShadow: altStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
         }}
       >
         <div
-          key={props.listingId + '_div'}
-          src={props.image}
+          key={props.listingId || project?.title + '_div'}
+          src={image}
           onClick={() =>
             (window.location.href = `/project/${props?.slug || ''}`)
           }
@@ -188,15 +190,15 @@ const ProjectCard = props => {
             margin: '0 auto',
             cursor: 'pointer',
             borderRadius: '12px 12px 0px 0px',
-            backgroundImage: /^\d+$/.test(props.image)
-              ? `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`
-              : `url(${props.image})`,
+            backgroundImage: /^\d+$/.test(image)
+              ? `url('/assets/create/projectImageGallery${image.toString()}.svg')`
+              : `url(${image})`,
             backgroundColor: '#cccccc',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             position: 'relative'
           }}
-          alt={props.name}
+          alt={props.name || project?.title}
         />
         <div style={{ position: 'relative' }}>
           <Dot
@@ -275,7 +277,7 @@ const ProjectCard = props => {
           }}
           key={props.listingId + '_heading'}
         >
-          {props.name}
+          {props.name || project?.title}
           <Text
             sx={{ variant: 'text.default' }}
             style={{

@@ -124,7 +124,7 @@ const GithubIssue = () => {
         position: 'fixed',
         bottom: 0,
         right: 0,
-        zIndex: 2,
+        zIndex: 4,
         m: 4,
         borderRadius: '12px',
         backgroundColor: 'background',

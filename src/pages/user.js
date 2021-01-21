@@ -5,7 +5,9 @@ import Layout from '../components/layout'
 import Seo from '../components/seo'
 import { useApolloClient } from '@apollo/client'
 import { PublicProfileView } from '../components/user'
+import { FETCH_USER_PROJECTS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
+import { USERS_DONATIONS } from '../apollo/gql/donations'
 
 const User = props => {
   const { address } = props
@@ -13,6 +15,8 @@ const User = props => {
 
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
+  const [userDonations, setDonations] = useState(null)
+  const [userProjects, setProjects] = useState(null)
 
   useEffect(() => {
     const getUser = async () => {
@@ -25,6 +29,23 @@ const User = props => {
           }
         })
         setUser(data?.userByAddress)
+
+        // GET DONATIONS
+        const { data: donations } = await client.query({
+          query: USERS_DONATIONS,
+          variables: { fromWalletAddresses: [address] },
+          fetchPolicy: 'network-only'
+        })
+        setDonations(donations?.donationsFromWallets)
+
+        // GET PROJECTS
+        const { data: projects } = await client.query({
+          query: FETCH_USER_PROJECTS,
+          variables: { admin: parseFloat(data?.userByAddress?.id || -1) },
+          fetchPolicy: 'network-only'
+        })
+        setProjects(projects?.projects)
+
         setLoading(false)
       } catch (error) {
         console.log({ error })
@@ -37,6 +58,7 @@ const User = props => {
       setLoading(false)
     }
   })
+
   return (
     <Layout>
       <Seo title={user?.name ? `${user?.name} at Giveth` : 'Giveth Profile'} />
@@ -45,8 +67,18 @@ const User = props => {
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : user ? (
-        <PublicProfileView user={user} />
-      ) : null}
+        <PublicProfileView
+          user={user}
+          projects={userProjects}
+          donations={userDonations}
+        />
+      ) : (
+        <Flex sx={{ m: 'auto' }}>
+          <Text variant='headings.h3' color='secondary'>
+            No user found
+          </Text>
+        </Flex>
+      )}
     </Layout>
   )
 }

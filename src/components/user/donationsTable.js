@@ -1,18 +1,13 @@
 /** @jsx jsx */
-import React, { useEffect } from 'react'
-import { ProjectContext } from '../../contextProvider/projectProvider'
-import { ethers } from 'ethers'
+import React from 'react'
 import { titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
-import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { Badge, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
 dayjs.extend(localizedFormat)
@@ -37,13 +32,19 @@ const Table = styled.table`
     border-bottom: 1px solid #eaebee;
     padding: 0.35em;
   }
-  thead th:first-child,
-  thead th:nth-child(3),
-  thead th:nth-child(4) {
+  thead th:first-child {
     border-left: none;
     width: 10em;
     min-width: 10em;
     max-width: 10em;
+  }
+
+  thead th:nth-child(3),
+  thead th:nth-child(4) {
+    border-left: none;
+    width: 20em;
+    min-width: 20em;
+    max-width: 20em;
   }
   th,
   td {
@@ -88,6 +89,7 @@ const Table = styled.table`
     }
 
     td {
+      width: 100%;
       border-bottom: 1px solid #eaebee;
       display: block;
       font-size: 0.8em;
@@ -145,67 +147,12 @@ const DonorBox = styled.td`
   align-items: center;
 `
 
-const IconSearch = styled(SearchIcon)`
-  margin-left: -2.5rem;
-`
-const SearchInput = styled(Flex)`
-  align-items: center;
-`
-const FilterInput = styled(Flex)`
-  align-items: center;
-`
-
-const FilterBox = styled(Flex)`
-  width: 100%;
-  justify-content: space-between;
-`
-
-const MyDonations = props => {
+const DonationsTable = props => {
   const options = ['All Donations', 'Fiat', 'Crypto']
-  const { user } = React.useContext(TorusContext)
-  const [currentDonations, setCurrentDonations] = React.useState([])
-  const [filter, setFilter] = React.useState(0)
-  const [loading, setLoading] = React.useState(true)
-  // TODO: Set this context for the user
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
+  const [currentDonations, setCurrentDonations] = React.useState(
+    props?.donations
   )
-
-  const etherscanPrefix =
-    typeof process.env.ETHEREUM_NETWORK !== 'undefined'
-      ? process.env.ETHEREUM_NETWORK === 'mainnet'
-        ? ''
-        : process.env.ETHEREUM_NETWORK + '.'
-      : ''
-
-  React.useEffect(() => {
-    const setup = async () => {
-      window.scrollTo(0, 0)
-      if (props?.donations) {
-        setCurrentDonations(props?.donations)
-        setLoading(false)
-      }
-    }
-
-    setup()
-  }, [currentProjectView])
-
-  const searching = search => {
-    const donations = currentDonations
-    if (!search || search === '') {
-      return setCurrentDonations(props?.donations)
-    }
-    const some = donations.filter(donation => {
-      if (!donation?.project.title) return null
-      return (
-        donation?.project.title
-          ?.toString()
-          ?.toLowerCase()
-          .indexOf(search.toString().toLowerCase()) === 0
-      )
-    })
-    setCurrentDonations(some)
-  }
+  const [filter, setFilter] = React.useState(0)
 
   const filterDonations = items => {
     switch (options[filter]) {
@@ -228,7 +175,7 @@ const MyDonations = props => {
     const [activeItem, setCurrentItem] = React.useState(1)
 
     // Data to be rendered using pagination.
-    const itemsPerPage = 6
+    const itemsPerPage = 20
 
     // Logic for displaying current items
     const indexOfLastItem = activeItem * itemsPerPage
@@ -246,28 +193,33 @@ const MyDonations = props => {
       navigator.clipboard.writeText(hash)
     }
 
+    const etherscanPrefix =
+      typeof process.env.ETHEREUM_NETWORK !== 'undefined'
+        ? process.env.ETHEREUM_NETWORK === 'mainnet'
+          ? ''
+          : process.env.ETHEREUM_NETWORK + '.'
+        : ''
+
     return (
-      <>
+      <Flex sx={{ flexDirection: 'column', mx: [2, 5, 5] }}>
         <Table>
           <thead>
             <tr>
-              {['Date', 'Project', 'Currency', 'Amount', 'Transaction'].map(
-                (i, index) => {
-                  return (
-                    <th scope='col' key={index}>
-                      <Text
-                        sx={{
-                          variant: 'text.small',
-                          fontWeight: 'bold',
-                          color: 'secondary'
-                        }}
-                      >
-                        {i}
-                      </Text>
-                    </th>
-                  )
-                }
-              )}
+              {['Date', 'Project', 'Currency', 'Amount'].map((i, index) => {
+                return (
+                  <th scope='col' key={index}>
+                    <Text
+                      sx={{
+                        variant: 'text.small',
+                        fontWeight: 'bold',
+                        color: 'secondary'
+                      }}
+                    >
+                      {i}
+                    </Text>
+                  </th>
+                )
+              })}
             </tr>
           </thead>
           <tbody>
@@ -275,6 +227,7 @@ const MyDonations = props => {
               ?.slice()
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((i, key) => {
+                console.log({ i })
                 return (
                   <tr key={key}>
                     <td
@@ -314,7 +267,7 @@ const MyDonations = props => {
                       <Text
                         sx={{
                           variant: 'text.small',
-                          whiteSpace: 'pre-wrap',
+                          // whiteSpace: 'pre-wrap',
                           color: 'secondary'
                         }}
                       >
@@ -327,47 +280,6 @@ const MyDonations = props => {
                               currency: 'USD'
                             })}
                       </Text>
-                    </td>
-                    <td
-                      data-label='Transaction'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row'
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: '120px',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          marginRight: 6
-                        }}
-                      >
-                        <Text
-                          sx={{
-                            variant: 'text.small',
-                            color: 'secondary'
-                          }}
-                        >
-                          {i?.transactionId}
-                        </Text>
-                      </div>
-                      <FiCopy
-                        size='18px'
-                        sx={{ cursor: 'pointer', mr: 2 }}
-                        onClick={() => copy(i?.transactionId)}
-                      />{' '}
-                      <FiExternalLink
-                        size='18px'
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() =>
-                          window.open(
-                            `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
-                          )
-                        }
-                      />
                     </td>
                   </tr>
                 )
@@ -388,40 +300,16 @@ const MyDonations = props => {
             activeClass='active-page'
           />
         </PagesStyle>
-      </>
+      </Flex>
     )
   }
 
   return (
     <>
-      <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
-        <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
-          <DropdownInput
-            options={options}
-            current={filter}
-            setCurrent={i => setFilter(i)}
-          />
-        </FilterInput>
-        <SearchInput sx={{ width: ['100%', null, '65%'] }}>
-          <Input
-            defaultValue=''
-            placeholder='Search Donations'
-            variant='forms.search'
-            onChange={e => searching(e.target.value)}
-          />
-          <IconSearch />
-        </SearchInput>
-      </FilterBox>
-      {loading ? (
-        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Spinner variant='spinner.medium' />
-        </Flex>
-      ) : !filteredDonations || filteredDonations?.length === 0 ? (
-        <Table>
-          <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-            No donations :(
-          </Text>
-        </Table>
+      {!filteredDonations || filteredDonations?.length === 0 ? (
+        <Text sx={{ variant: 'headings.h5', color: 'secondary', mx: 5, mt: 4 }}>
+          No donations :(
+        </Text>
       ) : (
         <TableToShow />
       )}
@@ -429,4 +317,4 @@ const MyDonations = props => {
   )
 }
 
-export default MyDonations
+export default DonationsTable
