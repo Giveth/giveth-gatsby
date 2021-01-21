@@ -133,7 +133,7 @@ const Categories = ({ categories }) => {
 
 const ProjectCard = props => {
   // const { balance } = useContext(TorusContext)
-  const { project } = props
+  const { project, shadowed } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
@@ -170,7 +170,12 @@ const ProjectCard = props => {
       onMouseOver={() => setAltStyle(true)}
       onMouseLeave={() => setAltStyle(false)}
     >
-      <CardContainer key={props.listingId + '_card'}>
+      <CardContainer
+        key={props.listingId + '_card'}
+        sx={{
+          boxShadow: altStyle ? '0px 28px 52px rgba(44, 13, 83, 0.2)' : null
+        }}
+      >
         <div
           key={props.listingId + '_div'}
           src={props.image}
@@ -186,10 +191,7 @@ const ProjectCard = props => {
             backgroundImage: /^\d+$/.test(props.image)
               ? `url('/assets/create/projectImageGallery${props.image.toString()}.svg')`
               : `url(${props.image})`,
-            boxShadow: altStyle
-              ? 'inset 0 0 0 100vmax rgba(48, 59, 114, 0.6)'
-              : null,
-            backgroundColor: altStyle ? 'red' : '#cccccc',
+            backgroundColor: '#cccccc',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             position: 'relative'

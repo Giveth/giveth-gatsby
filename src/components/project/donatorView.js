@@ -196,14 +196,17 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 }}
               >
                 {currentProjectView?.admin?.name && (
-                  <Link to={`/user/${currentProjectView.admin?.walletAddress}`}>
+                  <Link
+                    style={{ textDecoration: 'none' }}
+                    to={`/user/${currentProjectView.admin?.walletAddress}`}
+                  >
                     <Text
                       sx={{
                         fontSize: 4,
                         fontFamily: 'body',
                         fontWeight: 'body',
                         color: 'primary',
-                        textDecoration: 'none'
+                        cursor: 'pointer'
                       }}
                     >
                       {`by ${currentProjectView.admin.name}`}

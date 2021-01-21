@@ -82,51 +82,59 @@ export const ProjectEthAddressInput = ({
           desired*
         </Text>
       )}
-      <Button
-        aria-label='Back'
-        variant='nofill'
+      <Flex
         sx={{
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse'
         }}
-        onClick={goBack}
       >
-        <Text
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'secondary',
-            fontFamily: 'body',
-            fontSize: 2,
-            letterSpacing: '4%'
+            mt: '100px',
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px'
           }}
+          type='submit'
         >
-          Back
-        </Text>
-      </Button>
-      <Button
-        aria-label='Next'
-        sx={{
-          mt: '100px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px'
-        }}
-        type='submit'
-      >
-        <Text
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%',
+              cursor: 'pointer'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%',
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
             cursor: 'pointer'
           }}
+          onClick={goBack}
         >
-          NEXT
-        </Text>
-      </Button>
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
     </animated.section>
   )
 }

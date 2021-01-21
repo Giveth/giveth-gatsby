@@ -242,6 +242,7 @@ const ProjectsList = props => {
                     )
                     .map((project, index) => (
                       <ProjectCard
+                        shadowed
                         id={project.id}
                         listingId={project.title + '-' + index}
                         key={project.title + '-' + index}

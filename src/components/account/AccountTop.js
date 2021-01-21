@@ -50,10 +50,7 @@ const AccountTop = props => {
         <BsArrowLeft size='24px' />
         <Text
           sx={{
-            color: 'primary',
-            '&:hover': {
-              color: 'accent'
-            }
+            color: 'primary'
           }}
         >
           Giveth

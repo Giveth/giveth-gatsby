@@ -15,8 +15,11 @@ const HomeTopProjects = () => {
   }
 
   const { data } = useQuery(FETCH_PROJECTS, {
-    variables: { limit: 3, orderBy }
+    variables: { limit: 3, orderBy },
+    fetchPolicy: 'network-only'
   })
+
+  console.log({ data })
 
   const { topProjects } = data || {}
   const { projects = [], totalCount = 0 } = topProjects || {}

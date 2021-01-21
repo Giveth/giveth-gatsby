@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox, Label, Box, Text, Button } from 'theme-ui'
+import { Checkbox, Label, Flex, Box, Text, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
 export const ProjectCategoryInput = ({
@@ -62,52 +62,59 @@ export const ProjectCategoryInput = ({
           )
         })}
       </Box>
-      <Button
-        aria-label='Back'
-        variant='nofill'
+      <Flex
         sx={{
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer',
-          mb: 5
+          alignItems: 'flex-start',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse'
         }}
-        onClick={goBack}
       >
-        <Text
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'secondary',
-            fontFamily: 'body',
-            fontSize: 2,
-            letterSpacing: '4%'
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer'
           }}
+          type='submit'
         >
-          Back
-        </Text>
-      </Button>
-      <Button
-        aria-label='Next'
-        sx={{
-          mt: '20px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
-        }}
-        type='submit'
-      >
-        <Text
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%'
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer',
+            mb: 5
           }}
+          onClick={goBack}
         >
-          NEXT
-        </Text>
-      </Button>
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
     </animated.section>
   )
 }
