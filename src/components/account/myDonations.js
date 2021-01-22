@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { ethers } from 'ethers'
-import { titleCase } from '../../utils'
+import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
@@ -171,12 +171,7 @@ const MyDonations = props => {
     ProjectContext
   )
 
-  const etherscanPrefix =
-    typeof process.env.ETHEREUM_NETWORK !== 'undefined'
-      ? process.env.ETHEREUM_NETWORK === 'mainnet'
-        ? ''
-        : process.env.ETHEREUM_NETWORK + '.'
-      : ''
+  const etherscanPrefix = getEtherscanPrefix()
 
   React.useEffect(() => {
     const setup = async () => {

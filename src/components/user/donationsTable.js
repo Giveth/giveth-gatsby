@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React from 'react'
-import { titleCase } from '../../utils'
+import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
@@ -193,12 +193,7 @@ const DonationsTable = props => {
       navigator.clipboard.writeText(hash)
     }
 
-    const etherscanPrefix =
-      typeof process.env.ETHEREUM_NETWORK !== 'undefined'
-        ? process.env.ETHEREUM_NETWORK === 'mainnet'
-          ? ''
-          : process.env.ETHEREUM_NETWORK + '.'
-        : ''
+    const etherscanPrefix = getEtherscanPrefix()
 
     return (
       <Flex sx={{ flexDirection: 'column', mx: [2, 5, 5] }}>

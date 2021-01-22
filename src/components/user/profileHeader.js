@@ -1,14 +1,10 @@
 import React from 'react'
 import { Avatar, Text, Box, Link, Flex } from 'theme-ui'
+import { getEtherscanPrefix } from '../../utils'
 
 export const ProfileHeader = props => {
   const { user, donations, projects } = props
-  const etherscanPrefix =
-    typeof process.env.ETHEREUM_NETWORK !== 'undefined'
-      ? process.env.ETHEREUM_NETWORK === 'mainnet'
-        ? ''
-        : process.env.ETHEREUM_NETWORK + '.'
-      : ''
+  const etherscanPrefix = getEtherscanPrefix()
 
   const TitleBox = ({ title, content }) => {
     return (
@@ -23,7 +19,8 @@ export const ProfileHeader = props => {
       >
         <Text
           sx={{
-            fontSize: 0,
+            fontSize: 1,
+            fontWeight: 500,
             color: 'secondary',
             textTransform: 'uppercase'
           }}
@@ -39,14 +36,23 @@ export const ProfileHeader = props => {
     <Flex
       sx={{
         flex: 1,
-        m: 5,
+        m: [3, 5, 5],
         flexDirection: ['column', 'column', 'row'],
         justifyContent: 'space-between'
       }}
     >
-      <Flex sx={{ flex: 0.5, mr: 4 }}>
+      <Flex
+        sx={{
+          flex: [1, 0.5, 0.5],
+          mr: 4,
+          flexDirection: ['column', 'row', 'row'],
+          alignItems: ['center', null, null],
+          width: ['100%', null, null],
+          alignItems: ['left', null, null]
+        }}
+      >
         <Avatar src={user?.avatar} sx={{ width: 100, height: 100 }} />
-        <Box sx={{ ml: '27px' }}>
+        <Box sx={{ ml: [0, '27px', '27px'] }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Link
             sx={{ textDecoration: 'none' }}
@@ -54,7 +60,7 @@ export const ProfileHeader = props => {
           >
             <Text
               sx={{
-                color: 'secondary',
+                color: 'bodyLight',
                 fontSize: 3,
                 cursor: 'pointer',
                 wordBreak: 'break-all'
@@ -65,7 +71,12 @@ export const ProfileHeader = props => {
           </Link>
         </Box>
       </Flex>
-      <Flex sx={{ flex: 0.5, mt: [4, 4, 0] }}>
+      <Flex
+        sx={{
+          flex: 0.5,
+          mt: [4, 4, 0]
+        }}
+      >
         <TitleBox title='PROJECTS' content={projects?.length || 0} />
         <TitleBox title='DONATIONS' content={donations?.length || 0} />
       </Flex>

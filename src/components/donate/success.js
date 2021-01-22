@@ -4,7 +4,7 @@ import { Box, Link, Flex, Text, jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
 import { useApolloClient } from '@apollo/client'
-import { base64ToBlob } from '../../utils'
+import { base64ToBlob, getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../confetti'
 import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
@@ -54,12 +54,7 @@ const Success = props => {
     link.dispatchEvent(event)
   }
 
-  const etherscanPrefix =
-    typeof process.env.ETHEREUM_NETWORK !== 'undefined'
-      ? process.env.ETHEREUM_NETWORK === 'mainnet'
-        ? ''
-        : process.env.ETHEREUM_NETWORK + '.'
-      : ''
+  const etherscanPrefix = getEtherscanPrefix()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <>

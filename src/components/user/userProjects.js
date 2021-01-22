@@ -42,7 +42,7 @@ export const UserProjects = props => {
     >
       {projects?.length > 0 ? (
         <Grid
-          p={4}
+          p={[0, 4, 4]}
           columns={[1, 2, 3]}
           style={{
             margin: 0,

@@ -15,7 +15,7 @@ export const PublicProfileView = props => {
       <Button
         variant='nofill'
         type='button'
-        sx={{ width: '100%' }}
+        sx={{ mx: 2 }}
         onClick={e => {
           e.preventDefault()
           setQuery({ tab: name })
@@ -50,7 +50,7 @@ export const PublicProfileView = props => {
   return (
     <Flex sx={{ flexDirection: 'column' }}>
       <ProfileHeader {...props} />
-      <Flex sx={{ width: ['100%', '500px', '500px'] }}>
+      <Flex sx={{ width: ['100%', '500px', '500px'], ml: 4 }}>
         <Tab name='projects' />
         <Tab name='donations' />
       </Flex>
