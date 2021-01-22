@@ -9,13 +9,15 @@ import React from 'react'
 import './global.css'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
-import { ThemeProvider, Box, Flex, Image, Text } from 'theme-ui'
+import { ThemeProvider, Box, Button, Flex, Image, Text } from 'theme-ui'
 import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 import InfoIcon from '../images/info_outline.png'
+import CornerLeave from '../images/corner-leave.png'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
 import { FaGithub } from 'react-icons/fa'
+import { MdCancel } from 'react-icons/md'
 import TorusProvider from '../contextProvider/torusProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
@@ -114,31 +116,93 @@ const CookiesBanner = () => {
 }
 
 const GithubIssue = () => {
+  const [showIssuePopup, setShowIssuePopup] = React.useState(true)
+  if (!showIssuePopup) return null
   return (
     <Flex
       sx={{
         position: 'fixed',
         bottom: 0,
         right: 0,
-        zIndex: 2,
-        padding: 2,
-        borderTopLeftRadius: '10px',
+        zIndex: 4,
+        m: 4,
+        borderRadius: '12px',
         backgroundColor: 'background',
         alignItems: 'center',
-        boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.5)'
+        justifyContent: 'center',
+        boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)'
       }}
     >
-      <a
-        href='https://github.com/Giveth/giveth-2/issues/new/choose'
-        target='_blank'
-        rel='noopener noreferrer'
-        style={{ textDecoration: 'none' }}
+      <Flex
+        sx={{
+          padding: ['25px 18px', '25px 10px', '25px 10px'],
+          width: ['100%', '80%', '80%'],
+          textAlign: 'center',
+          flexDirection: 'column'
+        }}
       >
-        <Box sx={{ display: 'flex', alignContent: 'center' }}>
-          <FaGithub size='28px' color={theme.colors.secondary} />
-          <Text pl={2}>Report an issue</Text>
-        </Box>
-      </a>
+        <Text variant='headings.h5' mb={1} color='secondary'>
+          Give feedback
+        </Text>
+        <Text variant='text.default' color='secondary' mb={2}>
+          Share your feedback or report an issue
+        </Text>
+        <Button
+          type='button'
+          aria-label='edit project name'
+          variant='nofill'
+          onClick={() =>
+            (window.location.href =
+              'https://github.com/Giveth/giveth-2/issues/new/choose')
+          }
+          sx={{
+            backgroundColor: 'secondary',
+            alignItems: 'center'
+          }}
+        >
+          <Flex
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              py: 2
+            }}
+          >
+            <FaGithub size='23.43px' color={theme.colors.background} />
+            <Text
+              variant='text.default'
+              color='background'
+              pl={2}
+              sx={{ fontSize: '14px', fontWeight: 700 }}
+            >
+              GIVE FEEDBACK
+            </Text>
+          </Flex>
+        </Button>
+      </Flex>
+      <Image
+        src={CornerLeave}
+        width={[60, 80, 80]}
+        sx={{
+          position: 'absolute',
+          mb: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: -1,
+          borderBottomRightRadius: '12px'
+        }}
+      />
+      <MdCancel
+        onClick={() => setShowIssuePopup(false)}
+        style={{
+          cursor: 'pointer',
+          position: 'absolute',
+          top: '10px',
+          right: '10px'
+        }}
+        size='20px'
+        color={theme.colors.bodyLight}
+      />
     </Flex>
   )
 }

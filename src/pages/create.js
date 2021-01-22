@@ -5,7 +5,7 @@ import Web3 from 'web3'
 import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
 import { useMutation } from '@apollo/client'
-import { Flex, Text, Spinner } from 'theme-ui'
+import { Flex, Text, Spinner, Image } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 import Layout from '../components/layout'
 import decoratorClouds from '../images/decorator-clouds.svg'
@@ -96,7 +96,7 @@ const IndexPage = ({ data, location }) => {
     }
   }
 
-  function AfterCreation () {
+  function AfterCreation() {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -146,26 +146,26 @@ const IndexPage = ({ data, location }) => {
           }}
           className='hide'
         />
-        <img
+        <Image
           src={peopleStretching}
           alt=''
-          css={{
+          sx={{
             position: 'absolute',
             top: '240px',
-            right: '130px',
-            width: '252px',
+            right: [0, 0, '50px'],
+            width: [0, '252px', '252px'],
             height: '610px',
             zIndex: '-1'
           }}
           className='hide'
         />
-        <img
+        <Image
           src={decoratorFizzySquare}
           alt=''
-          css={{
+          sx={{
             position: 'absolute',
             top: '260px',
-            left: '380px',
+            left: ['80px', '180px', '180px'],
             zIndex: '-1'
           }}
           className='hide'
@@ -198,7 +198,7 @@ const IndexPage = ({ data, location }) => {
     )
   }
 
-  function ProjectForm () {
+  function ProjectForm() {
     if (!projectAdded && !projectId) {
       return (
         <>

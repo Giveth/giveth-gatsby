@@ -31,7 +31,8 @@ const HighFive = ({
         justifyContent: 'center',
         alignContent: 'center',
         textAlign: 'center',
-        mt: '100px'
+        mt: '100px',
+        mx: ['2px', 0, 0]
       }}
     >
       <Text
@@ -55,8 +56,17 @@ const HighFive = ({
         Your project is published and ready to raise funds.
       </Text>
 
-      <Flex sx={{ width: '80%', justifyContent: 'center' }}>
-        <Box sx={{ minWidth: '20vw', mt: '100px', width: '30%', bg: 'white' }}>
+      <Flex
+        sx={{
+          width: ['100%', '80%', '80%'],
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: ['column', 'row', 'row']
+        }}
+      >
+        <Box
+          sx={{ minWidth: '20vw', mt: '100px', width: ['80%', '40%', '30%'] }}
+        >
           <ProjectListing
             disabled
             shadowed
@@ -70,7 +80,14 @@ const HighFive = ({
           />
         </Box>
 
-        <Box sx={{ mt: '20%', ml: '10%', width: '20%', bg: 'white' }}>
+        <Box
+          sx={{
+            mt: [0, '20%', '20%'],
+            mb: ['20%', 0, 0],
+            ml: [0, '10%', '10%'],
+            width: ['60%', '20%', '20%']
+          }}
+        >
           <Text
             sx={{
               fontSize: 3,

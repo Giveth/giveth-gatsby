@@ -19,6 +19,7 @@ import {
   GET_STRIPE_PROJECT_DONATIONS,
   GET_PROJECT_UPDATES
 } from '../../apollo/gql/projects'
+import { GET_USER } from '../../apollo/gql/auth'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
 
@@ -75,10 +76,19 @@ export const ProjectDonatorView = ({ pageContext }) => {
           }
         })
 
+        // Get project admin Info
+        const admin = await client?.query({
+          query: GET_USER,
+          variables: {
+            userId: parseInt(project?.admin)
+          }
+        })
+
         setCurrentProjectView({
           ...currentProjectView,
           ethBalance,
           donations,
+          admin: admin?.data?.user,
           updates: updates?.data?.getProjectUpdates
         })
 
@@ -128,6 +138,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
       return false
     }
   }
+  console.log({ currentProjectView })
   return (
     <>
       <Flex>
@@ -184,15 +195,25 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   alignItems: 'center'
                 }}
               >
-                <Text
-                  sx={{
-                    fontSize: 6,
-                    fontFamily: 'body',
-                    fontWeight: 'body',
-                    color: 'primary',
-                    mt: '10px'
-                  }}
-                ></Text>
+                {currentProjectView?.admin?.name && (
+                  <Link
+                    style={{ textDecoration: 'none' }}
+                    to={`/user/${currentProjectView.admin?.walletAddress}`}
+                  >
+                    <Text
+                      sx={{
+                        fontSize: 4,
+                        fontFamily: 'body',
+                        fontWeight: 'body',
+                        color: 'primary',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {`by ${currentProjectView.admin.name}`}
+                    </Text>
+                  </Link>
+                )}
+
                 {pageContext?.project?.impactLocation && (
                   <Flex>
                     <ImLocation size='24px' color={theme.colors.secondary} />
