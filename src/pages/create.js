@@ -96,7 +96,7 @@ const IndexPage = ({ data, location }) => {
     }
   }
 
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -165,7 +165,7 @@ const IndexPage = ({ data, location }) => {
           sx={{
             position: 'absolute',
             top: '260px',
-            left: ['80px', '180px', '180px'],
+            left: ['80px', '80px', '180px'],
             zIndex: '-1'
           }}
           className='hide'
@@ -198,7 +198,7 @@ const IndexPage = ({ data, location }) => {
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (!projectAdded && !projectId) {
       return (
         <>
