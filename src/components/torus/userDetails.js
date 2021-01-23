@@ -8,6 +8,8 @@ import { Link } from 'gatsby'
 import { TorusContext } from '../../contextProvider/torusProvider'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
 
+import { FiExternalLink } from 'react-icons/fi'
+
 const AccountDetails = styled.div`
   width: 200px;
   position: absolute;
@@ -196,7 +198,7 @@ const UserDetails = () => {
               }}
               className='shadow boxheight'
             >
-              Settings
+              My Wallet <FiExternalLink size='18px' />
             </MenuItem>
           </Link>
           <Link
