@@ -90,7 +90,7 @@ const Hero = ({ content }) => {
               p={4}
               sx={{
                 width: '290px',
-                variant: 'buttons.default'
+                variant: 'buttons.big'
               }}
             >
               {content.mainButton}
@@ -113,7 +113,7 @@ const Hero = ({ content }) => {
           </Link>
         </Grid>
       </HeroText>
-      <Box sx={{ minHeight: '80vh' }}>
+      <Box sx={{ minHeight: '100vh' }}>
         {isMobile ? null : <HeroImage alt='' />}
       </Box>
     </HeroSection>

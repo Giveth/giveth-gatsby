@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import { jsx } from 'theme-ui'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import { FETCH_PROJECTS } from '../../apollo/gql/projects'
 import { navigate } from 'gatsby'
 import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
@@ -15,8 +15,11 @@ const HomeTopProjects = () => {
   }
 
   const { data } = useQuery(FETCH_PROJECTS, {
-    variables: { limit: 3, orderBy }
+    variables: { limit: 3, orderBy },
+    fetchPolicy: 'network-only'
   })
+
+  console.log({ data })
 
   const { topProjects } = data || {}
   const { projects = [], totalCount = 0 } = topProjects || {}

@@ -1,15 +1,18 @@
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react'
-import { Box, Link, Text, jsx } from 'theme-ui'
+import React, { useContext, useState, useEffect } from 'react'
+import { Box, Link, Flex, Text, jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
-import { useApolloClient } from '@apollo/react-hooks'
-import { base64ToBlob } from '../../utils'
+import { useMediaQuery } from 'react-responsive'
+import { useApolloClient } from '@apollo/client'
+import { base64ToBlob, getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
+import ConfettiAnimation from '../confetti'
 import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
-
+import { TorusContext } from '../../contextProvider/torusProvider'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
 const Content = styled.div`
+  z-index: 10;
   min-width: 32vw;
   word-wrap: break-word;
 `
@@ -34,12 +37,11 @@ const DownloadReceipt = styled(Box)`
 `
 
 const Success = props => {
+  const { isLoggedIn, login } = useContext(TorusContext)
   const { project, sessionId, hash } = props
   const [pdfBase64, setPdfBase64] = useState(null)
 
   const client = useApolloClient()
-
-  console.log({ sessionId })
 
   const downloadPDF = () => {
     const blob = base64ToBlob(pdfBase64)
@@ -52,81 +54,94 @@ const Success = props => {
     link.dispatchEvent(event)
   }
 
-  useEffect(() => {
-    const getData = async () => {
-      // get session ID
-      try {
-        const { data, error } = await client.query({
-          query: GET_STRIPE_DONATION_PDF,
-          variables: {
-            sessionId: parseInt(sessionId)
-          }
-        })
-        console.log({ data, error }, data?.getStripeDonationPDF?.pdf?.length)
-        setPdfBase64(data?.getStripeDonationPDF?.pdf)
-      } catch (error) {
-        console.log({ error })
-      }
-    }
-    getData()
-  }, [])
-
-  console.log({ hash })
-
+  const etherscanPrefix = getEtherscanPrefix()
+  const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
-    <Content>
-      <Text sx={{ variant: 'headings.h3', my: 3, textAlign: 'left' }}>
-        You're a giver now!
-      </Text>
-      <Text sx={{ variant: 'headings.h5' }}>
-        Thank you for supporting <strong> {project?.title} </strong>.
-      </Text>
-      <Text sx={{ variant: 'headings.h5', pt: -1 }}>
-        Your <strong> {hash && `${hash.subtotal} ETH`} </strong> contribution
-        goes a long way!
-      </Text>
-      {hash ? (
-        <Receipt sx={{ my: 4 }}>
-          <div style={{ flex: 1 }}>
-            <Link
-              sx={{
-                variant: 'text.paragraph',
-                color: 'yellow',
-                cursor: 'pointer'
-              }}
-              href={`https://etherscan.io/tx/${hash?.hash}`}
-            >
-              View transaction details
-            </Link>
-          </div>
-        </Receipt>
-      ) : (
-        <Receipt sx={{ my: 4 }}>
-          <DownloadReceipt onClick={() => downloadPDF()}>
-            <Text
-              sx={{
-                variant: 'text.paragraph',
-                pt: -1,
-                color: 'bodyLight'
-              }}
-            >
-              Download receipt
-            </Text>
-            <BillIcon />
-          </DownloadReceipt>
-        </Receipt>
-      )}
-
-      <Text sx={{ variant: 'headings.h5', pt: 4 }}>
-        Stay a Giver?{' '}
-        <span
-          sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
-          onClick={() => navigate('/')}
+    <>
+      <Flex
+        sx={{
+          position: 'absolute',
+          zIndex: 0,
+          top: ['5%', 0, '-10%'],
+          left: ['5%', '40%', '40%']
+        }}
+      >
+        <ConfettiAnimation size={isMobile ? 350 : 600} />
+      </Flex>
+      <Content>
+        <Text
+          sx={{
+            variant: 'headings.h3',
+            color: 'background',
+            my: 3,
+            textAlign: 'left'
+          }}
         >
-          Register an account.
-        </span>
-      </Text>
-    </Content>
+          You're a giver now!
+        </Text>
+        <Text sx={{ variant: 'headings.h5', color: 'background' }}>
+          Thank you for supporting <strong> {project?.title} </strong>.
+        </Text>
+        <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
+          Your <strong> {hash && `${hash.subtotal} ETH`} </strong> contribution
+          goes a long way!
+        </Text>
+        {hash ? (
+          <Receipt sx={{ my: 4 }}>
+            <div style={{ flex: 1 }}>
+              <Link
+                sx={{
+                  variant: 'text.paragraph',
+                  color: 'yellow',
+                  cursor: 'pointer'
+                }}
+                target='_blank'
+                href={`https://${etherscanPrefix}etherscan.io/tx/${hash?.hash}`}
+              >
+                View transaction details
+              </Link>
+            </div>
+          </Receipt>
+        ) : (
+          <Receipt sx={{ my: 4 }}>
+            <DownloadReceipt onClick={() => downloadPDF()}>
+              <Text
+                sx={{
+                  variant: 'text.paragraph',
+                  pt: -1,
+                  color: 'bodyLight'
+                }}
+              >
+                Download receipt
+              </Text>
+              <BillIcon />
+            </DownloadReceipt>
+          </Receipt>
+        )}
+
+        {!isLoggedIn ? (
+          <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
+            Stay a Giver?{' '}
+            <span
+              sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
+              onClick={login}
+            >
+              Register an account.
+            </span>
+          </Text>
+        ) : (
+          <Text sx={{ variant: 'headings.h5', color: 'background', pt: 4 }}>
+            Thank you for your support{' '}
+            <span
+              sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
+              onClick={() => navigate('/account?view=donations')}
+            >
+              View your donations
+            </span>
+          </Text>
+        )}
+      </Content>
+    </>
   )
 }
 

@@ -3,26 +3,26 @@ import { Link } from 'gatsby'
 import { Text, Flex, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  LinkedinShareButton,
+  LinkedinIcon,
+  TwitterShareButton,
+  TwitterIcon
+} from 'react-share'
 
 const HighFive = ({
+  project,
   addedProject,
   projectId,
   projectImage,
   projectTitle,
   projectDescription
 }) => {
-  // console.log({ projectImage })
-  // This will be useful when we need to handle the route on webhook
+  const shareTitle = `Make a donation today to ${project?.title}!`
+  const url = `${window.location.origin}/project/${addedProject?.slug}`
 
-  // const { loading, error, data } = useQuery(FETCH_PROJECT, {
-  //   variables: { id: projectId }
-  // })
-
-  // console.log({ loading, error, data })
-  // if (loading) return <h3>loading</h3>
-
-  // const project = data?.project
-  // console.log({ data, project })
   return (
     <Flex
       sx={{
@@ -31,7 +31,8 @@ const HighFive = ({
         justifyContent: 'center',
         alignContent: 'center',
         textAlign: 'center',
-        mt: '100px'
+        mt: '100px',
+        mx: ['2px', 0, 0]
       }}
     >
       <Text
@@ -55,8 +56,17 @@ const HighFive = ({
         Your project is published and ready to raise funds.
       </Text>
 
-      <Flex sx={{ width: '80%', justifyContent: 'center' }}>
-        <Box sx={{ minWidth: '20vw', mt: '100px', width: '30%', bg: 'white' }}>
+      <Flex
+        sx={{
+          width: ['100%', '80%', '80%'],
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: ['column', 'row', 'row']
+        }}
+      >
+        <Box
+          sx={{ minWidth: '20vw', mt: '100px', width: ['80%', '40%', '30%'] }}
+        >
           <ProjectListing
             disabled
             shadowed
@@ -64,13 +74,20 @@ const HighFive = ({
             description={projectDescription}
             image={projectImage || addedProject?.image}
             raised={0}
-            categories={['Blockchain 4 Good']}
+            categories={project?.categories}
             listingId='key1'
             key='key1'
           />
         </Box>
 
-        <Box sx={{ mt: '20%', ml: '10%', width: '20%', bg: 'white' }}>
+        <Box
+          sx={{
+            mt: [0, '20%', '20%'],
+            mb: ['20%', 0, 0],
+            ml: [0, '10%', '10%'],
+            width: ['60%', '20%', '20%']
+          }}
+        >
           <Text
             sx={{
               fontSize: 3,
@@ -82,9 +99,23 @@ const HighFive = ({
             Tell everyone about it.
           </Text>
           <Flex sx={{ my: '30px', justifyContent: 'space-evenly' }}>
-            <FaTwitter size='24px' />
-            <FaFacebook size='24px' />
-            <FaLinkedin size='24px' />
+            <TwitterShareButton
+              title={shareTitle}
+              url={url}
+              hashtags={['giveth']}
+            >
+              <FaTwitter size='24px' />
+            </TwitterShareButton>
+            <FacebookShareButton quote={shareTitle} url={url} hashtag='#giveth'>
+              <FaFacebook size='24px' />
+            </FacebookShareButton>
+            <LinkedinShareButton
+              title={shareTitle}
+              summary={project?.description}
+              url={url}
+            >
+              <FaLinkedin size='24px' />
+            </LinkedinShareButton>
           </Flex>
           <Link to={`/project/${addedProject?.slug}`}>
             <Text

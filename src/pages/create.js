@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
+import { navigate } from 'gatsby'
 import Web3 from 'web3'
 import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
-import { useMutation } from '@apollo/react-hooks'
-import { Text, Spinner } from 'theme-ui'
+import { useMutation } from '@apollo/client'
+import { Flex, Text, Spinner, Image } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../apollo/gql/projects'
 import Layout from '../components/layout'
 import decoratorClouds from '../images/decorator-clouds.svg'
@@ -13,18 +14,19 @@ import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
 import fetch from 'isomorphic-fetch'
+import { TorusContext } from '../contextProvider/torusProvider'
 
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
-const IndexPage = props => {
+const IndexPage = ({ data, location }) => {
   // const [isLoggedIn] = useState(checkIfLoggedIn())
-  const [isLoggedIn] = useState(true)
+  // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState(null)
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
-  const { projectId } = queryString.parse(props.location.search)
+  const { projectId } = queryString.parse(location.search)
   const onSubmit = async (values, walletAddress) => {
     setProjectAdded(true)
 
@@ -43,6 +45,17 @@ const IndexPage = props => {
       console.log('found it', imageFile)
       return imageFile
     }
+    const siteId = process.env.GATSBY_SITE_ID
+    let organisationId
+    if (siteId === 'giveth') {
+      organisationId = 1
+    } else if (siteId === 'gaia-giveth') {
+      organisationId = 2
+    } else {
+      throw new Error(
+        `Invalid siteId ${process.env.GATSBY_SITE_ID}, checking GATSBY_SITE_ID in the .env config, it should be either 'giveth' or 'gaia-giveth'`
+      )
+    }
 
     const projectData = {
       title: values.projectName,
@@ -50,6 +63,7 @@ const IndexPage = props => {
       admin: values.projectAdmin,
       impactLocation: values.projectImpactLocation,
       categories: projectCategories,
+      organisationId,
       walletAddress: Web3.utils.toChecksumAddress(values.projectWalletAddress)
     }
     if (values.projectImage.length === 1) {
@@ -74,6 +88,7 @@ const IndexPage = props => {
         console.log(`project : ${JSON.stringify(project, null, 2)}`)
         setAddedProject(project.data.addProject)
         setProjectAdded(true)
+        window?.localStorage.removeItem('create-form')
       }
     } catch (error) {
       console.log(`Error adding project: ---> : ${error}`)
@@ -81,7 +96,7 @@ const IndexPage = props => {
     }
   }
 
-  function AfterCreation () {
+  function AfterCreation() {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -131,32 +146,33 @@ const IndexPage = props => {
           }}
           className='hide'
         />
-        <img
+        <Image
           src={peopleStretching}
           alt=''
-          css={{
+          sx={{
             position: 'absolute',
             top: '240px',
-            right: '130px',
-            width: '252px',
+            right: [0, 0, '50px'],
+            width: [0, '252px', '252px'],
             height: '610px',
             zIndex: '-1'
           }}
           className='hide'
         />
-        <img
+        <Image
           src={decoratorFizzySquare}
           alt=''
-          css={{
+          sx={{
             position: 'absolute',
             top: '260px',
-            left: '380px',
+            left: ['80px', '180px', '180px'],
             zIndex: '-1'
           }}
           className='hide'
         />
         {addedProject ? (
           <HighFive
+            project={addedProject}
             addedProject={addedProject}
             projectId={projectId || addedProject.id}
             projectImage={addedProject.image}
@@ -164,63 +180,58 @@ const IndexPage = props => {
             projectDescription={addedProject.description}
           />
         ) : (
-          <Spinner variant='spinner.medium' />
+          <Flex
+            sx={{
+              mt: '22%',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
+              Setting everything up...
+            </Text>
+            <Spinner variant='spinner.large' />
+          </Flex>
         )}
       </>
     )
   }
 
-  function ProjectForm () {
-    if (isLoggedIn === true) {
-      if (!projectAdded && !projectId) {
-        return (
-          <>
-            <img
-              src={decoratorClouds}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '57px',
-                right: '434px'
-              }}
-              className='hide'
-            />
-            <img
-              src={peoplePuzzle2}
-              alt=''
-              css={{
-                position: 'absolute',
-                top: '417px',
-                right: '0px'
-              }}
-              className='hide'
-            />
-            <CreateProjectForm onSubmit={onSubmit} />
-          </>
-        )
-      } else {
-        return (
-          <>
-            <AfterCreation />
-          </>
-        )
-      }
-    } else {
+  function ProjectForm() {
+    if (!projectAdded && !projectId) {
       return (
-        <Text
-          sx={{
-            fontSize: 6,
-            fontFamily: 'body',
-            color: 'secondary',
-            mt: '16px'
-          }}
-        >
-          Please log in to create a project.
-        </Text>
+        <>
+          <img
+            src={decoratorClouds}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '57px',
+              right: '434px'
+            }}
+            className='hide'
+          />
+          <img
+            src={peoplePuzzle2}
+            alt=''
+            css={{
+              position: 'absolute',
+              top: '417px',
+              right: '0px'
+            }}
+            className='hide'
+          />
+          <CreateProjectForm
+            onSubmit={onSubmit}
+            categoryList={data.giveth.categories}
+          />
+        </>
       )
+    } else {
+      return <AfterCreation />
     }
   }
-
   return (
     <Layout noFooter noHeader>
       <div
@@ -241,5 +252,14 @@ const IndexPage = props => {
     </Layout>
   )
 }
-
+export const pageQuery = graphql`
+  query {
+    giveth {
+      categories {
+        name
+        value
+      }
+    }
+  }
+`
 export default IndexPage

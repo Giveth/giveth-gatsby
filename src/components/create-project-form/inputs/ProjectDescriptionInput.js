@@ -6,7 +6,8 @@ import { DescriptionInstructionModal } from '../modals'
 export const ProjectDescriptionInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [showInstructions, setShowInstructions] = useState(false)
   const [characterLength, setCharacterLength] = useState(
@@ -29,7 +30,7 @@ export const ProjectDescriptionInput = ({
       </Label>
       <Button
         type='button'
-        aria-label='How to write a good project description'
+        aria-label='How to write a great project description'
         onClick={() => setShowInstructions(!showInstructions)}
         sx={{
           background: 'unset',
@@ -46,7 +47,7 @@ export const ProjectDescriptionInput = ({
             lineHeight: '19px'
           }}
         >
-          How To Write A Good Project Description
+          How To Write A Great Project Description
         </Text>
       </Button>
       <Flex sx={{ width: '175%' }}>
@@ -62,6 +63,7 @@ export const ProjectDescriptionInput = ({
           ref={register}
           defaultValue={currentValue}
           rows={12}
+          maxLength={2000}
           onChange={e => getLength(e)}
         />
         <Text
@@ -75,29 +77,59 @@ export const ProjectDescriptionInput = ({
           {characterLength}/2000
         </Text>
       </Flex>
-      <Button
-        aria-label='Next'
+      <Flex
         sx={{
-          mt: '100px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px'
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse'
         }}
-        type='submit'
       >
-        <Text
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%',
+            mt: '100px',
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px'
+          }}
+          type='submit'
+        >
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%',
+              cursor: 'pointer'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
+          sx={{
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
             cursor: 'pointer'
           }}
+          onClick={goBack}
         >
-          NEXT
-        </Text>
-      </Button>
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
       {showInstructions ? (
         <DescriptionInstructionModal
           showModal={showInstructions}

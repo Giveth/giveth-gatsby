@@ -1,15 +1,20 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
+import { useMutation } from '@apollo/client'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
+import { SAVE_DONATION } from '../../apollo/gql/donations'
+
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
+import { ensRegex } from '../../utils'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
+import Toast from '../../components/toast'
 import styled from '@emotion/styled'
 
 let provider
@@ -118,7 +123,7 @@ const OnlyCrypto = props => {
       )
       setNotify(initNotify())
     }
-    console.log(ethers.utils.parseEther('1.0'))
+    // console.log(ethers.utils.parseEther('1.0'))
     init()
   }, [])
 
@@ -180,44 +185,56 @@ const OnlyCrypto = props => {
     )
   }
 
-  const setProvider = async () => {
-    await onboard.walletSelect()
-    await onboard.walletCheck()
-  }
-
   const readyToTransact = async () => {
     onboard.walletReset()
     const walletSelected = await onboard.walletSelect()
+
     if (!walletSelected) return false
     const ready = await onboard.walletCheck()
-    console.log({ ready })
+
     return ready
   }
 
   // FOR REGULAR TX
   const sendTx = async () => {
     try {
+      // CHECK ADDRESS
+      let toAddress = project?.walletAddress
+      if (ensRegex(project?.walletAddress)) {
+        toAddress = await provider.resolveName(project?.walletAddress)
+      }
       const signer = getSigner(provider)
-      console.log(ethers.utils.parseEther(subtotal.toString()))
+      // console.log(ethers.utils.parseEther(subtotal.toString()))
+
       const { hash } = await signer.sendTransaction({
-        to: project?.walletAddress,
+        to: toAddress,
         value: ethers.utils.parseEther(subtotal.toString())
       })
+
       props.setHashSent({ hash, subtotal })
-      console.log({ txId: hash?.toString(), anonymous: false })
+
       // Send tx hash to our graph
-      // try {
-      //   const { data } = await client.mutate({
-      //     mutation: REGISTER_PROJECT_DONATION,
-      //     variables: {
-      //       txId: hash?.toString(),
-      //       anonymous: false
-      //     }
-      //   })
-      //   console.log('BO', { data })
-      // } catch (error) {
-      //   console.log({ error })
-      // }
+      try {
+        console.log(`SAVE_DONATION --->`)
+        const { data } = await client.mutate({
+          mutation: SAVE_DONATION,
+          variables: {
+            transactionId: hash?.toString(),
+            anonymous: false
+          }
+        })
+        const ob = onboard.getState()
+
+        const storageWallets = localStorage.getItem('giveth_donation_wallets')
+
+        const donatingWallets = storageWallets ? storageWallets.split(',') : []
+        if (donatingWallets.indexOf(ob.address) === -1) {
+          donatingWallets.push(ob.address)
+        }
+        localStorage.setItem('giveth_donation_wallets', donatingWallets)
+      } catch (error) {
+        console.log({ error })
+      }
 
       // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
       if (process.env.GATSBY_NETWORK === 'ropsten') return
@@ -230,7 +247,7 @@ const OnlyCrypto = props => {
           // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
           // or you could use onclick for when someone clicks on the notification itself
           onclick: () =>
-            window.open(`https://ropsten.etherscan.io/tx/${transaction.hash}`)
+            window.open(`https://etherscan.io/tx/${transaction.hash}`)
         }
       })
 
@@ -244,8 +261,8 @@ const OnlyCrypto = props => {
         console.log('ALLLLLLL', event)
       })
     } catch (error) {
-      alert(error?.message)
       console.log({ error })
+      return Toast({ content: error?.message, type: 'error' })
     }
   }
 
@@ -516,12 +533,13 @@ const OnlyCrypto = props => {
           <Button
             onClick={async () => {
               if (!project?.walletAddress) {
-                return alert(
-                  'There is no eth address assigned for this project'
-                )
+                return Toast({
+                  content: 'There is no eth address assigned for this project',
+                  type: 'error'
+                })
               }
               if (!amountTyped || parseFloat(amountTyped) <= 0) {
-                return alert('Please set an amount')
+                return Toast({ content: 'Please set an amount', type: 'warn' })
               }
               const ready = await readyToTransact()
               if (!ready) return

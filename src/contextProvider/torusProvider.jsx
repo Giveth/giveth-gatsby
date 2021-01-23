@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Web3 from 'web3'
+import { keccak256 } from 'ethers/lib/utils'
+import { promisify } from 'util'
 import LoadingModal from '../components/loadingModal'
 import * as Auth from '../services/auth'
 
@@ -168,11 +170,20 @@ const TorusProvider = props => {
       let signedMessage = null
 
       if (isLoggedIn) {
-        signedMessage = await web3.eth.personal.sign(
-          message,
-          user.addresses[0],
-          ''
+        const publicAddress = Web3.utils.toChecksumAddress(user.addresses[0])
+        const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
+        const prefixWithLength = Buffer.from(`${customPrefix}${message.length.toString()}`, 'utf-8')
+        const finalMessage = Buffer.concat([prefixWithLength, Buffer.from(message)])
+        const hashedMsg = keccak256(finalMessage)
+        const send = promisify(web3.currentProvider.send)
+        const { result } = await send(
+          {
+            method: 'eth_sign',
+            params: [publicAddress, hashedMsg, { customPrefix, customMessage: message }],
+            from: publicAddress
+          }
         )
+        signedMessage = result
       }
       setLoading(false)
       return signedMessage
@@ -190,7 +201,8 @@ const TorusProvider = props => {
         balance,
         user,
         signMessage,
-        network
+        network,
+        web3
       }}
     >
       {loading && <LoadingModal isOpen={loading} />}

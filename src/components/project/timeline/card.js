@@ -19,8 +19,9 @@ import {
   GET_PROJECT_UPDATES
 } from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { navigate } from 'gatsby'
+import Toast from '../../toast'
 import styled from '@emotion/styled'
 
 import theme from '../../../gatsby-plugin-theme-ui'
@@ -113,9 +114,21 @@ const TimelineCard = props => {
         variables: {
           reaction: 'heart',
           updateId: parseFloat(props?.content?.id)
-        }
+        },
+        refetchQueries: [
+          {
+            query: props.refreshQuery,
+            variables: {
+              projectId: parseInt(props?.project?.id),
+              take: 100,
+              skip: 0
+            }
+          }
+        ]
       })
-      console.log({ reaction })
+      console.log({ props, reaction })
+
+      return Toast({ content: 'You liked it!', type: 'success' })
     } catch (error) {
       console.log({ error })
     }

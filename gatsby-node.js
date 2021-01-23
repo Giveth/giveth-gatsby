@@ -10,14 +10,25 @@ exports.onCreatePage = async ({ page, actions }) => {
   // page.matchPath is a special key that's used for matching pages
   // only on the client.
   if (page.path.match(/^\/donate/)) {
-    page.matchPath = '/donate/*'
-    // Update the page.
-    createPage(page)
+    createPage({
+      path: '/donate',
+      matchPath: '/donate/:id',
+      component: require.resolve('./src/pages/donate.js')
+    })
   }
   if (page.path.match(/^\/project/)) {
-    page.matchPath = '/project/*'
-    // Update the page.
-    createPage(page)
+    createPage({
+      path: '/project',
+      matchPath: '/project/:id',
+      component: require.resolve('./src/pages/project.js')
+    })
+  }
+  if (page.path.match(/^\/user/)) {
+    createPage({
+      path: '/user',
+      matchPath: '/user/:address',
+      component: require.resolve('./src/pages/user.js')
+    })
   }
   if (page.path.match(/^\//)) {
     page.context = {
@@ -33,41 +44,42 @@ exports.onCreatePage = async ({ page, actions }) => {
   }
 }
 
-// exports.createPages = async ({ graphql, actions }) => {
-//   const { createPage } = actions
-//   const projectResults = await graphql(`
-//     query {
-//       giveth {
-//         projects {
-//           id
-//           title
-//           description
-//           slug
-//           creationDate
-//           admin
-//           image
-//           walletAddress
-//           categories {
-//             name
-//           }
-//         }
-//       }
-//     }
-//   `)
-//   const projectPageTemplate = require.resolve('./src/templates/project.js')
-//   if (projectResults.data) {
-//     projectResults.data.giveth.projects.forEach(project => {
-//       createPage({
-//         path: `/project/${project.slug}`,
-//         component: projectPageTemplate,
-//         context: {
-//           // entire project is passed down as context
-//           project: project
-//         }
-//       })
-//     })
-//   }
-// }
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  // Mateo: This is being done on the client for now, not generated on the server.
+  // const projectResults = await graphql(`
+  //   query {
+  //     giveth {
+  //       projects {
+  //         id
+  //         title
+  //         description
+  //         slug
+  //         creationDate
+  //         admin
+  //         image
+  //         walletAddress
+  //         categories {
+  //           name
+  //         }
+  //       }
+  //     }
+  //   }
+  // `)
+  // const projectPageTemplate = require.resolve('./src/templates/project.js')
+  // if (projectResults.data) {
+  //   projectResults.data.giveth.projects.forEach(project => {
+  //     createPage({
+  //       path: `/project/${project.slug}`,
+  //       component: projectPageTemplate,
+  //       context: {
+  //         // entire project is passed down as context
+  //         project: project
+  //       }
+  //     })
+  //   })
+  // }
+}
 
 exports.onCreateNode = ({ node }) => {
   if (node.internal.type === `File`) {

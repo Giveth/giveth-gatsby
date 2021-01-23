@@ -23,7 +23,6 @@ const Donate = props => {
   const { handleSubmit, register } = useForm()
   const { doDonate } = props
   const onSubmit = values => {
-    console.log(`values : ${JSON.stringify(values, null, 2)}`)
     doDonate(values)
   }
 

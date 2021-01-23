@@ -82,6 +82,25 @@ const FETCH_PROJECT_BY_SLUG = gql`
       categories {
         name
       }
+      donations {
+        transactionId
+        toWalletAddress
+        fromWalletAddress
+        anonymous
+        amount
+        valueUsd
+        user {
+          id
+          firstName
+          lastName
+          avatar
+        }
+        project {
+          title
+        }
+        createdAt
+        currency
+      }
     }
   }
 `
@@ -252,6 +271,23 @@ const TOGGLE_UPDATE_REACTION = gql`
   }
 `
 
+const TOGGLE_PROJECT_REACTION = gql`
+  mutation ToggleProjectReaction($reaction: String!, $projectId: Float!) {
+    toggleProjectReaction(reaction: $reaction, projectId: $projectId)
+  }
+`
+
+const GET_PROJECT_REACTIONS = gql`
+  query GetProjectReactions($projectId: Float!) {
+    getProjectReactions(projectId: $projectId) {
+      id
+      projectUpdateId
+      userId
+      reaction
+    }
+  }
+`
+
 const GET_PROJECT_BY_ADDRESS = gql`
   query ProjectByAddress($address: String!) {
     projectByAddress(address: $address) {
@@ -309,7 +345,9 @@ export {
   GET_STRIPE_PROJECT_DONATIONS,
   ADD_PROJECT_UPDATE,
   GET_PROJECT_UPDATES,
+  TOGGLE_PROJECT_REACTION,
   TOGGLE_UPDATE_REACTION,
+  GET_PROJECT_REACTIONS,
   GET_PROJECT_BY_ADDRESS,
   REGISTER_PROJECT_DONATION,
   EDIT_PROJECT

@@ -2,9 +2,9 @@ import React from 'react'
 import styled from '@emotion/styled'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { Spinner, Text } from 'theme-ui'
+import { Spinner, Flex, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui'
-import Table from './donationsTable'
+import DonationsTable from './donationsTable'
 
 const Funds = styled.div`
   padding: 2rem;
@@ -17,8 +17,16 @@ const Funds = styled.div`
 const DonationsTab = ({ project, showModal, setShowModal }) => {
   const [loading, setLoading] = React.useState(true)
   const { currentProjectView } = React.useContext(ProjectContext)
-  const total = currentProjectView?.ethBalance
-
+  // james const total = currentProjectView?.ethBalance
+  const donations = project.donations
+  const totalDonations = donations.reduce(
+    (total, donation) => total + donation.amount,
+    0
+  )
+  const totalUSDonations = donations.reduce(
+    (total, donation) => total + donation.valueUsd,
+    0
+  )
   React.useEffect(() => {
     setLoading(false)
   }, [])
@@ -27,7 +35,7 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
     return <Spinner variant='spinner.medium' />
   }
 
-  if (!total)
+  if (!totalDonations)
     return (
       <Text sx={{ variant: 'text.large', color: 'secondary' }}>
         No donations yet :(
@@ -40,22 +48,60 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
         <Text sx={{ variant: 'text.medium', color: 'secondary' }}>
           TOTAL FUNDS RAISED:
         </Text>
-        <Text
+        <Flex
           sx={{
-            variant: ['headings.h3', null, 'headings.display'],
-            color: 'secondary'
+            flexDirection: 'row',
+            alignItems: 'flex-end'
           }}
         >
-          {`${parseFloat(
-            ethers.utils.formatEther(currentProjectView?.ethBalance)
-          ).toFixed(2)} ETH` ||
-            (total?.amount / 10)?.toLocaleString('en-US', {
-              style: 'currency',
-              currency: 'USD'
-            })}
+          <Text
+            sx={{
+              variant: ['headings.h3', null, 'headings.display'],
+              color: 'secondary'
+            }}
+          >
+            {totalUSDonations
+              ? totalUSDonations?.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                })
+              : null}
+          </Text>
+          <Text
+            sx={{
+              variant: ['headings.h6', null, 'headings.h5'],
+              pl: 4,
+              pb: 3,
+              color: 'secondary'
+            }}
+          >
+            {currentProjectView?.ethBalance
+              ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
+              : totalDonations &&
+                (totalDonations / 10)?.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                })}
+          </Text>
+        </Flex>
+        <Text
+          sx={{
+            variant: 'text.medium',
+            color: 'bodyLight',
+            fontWeight: 'bold',
+            cursor: 'pointer',
+            mt: -2
+          }}
+          onClick={() =>
+            window.open(
+              `https://etherscan.io/address/${project?.walletAddress}`
+            )
+          }
+        >
+          {project?.walletAddress}
         </Text>
       </Funds>
-      <Table donations={currentProjectView?.donations} />
+      <DonationsTable donations={donations} />
     </div>
   )
 }

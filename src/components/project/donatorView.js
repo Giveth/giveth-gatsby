@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import Seo from '../seo'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { TorusContext } from '../../contextProvider/torusProvider'
-import { ImLocation } from 'react-icons/im'
+import { PopupContext } from '../../contextProvider/popupProvider'
 
 import testImg from '../../images/giveth-test-image.png'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
+import { FaShareAlt } from 'react-icons/fa'
+import { ImLocation } from 'react-icons/im'
 
 import { Link } from 'gatsby'
-import { useQuery, useApolloClient } from '@apollo/react-hooks'
+import { useQuery, useApolloClient } from '@apollo/client'
 import {
   GET_STRIPE_PROJECT_DONATIONS,
   GET_PROJECT_UPDATES
 } from '../../apollo/gql/projects'
+import { GET_USER } from '../../apollo/gql/auth'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
 
@@ -38,40 +40,32 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
+  const usePopup = React.useContext(PopupContext)
   const isSSR = typeof window === 'undefined'
   const client = useApolloClient()
-
-  const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
-    variables: { projectId: pageContext?.project?.id }
-  })
 
   const { currentProjectView, setCurrentProjectView } = React.useContext(
     ProjectContext
   )
 
   const project = pageContext?.project
-
   useEffect(() => {
     const firstFetch = async () => {
       try {
         // Add donations to current project store
         if (!project.walletAddress) return
-        const cryptoTxs = await getEtherscanTxs(
-          project.walletAddress,
-          client,
-          true
-        )
-        console.log({ cryptoTxs, data })
-        let donations = []
-        if (cryptoTxs) {
-          donations = [
-            data?.getStripeProjectDonations || null,
-            ...cryptoTxs.txs
-          ].filter(function (e) {
-            return e
-          })
-        }
+        // Etherscan not used anymore front side
+        // const cryptoTxs = await getEtherscanTxs(
+        //   project.walletAddress,
+        //   client,
+        //   true
+        // )
 
+        let donations = project?.donations
+        const ethBalance = donations?.reduce(
+          (prev, current) => prev + current?.amount,
+          0
+        )
         // Get Updates
         const updates = await client?.query({
           query: GET_PROJECT_UPDATES,
@@ -82,14 +76,25 @@ export const ProjectDonatorView = ({ pageContext }) => {
           }
         })
 
+        // Get project admin Info
+        const admin = await client?.query({
+          query: GET_USER,
+          variables: {
+            userId: parseInt(project?.admin)
+          }
+        })
+
         setCurrentProjectView({
           ...currentProjectView,
-          ethBalance: cryptoTxs?.balance,
+          ethBalance,
           donations,
+          admin: admin?.data?.user,
           updates: updates?.data?.getProjectUpdates
         })
-        setTotalDonations(donations?.length)
-        setTotalGivers([...new Set(donations?.map(data => data?.donor))].length)
+
+        setTotalGivers(
+          [...new Set(donations?.map(data => data?.fromWalletAddress))].length
+        )
         setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
       } catch (error) {
         console.log({ error })
@@ -136,7 +141,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
   console.log({ currentProjectView })
   return (
     <>
-      <Seo title={project?.title} />
       <Flex>
         {setImage(project?.image) || (
           <Image
@@ -179,7 +183,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   fontFamily: 'heading',
                   fontWeight: 'bold',
                   color: 'secondary',
-                  wordBreak: 'break-all'
+                  wordBreak: 'break-word'
                 }}
               >
                 {pageContext?.project?.title}
@@ -191,15 +195,25 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   alignItems: 'center'
                 }}
               >
-                <Text
-                  sx={{
-                    fontSize: 6,
-                    fontFamily: 'body',
-                    fontWeight: 'body',
-                    color: 'primary',
-                    mt: '10px'
-                  }}
-                ></Text>
+                {currentProjectView?.admin?.name && (
+                  <Link
+                    style={{ textDecoration: 'none' }}
+                    to={`/user/${currentProjectView.admin?.walletAddress}`}
+                  >
+                    <Text
+                      sx={{
+                        fontSize: 4,
+                        fontFamily: 'body',
+                        fontWeight: 'body',
+                        color: 'primary',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {`by ${currentProjectView.admin.name}`}
+                    </Text>
+                  </Link>
+                )}
+
                 {pageContext?.project?.impactLocation && (
                   <Flex>
                     <ImLocation size='24px' color={theme.colors.secondary} />
@@ -340,6 +354,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 <Text
                   sx={{
                     mb: 4,
+                    wordBreak: 'break-word',
+                    whiteSpace: 'break-spaces',
+                    width: '100%',
                     fontSize: 3,
                     fontFamily: 'body',
                     fontWeight: 'body',
@@ -387,7 +404,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
             }}
             onClick={() =>
               isOwner
-                ? window.location.replace('/account')
+                ? window.location.replace(
+                    `/account?data=${project?.slug}&view=projects`
+                  )
                 : window.location.replace(`/donate/${project?.slug}`)
             }
           >
@@ -401,9 +420,9 @@ export const ProjectDonatorView = ({ pageContext }) => {
               my: '20px'
             }}
           >
-            <Text>Givers: {totalGivers}</Text>
+            <Text>Givers: {totalGivers || 0}</Text>
             <Text sx={{ pl: 4, borderLeft: '2px solid #edf0fa' }}>
-              Donations: {totalDonations}
+              Donations: {project?.donations?.length || 0}
             </Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
@@ -434,19 +453,49 @@ export const ProjectDonatorView = ({ pageContext }) => {
               })}
           </Flex>
 
-          <Flex sx={{ justifyContent: 'center' }}>
-            <Link to='/projects'>
+          <Flex sx={{ justifyContent: 'center', mt: 2 }}>
+            <Link to='/projects' style={{ textDecoration: 'none' }}>
               <Text
                 sx={{
                   variant: 'text.medium',
                   color: 'primary',
                   textDecoration: 'none',
-                  mt: '10px'
+                  mt: '5px'
                 }}
               >
                 View similar projects
               </Text>
             </Link>
+          </Flex>
+          <Flex
+            sx={{
+              mt: 2,
+              justifyContent: 'center',
+              textAlign: 'center',
+              alignItems: 'center',
+              width: '100%',
+              cursor: 'pointer',
+              mt: '5px'
+            }}
+            onClick={() => {
+              usePopup?.triggerPopup('share', {
+                title: project?.title,
+                description: project?.description,
+                slug: project?.slug
+              })
+            }}
+          >
+            <FaShareAlt size={'12px'} color={theme.colors.secondary} />
+            <Text
+              sx={{
+                variant: 'text.medium',
+                color: 'secondary',
+                textDecoration: 'none',
+                ml: '10px'
+              }}
+            >
+              Share
+            </Text>
           </Flex>
         </FloatingDonateView>
       </Flex>

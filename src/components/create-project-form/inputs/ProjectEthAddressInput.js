@@ -6,7 +6,8 @@ export const ProjectEthAddressInput = ({
   register,
   currentValue,
   walletUsed,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [characterLength, setCharacterLength] = useState(
     currentValue ? currentValue.length : 0
@@ -39,7 +40,7 @@ export const ProjectEthAddressInput = ({
           lineHeight: '19px'
         }}
       >
-        You can set a custom ethereum address to receive donations
+        You can set a custom ethereum address or ENS to receive donations
       </Text>
       <Flex sx={{ width: '175%' }}>
         <Input
@@ -64,7 +65,7 @@ export const ProjectEthAddressInput = ({
             color: 'muted'
           }}
         >
-          {characterLength}/42
+          {/* {characterLength}/42 */}
         </Text>
       </Flex>
       {walletUsed !== true && !address && (
@@ -81,30 +82,59 @@ export const ProjectEthAddressInput = ({
           desired*
         </Text>
       )}
-
-      <Button
-        aria-label='Next'
+      <Flex
         sx={{
-          mt: '100px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px'
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse'
         }}
-        type='submit'
       >
-        <Text
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%',
+            mt: '100px',
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px'
+          }}
+          type='submit'
+        >
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%',
+              cursor: 'pointer'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
+          sx={{
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
             cursor: 'pointer'
           }}
+          onClick={goBack}
         >
-          NEXT
-        </Text>
-      </Button>
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
     </animated.section>
   )
 }

@@ -5,8 +5,8 @@ import { Router } from '@reach/router'
 import { Box, Button, Grid, Spinner, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
-import { useQuery } from '@apollo/react-hooks'
-
+import Seo from '../components/seo'
+import { useQuery } from '@apollo/client'
 import OnlyFiat from '../components/donate/onlyFiat'
 import Success from '../components/donate/success'
 import Layout from '../components/layout'
@@ -155,8 +155,7 @@ const ShowProject = props => {
       return (
         <OptionTypesBox
           onClick={() => {
-            if (title === 'Credit Card') return alert('coming soon')
-            // setPaymentType(title)
+            setPaymentType(title)
           }}
           style={{
             backgroundColor: isSelected ? 'white' : theme.colors.secondary,
@@ -260,7 +259,7 @@ const ShowProject = props => {
         </ProjectContainer>
         <Payment>
           <Success sessionId={paymentSessionId} hash={hashSent} />
-          <div style={{ margin: '3rem 0' }}>
+          <div style={{ margin: '3rem 0', zIndex: 2 }}>
             <ShareIcons message='Share this with your friends!' />
           </div>
         </Payment>
@@ -280,7 +279,7 @@ const ShowProject = props => {
             'https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
           }
           raised={1223}
-          category={project?.categories || 'Blockchain 4 Good'}
+          categories={project?.categories}
           listingId='key1'
           key='key1'
         />
@@ -294,19 +293,27 @@ const ShowProject = props => {
 }
 
 const Donate = props => {
-  const { projectId } = props
+  const { id } = props
 
   const { loading, error, data } = useQuery(FETCH_PROJECT_BY_SLUG, {
-    variables: { slug: projectId }
+    variables: { slug: id }
   })
 
   // console.log({ data })
 
   return (
     <Layout asDialog>
+      <Seo
+        title={
+          data?.projectBySlug?.title
+            ? `Make a donation to ${data?.projectBySlug?.title}!`
+            : 'Make a donation today!'
+        }
+        image={data?.projectBySlug?.image}
+      />
       <Content style={{ justifyItems: 'center' }}>
         {error ? (
-          <Text>Error</Text>
+          <Text sx={{ color: 'background' }}>Error</Text>
         ) : loading ? (
           <Spinner variant='spinner.medium' />
         ) : data?.projectBySlug ? (
@@ -319,33 +326,4 @@ const Donate = props => {
   )
 }
 
-const DonateWithoutSlug = () => {
-  return (
-    <Layout asDialog>
-      <Content style={{ justifyItems: 'center' }}>
-        {/* <Link to='/projects'>
-          <Button
-            variant='default'
-            sx={{
-              paddingTop: '20px',
-              paddingBottom: '20px'
-            }}
-          >
-            <Text sx={{ color: 'background' }}>Go see our projects</Text>
-          </Button>
-        </Link> */}
-      </Content>
-    </Layout>
-  )
-}
-
-const DonateIndex = () => {
-  return (
-    <Router basepath='/'>
-      <DonateWithoutSlug path='donate' />
-      <Donate path='donate/:projectId' />
-    </Router>
-  )
-}
-
-export default DonateIndex
+export default Donate

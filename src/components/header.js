@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { navigate, Link } from 'gatsby'
 import Loadable from '@loadable/component'
@@ -10,6 +10,9 @@ import theme from '../gatsby-plugin-theme-ui/index'
 import Logo from './content/Logo'
 import { useLocation } from '@reach/router'
 import Headroom from 'react-headroom'
+import { PopupContext } from '../contextProvider/popupProvider'
+import { TorusContext } from '../contextProvider/torusProvider'
+
 // import graphics
 import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
@@ -155,6 +158,9 @@ const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
   const location = useLocation()
+  const { isLoggedIn } = React.useContext(TorusContext)
+  const usePopup = React.useContext(PopupContext)
+  const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [navHidden, setHideNavbar] = useState(false)
@@ -177,6 +183,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
+    if (!isLoggedIn) return triggerPopup('Welcome')
     navigate('/create')
   }
 
@@ -226,6 +233,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                 alt=''
                 width='40px'
                 height='40px'
+                sx={{ mr: 3 }}
               />
             ) : (
               <LogoSpan
@@ -260,7 +268,10 @@ const Header = ({ siteTitle, isHomePage }) => {
           <MiddleSpan>
             <NavLink
               to='/'
-              sx={{ color: isHomePage ? 'secondary' : 'primary' }}
+              sx={{
+                display: ['none', 'block', 'block'],
+                color: isHomePage ? 'secondary' : 'primary'
+              }}
             >
               Home
             </NavLink>

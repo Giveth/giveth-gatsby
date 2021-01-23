@@ -1,4 +1,5 @@
 export default {
+  donationSlug: 'giveth',
   breakpoints: ['850px', '1024px', '1280px'],
   colors: {
     text: '#2C0B3F',
@@ -13,9 +14,14 @@ export default {
     attention: '#E01C6B',
     bodyDark: '#6B7087',
     bodyLight: '#AAAFCA',
+    softGray: '#F4F6FC',
     anotherGrey: '#C9D0E8',
+    blue: '#3F91E4',
+    lightBlue: '#F0F6FC',
     lightestBlue: '#EDF0FA',
     yellow: '#FFEF9D',
+    warnYellow: '#F6AB2F',
+    green: '#37B4A9',
     greenishBlue: '#36CDD7',
     red: '#D74036'
   },
@@ -233,6 +239,23 @@ export default {
       py: '1rem',
       px: '1.5rem',
       fontSize: 3,
+      fontWeight: 'bold',
+      lineHeight: 'button',
+      textTransform: ['capitalize', 'uppercase'],
+      borderRadius: '88px',
+      '&:focus': {
+        outline: 'none'
+      },
+      '&:hover': {
+        scale: '1.1'
+      }
+    },
+    big: {
+      cursor: 'pointer',
+      fontFamily: 'body',
+      py: '2rem',
+      px: '1.5rem',
+      fontSize: 4,
       fontWeight: 'bold',
       lineHeight: 'button',
       textTransform: ['capitalize', 'uppercase'],

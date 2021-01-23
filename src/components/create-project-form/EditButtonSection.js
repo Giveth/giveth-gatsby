@@ -53,7 +53,10 @@ const EditButtonSection = ({ formData, setStep }) => {
               border: 0,
               background: 'unset',
               fontSize: 1,
-              p: 0
+              p: 0,
+              '&:hover': {
+                cursor: 'pointer'
+              }
             }}
             onClick={() => setStep(1)}
           >
@@ -62,7 +65,10 @@ const EditButtonSection = ({ formData, setStep }) => {
                 fontSize: 0,
                 textTransform: 'uppercase',
                 fontFamily: 'heading',
-                color: 'bodyLight'
+                color: 'bodyLight',
+                '&:hover': {
+                  cursor: 'pointer'
+                }
               }}
             >
               Admin
@@ -84,7 +90,10 @@ const EditButtonSection = ({ formData, setStep }) => {
               border: 0,
               background: 'unset',
               fontSize: 1,
-              p: 0
+              p: 0,
+              '&:hover': {
+                cursor: 'pointer'
+              }
             }}
             onClick={() => setStep(2)}
           >
@@ -115,7 +124,10 @@ const EditButtonSection = ({ formData, setStep }) => {
               border: 0,
               background: 'unset',
               fontSize: 1,
-              p: 0
+              p: 0,
+              '&:hover': {
+                cursor: 'pointer'
+              }
             }}
             onClick={() => setStep(3)}
           >
@@ -146,7 +158,10 @@ const EditButtonSection = ({ formData, setStep }) => {
               border: 0,
               background: 'unset',
               fontSize: 1,
-              p: 0
+              p: 0,
+              '&:hover': {
+                cursor: 'pointer'
+              }
             }}
             onClick={() => setStep(4)}
           >
@@ -177,7 +192,10 @@ const EditButtonSection = ({ formData, setStep }) => {
               border: 0,
               background: 'unset',
               fontSize: 1,
-              p: 0
+              p: 0,
+              '&:hover': {
+                cursor: 'pointer'
+              }
             }}
             onClick={() => setStep(6)}
           >

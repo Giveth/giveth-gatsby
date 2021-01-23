@@ -2,7 +2,7 @@
 import React from 'react'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
@@ -19,6 +19,7 @@ import {
   Text,
   jsx
 } from 'theme-ui'
+import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
@@ -44,7 +45,6 @@ const Table = styled.table`
     border-bottom: 1px solid #eaebee;
     padding: 0.35em;
   }
-
   th,
   td {
     padding: 0.625em;
@@ -160,33 +160,29 @@ const FilterBox = styled(Flex)`
   justify-content: space-between;
 `
 
-const CustomTable = () => {
+const DonationsTable = ({ donations }) => {
   const options = ['All Donations', 'Fiat', 'Crypto']
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
-  const { currentProjectView, setCurrentProjectView } = React.useContext(
-    ProjectContext
-  )
   const client = useApolloClient()
 
   React.useEffect(() => {
     const setup = async () => {
-      setCurrentDonations(currentProjectView?.donations)
+      setCurrentDonations(donations)
       setLoading(false)
     }
 
     setup()
-  }, [currentProjectView])
+  }, [donations])
 
   const searching = search => {
-    const donations = currentProjectView?.donations
     if (!search || search === '') {
-      return setCurrentDonations(donations.filter(true))
+      return setCurrentDonations(donations)
     }
     const some = donations?.filter(donation => {
       return (
-        donation?.donor
+        donation?.fromWalletAddress
           ?.toString()
           .toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
@@ -221,6 +217,7 @@ const CustomTable = () => {
     // Logic for displaying current items
     const indexOfLastItem = activeItem * itemsPerPage
     const indexOfFirstItem = indexOfLastItem - itemsPerPage
+
     const currentItems = paginationItems?.slice(
       indexOfFirstItem,
       indexOfLastItem
@@ -269,58 +266,83 @@ const CustomTable = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.reverse().map((i, key) => {
-              if (!i) return null
-              return (
-                <tr key={key}>
-                  <td
-                    data-label='Account'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.createdAt
-                        ? dayjs.unix(i.createdAt).format('ll')
-                        : 'null'}
-                    </Text>
-                  </td>
-                  <DonorBox
-                    data-label='Donor'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Avatar
-                      src={
-                        i?.extra?.userByAddress?.avatar ||
-                        'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
-                      }
-                    />
-                    <Text
-                      sx={{ variant: 'text.small', color: 'secondary', ml: 2 }}
+            {currentItems
+              ?.slice()
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((i, key) => {
+                if (!i) return null
+                console.log({ i })
+                return (
+                  <tr key={key}>
+                    <td
+                      data-label='Account'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
                     >
-                      {i?.extra?.userByAddress?.name || i?.donor}
-                    </Text>
-                  </DonorBox>
-                  <td
-                    data-label='Currency'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Badge variant='green'>{i?.currency}</Badge>
-                  </td>
-                  <td
-                    data-label='Amount'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH' && i?.value
-                        ? parseFloat(ethers.utils.formatEther(i?.value))
-                        : i?.amount?.toLocaleString('en-US', {
-                            style: 'currency',
-                            currency: 'USD'
-                          })}
-                    </Text>
-                  </td>
-                </tr>
-              )
-            })}
+                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                        {i?.createdAt
+                          ? dayjs(i.createdAt).format('ll')
+                          : 'null'}
+                      </Text>
+                    </td>
+                    <DonorBox
+                      data-label='Donor'
+                      sx={{
+                        variant: 'text.small',
+                        color: 'secondary',
+                        svg: { borderRadius: '50%' }
+                      }}
+                    >
+                      {i?.user?.avatar ? (
+                        <Avatar src={i?.user?.avatar} />
+                      ) : (
+                        <Jdenticon size='32' value={i?.fromWalletAddress} />
+                      )}
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          color: 'secondary',
+                          ml: 2
+                        }}
+                      >
+                        {i?.user?.firstName
+                          ? i?.user?.lastName
+                            ? i?.user?.firstName + ' ' + i?.user?.lastName
+                            : i?.user?.firstName
+                          : !i?.anonymous
+                          ? i?.fromWalletAddress
+                          : ''}
+                      </Text>
+                    </DonorBox>
+                    <td
+                      data-label='Currency'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Badge variant='green'>{i?.currency}</Badge>
+                    </td>
+                    <td
+                      data-label='Amount'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.small',
+                          // whiteSpace: 'pre-wrap',
+                          color: 'secondary'
+                        }}
+                      >
+                        {i?.currency === 'ETH' && i?.valueUsd
+                          ? `${
+                              i?.amount ? `${i?.amount} ETH` : ''
+                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
+                          : i?.amount?.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD'
+                            })}
+                      </Text>
+                    </td>
+                  </tr>
+                )
+              })}
           </tbody>
         </Table>
         <PagesStyle>
@@ -368,7 +390,7 @@ const CustomTable = () => {
       ) : !filteredDonations || filteredDonations?.length === 0 ? (
         <Table>
           <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-            No donations :(
+            No donations yet :(
           </Text>
         </Table>
       ) : (
@@ -378,4 +400,4 @@ const CustomTable = () => {
   )
 }
 
-export default CustomTable
+export default DonationsTable

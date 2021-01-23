@@ -2,6 +2,7 @@
 import { jsx, Label, Input, Grid, Text, Button, Textarea } from 'theme-ui'
 import theme from '../gatsby-plugin-theme-ui/index'
 import React from 'react'
+import Seo from '../components/seo'
 import styled from '@emotion/styled'
 import useMediaQuery from 'react-responsive'
 
@@ -21,22 +22,32 @@ const Main = styled(Grid)`
 `
 
 const FormStyled = styled(Grid)`
-  grid-template-rows: repeat(5, auto);
   max-width: 50vw;
+  grid-template-rows: repeat(5, auto);
 
   @media (max-width: 500px) {
     max-width: 100%;
   }
 
   & label {
-    color: ${theme.colors.bodyLight};
+    text-transform: uppercase;
+    color: ${theme.colors.secondary};
     display: grid;
     grid-gap: 24px;
+  }
+
+  input {
+    &::placeholder {
+      color: ${theme.colors.bodyLight};
+    }
   }
 
   & textarea {
     border: 2px solid ${theme.colors.bodyLight};
     border-radius: 16px;
+    &::placeholder {
+      color: ${theme.colors.bodyLight};
+    }
   }
 `
 
@@ -53,6 +64,7 @@ const Contact = ({ data }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
+      <Seo title='Contact us' />
       {!isMobile ? (
         <img
           src={decoratorCircles}
@@ -60,7 +72,7 @@ const Contact = ({ data }) => {
           sx={{
             position: 'absolute',
             zIndex: '-1',
-            top: '20px',
+            top: '-32px',
             right: '80px'
           }}
         />
@@ -79,7 +91,9 @@ const Contact = ({ data }) => {
         />
       ) : null}
       <Main>
-        <Text sx={{ variant: 'headings.h2' }}>Contact us</Text>
+        <Text sx={{ variant: 'headings.h2', color: 'secondary', mt: 4 }}>
+          Contact us
+        </Text>
         <Text pb={5} sx={{ variant: 'text.large' }}>
           Have a question, or just want to say hi? Please fill out the form
           below to contact us.
@@ -90,13 +104,13 @@ const Contact = ({ data }) => {
           data-netlify='true'
           name='contact'
           gap={4}
-          sx={{ variant: 'text.default' }}
+          sx={{ variant: 'text.default', width: ['100%', '100%', '40vw'] }}
         >
           <input type='hidden' name='bot-field' />
           <input type='hidden' name='form-name' value='contact' />
           <Label
             sx={{
-              variant: 'text.overlineSmall'
+              variant: 'text.large'
             }}
           >
             Your full name
@@ -104,7 +118,7 @@ const Contact = ({ data }) => {
           </Label>
           <Label
             sx={{
-              variant: 'text.overlineSmall'
+              variant: 'text.large'
             }}
           >
             Your Email address
@@ -117,7 +131,7 @@ const Contact = ({ data }) => {
           </Label>
           <Label
             sx={{
-              variant: 'text.overlineSmall'
+              variant: 'text.large'
             }}
           >
             Message

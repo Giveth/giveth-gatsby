@@ -2,6 +2,7 @@
 import { jsx, Text, Box } from 'theme-ui'
 import { graphql } from 'gatsby'
 import React from 'react'
+import Seo from '../components/seo'
 import styled from '@emotion/styled'
 // import useMediaQuery from 'react-responsive'
 
@@ -14,6 +15,7 @@ const Faq = ({ data }) => {
   // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
+      <Seo title='FAQ' />
       <Main>
         <Text sx={{ variant: 'headings.h2', textAlign: 'center' }}>FAQ</Text>
         <ContentFaq data={data.faqA.edges} isopen />

@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Label, Input, Text, Button } from 'theme-ui'
+import { Label, Input, Flex, Text, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
 export const ProjectAdminInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [characterLength, setCharacterLength] = useState(
     currentValue ? currentValue.length : 0
@@ -32,6 +33,7 @@ export const ProjectAdminInput = ({
         name='projectAdmin'
         ref={register}
         defaultValue={currentValue}
+        maxLength={55}
         placeholder='Project Admin'
         onChange={e => setCharacterLength(e.target.value.length)}
       />
@@ -45,29 +47,59 @@ export const ProjectAdminInput = ({
       >
         {characterLength}/55
       </Text>
-      <Button
-        aria-label='Next'
+      <Flex
         sx={{
-          mt: '200px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse'
         }}
-        type='submit'
       >
-        <Text
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%'
+            mt: '200px',
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer'
           }}
+          type='submit'
         >
-          NEXT
-        </Text>
-      </Button>
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
+          sx={{
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer'
+          }}
+          onClick={goBack}
+        >
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
     </animated.section>
   )
 }

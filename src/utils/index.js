@@ -99,3 +99,17 @@ export async function getEtherscanTxs(
     console.log({ error })
   }
 }
+
+export function ensRegex(ens) {
+  return /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/.test(
+    ens
+  )
+}
+
+export function getEtherscanPrefix() {
+  return typeof process.env.ETHEREUM_NETWORK !== 'undefined'
+    ? process.env.ETHEREUM_NETWORK === 'mainnet'
+      ? ''
+      : process.env.ETHEREUM_NETWORK + '.'
+    : ''
+}

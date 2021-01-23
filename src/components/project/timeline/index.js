@@ -45,10 +45,16 @@ const LeftInfo = styled(Flex)`
   z-index: 1;
 `
 
-const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
+const Timeline = ({
+  content = [],
+  addUpdate,
+  project,
+  isOwner,
+  refreshQuery
+}) => {
   const newUpdateOption = true
   const projectCreationDate = dayjs(project?.creationDate)
-
+  console.log({ refreshQuery })
   return (
     <VerticalTimeline>
       {newUpdateOption && isOwner && (
@@ -100,6 +106,7 @@ const Timeline = ({ content = [], addUpdate, project, isOwner }) => {
                 reactions={i?.reactions}
                 number={content.length - index}
                 project={project}
+                refreshQuery={refreshQuery}
               />
             </Container>
           )

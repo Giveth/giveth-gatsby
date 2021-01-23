@@ -2,20 +2,18 @@
 import React, { useEffect } from 'react'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { ethers } from 'ethers'
-import { titleCase } from '../../utils'
+import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
 import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { TorusContext } from '../../contextProvider/torusProvider'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
-
-import { GET_STRIPE_PROJECT_DONATIONS } from '../../apollo/gql/projects'
 
 dayjs.extend(localizedFormat)
 
@@ -173,9 +171,7 @@ const MyDonations = props => {
     ProjectContext
   )
 
-  const { data } = useQuery(GET_STRIPE_PROJECT_DONATIONS, {
-    variables: { projectId: 1 }
-  })
+  const etherscanPrefix = getEtherscanPrefix()
 
   React.useEffect(() => {
     const setup = async () => {
@@ -187,7 +183,7 @@ const MyDonations = props => {
     }
 
     setup()
-  }, [currentProjectView, data])
+  }, [currentProjectView])
 
   const searching = search => {
     const donations = currentDonations
@@ -195,9 +191,9 @@ const MyDonations = props => {
       return setCurrentDonations(props?.donations)
     }
     const some = donations.filter(donation => {
-      if (!donation?.donor) return null
+      if (!donation?.project.title) return null
       return (
-        donation?.donor
+        donation?.project.title
           ?.toString()
           ?.toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
@@ -270,94 +266,107 @@ const MyDonations = props => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((i, key) => {
-              return (
-                <tr key={key}>
-                  <td
-                    data-label='Account'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.createdAt
-                        ? dayjs.unix(i.createdAt).format('ll')
-                        : 'null'}
-                    </Text>
-                  </td>
-                  <DonorBox
-                    data-label='Project'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Text
-                      sx={{
-                        variant: 'text.small',
-                        color: 'primary',
-                        ml: 2
-                      }}
+            {currentItems
+              ?.slice()
+              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .map((i, key) => {
+                return (
+                  <tr key={key}>
+                    <td
+                      data-label='Account'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
                     >
-                      {titleCase(i?.extra?.projectByAddress?.title) || i?.donor}
-                    </Text>
-                  </DonorBox>
-                  <td
-                    data-label='Currency'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Badge variant='green'>{i.currency}</Badge>
-                  </td>
-                  <td
-                    data-label='Amount'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                  >
-                    <Text sx={{ variant: 'text.small', color: 'secondary' }}>
-                      {i?.currency === 'ETH' && i?.value
-                        ? parseFloat(ethers.utils.formatEther(i?.value))
-                        : i?.amount?.toLocaleString('en-US', {
-                            style: 'currency',
-                            currency: 'USD'
-                          })}
-                    </Text>
-                  </td>
-                  <td
-                    data-label='Transaction'
-                    sx={{ variant: 'text.small', color: 'secondary' }}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row'
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '120px',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        marginRight: 6
-                      }}
+                      <Text sx={{ variant: 'text.small', color: 'secondary' }}>
+                        {i?.createdAt
+                          ? dayjs(i.createdAt).format('ll')
+                          : 'null'}
+                      </Text>
+                    </td>
+                    <DonorBox
+                      data-label='Project'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Text
+                        sx={{
+                          variant: 'text.medium',
+                          color: 'primary',
+                          ml: 2
+                        }}
+                      >
+                        {titleCase(i?.project?.title) || i?.donor}
+                      </Text>
+                    </DonorBox>
+                    <td
+                      data-label='Currency'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                    >
+                      <Badge variant='green'>{i.currency}</Badge>
+                    </td>
+                    <td
+                      data-label='Amount'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
                     >
                       <Text
                         sx={{
                           variant: 'text.small',
+                          whiteSpace: 'pre-wrap',
                           color: 'secondary'
                         }}
                       >
-                        {i?.hash}
+                        {i?.currency === 'ETH' && i?.valueUsd
+                          ? `${
+                              i?.amount ? `${i?.amount} ETH` : ''
+                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
+                          : i?.amount?.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD'
+                            })}
                       </Text>
-                    </div>
-                    <FiCopy
-                      size='18px'
-                      sx={{ cursor: 'pointer', mr: 2 }}
-                      onClick={() => copy(i?.hash)}
-                    />{' '}
-                    <FiExternalLink
-                      size='18px'
-                      sx={{ cursor: 'pointer' }}
-                      onClick={() =>
-                        window.open(`https://etherscan.io/tx/${i?.hash}`)
-                      }
-                    />
-                  </td>
-                </tr>
-              )
-            })}
+                    </td>
+                    <td
+                      data-label='Transaction'
+                      sx={{ variant: 'text.small', color: 'secondary' }}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row'
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '120px',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          marginRight: 6
+                        }}
+                      >
+                        <Text
+                          sx={{
+                            variant: 'text.small',
+                            color: 'secondary'
+                          }}
+                        >
+                          {i?.transactionId}
+                        </Text>
+                      </div>
+                      <FiCopy
+                        size='18px'
+                        sx={{ cursor: 'pointer', mr: 2 }}
+                        onClick={() => copy(i?.transactionId)}
+                      />{' '}
+                      <FiExternalLink
+                        size='18px'
+                        sx={{ cursor: 'pointer' }}
+                        onClick={() =>
+                          window.open(
+                            `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+                          )
+                        }
+                      />
+                    </td>
+                  </tr>
+                )
+              })}
           </tbody>
         </Table>
         <PagesStyle>

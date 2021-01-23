@@ -1,14 +1,18 @@
 /** @jsx jsx */
 import React, { useState } from 'react'
 import { Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
-import { useApolloClient } from '@apollo/react-hooks'
+import { useApolloClient } from '@apollo/client'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { loadStripe } from '@stripe/stripe-js'
 import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
 import theme from '../../gatsby-plugin-theme-ui/index'
 
+import ComingSoon1 from '../../images/coming-soon-gear.png'
+import ComingSoon2 from '../../images/coming-soon.png'
+
 const GIVETH_DONATION_AMOUNT = 5
+const COMING_SOON = true
 
 const Content = styled.div`
   max-width: 41.25rem;
@@ -208,6 +212,27 @@ const OnlyFiat = props => {
           ${amount}
         </Text>
       </SmRow>
+    )
+  }
+
+  if (COMING_SOON) {
+    return (
+      <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+        <Text
+          sx={{
+            variant: 'headings.h5',
+            color: 'background',
+            mb: -4,
+            mt: 4
+          }}
+        >
+          Coming Soon
+        </Text>
+        <Flex>
+          <img src={ComingSoon1} sx={{ ml: -6 }} />
+          <img src={ComingSoon2} sx={{ position: 'absolute', mt: 5, ml: 4 }} />
+        </Flex>
+      </Flex>
     )
   }
 

@@ -1,24 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { Flex, Label, Button, Checkbox, Text } from 'theme-ui'
+import { Flex, Input, Label, Button, Checkbox, Text } from 'theme-ui'
 import { animated } from 'react-spring'
-
-import { LocationInputModal } from '../modals'
 
 export const ProjectImpactLocationInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [showLocationInput, setShowLocationInput] = useState(false)
   const [location, setLocation] = useState(
     currentValue === 'Global' ? 'Global' : currentValue
   )
   useEffect(() => {
-    if (showLocationInput === true) window.initMap(setLocation)
-  }, [showLocationInput])
+    typeof window !== 'undefined' && window.initMap(setLocation)
+  }, [])
 
   return (
-    <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
+    <animated.section
+      style={{
+        ...animationStyle,
+        marginTop: '30px'
+      }}
+    >
       <Label
         sx={{
           fontSize: 8,
@@ -38,22 +42,16 @@ export const ProjectImpactLocationInput = ({
       >
         Donors will easier find the project based on the location you provide
       </Text>
-      <Flex sx={{ mt: '75px' }}>
-        <Button
-          type='button'
-          onClick={() => setShowLocationInput(!showLocationInput)}
-          sx={{
-            width: '700px',
-            padding: 0,
-            mr: '50px',
-            background: 'unset',
-            cursor: 'pointer'
-          }}
-        >
-          <Text sx={{ fontFamily: 'body', color: 'muted', fontSize: 8 }}>
-            {location || 'x Select Location'}
-          </Text>
-        </Button>
+      <Flex sx={{ mt: 4 }}>
+        <div id='locationField'>
+          <Input
+            id='autocomplete'
+            placeholder='Search a Location'
+            type='text'
+            sx={{ fontFamily: 'body', width: '400px', mr: '35px' }}
+            onChange={e => setLocation(e.target.value)}
+          />
+        </div>
         <input
           id='projectImpactLocation'
           name='projectImpactLocation'
@@ -79,36 +77,76 @@ export const ProjectImpactLocationInput = ({
           </Text>
         </Label>
       </Flex>
-      <Button
-        aria-label='Next'
-        sx={{
-          mt: '200px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px'
+      {location ? (
+        <Text sx={{ fontFamily: 'body', color: 'muted', mt: 3, fontSize: 8 }}>
+          {location}
+        </Text>
+      ) : null}
+      <div
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '600px',
+          backgroundColor: 'white',
+          borderRadius: '2px',
+          margin: '2rem 0 0 0'
         }}
-        type='submit'
       >
-        <Text
+        <div id='map' style={{ height: '250px' }} />
+      </div>
+      <Flex
+        sx={{
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse',
+          margin: '2rem 0'
+        }}
+      >
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%',
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px'
+          }}
+          type='submit'
+        >
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%',
+              cursor: 'pointer'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
+          sx={{
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
             cursor: 'pointer'
           }}
+          onClick={goBack}
         >
-          NEXT
-        </Text>
-      </Button>
-      {showLocationInput ? (
-        <LocationInputModal
-          showModal={showLocationInput}
-          setShowModal={setShowLocationInput}
-          setLocation={setLocation}
-        />
-      ) : null}
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
     </animated.section>
   )
 }

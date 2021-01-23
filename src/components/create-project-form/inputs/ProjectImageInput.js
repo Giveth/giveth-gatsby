@@ -25,7 +25,8 @@ const Selection = styled(Button)`
 export const ProjectImageInput = ({
   register,
   currentValue,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   const [image, setImage] = useState()
   const [displayImage, setDisplayImage] = useState(currentValue)
@@ -75,7 +76,10 @@ export const ProjectImageInput = ({
           maxHeight: '270px',
           mt: '12px',
           p: '2.5%',
-          gap: '20px'
+          gap: '20px',
+          '&:hover': {
+            cursor: 'pointer'
+          }
         }}
       >
         <Flex
@@ -129,7 +133,11 @@ export const ProjectImageInput = ({
               Upload from computer
             </Text>
           </Text>
-          <Text sx={{ marginTop: '8px' }}>
+          <Text
+            sx={{
+              marginTop: '8px'
+            }}
+          >
             Suggested image size min. 1200px width. Image size up to 16mb.
           </Text>
         </Flex>
@@ -159,29 +167,59 @@ export const ProjectImageInput = ({
           )
         })}
       </Grid>
-      <Button
-        aria-label='Next'
+      <Flex
         sx={{
-          mt: '50px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse'
         }}
-        type='submit'
       >
-        <Text
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%'
+            mt: '50px',
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer'
           }}
+          type='submit'
         >
-          NEXT
-        </Text>
-      </Button>
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
+          sx={{
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer'
+          }}
+          onClick={goBack}
+        >
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
     </animated.section>
   )
 }

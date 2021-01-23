@@ -3,9 +3,9 @@ import {
   GET_PROJECT_UPDATES,
   ADD_PROJECT_UPDATE
 } from '../../apollo/gql/projects'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-
+import Toast from '../toast'
 import Timeline from './timeline'
 
 const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
@@ -33,7 +33,8 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
 
   const addUpdate = async ({ title, content }) => {
     try {
-      if (!title || !content) return alert('Fields should not be empty')
+      if (!title || !content)
+        return Toast({ content: 'Fields should not be empty', type: 'error' })
       const { data } = await addUpdateMutation({
         variables: {
           projectId: parseFloat(project?.id),
@@ -61,6 +62,7 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
         addUpdate={addUpdate}
         project={project}
         isOwner={isOwner}
+        refreshQuery={GET_PROJECT_UPDATES}
       />
     </>
   )

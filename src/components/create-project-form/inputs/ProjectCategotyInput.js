@@ -1,12 +1,13 @@
 import React from 'react'
-import { Checkbox, Label, Box, Text, Button } from 'theme-ui'
+import { Checkbox, Label, Flex, Box, Text, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 
 export const ProjectCategoryInput = ({
   register,
   currentValue,
   categoryList,
-  animationStyle
+  animationStyle,
+  goBack
 }) => {
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
@@ -30,7 +31,13 @@ export const ProjectCategoryInput = ({
       >
         You can select multiple categories
       </Text>
-      <Box sx={{ mt: '50px' }}>
+      <Box
+        sx={{
+          my: '50px'
+          // height: '320px',
+          // overflow: 'scroll'
+        }}
+      >
         {categoryList.map(category => {
           return (
             <Label
@@ -55,29 +62,59 @@ export const ProjectCategoryInput = ({
           )
         })}
       </Box>
-      <Button
-        aria-label='Next'
+      <Flex
         sx={{
-          mt: '200px',
-          width: '180px',
-          height: '52px',
-          borderRadius: '48px',
-          cursor: 'pointer'
+          alignItems: 'flex-start',
+          justifyContent: 'flex-end',
+          flexDirection: 'row-reverse'
         }}
-        type='submit'
       >
-        <Text
+        <Button
+          aria-label='Next'
           sx={{
-            color: 'background',
-            fontFamily: 'body',
-            fontWeight: 'bold',
-            fontSize: 2,
-            letterSpacing: '4%'
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer'
           }}
+          type='submit'
         >
-          NEXT
-        </Text>
-      </Button>
+          <Text
+            sx={{
+              color: 'background',
+              fontFamily: 'body',
+              fontWeight: 'bold',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            NEXT
+          </Text>
+        </Button>
+        <Button
+          aria-label='Back'
+          variant='nofill'
+          sx={{
+            width: '180px',
+            height: '52px',
+            borderRadius: '48px',
+            cursor: 'pointer',
+            mb: 5
+          }}
+          onClick={goBack}
+        >
+          <Text
+            sx={{
+              color: 'secondary',
+              fontFamily: 'body',
+              fontSize: 2,
+              letterSpacing: '4%'
+            }}
+          >
+            Back
+          </Text>
+        </Button>
+      </Flex>
     </animated.section>
   )
 }
