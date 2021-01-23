@@ -156,7 +156,7 @@ const GithubIssue = () => {
               'https://github.com/Giveth/giveth-2/issues/new/choose')
           }
           sx={{
-            backgroundColor: 'secondary',
+            variant: 'buttons.secondary',
             alignItems: 'center'
           }}
         >
