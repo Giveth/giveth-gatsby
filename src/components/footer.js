@@ -144,45 +144,45 @@ let strRomanDate = romanize(currentTime.getFullYear())
             <FooterLink to='/about'>About Us</FooterLink>
             <FooterLink to='/faq'>FAQ</FooterLink>
             <FooterLink to='/partnerships'>Partnerships</FooterLink>
-            <FooterLink href='https://wiki.giveth.io'>
+            <FooterExternalLink to='https://wiki.giveth.io'>
               Wiki <FiExternalLink size='18px' />
-            </FooterLink>
-            <FooterLink href='https://medium.com/giveth'>
+            </FooterExternalLink>
+            <FooterExternalLink to='https://medium.com/giveth'>
               Blog <FiExternalLink size='18px' />
-            </FooterLink>
+            </FooterExternalLink>
             <FooterLink to='/contact'>Contact</FooterLink>
           </LinkBox>
           <LinkBox>
             <FooterExternalLink
-              href='https://beta.giveth.io'
+              to='https://beta.giveth.io'
               target='_blank'
               rel='noopener noreferrer'
             >
               Giveth DApp
             </FooterExternalLink>
             <FooterExternalLink
-              href='https://commonsstack.org'
+              to='https://commonsstack.org'
               target='_blank'
               rel='noopener noreferrer'
             >
               The Commons Stack
             </FooterExternalLink>
             <FooterExternalLink
-              href='https://wiki.giveth.io/governance/'
+              to='https://wiki.giveth.io/governance/'
               target='_blank'
               rel='noopener noreferrer'
             >
               Governance
             </FooterExternalLink>
             <FooterExternalLink
-              href='https://giveth.io/'
+              to='https://giveth.io/'
               target='_blank'
               rel='noopener noreferrer'
             >
               Galaxy Projects
             </FooterExternalLink>
             <FooterExternalLink
-              href='https://giveth.io/#socialcoding'
+              to='https://giveth.io/#socialcoding'
               target='_blank'
               rel='noopener noreferrer'
             >

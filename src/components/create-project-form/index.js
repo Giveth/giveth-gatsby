@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import Web3 from 'web3'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -15,7 +14,14 @@ import { navigate } from 'gatsby'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
-import { TorusContext } from '../../contextProvider/torusProvider'
+//import { TorusContext } from '../../contextProvider/torusProvider'
+import {
+  useWallet,
+  isWalletAddressValid,
+  isAddressENS,
+  getAddressFromENS
+} from '../../contextProvider/WalletProvider'
+
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
@@ -32,11 +38,12 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
+import { validateProjectWallet } from './utils'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
   const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
-  const { user, isLoggedIn, web3 } = useContext(TorusContext)
+  const { isLoggedIn, user } = useWallet()
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
@@ -120,30 +127,43 @@ const CreateProjectForm = props => {
   ]
 
   const onSubmit = async data => {
+    console.log('onSubmit: start')
+
     let projectCategory = formData.projectCategory
       ? formData.projectCategory
       : {}
-    if (currentStep === 6) {
-      // CHECK IF STRING IS ENS AND VALID
-      let ethAddress = data?.projectWalletAddress
-      const ens = await web3.eth.ens.getOwner(ethAddress)
-      if (ens !== '0x0000000000000000000000000000000000000000') {
-        ethAddress = ens
-        data.projectWalletAddress = ethAddress
-      }
-      console.log({ ens, ethAddress })
 
-      if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
-        return Toast({ content: 'Eth address not valid', type: 'error' })
+    console.log('onSubmit: projectCategory')
+    console.log(`formData : ${JSON.stringify(formData, null, 2)}`)
+
+    console.log(`currentStep ---> : ${currentStep}`)
+    if (currentStep === 6) {
+      // if (!data?.projectWalletAddress)
+      //   throw new Error('Error finding Project wallet address')
+      console.log(`onSubmit: data : ${JSON.stringify(data, null, 2)}`)
+
+      let ethAddress
+      if (data?.projectWalletAddress) {
+        if (!isWalletAddressValid(data?.projectWalletAddress))
+          throw new Error('Wallet address is invalid')
+
+        ethAddress = isAddressENS(data?.projectWalletAddress)
+          ? await getAddressFromENS(data?.projectWalletAddress)
+          : data?.projectWalletAddress
+      } else {
+        ethAddress = data?.projectWalletAddress
       }
-      // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
+
+      console.log('onSubmit: ethAddress', ethAddress)
+      //let ethAddress = data?.projectWalletAddress
+
       const res = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
           address: ethAddress
         }
       })
-      console.log({ res })
+      console.log('Get project address', { res })
       if (res?.data?.projectByAddress) {
         return Toast({
           content: 'This eth address is already being used for a project',
@@ -152,6 +172,8 @@ const CreateProjectForm = props => {
       }
     }
     let content = null
+    // console.log('onSubmit: ethAddress 2', ethAddress)
+
     if (currentStep === 3) {
       projectCategory = {
         ...data
@@ -166,12 +188,17 @@ const CreateProjectForm = props => {
         ...data
       }
     }
+    console.log(`onSubmit: content : ${JSON.stringify(content, null, 2)}`)
+
     setFormData(content)
     window?.localStorage.setItem('create-form', JSON.stringify(content))
-    console.log({ formData, content })
+    console.log('debug: didSetFormData', { formData, content })
     if (currentStep === steps.length - 1) {
+      console.log('debug: do onSubmit')
+
       props.onSubmit(formData)
     }
+    console.log('debug: before next step')
     nextStep()
   }
 
@@ -198,9 +225,20 @@ const CreateProjectForm = props => {
           address: user?.addresses && user.addresses[0]
         }
       })
+      console.log(
+        `data?.projectByAddress : ${JSON.stringify(
+          data?.projectByAddress,
+          null,
+          2
+        )}`
+      )
+
       if (data?.projectByAddress) {
+        console.log('Set wallet true')
+
         setWalletUsed(true)
       } else {
+        console.log('set wallet 2', user?.addresses && user.addresses[0])
         setWalletUsed(user?.addresses && user.addresses[0])
       }
       setLoading(false)
@@ -210,13 +248,15 @@ const CreateProjectForm = props => {
     } else {
       checkProjectWallet()
     }
-  }, [user])
+  }, [user, isLoggedIn, client])
 
   useEffect(() => {
     //Checks localstorage to reset form
     const localCreateForm = window?.localStorage.getItem('create-form')
     console.log({ localCreateForm })
     localCreateForm && setFormData(JSON.parse(localCreateForm))
+    console.log('Run prove wallet in the useEffect of create form')
+    /// proveWallet()
   }, [])
 
   if (loading) {
@@ -247,24 +287,6 @@ const CreateProjectForm = props => {
   //     </Flex>
   //   )
   // }
-
-  if (!isWalletProved && !loading) {
-    return (
-      <Text sx={{ variant: 'headings.h2', color: 'secondary', m: 6 }}>
-        Let's first verify your wallet{' '}
-        <Link
-          sx={{
-            color: 'primary',
-            textDecoration: 'underline',
-            cursor: 'pointer'
-          }}
-          onClick={() => proveWallet()}
-        >
-          here
-        </Link>
-      </Text>
-    )
-  }
 
   return (
     <>

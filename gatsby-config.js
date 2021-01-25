@@ -18,7 +18,7 @@ if (typeof atob === 'undefined') {
 
 module.exports = {
   flags: {
-    PRESERVE_WEBPACK_CACHE: true
+    PRESERVE_WEBPACK_CACHE: false
   },
   siteMetadata: siteMetaData,
   plugins: [
@@ -105,9 +105,18 @@ module.exports = {
       }
     },
     `gatsby-transformer-remark`,
-    'gatsby-plugin-use-query-params'
+    'gatsby-plugin-use-query-params',
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
     // `gatsby-plugin-offline`,
+    {
+      resolve: '@sentry/gatsby',
+      options: {
+        dsn:
+          'https://de31cb89ac0045afbb9d28322cc9c040@o510515.ingest.sentry.io/5606310',
+        autoSessionTracking: true,
+        sampleRate: 0.7
+      }
+    }
   ]
 }

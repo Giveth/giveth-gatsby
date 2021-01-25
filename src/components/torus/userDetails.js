@@ -5,8 +5,9 @@ import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import useComponentVisible from '../../utils/useComponentVisible'
 import { Link } from 'gatsby'
-import { TorusContext } from '../../contextProvider/torusProvider'
+//import { TorusContext } from '../../contextProvider/torusProvider'
 import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 const AccountDetails = styled.div`
   width: 200px;
@@ -74,7 +75,8 @@ const UserDetails = () => {
     setIsComponentVisible
   } = useComponentVisible(false)
 
-  const { logout, user, balance, network } = useContext(TorusContext)
+  const { isLoggedIn, logout, user, balance, network } = useWallet()
+  // const { logout, user, balance, network } = useContext(TorusContext)
   const { proveWallet, isWalletProved } = useContext(ProveWalletContext)
 
   const address = (user?.addresses && user.addresses[0]) || ''
@@ -184,7 +186,7 @@ const UserDetails = () => {
               Verify Your Wallet
             </MenuItem>
           )}
-          <Link
+          <a
             href='https://app.tor.us'
             target='_blank'
             rel='noopener noreferrer'
@@ -198,7 +200,7 @@ const UserDetails = () => {
             >
               Settings
             </MenuItem>
-          </Link>
+          </a>
           <Link
             to='/account?data=all&view=projects'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}

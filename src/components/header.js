@@ -11,7 +11,8 @@ import Logo from './content/Logo'
 import { useLocation } from '@reach/router'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { TorusContext } from '../contextProvider/torusProvider'
+// import { TorusContext } from '../contextProvider/torusProvider'
+import { useWallet } from '../contextProvider/WalletProvider'
 
 // import graphics
 import iconVerticalLine from '../images/icon-vertical-line.svg'
@@ -158,7 +159,8 @@ const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
   const location = useLocation()
-  const { isLoggedIn } = React.useContext(TorusContext)
+  const { isLoggedIn } = useWallet()
+  console.log(`torus: header.js isLoggedIn ---> : ${isLoggedIn}`)
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -166,7 +168,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -177,7 +179,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
