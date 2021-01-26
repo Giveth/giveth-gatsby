@@ -7,11 +7,11 @@ import AccountBody from '../../components/account/AccountBody'
 import Layout from '../../components/layout'
 import MyProjects from '../../components/account/myProjects'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { useQuery } from '@apollo/client'
 
 const ProjectListing = props => {
-  const { user, isLoggedIn } = React.useContext(TorusContext)
+  const { user, isLoggedIn } = useWallet()
   // console.log(`user in ProjectListing : ${JSON.stringify(user, null, 2)}`)
   console.log(`user in ProjectListing :`)
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
 import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 
 import testImg from '../../images/giveth-test-image.png'
@@ -35,7 +35,7 @@ const FloatingDonateView = styled(Flex)`
 `
 
 export const ProjectDonatorView = ({ pageContext }) => {
-  const { user } = React.useContext(TorusContext)
+  const { user } = useWallet()
   const [currentTab, setCurrentTab] = useState('description')
   const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)

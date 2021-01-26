@@ -11,7 +11,7 @@ import Logo from './content/Logo'
 import { useLocation } from '@reach/router'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { TorusContext } from '../contextProvider/torusProvider'
+import { useWallet } from '../contextProvider/WalletProvider'
 
 // import graphics
 import iconVerticalLine from '../images/icon-vertical-line.svg'
@@ -164,7 +164,7 @@ const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
   const location = useLocation()
-  const { isLoggedIn } = React.useContext(TorusContext)
+  const { isLoggedIn } = useWallet()
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })

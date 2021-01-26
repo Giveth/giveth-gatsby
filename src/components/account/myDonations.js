@@ -8,7 +8,7 @@ import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
 import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -162,7 +162,7 @@ const FilterBox = styled(Flex)`
 
 const MyDonations = props => {
   const options = ['All Donations', 'Fiat', 'Crypto']
-  const { user } = React.useContext(TorusContext)
+  const { user } = useWallet()
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)

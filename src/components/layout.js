@@ -16,19 +16,17 @@ import InfoIcon from '../images/info_outline.png'
 import CornerLeave from '../images/corner-leave.png'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Header from './header'
-import { FaGithub } from 'react-icons/fa'
-import { MdCancel } from 'react-icons/md'
-import TorusProvider from '../contextProvider/torusProvider'
+import { WalletProvider } from '../contextProvider/WalletProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
 
 import Dialog from './dialog'
+import GithubIssue from './GithubIssue'
 import Footer from './footer'
 import Popup from './popup'
 import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import ProveWalletProvider from '../contextProvider/proveWalletProvider'
 import styled from '@emotion/styled'
 
 const StyledToastContainer = styled(ToastContainer)`
@@ -81,7 +79,7 @@ const CookiesBanner = () => {
     const accepted =
       typeof window !== 'undefined' &&
       window.localStorage.getItem('cookiesAccepted')
-    console.log({ accepted })
+    // console.log({ accepted })
     setCookiesAccepted(accepted)
   }, [])
   if (cookiesAccepted || cookiesAccepted === 'none') return null
@@ -112,98 +110,6 @@ const CookiesBanner = () => {
         Ok
       </Text>
     </CookieBanner>
-  )
-}
-
-const GithubIssue = () => {
-  const [showIssuePopup, setShowIssuePopup] = React.useState(true)
-  if (!showIssuePopup) return null
-  return (
-    <Flex
-      sx={{
-        position: 'fixed',
-        bottom: 0,
-        right: 0,
-        zIndex: 4,
-        m: 4,
-        borderRadius: '12px',
-        backgroundColor: 'background',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)'
-      }}
-    >
-      <Flex
-        sx={{
-          padding: ['25px 18px', '25px 10px', '25px 10px'],
-          width: ['100%', '80%', '80%'],
-          textAlign: 'center',
-          flexDirection: 'column'
-        }}
-      >
-        <Text variant='headings.h5' mb={1} color='secondary'>
-          Give feedback
-        </Text>
-        <Text variant='text.default' color='secondary' mb={2}>
-          Share your feedback or report an issue
-        </Text>
-        <Button
-          type='button'
-          aria-label='edit project name'
-          variant='nofill'
-          onClick={() =>
-            (window.location.href =
-              'https://github.com/Giveth/giveth-2/issues/new/choose')
-          }
-          sx={{
-            variant: 'buttons.secondary',
-            alignItems: 'center'
-          }}
-        >
-          <Flex
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              py: 2
-            }}
-          >
-            <FaGithub size='23.43px' color={theme.colors.background} />
-            <Text
-              variant='text.default'
-              color='background'
-              pl={2}
-              sx={{ fontSize: '14px', fontWeight: 700 }}
-            >
-              GIVE FEEDBACK
-            </Text>
-          </Flex>
-        </Button>
-      </Flex>
-      <Image
-        src={CornerLeave}
-        width={[60, 80, 80]}
-        sx={{
-          position: 'absolute',
-          mb: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: -1,
-          borderBottomRightRadius: '12px'
-        }}
-      />
-      <MdCancel
-        onClick={() => setShowIssuePopup(false)}
-        style={{
-          cursor: 'pointer',
-          position: 'absolute',
-          top: '10px',
-          right: '10px'
-        }}
-        size='20px'
-        color={theme.colors.bodyLight}
-      />
-    </Flex>
   )
 }
 
@@ -309,22 +215,20 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
         `}
         </script>
       </Helmet>
-      <TorusProvider>
-        <ProveWalletProvider>
-          <GlobalProvider>
-            <ThemeProvider theme={theme}>
-              <Provider template={AlertTemplate} {...AlertOptions}>
-                <PopupProvider>
-                  <GithubIssue />
-                  <Template />
-                  <Popup />
-                </PopupProvider>
-              </Provider>
-            </ThemeProvider>
-          </GlobalProvider>
-        </ProveWalletProvider>
+      <WalletProvider>
+        <GlobalProvider>
+          <ThemeProvider theme={theme}>
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <PopupProvider>
+                <GithubIssue fixed={true} />
+                <Template />
+                <Popup />
+              </PopupProvider>
+            </Provider>
+          </ThemeProvider>
+        </GlobalProvider>
         <StyledToastContainer />
-      </TorusProvider>
+      </WalletProvider>
     </>
   )
 }

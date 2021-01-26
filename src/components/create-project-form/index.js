@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react'
-import Web3 from 'web3'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -14,8 +13,8 @@ import {
 import { navigate } from 'gatsby'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
-import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { projectWalletAlreadyUsed, getProjectWallet } from './utils'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
@@ -35,8 +34,7 @@ import Toast from '../toast'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
-  const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
-  const { user, isLoggedIn, web3 } = useContext(TorusContext)
+  const { isLoggedIn, user } = useWallet()
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
@@ -119,60 +117,59 @@ const CreateProjectForm = props => {
     )
   ]
 
-  const onSubmit = async data => {
-    let projectCategory = formData.projectCategory
-      ? formData.projectCategory
-      : {}
-    if (currentStep === 6) {
-      // CHECK IF STRING IS ENS AND VALID
-      let ethAddress = data?.projectWalletAddress
-      const ens = await web3.eth.ens.getOwner(ethAddress)
-      if (ens !== '0x0000000000000000000000000000000000000000') {
-        ethAddress = ens
-        data.projectWalletAddress = ethAddress
-      }
-      console.log({ ens, ethAddress })
-
-      if (ethAddress.length !== 42 || !Web3.utils.isAddress(ethAddress)) {
-        return Toast({ content: 'Eth address not valid', type: 'error' })
-      }
-      // CHECK IF WALLET IS ALREADY TAKEN FOR A PROJECT
-      const res = await client.query({
-        query: GET_PROJECT_BY_ADDRESS,
-        variables: {
-          address: ethAddress
+  const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
+    let project = {}
+    try {
+      if (isCategoryStep(submitCurrentStep)) {
+        let projectCategory = {
+          ...data
         }
+        project = {
+          ...formData,
+          projectCategory
+        }
+      } else {
+        project = {
+          ...formData,
+          ...data
+        }
+      }
+
+      if (isFinalConfirmationStep(submitCurrentStep, steps)) {
+        const didEnterWalletAddress = !!data?.projectWalletAddress
+        let projectWalletAddress
+        if (didEnterWalletAddress) {
+          projectWalletAddress = await getProjectWallet(
+            data?.projectWalletAddress
+          )
+        } else {
+          projectWalletAddress = user.addresses[0]
+        }
+        if (await projectWalletAlreadyUsed(projectWalletAddress))
+          return Toast({
+            content: `Eth address ${projectWalletAddress} ${
+              !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
+            }is already being used for a project`,
+            type: 'error'
+          })
+
+        project.projectWalletAddress = projectWalletAddress
+      }
+
+      window?.localStorage.setItem('create-form', JSON.stringify(project))
+      if (isLastStep(submitCurrentStep, steps)) {
+        props.onSubmit(project)
+      }
+
+      setFormData(project)
+      doNextStep()
+    } catch (error) {
+      console.log({ error })
+      Toast({
+        content: error?.message,
+        type: 'error'
       })
-      console.log({ res })
-      if (res?.data?.projectByAddress) {
-        return Toast({
-          content: 'This eth address is already being used for a project',
-          type: 'error'
-        })
-      }
     }
-    let content = null
-    if (currentStep === 3) {
-      projectCategory = {
-        ...data
-      }
-      content = {
-        ...formData,
-        projectCategory
-      }
-    } else {
-      content = {
-        ...formData,
-        ...data
-      }
-    }
-    setFormData(content)
-    window?.localStorage.setItem('create-form', JSON.stringify(content))
-    console.log({ formData, content })
-    if (currentStep === steps.length - 1) {
-      props.onSubmit(formData)
-    }
-    nextStep()
   }
 
   const stepTransitions = useTransition(currentStep, null, {
@@ -210,12 +207,11 @@ const CreateProjectForm = props => {
     } else {
       checkProjectWallet()
     }
-  }, [user])
+  }, [user, isLoggedIn, client])
 
   useEffect(() => {
     //Checks localstorage to reset form
     const localCreateForm = window?.localStorage.getItem('create-form')
-    console.log({ localCreateForm })
     localCreateForm && setFormData(JSON.parse(localCreateForm))
   }, [])
 
@@ -247,24 +243,6 @@ const CreateProjectForm = props => {
   //     </Flex>
   //   )
   // }
-
-  if (!isWalletProved && !loading) {
-    return (
-      <Text sx={{ variant: 'headings.h2', color: 'secondary', m: 6 }}>
-        Let's first verify your wallet{' '}
-        <Link
-          sx={{
-            color: 'primary',
-            textDecoration: 'underline',
-            cursor: 'pointer'
-          }}
-          onClick={() => proveWallet()}
-        >
-          here
-        </Link>
-      </Text>
-    )
-  }
 
   return (
     <>
@@ -298,7 +276,9 @@ const CreateProjectForm = props => {
           {currentStep === steps.length ? (
             <p>Creating project, please wait</p>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+              onSubmit={handleSubmit(onSubmit(formData, currentStep, nextStep))}
+            >
               <>
                 {currentStep !== steps.length - 1 ? (
                   <EditButtonSection
@@ -340,3 +320,15 @@ CreateProjectForm.defaultProps = {
 
 /** export the typeform component */
 export default CreateProjectForm
+
+function isCategoryStep(currentStep) {
+  return currentStep === 3
+}
+
+function isFinalConfirmationStep(currentStep, steps) {
+  return currentStep === steps.length - 2
+}
+
+function isLastStep(currentStep, steps) {
+  return currentStep === steps.length - 1
+}

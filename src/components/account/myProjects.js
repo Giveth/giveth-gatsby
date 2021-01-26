@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import React, { useContext, useState } from 'react'
-import { Link } from 'gatsby'
-import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
+import { Link, navigate } from 'gatsby'
 import { useQueryParams, StringParam } from 'use-query-params'
 import ProjectCard from '../projectListing'
 import ProjectEdition from './projectEdition/index'
@@ -10,6 +9,7 @@ import theme from '../../gatsby-plugin-theme-ui'
 import { Box, Grid, Text, jsx } from 'theme-ui'
 import DarkClouds from '../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHand from '../../images/decorator-raised-one-hand.png'
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 const SpecialCard = styled(Link)`
   display: flex;
@@ -40,10 +40,9 @@ const RaisedHandImg = styled.img`
 
 const MyProjects = props => {
   const { projects, edit } = props
-  // console.log(`My projects : ${JSON.stringify(projects, null, 2)}`)
 
   const [editProject, setEditProject] = useState(edit)
-  const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
+  const { isLoggedIn, user } = useWallet()
   const [query, setQuery] = useQueryParams({
     view: StringParam,
     data: StringParam
@@ -62,24 +61,8 @@ const MyProjects = props => {
     )
   }
 
-  if (!isWalletProved) {
-    return (
-      <>
-        <Text sx={{ variant: 'headings.h4', color: 'secondary', mt: 4 }}>
-          Let's first verify your wallet{' '}
-          <a
-            sx={{
-              color: 'primary',
-              textDecoration: 'underline',
-              cursor: 'pointer'
-            }}
-            onClick={proveWallet}
-          >
-            here
-          </a>
-        </Text>
-      </>
-    )
+  if (!isLoggedIn) {
+    navigate('/', { state: { welcome: true } })
   }
   return (
     <>

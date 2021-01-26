@@ -14,8 +14,8 @@ import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
 import fetch from 'isomorphic-fetch'
-import { TorusContext } from '../contextProvider/torusProvider'
-
+import { useWallet } from '../contextProvider/WalletProvider'
+import GithubIssue from '../components/GithubIssue'
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
 const IndexPage = ({ data, location }) => {
@@ -23,12 +23,16 @@ const IndexPage = ({ data, location }) => {
   // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
   const [addedProject, setAddedProject] = useState(null)
+  const [inError, setInError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
   const [addProjectQuery] = useMutation(ADD_PROJECT)
   // const [askedBankAccount, setAskedBankAccount] = useState(false)
 
   const { projectId } = queryString.parse(location.search)
   const onSubmit = async (values, walletAddress) => {
     setProjectAdded(true)
+
+    console.log(`values : ${JSON.stringify(values, null, 2)}`)
 
     const projectCategories = []
     for (const category in values.projectCategory) {
@@ -77,6 +81,7 @@ const IndexPage = ({ data, location }) => {
     }
 
     try {
+      console.log(`token Value is ---> : ${localStorage.getItem('token')}`)
       const project = await addProjectQuery({
         variables: {
           project: { ...projectData }
@@ -91,12 +96,20 @@ const IndexPage = ({ data, location }) => {
         window?.localStorage.removeItem('create-form')
       }
     } catch (error) {
-      console.log(`Error adding project: ---> : ${error}`)
+      console.log(`Error adding project: ---> : ${error.message}`)
       console.log(`${JSON.stringify(projectData, null, 2)}`)
+      if (error.message === 'Access denied') {
+        // navigate('/', { state: { welcome: true } })
+      }
+      setInError(true)
+      setErrorMessage(error.message)
     }
   }
 
-  function AfterCreation() {
+  function newProject () {
+    setAddedProject(null)
+  }
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -178,8 +191,9 @@ const IndexPage = ({ data, location }) => {
             projectImage={addedProject.image}
             projectTitle={addedProject.title}
             projectDescription={addedProject.description}
+            newProject={newProject}
           />
-        ) : (
+        ) : !inError ? (
           <Flex
             sx={{
               mt: '22%',
@@ -193,12 +207,32 @@ const IndexPage = ({ data, location }) => {
             </Text>
             <Spinner variant='spinner.large' />
           </Flex>
+        ) : (
+          <Flex
+            sx={{
+              mt: '22%',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
+              Something went wrong while adding your project
+            </Text>
+            <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
+              {errorMessage}
+            </Text>
+            <Text sx={{ variant: 'headings.h4', color: 'secondary', mb: 3 }}>
+              Please report this issue
+            </Text>
+            <GithubIssue />
+          </Flex>
         )}
       </>
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (!projectAdded && !projectId) {
       return (
         <>
