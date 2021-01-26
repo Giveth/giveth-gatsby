@@ -1,13 +1,25 @@
 import React from 'react'
 import { Flex, Text, Button, Image } from 'theme-ui'
 import { FaGithub } from 'react-icons/fa'
-import { MdCancel } from 'react-icons/md'
+import { IoMdClose } from 'react-icons/io'
 import CornerLeave from '../images/corner-leave.png'
 import theme from '../gatsby-plugin-theme-ui/index'
 
 const GithubIssue = props => {
   const { fixed } = props
-  const [showIssuePopup, setShowIssuePopup] = React.useState(true)
+  const [showIssuePopup, setShowIssuePopup] = React.useState(false)
+
+  React.useEffect(() => {
+    // check local storage
+    const issueAlreadyClosed =
+      typeof window !== 'undefined' &&
+      window.localStorage.getItem('githubIssueClosed')
+    console.log('cy?')
+    if (!issueAlreadyClosed) {
+      setShowIssuePopup(true)
+    }
+  })
+
   if (!showIssuePopup) return null
   let style = {
     m: 4,
@@ -89,8 +101,12 @@ const GithubIssue = props => {
           borderBottomRightRadius: '12px'
         }}
       />
-      <MdCancel
-        onClick={() => setShowIssuePopup(false)}
+      <IoMdClose
+        onClick={() => {
+          typeof window !== 'undefined' &&
+            window.localStorage.setItem('githubIssueClosed', true)
+          setShowIssuePopup(false)
+        }}
         style={{
           cursor: 'pointer',
           position: 'absolute',

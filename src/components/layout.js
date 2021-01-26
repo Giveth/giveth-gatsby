@@ -79,7 +79,7 @@ const CookiesBanner = () => {
     const accepted =
       typeof window !== 'undefined' &&
       window.localStorage.getItem('cookiesAccepted')
-    console.log({ accepted })
+    // console.log({ accepted })
     setCookiesAccepted(accepted)
   }, [])
   if (cookiesAccepted || cookiesAccepted === 'none') return null
