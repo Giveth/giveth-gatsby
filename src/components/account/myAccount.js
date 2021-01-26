@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from 'react'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { Avatar, Button, Box, Flex, Text, jsx } from 'theme-ui'
+import EditProfileModal from './editProfileModal'
 
 const MyAccount = ({ info }) => {
+  const [openModal, setOpenModal] = useState(false)
   const [ethPrice, setEthPrice] = useState(1)
   const { balance, user } = useWallet()
 
@@ -19,11 +21,27 @@ const MyAccount = ({ info }) => {
   })
   return (
     <>
+      <EditProfileModal
+        isOpen={openModal}
+        onRequestClose={() => setOpenModal(false)}
+        user={user}
+      />
       <Flex>
         <Avatar src={user?.profileImage} sx={{ width: 100, height: 100 }} />
         <Box sx={{ ml: '27px' }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
+          <Text
+            onClick={() => setOpenModal(true)}
+            sx={{
+              color: 'primary',
+              fontSize: 3,
+              variant: 'links.default',
+              mt: 2
+            }}
+          >
+            Edit Profile
+          </Text>
         </Box>
       </Flex>
       <Flex sx={{ mt: '40px', alignItems: 'center' }}>
