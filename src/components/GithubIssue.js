@@ -14,7 +14,6 @@ const GithubIssue = props => {
     const issueAlreadyClosed =
       typeof window !== 'undefined' &&
       window.localStorage.getItem('githubIssueClosed')
-    console.log('cy?')
     if (!issueAlreadyClosed) {
       setShowIssuePopup(true)
     }
