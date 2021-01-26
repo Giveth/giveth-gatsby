@@ -2,14 +2,15 @@ import React, { useContext, useEffect, useState } from 'react'
 import * as Auth from '../services/auth'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
+import Web3 from 'web3'
 
-export async function getToken (user, signedMessage) {
+export async function getToken(user, signedMessage) {
   if (signedMessage) {
     try {
       const { data } = await client.mutate({
         mutation: DO_LOGIN,
         variables: {
-          walletAddress: user?.addresses[0],
+          walletAddress: Web3.utils.toChecksumAddress(user?.addresses[0]),
           signature: signedMessage,
           email: user?.email,
           avatar: user?.profileImage,
