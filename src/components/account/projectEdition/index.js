@@ -30,6 +30,8 @@ import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
 import { getWallet } from '../../../wallets'
+let wallet = null
+let web3 = null
 
 const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
@@ -299,8 +301,6 @@ function ProjectEditionForm (props) {
 }
 
 function ProjectEdition (props) {
-  const wallet = getWallet('torus')
-  const { web3 } = wallet
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -315,6 +315,10 @@ function ProjectEdition (props) {
       variables: { slug: props?.project }
     }
   )
+  useEffect(() => {
+    wallet = getWallet('torus')
+    web3 = wallet.web3
+  }, [])
 
   useEffect(
     data => {

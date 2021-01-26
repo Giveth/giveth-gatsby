@@ -9,7 +9,11 @@ import { getWallet } from '../wallets'
 
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
-const wallet = getWallet('torus')
+
+let wallet = {}
+if (typeof window === 'object') {
+  wallet = getWallet('torus')
+}
 
 function useWallet () {
   const context = React.useContext(WalletContext)
@@ -18,24 +22,17 @@ function useWallet () {
   }
   return context
 }
-const jamesOut = true
+
 function WalletProvider (props) {
-  const jamesIn = true
   const [account, setAccount] = useState('')
-  //const [wallet, setWallet] = useState(web3Obj)
   const [balance, setBalance] = useState(0)
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState(Auth.getUser())
-  const [network, setNetwork] = useState(network)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
 
   useEffect(() => {
     wallet.init('production', network)
   }, [])
-
-  function getNetwork () {
-    wallet.web3.eth.net.getNetworkType((_, net) => setNetwork(net))
-  }
 
   async function logout () {
     setLoading(true)
