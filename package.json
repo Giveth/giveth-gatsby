@@ -25,7 +25,6 @@
     "bnc-onboard": "^1.18.0",
     "buffer": "^5.7.1",
     "dayjs": "^1.10.3",
-    "electron": "^10.3.0",
     "eslint": "^7.18.0",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-standard": "^5.0.0",

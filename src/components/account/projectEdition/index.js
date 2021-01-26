@@ -30,6 +30,8 @@ import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
 import { getWallet } from '../../../wallets'
+let wallet = null
+let web3 = null
 
 const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
@@ -314,6 +316,10 @@ function ProjectEdition(props) {
       variables: { slug: props?.project }
     }
   )
+  useEffect(() => {
+    wallet = getWallet('torus')
+    web3 = wallet.web3
+  }, [])
 
   useEffect(
     data => {

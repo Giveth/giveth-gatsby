@@ -1,6 +1,6 @@
 import Web3 from 'web3'
+import React from 'react'
 import { getWallet } from '../wallets'
-const wallet = getWallet('torus')
 
 export function isAddressENS (address) {
   console.log(`!!!! address ---> : ${address}`)
@@ -14,6 +14,7 @@ export function isWalletAddressValid (address) {
   }
 }
 export async function getAddressFromENS (address) {
+  const wallet = getWallet('torus')
   const ens = await wallet.web3.eth.ens.getOwner(address)
   let zeroXAddress
   if (ens !== '0x0000000000000000000000000000000000000000') {
