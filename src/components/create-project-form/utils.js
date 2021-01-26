@@ -6,23 +6,26 @@ import {
   isAddressENS
 } from '../../services/wallet'
 
-export async function getProjectWallet (projectWalletAddress) {
+export async function getProjectWallet(projectWalletAddress) {
   if (projectWalletAddress) {
     try {
-      if (!isWalletAddressValid(projectWalletAddress))
+      const isENS = isAddressENS(projectWalletAddress)
+      if (!isWalletAddressValid(projectWalletAddress) && !isENS) {
         throw new Error('Wallet address is invalid')
+      }
 
-      projectWalletAddress = isAddressENS(projectWalletAddress)
+      projectWalletAddress = isENS
         ? await getAddressFromENS(projectWalletAddress)
         : projectWalletAddress
     } catch (error) {
+      console.log({ error })
       throw new Error(`Error while validating wallet - ${projectWalletAddress}`)
     }
   }
   return projectWalletAddress
 }
 
-export async function projectWalletAlreadyUsed (projectWalletAddress) {
+export async function projectWalletAlreadyUsed(projectWalletAddress) {
   const res = await client.query({
     query: GET_PROJECT_BY_ADDRESS,
     variables: {

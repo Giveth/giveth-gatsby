@@ -5,7 +5,6 @@ import { Link } from 'gatsby'
 import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
-
 import { FiExternalLink } from 'react-icons/fi'
 
 const formatTitle = (title, projectsList, userDonations) => {
@@ -41,8 +40,8 @@ const AccountNav = props => {
           color: 'secondary',
           fontSize: 8,
           mt: '40px',
-          mb: '68px',
-          variant: 'links.secondary'
+          mb: '68px'
+          // variant: 'links.secondary',
         }}
       >
         My Account

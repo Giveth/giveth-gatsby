@@ -119,50 +119,57 @@ const CreateProjectForm = props => {
 
   const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
     let project = {}
-
-    if (isCategoryStep(submitCurrentStep)) {
-      let projectCategory = {
-        ...data
-      }
-      project = {
-        ...formData,
-        projectCategory
-      }
-    } else {
-      project = {
-        ...formData,
-        ...data
-      }
-    }
-
-    if (isFinalConfirmationStep(submitCurrentStep, steps)) {
-      const didEnterWalletAddress = !!data?.projectWalletAddress
-      let projectWalletAddress
-      if (didEnterWalletAddress) {
-        projectWalletAddress = await getProjectWallet(
-          data?.projectWalletAddress
-        )
+    try {
+      if (isCategoryStep(submitCurrentStep)) {
+        let projectCategory = {
+          ...data
+        }
+        project = {
+          ...formData,
+          projectCategory
+        }
       } else {
-        projectWalletAddress = user.addresses[0]
+        project = {
+          ...formData,
+          ...data
+        }
       }
-      if (await projectWalletAlreadyUsed(projectWalletAddress))
-        return Toast({
-          content: `Eth address ${projectWalletAddress} ${
-            !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
-          }is already being used for a project`,
-          type: 'error'
-        })
 
-      project.projectWalletAddress = projectWalletAddress
+      if (isFinalConfirmationStep(submitCurrentStep, steps)) {
+        const didEnterWalletAddress = !!data?.projectWalletAddress
+        let projectWalletAddress
+        if (didEnterWalletAddress) {
+          projectWalletAddress = await getProjectWallet(
+            data?.projectWalletAddress
+          )
+        } else {
+          projectWalletAddress = user.addresses[0]
+        }
+        if (await projectWalletAlreadyUsed(projectWalletAddress))
+          return Toast({
+            content: `Eth address ${projectWalletAddress} ${
+              !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
+            }is already being used for a project`,
+            type: 'error'
+          })
+
+        project.projectWalletAddress = projectWalletAddress
+      }
+
+      window?.localStorage.setItem('create-form', JSON.stringify(project))
+      if (isLastStep(submitCurrentStep, steps)) {
+        props.onSubmit(project)
+      }
+
+      setFormData(project)
+      doNextStep()
+    } catch (error) {
+      console.log({ error })
+      Toast({
+        content: error?.message,
+        type: 'error'
+      })
     }
-
-    window?.localStorage.setItem('create-form', JSON.stringify(project))
-    if (isLastStep(submitCurrentStep, steps)) {
-      props.onSubmit(project)
-    }
-
-    setFormData(project)
-    doNextStep()
   }
 
   const stepTransitions = useTransition(currentStep, null, {
@@ -314,14 +321,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep (currentStep) {
+function isCategoryStep(currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep (currentStep, steps) {
+function isFinalConfirmationStep(currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep (currentStep, steps) {
+function isLastStep(currentStep, steps) {
   return currentStep === steps.length - 1
 }

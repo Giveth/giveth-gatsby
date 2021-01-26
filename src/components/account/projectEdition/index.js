@@ -35,7 +35,7 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEditionForm (props) {
+function ProjectEditionForm(props) {
   const {
     goBack,
     setCancelModal,
@@ -298,9 +298,8 @@ function ProjectEditionForm (props) {
   )
 }
 
-function ProjectEdition (props) {
+function ProjectEdition(props) {
   const wallet = getWallet('torus')
-  const { web3 } = wallet
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -353,13 +352,13 @@ function ProjectEdition (props) {
     }
   }, [project])
 
-  async function updateProject (data) {
+  async function updateProject(data) {
     try {
       // Validate eth address
       let ethAddress = data.editWalletAddress
       if (project?.walletAddress !== data.editWalletAddress) {
         // CHECK IF STRING IS ENS AND VALID
-        const ens = await web3.eth.ens.getOwner(ethAddress)
+        const ens = await wallet?.web3.eth.ens.getOwner(ethAddress)
         if (ens !== '0x0000000000000000000000000000000000000000') {
           ethAddress = ens
         }
