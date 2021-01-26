@@ -3,6 +3,7 @@ import * as Auth from '../services/auth'
 import { TorusContext } from './torusProvider'
 import { useMutation } from '@apollo/client'
 import { DO_LOGIN } from '../apollo/gql/auth'
+import Web3 from 'web3'
 
 const proveWalletContext = React.createContext({})
 
@@ -29,7 +30,7 @@ const ProveWalletProvider = props => {
         try {
           const loginResponse = await doLogin({
             variables: {
-              walletAddress: user?.addresses[0],
+              walletAddress: Web3.utils.toChecksumAddress(user?.addresses[0]),
               signature: signedMessage,
               email: user?.email,
               avatar: user?.profileImage,
