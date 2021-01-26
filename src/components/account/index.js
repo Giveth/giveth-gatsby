@@ -5,7 +5,7 @@ import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { BsArrowLeft } from 'react-icons/bs'
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
@@ -27,9 +27,7 @@ const UserSpan = styled.span`
 `
 
 const AccountPage = props => {
-  console.log('Render AccountPage')
-
-  const { user, isLoggedIn } = React.useContext(TorusContext)
+  const { user, isLoggedIn } = useWallet()
   const fromWalletAddress = user?.addresses && user.addresses[0]
   const storageWallets =
     typeof localStorage !== 'undefined'

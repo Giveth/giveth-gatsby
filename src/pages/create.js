@@ -106,6 +106,9 @@ const IndexPage = ({ data, location }) => {
     }
   }
 
+  function newProject () {
+    setAddedProject(null)
+  }
   function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
@@ -188,6 +191,7 @@ const IndexPage = ({ data, location }) => {
             projectImage={addedProject.image}
             projectTitle={addedProject.title}
             projectDescription={addedProject.description}
+            newProject={newProject}
           />
         ) : !inError ? (
           <Flex

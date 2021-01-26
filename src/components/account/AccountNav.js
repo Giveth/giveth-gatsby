@@ -4,7 +4,8 @@ import { jsx, Text, Flex, Box } from 'theme-ui'
 import { Link } from 'gatsby'
 import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
+
 
 const UserSpan = styled.span`
   position: relative;
@@ -38,7 +39,7 @@ const options = [
 ]
 const AccountNav = props => {
   const { setQuery, query, projectsList, userDonations } = props
-  const { logout } = React.useContext(TorusContext)
+  const { logout } = useWallet()
   const handleLogout = () => {
     logout()
   }

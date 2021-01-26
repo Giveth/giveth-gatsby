@@ -27,7 +27,6 @@ import Popup from './popup'
 import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import ProveWalletProvider from '../contextProvider/proveWalletProvider'
 import styled from '@emotion/styled'
 
 const StyledToastContainer = styled(ToastContainer)`
@@ -217,19 +216,17 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
         </script>
       </Helmet>
       <WalletProvider>
-        <ProveWalletProvider>
-          <GlobalProvider>
-            <ThemeProvider theme={theme}>
-              <Provider template={AlertTemplate} {...AlertOptions}>
-                <PopupProvider>
-                  <GithubIssue fixed={true} />
-                  <Template />
-                  <Popup />
-                </PopupProvider>
-              </Provider>
-            </ThemeProvider>
-          </GlobalProvider>
-        </ProveWalletProvider>
+        <GlobalProvider>
+          <ThemeProvider theme={theme}>
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <PopupProvider>
+                <GithubIssue fixed={true} />
+                <Template />
+                <Popup />
+              </PopupProvider>
+            </Provider>
+          </ThemeProvider>
+        </GlobalProvider>
         <StyledToastContainer />
       </WalletProvider>
     </>

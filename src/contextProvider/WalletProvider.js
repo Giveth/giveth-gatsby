@@ -1,48 +1,15 @@
 import React, { useState, useEffect } from 'react'
-// import web3Obj from '../providers/torus'
 import Web3 from 'web3'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import * as Auth from '../services/auth'
-import Torus from '@toruslabs/torus-embed'
 import LoadingModal from '../components/loadingModal'
 import { getToken } from '../services/token'
+import { getWallet } from '../wallets'
+
 const WalletContext = React.createContext()
-const network = 'rinkeby'
-
-const wallet = {
-  setweb3: function (provider) {
-    const web3Inst = new Web3(provider)
-    wallet.web3 = web3Inst
-    console.log(`torus: setweb3 wallet.web3 ---> : ${wallet.web3}`)
-  },
-  init: async buildEnv => {
-    const torus = new Torus()
-    await torus.init({
-      buildEnv: buildEnv || 'production',
-      network: { host: network },
-      showTorusButton: false,
-      whiteLabel: true
-    })
-    //await torus.login()
-
-    wallet.torus = torus
-    wallet.setweb3(torus.provider)
-    console.log(`torus: login wallet.torus is inited`)
-
-    console.log(
-      `torus: ! wallet.torus.isLoggedIn ---> : ${wallet.torus.isLoggedIn}`
-    )
-  },
-  login: async () => {
-    console.log('torus: Logging into Torus')
-    await wallet.torus.login()
-    return wallet.torus
-  },
-  logout: async () => {
-    // wallet.torus.logout()
-  }
-}
+const network = process.env.GATSBY_NETWORK
+const wallet = getWallet('torus')
 
 function useWallet () {
   const context = React.useContext(WalletContext)
@@ -63,44 +30,15 @@ function WalletProvider (props) {
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
 
   useEffect(() => {
-    console.log(`torus: login wallet.init`)
-
-    wallet.init('production')
+    wallet.init('production', network)
   }, [])
 
-  /*useEffect(() => {
-    console.log('Do init')
-
-    const initWallet = async () => {
-      const walletObj = await web3Obj.initialize('development')
-      console.log(
-        `torus -> It has been initialised : ${JSON.stringify(
-          walletObj.torus,
-          null,
-          2
-        )}`
-      )
-      //setWallet(walletObj)
-    }
-    initWallet()
-  }, [])*/
-
-  function getWeb3 () {
-    if (!wallet.web3) throw new Error('Web 3 not loaded yet')
-    return wallet.web3
-  }
   function getNetwork () {
     wallet.web3.eth.net.getNetworkType((_, net) => setNetwork(net))
   }
 
   async function logout () {
     setLoading(true)
-
-    if (wallet.torus.isLoggedIn) {
-      console.log('torus: Logging out')
-
-      // await wallet.logout()
-    }
 
     Auth.handleLogout()
     setIsLoggedIn(false)
@@ -203,11 +141,17 @@ function WalletProvider (props) {
   }
 
   function isAddressENS (address) {
+    console.log(
+      `isAddressENS ---> : ${address.toLowerCase().indexOf('.eth') > -1}`
+    )
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
   async function getAddressFromENS (address) {
+    console.log('getAddressFromENS', address)
+
     const ens = await wallet.web3.eth.ens.getOwner(address)
+    console.log(`ens ---> : ${ens}`)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {
       zeroXAddress = ens
@@ -233,7 +177,6 @@ function WalletProvider (props) {
       user,
       balance,
       network,
-      getWeb3,
       isWalletAddressValid,
       isAddressENS,
       getAddressFromENS

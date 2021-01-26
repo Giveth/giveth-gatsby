@@ -11,7 +11,6 @@ import {
 } from '../apollo/gql/projects'
 import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
-import { TorusContext } from '../contextProvider/torusProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 
 const CardContainer = styled(Card)`
@@ -132,7 +131,6 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectCard = props => {
-  // const { balance } = useContext(TorusContext)
   const { project, shadowed } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
@@ -182,9 +180,9 @@ const ProjectCard = props => {
           key={props.listingId || project?.title + '_div'}
           src={image}
           onClick={() =>
-            (window.location.href = `/project/${
-              props?.slug || project?.slug || ''
-            }`)
+            (window.location.href = `/project/${props?.slug ||
+              project?.slug ||
+              ''}`)
           }
           style={{
             width: '100%',

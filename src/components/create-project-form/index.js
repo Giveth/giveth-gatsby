@@ -13,15 +13,8 @@ import {
 import { navigate } from 'gatsby'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
-import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
-//import { TorusContext } from '../../contextProvider/torusProvider'
-import {
-  useWallet,
-  isWalletAddressValid,
-  isAddressENS,
-  getAddressFromENS
-} from '../../contextProvider/WalletProvider'
-
+import { projectWalletAlreadyUsed, getProjectWallet } from './utils'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
@@ -38,11 +31,9 @@ import EditButtonSection from './EditButtonSection'
 import FinalVerificationStep from './FinalVerificationStep'
 import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
-import { validateProjectWallet } from './utils'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
-  const { isWalletProved, proveWallet } = useContext(ProveWalletContext)
   const { isLoggedIn, user } = useWallet()
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
@@ -126,80 +117,52 @@ const CreateProjectForm = props => {
     )
   ]
 
-  const onSubmit = async data => {
-    console.log('onSubmit: start')
+  const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
+    let project = {}
 
-    let projectCategory = formData.projectCategory
-      ? formData.projectCategory
-      : {}
-
-    console.log('onSubmit: projectCategory')
-    console.log(`formData : ${JSON.stringify(formData, null, 2)}`)
-
-    console.log(`currentStep ---> : ${currentStep}`)
-    if (currentStep === 6) {
-      // if (!data?.projectWalletAddress)
-      //   throw new Error('Error finding Project wallet address')
-      console.log(`onSubmit: data : ${JSON.stringify(data, null, 2)}`)
-
-      let ethAddress
-      if (data?.projectWalletAddress) {
-        if (!isWalletAddressValid(data?.projectWalletAddress))
-          throw new Error('Wallet address is invalid')
-
-        ethAddress = isAddressENS(data?.projectWalletAddress)
-          ? await getAddressFromENS(data?.projectWalletAddress)
-          : data?.projectWalletAddress
-      } else {
-        ethAddress = data?.projectWalletAddress
-      }
-
-      console.log('onSubmit: ethAddress', ethAddress)
-      //let ethAddress = data?.projectWalletAddress
-
-      const res = await client.query({
-        query: GET_PROJECT_BY_ADDRESS,
-        variables: {
-          address: ethAddress
-        }
-      })
-      console.log('Get project address', { res })
-      if (res?.data?.projectByAddress) {
-        return Toast({
-          content: 'This eth address is already being used for a project',
-          type: 'error'
-        })
-      }
-    }
-    let content = null
-    // console.log('onSubmit: ethAddress 2', ethAddress)
-
-    if (currentStep === 3) {
-      projectCategory = {
+    if (isCategoryStep(submitCurrentStep)) {
+      let projectCategory = {
         ...data
       }
-      content = {
+      project = {
         ...formData,
         projectCategory
       }
     } else {
-      content = {
+      project = {
         ...formData,
         ...data
       }
     }
-    console.log(`onSubmit: content : ${JSON.stringify(content, null, 2)}`)
 
-    setFormData(content)
-    window?.localStorage.setItem('create-form', JSON.stringify(content))
-    console.log('debug: didSetFormData', { formData, content })
-    if (currentStep === steps.length - 1) {
-      console.log('debug: do onSubmit')
+    if (isFinalConfirmationStep(submitCurrentStep, steps)) {
+      const didEnterWalletAddress = !!data?.projectWalletAddress
+      let projectWalletAddress
+      if (didEnterWalletAddress) {
+        projectWalletAddress = await getProjectWallet(
+          data?.projectWalletAddress
+        )
+      } else {
+        projectWalletAddress = user.addresses[0]
+      }
+      if (await projectWalletAlreadyUsed(projectWalletAddress))
+        return Toast({
+          content: `Eth address ${projectWalletAddress} ${
+            !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
+          }is already being used for a project`,
+          type: 'error'
+        })
 
-      props.onSubmit(formData)
+      project.projectWalletAddress = projectWalletAddress
     }
-    console.log('debug: before next step')
-    nextStep()
+
+    window?.localStorage.setItem('create-form', JSON.stringify(project))
+    if (isLastStep(submitCurrentStep, steps)) {
+      props.onSubmit(project)
+    }
+
+    setFormData(project)
+    doNextStep()
   }
 
   const stepTransitions = useTransition(currentStep, null, {
@@ -225,20 +188,9 @@ const CreateProjectForm = props => {
           address: user?.addresses && user.addresses[0]
         }
       })
-      console.log(
-        `data?.projectByAddress : ${JSON.stringify(
-          data?.projectByAddress,
-          null,
-          2
-        )}`
-      )
-
       if (data?.projectByAddress) {
-        console.log('Set wallet true')
-
         setWalletUsed(true)
       } else {
-        console.log('set wallet 2', user?.addresses && user.addresses[0])
         setWalletUsed(user?.addresses && user.addresses[0])
       }
       setLoading(false)
@@ -253,10 +205,7 @@ const CreateProjectForm = props => {
   useEffect(() => {
     //Checks localstorage to reset form
     const localCreateForm = window?.localStorage.getItem('create-form')
-    console.log({ localCreateForm })
     localCreateForm && setFormData(JSON.parse(localCreateForm))
-    console.log('Run prove wallet in the useEffect of create form')
-    /// proveWallet()
   }, [])
 
   if (loading) {
@@ -320,7 +269,9 @@ const CreateProjectForm = props => {
           {currentStep === steps.length ? (
             <p>Creating project, please wait</p>
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+              onSubmit={handleSubmit(onSubmit(formData, currentStep, nextStep))}
+            >
               <>
                 {currentStep !== steps.length - 1 ? (
                   <EditButtonSection
@@ -362,3 +313,15 @@ CreateProjectForm.defaultProps = {
 
 /** export the typeform component */
 export default CreateProjectForm
+
+function isCategoryStep (currentStep) {
+  return currentStep === 3
+}
+
+function isFinalConfirmationStep (currentStep, steps) {
+  return currentStep === steps.length - 2
+}
+
+function isLastStep (currentStep, steps) {
+  return currentStep === steps.length - 1
+}

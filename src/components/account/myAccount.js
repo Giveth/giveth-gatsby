@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { Avatar, Button, Box, Flex, Text, jsx } from 'theme-ui'
 
 const MyAccount = ({ info }) => {
   const [ethPrice, setEthPrice] = useState(1)
-  const { balance, user } = React.useContext(TorusContext)
+  const { balance, user } = useWallet()
 
   useEffect(() => {
     const init = async () => {

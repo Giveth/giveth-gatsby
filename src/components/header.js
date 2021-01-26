@@ -11,7 +11,6 @@ import Logo from './content/Logo'
 import { useLocation } from '@reach/router'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
-// import { TorusContext } from '../contextProvider/torusProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
 
 // import graphics
@@ -160,7 +159,6 @@ const projectSearch = process.env.PROJECT_SEARCH
 const Header = ({ siteTitle, isHomePage }) => {
   const location = useLocation()
   const { isLoggedIn } = useWallet()
-  console.log(`torus: header.js isLoggedIn ---> : ${isLoggedIn}`)
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
