@@ -7,6 +7,8 @@ import useComponentVisible from '../../utils/useComponentVisible'
 import { Link } from 'gatsby'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
+import { FiExternalLink } from 'react-icons/fi'
+
 const AccountDetails = styled.div`
   width: 200px;
   position: absolute;
@@ -182,7 +184,7 @@ const UserDetails = () => {
               }}
               className='shadow boxheight'
             >
-              Settings
+              My Wallet <FiExternalLink size='18px' />
             </MenuItem>
           </a>
           <Link

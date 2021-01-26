@@ -1,23 +1,13 @@
 /** @jsx jsx */
 import React from 'react'
-import { jsx, Text, Flex, Box } from 'theme-ui'
+import { jsx, Text, Box } from 'theme-ui'
 import { Link } from 'gatsby'
-import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 
-const UserSpan = styled.span`
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  align-items: center;
-  justify-self: end;
-  @media (max-width: 1030px) {
-    grid-row: 1;
-    grid-column: 3;
-  }
-`
+import { FiExternalLink } from 'react-icons/fi'
+
 const formatTitle = (title, projectsList, userDonations) => {
   switch (title) {
     case 'My Projects':
@@ -97,7 +87,9 @@ const AccountNav = props => {
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}
         >
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>Wallet Settings</Text>
+          <Text sx={{ mb: '8px', variant: 'links.grey' }}>
+            My Wallet <FiExternalLink size='18px' />
+          </Text>
         </Link>
         <Link
           href='https://github.com/Giveth/giveth-2/issues/new/choose'

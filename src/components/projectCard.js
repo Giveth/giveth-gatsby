@@ -308,7 +308,7 @@ const ProjectCard = props => {
             </Button>
             <Text
               sx={{
-                variant: 'text.default',
+                variant: 'links.default',
                 my: 2,
                 mx: 'auto',
                 cursor: 'pointer',

@@ -32,7 +32,7 @@ const CreateLink = styled(Link)`
   color: ${theme.colors.primary};
   align-self: center;
   :hover {
-    color: ${theme.colors.accent};
+    color: ${theme.colors.hover};
   }
 `
 const IconSearch = styled(SearchIcon)`

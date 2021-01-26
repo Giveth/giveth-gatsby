@@ -129,7 +129,10 @@ const NavLink = styled(Link)`
   line-height: 21px;
   text-decoration: none;
   :hover {
-    color: ${theme.colors.accent};
+    color: ${theme.colors.hover};
+  }
+  :active {
+    color: ${theme.colors.secondary};
   }
 `
 
@@ -144,7 +147,10 @@ const CreateLink = styled.div`
   color: ${theme.colors.primary};
   align-self: center;
   :hover {
-    color: ${theme.colors.accent};
+    color: ${theme.colors.hover};
+  }
+  :active {
+    color: ${theme.colors.secondary};
   }
 `
 
