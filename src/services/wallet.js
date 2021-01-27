@@ -3,7 +3,6 @@ import React from 'react'
 import { getWallet } from '../wallets'
 
 export function isAddressENS (address) {
-  console.log(`!!!! address ---> : ${address}`)
   return address.toLowerCase().indexOf('.eth') > -1
 }
 export function isWalletAddressValid (address) {
