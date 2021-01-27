@@ -1,4 +1,10 @@
-import gql from 'graphql-tag'
+import { gql } from '@apollo/client'
+
+const VALIDATE_TOKEN = gql`
+  mutation DoLoginWallet($token: String!) {
+    validateToken(token: $token)
+  }
+`
 
 const DO_LOGIN = gql`
   mutation DoLoginWallet(
@@ -74,4 +80,4 @@ const DO_REGISTER = gql`
     }
   }
 `
-export { DO_LOGIN, DO_REGISTER, GET_USER, GET_USER_BY_ADDRESS }
+export { DO_LOGIN, DO_REGISTER, GET_USER, GET_USER_BY_ADDRESS, VALIDATE_TOKEN }

@@ -5,8 +5,7 @@ import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import useComponentVisible from '../../utils/useComponentVisible'
 import { Link } from 'gatsby'
-import { TorusContext } from '../../contextProvider/torusProvider'
-import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
 
@@ -76,9 +75,7 @@ const UserDetails = () => {
     setIsComponentVisible
   } = useComponentVisible(false)
 
-  const { logout, user, balance, network } = useContext(TorusContext)
-  const { proveWallet, isWalletProved } = useContext(ProveWalletContext)
-
+  const { isLoggedIn, logout, user, balance, network } = useWallet()
   const address = (user?.addresses && user.addresses[0]) || ''
   const truncAddress = `${address.substring(0, 14)}...${address.substring(
     address.length - 4,
@@ -175,18 +172,7 @@ const UserDetails = () => {
               My Account
             </MenuItem>
           </Link>
-          {!isWalletProved && (
-            <MenuItem
-              sx={{
-                variant: 'text.medium'
-              }}
-              onClick={proveWallet}
-              className='boxheight'
-            >
-              Verify Your Wallet
-            </MenuItem>
-          )}
-          <Link
+          <a
             href='https://app.tor.us'
             target='_blank'
             rel='noopener noreferrer'
@@ -200,7 +186,7 @@ const UserDetails = () => {
             >
               My Wallet <FiExternalLink size='18px' />
             </MenuItem>
-          </Link>
+          </a>
           <Link
             to='/account?data=all&view=projects'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}

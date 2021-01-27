@@ -1,10 +1,8 @@
 import React from 'react'
 import { Box, Button, Flex, Text } from 'theme-ui'
 import Modal from './modal'
-import { TorusContext } from '../contextProvider/torusProvider'
+import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { ProveWalletContext } from '../contextProvider/proveWalletProvider'
-
 import decoratorClouds from '../images/decorator-clouds.svg'
 import signupBg from '../images/popup1.png'
 import {
@@ -16,27 +14,9 @@ import {
   TwitterIcon
 } from 'react-share'
 
-function WelcomePopup({ close }) {
-  const { login, isLoggedIn } = React.useContext(TorusContext)
-  const { proveWallet, isWalletProved } = React.useContext(ProveWalletContext)
+function WelcomePopup ({ close }) {
+  const { isLoggedIn, login } = useWallet()
 
-  if (isLoggedIn && !isWalletProved) {
-    return (
-      <Flex sx={{ flexDirection: 'column', p: 4 }}>
-        <Text
-          sx={{
-            variant: 'headings.h4',
-            color: 'primary',
-            textDecoration: 'underline',
-            cursor: 'pointer'
-          }}
-          onClick={proveWallet}
-        >
-          Please first verify your wallet
-        </Text>
-      </Flex>
-    )
-  }
   if (isLoggedIn) {
     close()
     return null
@@ -88,7 +68,7 @@ function WelcomePopup({ close }) {
   )
 }
 
-function SharePopup() {
+function SharePopup () {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
@@ -129,7 +109,7 @@ function SharePopup() {
   )
 }
 
-function Popup() {
+function Popup () {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
   const setView = () => {

@@ -3,7 +3,7 @@ import React from 'react'
 import { jsx, Text, Box } from 'theme-ui'
 import { Link } from 'gatsby'
 import styled from '@emotion/styled'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
 
@@ -28,7 +28,7 @@ const options = [
 ]
 const AccountNav = props => {
   const { setQuery, query, projectsList, userDonations } = props
-  const { logout } = React.useContext(TorusContext)
+  const { logout } = useWallet()
   const handleLogout = () => {
     logout()
   }
@@ -40,8 +40,8 @@ const AccountNav = props => {
           color: 'secondary',
           fontSize: 8,
           mt: '40px',
-          mb: '68px',
-          variant: 'links.secondary'
+          mb: '68px'
+          // variant: 'links.secondary',
         }}
       >
         My Account

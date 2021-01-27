@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import styled from '@emotion/styled'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { Text, jsx } from 'theme-ui'
 import { useContext } from 'react'
-import { TorusContext } from '../../contextProvider/torusProvider'
 
 const Container = styled.div`
   width: 70px;
@@ -12,7 +12,7 @@ const Container = styled.div`
 `
 
 const LoginButton = props => {
-  const { login } = useContext(TorusContext)
+  const { login } = useWallet()
   return (
     <Container>
       <Text

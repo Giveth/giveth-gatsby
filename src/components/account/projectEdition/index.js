@@ -24,11 +24,14 @@ import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
-import { TorusContext } from '../../../contextProvider/torusProvider'
+import { useWallet } from '../../../contextProvider/WalletProvider'
 import useIsClient from '../../../utils/useIsClient'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
+import { getWallet } from '../../../wallets'
+let wallet = null
+let web3 = null
 
 const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
@@ -50,10 +53,6 @@ function ProjectEditionForm(props) {
   const [categories, setCategories] = useState(null)
 
   const { register, handleSubmit, errors } = useForm() // initialize the hook
-  // console.log(
-  //   `ProjectEditionForm -> project : ${JSON.stringify(project, null, 2)}`,
-  //   { project, categories }
-  // )
 
   useEffect(() => {
     setCategories(project?.categories)
@@ -302,7 +301,7 @@ function ProjectEditionForm(props) {
 }
 
 function ProjectEdition(props) {
-  const { web3 } = useContext(TorusContext)
+  const wallet = getWallet('torus')
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -317,8 +316,10 @@ function ProjectEdition(props) {
       variables: { slug: props?.project }
     }
   )
-
-  // console.log({ project })
+  useEffect(() => {
+    wallet = getWallet('torus')
+    web3 = wallet.web3
+  }, [])
 
   useEffect(
     data => {
@@ -336,13 +337,6 @@ function ProjectEdition(props) {
   })
 
   useEffect(() => {
-    // console.log(
-    //   `editProjectMutation effect : ${JSON.stringify(
-    //     { fetchedProject, project },
-    //     null,
-    //     2
-    //   )}`
-    // )
     if (project && updateProjectOnServer) {
       const projectId = fetchedProject.projectBySlug.id
 
@@ -355,9 +349,6 @@ function ProjectEdition(props) {
             projectId: parseFloat(projectId)
           }
         })
-        console.log(`debug > edit : ${JSON.stringify(edit, null, 2)}`)
-        console.log(`debug > after set Modal`)
-        console.log({ edit })
         setUpdateProjectOnServer(false)
         setShowModal(true)
       }
@@ -368,15 +359,12 @@ function ProjectEdition(props) {
   }, [project])
 
   async function updateProject(data) {
-    console.log(`updateProject!!!`)
-    console.log(`data : ${JSON.stringify(data, null, 2)}`)
-
     try {
       // Validate eth address
       let ethAddress = data.editWalletAddress
       if (project?.walletAddress !== data.editWalletAddress) {
         // CHECK IF STRING IS ENS AND VALID
-        const ens = await web3.eth.ens.getOwner(ethAddress)
+        const ens = await wallet?.web3.eth.ens.getOwner(ethAddress)
         if (ens !== '0x0000000000000000000000000000000000000000') {
           ethAddress = ens
         }
@@ -427,18 +415,13 @@ function ProjectEdition(props) {
           projectData.imageUpload = imageFile
         }
       }
-      console.log('debug > Do Mutation')
-      console.log(`projectData : ${JSON.stringify(projectData, null, 2)}`)
       setUpdateProjectOnServer(true)
       setProject(projectData)
     } catch (error) {
-      console.log('debug > There was an error')
       setLoading(false)
       console.log({ error })
     }
   }
-
-  // console.log(`james render - project : ${JSON.stringify(project, null, 2)}`)
 
   return (
     <>

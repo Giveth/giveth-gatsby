@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
 
 const Login = () => {
-  const { isLoggedIn } = useContext(TorusContext)
+  const { isLoggedIn } = useWallet()
 
   if (!isLoggedIn) {
     return <LoginButton />
