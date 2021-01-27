@@ -1,8 +1,14 @@
 import React from 'react'
 import { Avatar, Box, Button, Input, Text, Flex } from 'theme-ui'
+import { useWallet } from '../../contextProvider/WalletProvider'
+import * as Auth from '../../services/auth'
+import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
+import { useForm } from 'react-hook-form'
+import { UPDATE_USER } from '../../apollo/gql/auth'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import Modal from 'react-modal'
+import Toast from '../../components/toast'
 
 const customStyles = {
   overlay: {
@@ -31,8 +37,12 @@ const customStyles = {
 
 function EditProfileModal(props) {
   const { user } = props
+  const wallet = useWallet()
+  const { register, handleSubmit, watch, errors } = useForm()
+  const [updateUser] = useMutation(UPDATE_USER)
 
-  const InputBox = ({ title, placeholderText }) => {
+  const InputBox = props => {
+    const { title, placeholderText, defaultValue, name } = props
     return (
       <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
         <Text
@@ -42,6 +52,8 @@ function EditProfileModal(props) {
           {title}
         </Text>
         <Input
+          name={name}
+          ref={register}
           sx={{
             width: '100%',
             fontFamily: 'body',
@@ -52,13 +64,41 @@ function EditProfileModal(props) {
             }
           }}
           type='text'
-          defaultValue={''}
           placeholder={placeholderText}
           maxLength={100}
+          defaultValue={defaultValue}
           // onChange={e => setCharacterLength(e.target.value.length)}
         />
       </Box>
     )
+  }
+
+  const onSubmit = async data => {
+    try {
+      const { firstName, lastName, location, url } = data
+      const newProfile = {
+        firstName: firstName || user?.profile?.firstName,
+        lastName: lastName || user?.profile?.lastName,
+        location: location || user?.profile?.location,
+        url: url || user?.profile?.url
+      }
+      const { data: response } = await updateUser({
+        variables: newProfile
+      })
+      if (response?.updateUser === true) {
+        props.onRequestClose()
+        wallet?.updateUser && wallet.updateUser(user?.addresses)
+        return Toast({
+          content: 'Profile updated successfully',
+          type: 'success'
+        })
+      } else {
+        return Toast({ content: 'There was an error', type: 'error' })
+      }
+    } catch (error) {
+      console.log({ error })
+      return Toast({ content: JSON.stringify(error), type: 'error' })
+    }
   }
 
   return (
@@ -68,44 +108,69 @@ function EditProfileModal(props) {
       style={customStyles}
       contentLabel={props.contentLabel}
     >
-      <Flex sx={{ flexDirection: 'column', p: 4, alignItems: 'center' }}>
-        <Flex sx={{ mb: 2 }}>
-          <Avatar src={user?.profileImage} sx={{ width: 100, height: 100 }} />
-          <Box sx={{ ml: '27px' }}>
-            <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
-            <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
-          </Box>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Flex sx={{ flexDirection: 'column', p: 4, alignItems: 'center' }}>
+          <Flex sx={{ mb: 2 }}>
+            <Avatar src={user?.profileImage} sx={{ width: 100, height: 100 }} />
+            <Box sx={{ ml: '27px' }}>
+              <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
+              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
+            </Box>
+          </Flex>
+          <InputBox
+            title='First Name'
+            name='firstName'
+            placeholderText='First Name'
+            defaultValue={user?.profile?.firstName}
+          />
+          <InputBox
+            title='Last Name'
+            placeholderText='Last Name'
+            name='lastName'
+            defaultValue={user?.profile?.lastName}
+          />
+          <InputBox
+            title='Location'
+            placeholderText='Location'
+            name='location'
+            defaultValue={user?.profile?.location}
+          />
+          <InputBox
+            title='Website or URL'
+            placeholderText='website'
+            name='url'
+            defaultValue={user?.profile?.url}
+          />
+          <Button
+            type='button'
+            aria-label='edit profile'
+            variant='small'
+            sx={{
+              mt: 4,
+              mx: 'auto',
+              py: 2,
+              color: 'background',
+              width: '50%',
+              fontWeight: 'bold'
+            }}
+            type='submit'
+            // onClick={() => alert('This is still a mockup, hold on!')}
+          >
+            SAVE
+          </Button>
+          <IoMdClose
+            onClick={props.onRequestClose}
+            style={{
+              cursor: 'pointer',
+              position: 'absolute',
+              top: '12px',
+              right: '12px'
+            }}
+            size='20px'
+            color={theme.colors.bodyLight}
+          />
         </Flex>
-        <InputBox title='Full Name' placeholderText='Full Name' />
-        <InputBox title='Location' placeholderText='Location' />
-        <InputBox title='Website or URL' placeholderText='website' />
-        <Button
-          type='button'
-          aria-label='edit profile'
-          variant='small'
-          sx={{
-            mt: 4,
-            py: 2,
-            color: 'background',
-            width: '50%',
-            fontWeight: 'bold'
-          }}
-          onClick={() => alert('This is still a mockup, hold on!')}
-        >
-          SAVE
-        </Button>
-        <IoMdClose
-          onClick={props.onRequestClose}
-          style={{
-            cursor: 'pointer',
-            position: 'absolute',
-            top: '12px',
-            right: '12px'
-          }}
-          size='20px'
-          color={theme.colors.bodyLight}
-        />
-      </Flex>
+      </form>
     </Modal>
   )
 }

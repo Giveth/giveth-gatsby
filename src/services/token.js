@@ -24,7 +24,10 @@ export async function getToken(user, signedMessage) {
 
       if (!userIDFromDB) throw new Error('No userId returned from the database')
       return {
-        userIDFromDB,
+        data: {
+          userIDFromDB,
+          profile: data?.loginWallet?.user
+        },
         token
       }
     } catch (error) {
