@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
-import { navigate } from 'gatsby'
+import { graphql, navigate } from 'gatsby'
 import Web3 from 'web3'
 import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'

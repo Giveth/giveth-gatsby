@@ -81,50 +81,50 @@ const CreditsSection = styled(Grid)`
 
 const Footer = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-function romanize (num) {
-  if (!+num) return false
-  let digits = String(+num).split(''),
-    key = [
-      '',
-      'C',
-      'CC',
-      'CCC',
-      'CD',
-      'D',
-      'DC',
-      'DCC',
-      'DCCC',
-      'CM',
-      '',
-      'X',
-      'XX',
-      'XXX',
-      'XL',
-      'L',
-      'LX',
-      'LXX',
-      'LXXX',
-      'XC',
-      '',
-      'I',
-      'II',
-      'III',
-      'IV',
-      'V',
-      'VI',
-      'VII',
-      'VIII',
-      'IX'
-    ],
-    roman = '',
-    i = 3
-  while (i--) roman = (key[+digits.pop() + i * 10] || '') + roman
-  return Array(+digits.join('') + 1).join('M') + roman
-}
+  function romanize (num) {
+    if (!+num) return false
+    let digits = String(+num).split(''),
+      key = [
+        '',
+        'C',
+        'CC',
+        'CCC',
+        'CD',
+        'D',
+        'DC',
+        'DCC',
+        'DCCC',
+        'CM',
+        '',
+        'X',
+        'XX',
+        'XXX',
+        'XL',
+        'L',
+        'LX',
+        'LXX',
+        'LXXX',
+        'XC',
+        '',
+        'I',
+        'II',
+        'III',
+        'IV',
+        'V',
+        'VI',
+        'VII',
+        'VIII',
+        'IX'
+      ],
+      roman = '',
+      i = 3
+    while (i--) roman = (key[+digits.pop() + i * 10] || '') + roman
+    return Array(+digits.join('') + 1).join('M') + roman
+  }
 
-let currentTime = new Date()
+  let currentTime = new Date()
 
-let strRomanDate = romanize(currentTime.getFullYear())
+  let strRomanDate = romanize(currentTime.getFullYear())
 
   return (
     <Container p={[0, 3, 5]} sx={{ position: 'relative' }}>
@@ -151,6 +151,9 @@ let strRomanDate = romanize(currentTime.getFullYear())
               Blog <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterLink to='/contact'>Contact</FooterLink>
+            <FooterLink to='/tos' target='_blank' rel='noopener noreferrer'>
+              Terms of Use
+            </FooterLink>
           </LinkBox>
           <LinkBox>
             <FooterExternalLink
@@ -232,16 +235,6 @@ let strRomanDate = romanize(currentTime.getFullYear())
             The Giveth DAC
           </a>
         </Text>
-      </CreditsSection>
-      <CreditsSection>
-        <Link
-        to='/tos'
-        target='_blank'
-        rel='noopener noreferrer'
-        sx={{ variant: 'links.light', fontSize: '0' }}
-        >
-          Terms of Use
-        </Link>
       </CreditsSection>
     </Container>
   )
