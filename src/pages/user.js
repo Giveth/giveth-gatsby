@@ -26,11 +26,10 @@ const User = props => {
         const { data } = await client.query({
           query: GET_USER_BY_ADDRESS,
           variables: {
-            address: Web3.utils.toChecksumAddress(address)
+            address: address?.toLowerCase()
           }
         })
         setUser(data?.userByAddress)
-
         // GET DONATIONS
         const { data: donations } = await client.query({
           query: USERS_DONATIONS,
