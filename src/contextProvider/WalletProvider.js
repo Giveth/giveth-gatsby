@@ -15,7 +15,7 @@ if (typeof window === 'object') {
   wallet = getWallet('torus')
 }
 
-function useWallet () {
+function useWallet() {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -23,7 +23,7 @@ function useWallet () {
   return context
 }
 
-function WalletProvider (props) {
+function WalletProvider(props) {
   const [account, setAccount] = useState('')
   const [balance, setBalance] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -34,7 +34,7 @@ function WalletProvider (props) {
     wallet.init('production', network)
   }, [])
 
-  async function logout () {
+  async function logout() {
     setLoading(true)
 
     Auth.handleLogout()
@@ -46,7 +46,7 @@ function WalletProvider (props) {
     setLoading(false)
   }
 
-  async function signMessage (message, publicAddress) {
+  async function signMessage(message, publicAddress) {
     try {
       let signedMessage = null
       console.log({ user })
@@ -88,7 +88,7 @@ function WalletProvider (props) {
     }
   }
 
-  async function updateUser (accounts) {
+  async function updateUser(accounts) {
     console.log(`Updating User`)
     setAccount(accounts[0])
     const balance = await wallet.web3.eth.getBalance(accounts[0])
@@ -105,8 +105,9 @@ function WalletProvider (props) {
 
     const signedMessage = await signMessage('our_secret', publicAddress)
 
-    const { userIDFromDB, token } = await getToken(user, signedMessage)
-    user.userIDFromDB = userIDFromDB
+    const { data, token } = await getToken(user, signedMessage)
+    user.userIDFromDB = data?.userIDFromDB
+    user.profile = data?.profile
 
     localStorage.setItem('token', token)
     Auth.setUser(user)
@@ -114,7 +115,7 @@ function WalletProvider (props) {
     setUser(user)
   }
 
-  async function login () {
+  async function login() {
     console.log(`torus: login WalletProvider.login`)
     console.log(
       `torus: login  wallet.torus is loaded : ${typeof wallet.torus === true}`
@@ -132,7 +133,7 @@ function WalletProvider (props) {
     setLoading(false)
   }
 
-  function isWalletAddressValid (address) {
+  function isWalletAddressValid(address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -140,14 +141,14 @@ function WalletProvider (props) {
     }
   }
 
-  function isAddressENS (address) {
+  function isAddressENS(address) {
     console.log(
       `isAddressENS ---> : ${address.toLowerCase().indexOf('.eth') > -1}`
     )
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function getAddressFromENS (address) {
+  async function getAddressFromENS(address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {
@@ -170,15 +171,15 @@ function WalletProvider (props) {
       account,
       balance,
       isLoggedIn,
+      updateUser,
       logout,
       user,
-      balance,
       network,
       isWalletAddressValid,
       isAddressENS,
       getAddressFromENS
     }
-  }, [account, balance, isLoggedIn, user, balance, network])
+  }, [account, balance, isLoggedIn, user, network])
   //return <WalletContext.Provider value={value} {...props} />
   return (
     <WalletContext.Provider value={value} {...props}>

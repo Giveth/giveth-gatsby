@@ -11,21 +11,21 @@ exports.onCreatePage = async ({ page, actions }) => {
   // only on the client.
   if (page.path.match(/^\/donate/)) {
     createPage({
-      path: '/donate/',
+      path: '/donate',
       matchPath: '/donate/:id',
       component: require.resolve('./src/pages/donate.js')
     })
   }
   if (page.path.match(/^\/project/)) {
     createPage({
-      path: '/project/',
+      path: '/project',
       matchPath: '/project/:id',
       component: require.resolve('./src/pages/project.js')
     })
   }
   if (page.path.match(/^\/user/)) {
     createPage({
-      path: '/user/',
+      path: '/user',
       matchPath: '/user/:address',
       component: require.resolve('./src/pages/user.js')
     })

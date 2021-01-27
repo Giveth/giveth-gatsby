@@ -7,7 +7,9 @@ import EditProfileModal from './editProfileModal'
 const MyAccount = ({ info }) => {
   const [openModal, setOpenModal] = useState(false)
   const [ethPrice, setEthPrice] = useState(1)
-  const { balance, user } = useWallet()
+  const wallet = useWallet()
+  const user = wallet?.user
+  const balance = wallet?.balance
 
   useEffect(() => {
     const init = async () => {
@@ -40,7 +42,7 @@ const MyAccount = ({ info }) => {
               mt: 2
             }}
           >
-            Edit Profile
+            Edit Public Profile
           </Text>
         </Box>
       </Flex>
