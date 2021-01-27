@@ -32,8 +32,6 @@ const IndexPage = ({ data, location }) => {
   const onSubmit = async (values, walletAddress) => {
     setProjectAdded(true)
 
-    console.log(`values : ${JSON.stringify(values, null, 2)}`)
-
     const projectCategories = []
     for (const category in values.projectCategory) {
       if (values.projectCategory[category].length !== 0) {
@@ -81,7 +79,6 @@ const IndexPage = ({ data, location }) => {
     }
 
     try {
-      console.log(`token Value is ---> : ${localStorage.getItem('token')}`)
       const project = await addProjectQuery({
         variables: {
           project: { ...projectData }
@@ -90,7 +87,6 @@ const IndexPage = ({ data, location }) => {
       })
 
       if (project) {
-        console.log(`project : ${JSON.stringify(project, null, 2)}`)
         setAddedProject(project.data.addProject)
         setProjectAdded(true)
         window?.localStorage.removeItem('create-form')
