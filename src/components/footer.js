@@ -168,7 +168,7 @@ const Footer = () => {
               target='_blank'
               rel='noopener noreferrer'
             >
-              The Commons Stack
+              Commons Stack
             </FooterExternalLink>
             <FooterExternalLink
               to='https://wiki.giveth.io/governance/'
