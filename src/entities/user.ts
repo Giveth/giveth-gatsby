@@ -1,6 +1,7 @@
 
 import { ProjectNameInput } from '../components/create-project-form/inputs/ProjectNameInput';
 import { isAddressENS } from '../services/wallet';
+import { Location } from '@reach/router';
 
 export default class User {
   id: number
@@ -40,6 +41,22 @@ export default class User {
       this.id = initUser.id
       this.token = initUser.token
     }
+  }
+
+  /**
+   * From the database
+   * @param initUser 
+   */
+  parseDbUser(dbUser) {   
+    console.log(`debug: updating user details from the db`)
+    this.avatar = dbUser.avatar
+    this.email = dbUser.email
+    this.id = dbUser.id
+    this.token = dbUser.firstName
+    this.lastName = dbUser.lastName
+    this.location = dbUser.location
+    this.name = dbUser.name
+    this.url = dbUser.url
   }
 
   setUserId(userId) {

@@ -8,6 +8,9 @@ const metamask = {
     const web3Inst = new Web3(provider)
     metamask.web3 = web3Inst
     metamask.isInitialized = true
+    console.log(`setweb3 provider : ${JSON.stringify(provider, null, 2)}`)
+
+    metamask.provider = provider
   },
   init: async (buildEnv, network) => {
     const provider = await detectEthereumProvider()

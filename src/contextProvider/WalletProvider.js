@@ -7,9 +7,9 @@ import LoadingModal from '../components/loadingModal'
 import { getToken } from '../services/token'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
+import { PopupContext } from '../contextProvider/popupProvider'
 
 console.log(`*** User : ${JSON.stringify(User, null, 2)}`)
-
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
 
@@ -27,8 +27,12 @@ function useWallet () {
 }
 
 function WalletProvider (props) {
+  const popup = React.useContext(PopupContext)
+
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
+  console.log(`debug: initUser : ${JSON.stringify(initUser, null, 2)}`)
+
   const [user, setUser] = useState(initUser)
   const [account, setAccount] = useState('')
   const [balance, setBalance] = useState(0)
@@ -37,10 +41,13 @@ function WalletProvider (props) {
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
 
   useEffect(() => {
-    wallet.init('production', network)
-    const walletType = typeof wallet.torus !== 'undefined' ? 'torus' : 'other'
-    const initUser = new User(walletType, Auth.getUser())
-    setUser(initUser)
+    const initWallet = async () => {
+      await wallet.init('production', network)
+      wallet.provider.on('accountsChanged', function (accounts) {
+        popup.triggerPopup('Account changed')
+      })
+    }
+    initWallet()
   }, [])
 
   async function logout () {
@@ -123,11 +130,6 @@ function WalletProvider (props) {
     setBalance(balance)
     // let user
     let user
-
-    //console.log(`user : ${JSON.stringify(user, null, 2)}`)
-    if (typeof wallet.torus !== 'undefined') {
-    }
-
     if (typeof wallet.torus !== 'undefined') {
       const torusUser = await wallet.torus.getUserInfo()
       user = new User('torus')
@@ -175,7 +177,8 @@ function WalletProvider (props) {
 
     console.log(`debug: signedMessage ---> : ${signedMessage}`)
 
-    const { userIDFromDB, token } = await getToken(user, signedMessage)
+    const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
+    user.parseDbUser(dbUser)
 
     console.log(
       `debug: { userIDFromDB, token } : ${JSON.stringify(
