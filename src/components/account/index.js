@@ -29,7 +29,7 @@ const UserSpan = styled.span`
 
 const AccountPage = props => {
   const { user, isLoggedIn } = useWallet()
-  const fromWalletAddress = user?.addresses && user.addresses[0]
+  const fromWalletAddress = user.getWalletAddress()
   const storageWallets =
     typeof localStorage !== 'undefined'
       ? localStorage.getItem('giveth_donation_wallets')
@@ -45,10 +45,12 @@ const AccountPage = props => {
   })
   const userDonations = donations?.donationsFromWallets
 
+  console.log(`debug: account/index user : ${JSON.stringify(user, null, 2)}`)
+
   const { data: userProjects, loading: projectsLoading } = useQuery(
     FETCH_USER_PROJECTS,
     {
-      variables: { admin: parseFloat(user?.userIDFromDB || -1) },
+      variables: { admin: parseFloat(user?.id || -1) },
       fetchPolicy: 'network-only'
     }
   )

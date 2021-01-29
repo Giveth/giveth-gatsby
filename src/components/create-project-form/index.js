@@ -35,6 +35,7 @@ import Toast from '../toast'
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
   const { isLoggedIn, user } = useWallet()
+  console.log(`debug: CreateProjectForm ---> : ${isLoggedIn}`)
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
@@ -187,18 +188,22 @@ const CreateProjectForm = props => {
   useEffect(() => {
     const checkProjectWallet = async () => {
       if (!user) return null
+      console.log(
+        `debug: creat project user : ${JSON.stringify(user, null, 2)}`
+      )
+
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
       // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
-          address: user?.addresses && user.addresses[0]
+          address: user.getWalletAddress()
         }
       })
       if (data?.projectByAddress) {
         setWalletUsed(true)
       } else {
-        setWalletUsed(user?.addresses && user.addresses[0])
+        setWalletUsed(user.getWalletAddress())
       }
       setLoading(false)
     }
@@ -321,14 +326,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep(currentStep) {
+function isCategoryStep (currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep(currentStep, steps) {
+function isFinalConfirmationStep (currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep(currentStep, steps) {
+function isLastStep (currentStep, steps) {
   return currentStep === steps.length - 1
 }

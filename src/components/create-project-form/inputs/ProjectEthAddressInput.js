@@ -78,7 +78,7 @@ export const ProjectEthAddressInput = ({
             lineHeight: '19px'
           }}
         >
-          This is your torus wallet address, you can choose another one if
+          This is your default wallet address, you can choose another one if
           desired*
         </Text>
       )}

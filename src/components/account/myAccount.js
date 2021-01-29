@@ -63,7 +63,7 @@ const MyAccount = ({ info }) => {
         </Button> */}
       </Flex>
       <Text sx={{ mt: '14px', variant: 'text.medium', color: 'secondary' }}>
-        {user?.addresses?.length > 0 && user?.addresses[0]}
+        {user.getWalletAddress()}
       </Text>
       <Flex sx={{ mt: '40px' }}>
         <Box

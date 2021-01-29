@@ -189,6 +189,10 @@ const Header = ({ siteTitle, isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
+    return true
+    console.log('debug: goCreate Welcom')
+    console.log(`debug: isLoggedIn : ${JSON.stringify(isLoggedIn, null, 2)}`)
+
     if (!isLoggedIn) return triggerPopup('Welcome')
     navigate('/create')
   }
@@ -294,7 +298,8 @@ const Header = ({ siteTitle, isHomePage }) => {
             {isMobile ? null : (
               <Flex>
                 {pathname !== 'projects' && (
-                  <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                  // <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                  <NavLink to='/create'>Create a project</NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>
