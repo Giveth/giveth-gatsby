@@ -56,19 +56,12 @@ function WalletProvider(props) {
 
     Auth.handleLogout()
     setIsLoggedIn(false)
-    // if (balancePolling) {
-    //   clearInterval(balancePolling)
-    //   balancePolling = 0
-    // }
     setLoading(false)
   }
 
   async function signMessage(message, publicAddress) {
     try {
       let signedMessage = null
-      console.log({ user })
-      console.log('signMessage 1')
-
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
         `${customPrefix}${message.length.toString()}`,
@@ -78,19 +71,10 @@ function WalletProvider(props) {
         prefixWithLength,
         Buffer.from(message)
       ])
-      console.log('signMessage 2')
 
       const hashedMsg = keccak256(finalMessage)
       const send = promisify(wallet.web3.currentProvider.sendAsync)
 
-      console.log(
-        `message sending : ${JSON.stringify(
-          [publicAddress, hashedMsg, { customPrefix, customMessage: message }],
-          null,
-          2
-        )}`
-      )
-      console.log(`meta: THIS FAR ---> `, publicAddress)
       const { result } = await send({
         method: 'eth_sign',
         params: [
@@ -100,8 +84,6 @@ function WalletProvider(props) {
         ],
         from: publicAddress
       })
-      console.log('AFTER sign')
-
       signedMessage = result
 
       return signedMessage
@@ -111,23 +93,9 @@ function WalletProvider(props) {
   }
 
   async function updateUser(accounts) {
-    console.log(`accounts : ${JSON.stringify(accounts, null, 2)}`)
-
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
-    console.log(
-      `meta: updateUser publicAddress : ${JSON.stringify(
-        publicAddress,
-        null,
-        2
-      )}`
-    )
-
-    console.log(`Updating User`)
     setAccount(publicAddress)
     const balance = await wallet.web3.eth.getBalance(publicAddress)
-    // .then(balance => {
-    //   setBalance(balance)
-    // })
     setBalance(balance)
     // let user
     let user
@@ -135,7 +103,6 @@ function WalletProvider(props) {
       const torusUser = await wallet.torus.getUserInfo()
       // getUserInfo() won't return the addresses, so we have to add them here
       user = new User('torus')
-      console.log('OMG', { torusUser })
       user.parseTorusUser({
         ...torusUser,
         addresses: [publicAddress]
@@ -143,56 +110,14 @@ function WalletProvider(props) {
       // user.addresses = accounts
     } else {
       user = new User('other')
-      // const accounts = await wallet.web3.currentProvider.request({
-      //   method: 'eth_accounts'
-      // })
-      // console.log(`meta: accounts: ${JSON.stringify(accounts, null, 2)}`)
-      // Check for 3box here?
-      // user = {
-      //   addresses: [publicAddress]
-      // }
       console.log(`debug: publicAddress ---> : ${publicAddress}`)
-      user.addWalletAddress(publicAddress)
-      // user = {
-      //   profileImage:
-      //     'https://lh3.googleusercontent.com/a-/AOh14Ggo5BQVYb9izvbN0SaLtxSP220nntDwO0SLtZVa3g=s96-c',
-      //   name: 'James Farrell',
-      //   email: 'jamespfarrell@gmail.com',
-      //   verifierId: 'jamespfarrell@gmail.com',
-      //   verifier: 'google',
-      //   typeOfLogin: 'google',
-      //   addresses: [publicAddress],
-      //   userIDFromDB: '4',
-      //   profile: {
-      //     id: '4',
-      //     firstName: null,
-      //     lastName: null,
-      //     name: 'James Farrell',
-      //     email: 'jamespfarrell@gmail.com',
-      //     avatar:
-      //       'https://lh3.googleusercontent.com/a-/AOh14Ggo5BQVYb9izvbN0SaLtxSP220nntDwO0SLtZVa3g=s96-c',
-      //     url: null,
-      //     location: null,
-      //     __typename: 'User'
-      //   }
-      // }
+      user.addWalletAddress(publicAddress, true)
     }
 
-    console.log(`debug: publicAddress ---> : ${publicAddress}`)
     const signedMessage = await signMessage('our_secret', publicAddress)
-
-    console.log(`debug: signedMessage ---> : ${signedMessage}`)
 
     const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
     user.parseDbUser(dbUser)
-
-    console.log(
-      `debug: { userIDFromDB, token } : ${JSON.stringify(
-        { userIDFromDB, token },
-        null,
-        2
-      )}`
-    )
 
     user.setUserId(userIDFromDB)
     user.setToken(token)
@@ -215,9 +140,6 @@ function WalletProvider(props) {
       `torus: login  wallet.torus is loaded : ${typeof wallet.torus === true}`
     )
     setLoading(true)
-    // console.log(`walletProvider: wallet : ${JSON.stringify(wallet, null, 2)}`)
-
-    console.log(`jpf wallet.isLoggedIn() ---> : ${wallet.isLoggedIn()}`)
     if (!wallet.isLoggedIn()) {
       await wallet.login()
     }
@@ -235,9 +157,6 @@ function WalletProvider(props) {
   }
 
   function isAddressENS(address) {
-    console.log(
-      `isAddressENS ---> : ${address.toLowerCase().indexOf('.eth') > -1}`
-    )
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
@@ -272,7 +191,6 @@ function WalletProvider(props) {
       getAddressFromENS
     }
   }, [account, balance, isLoggedIn, user, network])
-  //return <WalletContext.Provider value={value} {...props} />
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}

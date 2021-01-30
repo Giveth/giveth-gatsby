@@ -6,12 +6,13 @@ import { Location } from '@reach/router';
 export default class User {
   id: number
   token: string
+  activeWalletIndex: number
   walletAddresses: string[]
+  activeWallet: string
   email?: string
   firstName?: string
   lastName?: string
   name?: string
-  walletAddress?: string
   password?: string
   avatar?: string
   url?: string
@@ -68,8 +69,14 @@ export default class User {
     localStorage.setItem('token', token)
   }
 
-  addWalletAddress(address) {
+  addWalletAddress(address, activeWallet) {
     this.walletAddresses.push(address)
+  
+    if(activeWallet) {
+      this.activeWalletIndex = this.walletAddresses.indexOf(address)
+    }
+    
+    
   }
 
   getAuthObject() {
@@ -79,8 +86,6 @@ export default class User {
   }
 
   getName() {
-    console.log(`this.name ---> : ${this.name}`)
-    console.log(`this.walletAddress : ${JSON.stringify(this.walletAddress, null, 2)}`)
     function truncAddress (address) {
       return `${address.substring(0, 5)}...${address.substring(
         address.length - 4,
