@@ -31,9 +31,6 @@ const AccountDetails = styled.div`
     padding-top: 11px;
     padding-bottom: 11px;
   }
-  & :hover .balance {
-    opacity: 1;
-  }
 `
 
 const MenuTitle = styled(Text)`
@@ -76,7 +73,10 @@ const LoginButton = props => {
                 key={index}
                 sx={{
                   variant: 'text.medium',
-                  textTransform: 'capitalize'
+                  textTransform: 'capitalize',
+                  ':hover': {
+                    color: 'primary'
+                  }
                 }}
                 className='shadow boxheight'
                 onClick={() => login({ walletProvider })}
