@@ -16,8 +16,8 @@ const IndexContent = ({ hideInfo, content, location }) => {
   React.useEffect(() => {
     if (location?.state?.welcome) {
       console.log('debug: index.js')
-
-      popup.triggerPopup('Welcome')
+      // TODO: make this better
+      // popup.triggerPopup('Welcome')
     }
   }, [])
 

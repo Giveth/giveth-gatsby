@@ -51,7 +51,7 @@ const metamask = {
     return false
   }
 }
-const wallets = {
+export const wallets = {
   metamask,
   torus: {
     setweb3: function (provider) {
@@ -80,11 +80,11 @@ const wallets = {
       // wallet.torus.logout()
     },
     isLoggedIn: () => {
-      return wallets.torus.isLoggedIn
+      return wallets.torus.torus.isLoggedIn
     }
   }
 }
 
-export function getWallet (wallet) {
+export function getWallet(wallet) {
   return wallets[wallet]
 }

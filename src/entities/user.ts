@@ -101,11 +101,12 @@ export default class User {
   // organisations: Organisation[]
   
   parseTorusUser(torusUser) {
+    console.log("here", {torusUser})
     if(this.walletType !== 'torus') throw Error ('Only valid for Torus wallets')
-    this.avatar = torusUser.profileImage
+    this.avatar = torusUser.profileImage || torusUser.avatar
     this.name = torusUser.name
     this.email = torusUser.email
-    this.walletAddresses = torusUser.addresses
+    this.walletAddresses = torusUser.addresses || torusUser.walletAddresses
     this.id = torusUser.id
   }
 }

@@ -12,13 +12,13 @@ import { PopupContext } from '../contextProvider/popupProvider'
 console.log(`*** User : ${JSON.stringify(User, null, 2)}`)
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
-
+const DEFAULT_WALLET = 'torus'
 let wallet = {}
 if (typeof window === 'object') {
-  wallet = getWallet('metamask')
+  wallet = getWallet(DEFAULT_WALLET)
 }
 
-function useWallet () {
+function useWallet() {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -26,7 +26,7 @@ function useWallet () {
   return context
 }
 
-function WalletProvider (props) {
+function WalletProvider(props) {
   const popup = React.useContext(PopupContext)
 
   const localStorageUser = Auth.getUser()
@@ -40,17 +40,18 @@ function WalletProvider (props) {
   console.log(`debug: Auth.checkIfLoggedIn() ---> : ${Auth.checkIfLoggedIn()}`)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
 
+  const initWallet = async () => {
+    await wallet.init('production', network)
+    wallet?.provider?.on('accountsChanged', function (accounts) {
+      popup.triggerPopup('Account changed')
+    })
+  }
+
   useEffect(() => {
-    const initWallet = async () => {
-      await wallet.init('production', network)
-      wallet.provider.on('accountsChanged', function (accounts) {
-        popup.triggerPopup('Account changed')
-      })
-    }
     initWallet()
   }, [])
 
-  async function logout () {
+  async function logout() {
     setLoading(true)
 
     Auth.handleLogout()
@@ -62,7 +63,7 @@ function WalletProvider (props) {
     setLoading(false)
   }
 
-  async function signMessage (message, publicAddress) {
+  async function signMessage(message, publicAddress) {
     try {
       let signedMessage = null
       console.log({ user })
@@ -109,7 +110,7 @@ function WalletProvider (props) {
     }
   }
 
-  async function updateUser (accounts) {
+  async function updateUser(accounts) {
     console.log(`accounts : ${JSON.stringify(accounts, null, 2)}`)
 
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
@@ -132,8 +133,13 @@ function WalletProvider (props) {
     let user
     if (typeof wallet.torus !== 'undefined') {
       const torusUser = await wallet.torus.getUserInfo()
+      // getUserInfo() won't return the addresses, so we have to add them here
       user = new User('torus')
-      user.parseTorusUser(torusUser)
+      console.log('OMG', { torusUser })
+      user.parseTorusUser({
+        ...torusUser,
+        addresses: [publicAddress]
+      })
       // user.addresses = accounts
     } else {
       user = new User('other')
@@ -194,32 +200,33 @@ function WalletProvider (props) {
     Auth.setUser(user)
     console.log('debug: setting logged in')
     console.log(`user : ${JSON.stringify(user, null, 2)}`)
-
     setIsLoggedIn(true)
     setUser(user)
   }
 
-  async function login () {
-    console.log(`torus: login WalletProvider.login`)
+  async function login({ walletProvider = DEFAULT_WALLET }) {
+    wallet = getWallet(walletProvider)
+    if (walletProvider !== DEFAULT_WALLET) await initWallet()
+    console.log(`torus: login WalletProvider.login`, {
+      wallet,
+      walletProvider
+    })
     console.log(
       `torus: login  wallet.torus is loaded : ${typeof wallet.torus === true}`
     )
-
     setLoading(true)
     // console.log(`walletProvider: wallet : ${JSON.stringify(wallet, null, 2)}`)
 
     console.log(`jpf wallet.isLoggedIn() ---> : ${wallet.isLoggedIn()}`)
     if (!wallet.isLoggedIn()) {
       await wallet.login()
-    } else {
-      const userInfo = await wallet.torus.getUserInfo()
     }
     wallet.web3.eth.getAccounts().then(updateUser)
 
     setLoading(false)
   }
 
-  function isWalletAddressValid (address) {
+  function isWalletAddressValid(address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -227,14 +234,14 @@ function WalletProvider (props) {
     }
   }
 
-  function isAddressENS (address) {
+  function isAddressENS(address) {
     console.log(
       `isAddressENS ---> : ${address.toLowerCase().indexOf('.eth') > -1}`
     )
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function getAddressFromENS (address) {
+  async function getAddressFromENS(address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {

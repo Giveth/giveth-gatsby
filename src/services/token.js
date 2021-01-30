@@ -4,7 +4,7 @@ import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
 import Web3 from 'web3'
 
-export async function getToken (user, signedMessage) {
+export async function getToken(user, signedMessage) {
   if (signedMessage) {
     try {
       const { data } = await client.mutate({
@@ -13,7 +13,7 @@ export async function getToken (user, signedMessage) {
           walletAddress: Web3.utils.toChecksumAddress(user?.getWalletAddress()),
           signature: signedMessage,
           email: user?.email,
-          avatar: user?.profileImage,
+          avatar: user?.avatar,
           name: user?.name,
           hostname: window.location.hostname
         }

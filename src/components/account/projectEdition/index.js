@@ -301,7 +301,6 @@ function ProjectEditionForm(props) {
 }
 
 function ProjectEdition(props) {
-  const wallet = getWallet('torus')
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)

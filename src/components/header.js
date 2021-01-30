@@ -172,7 +172,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -183,7 +183,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -299,7 +299,9 @@ const Header = ({ siteTitle, isHomePage }) => {
               <Flex>
                 {pathname !== 'projects' && (
                   // <CreateLink onClick={goCreate}>Create a project</CreateLink>
-                  <NavLink to='/create'>Create a project</NavLink>
+                  <NavLink to='/create' sx={{ textTransform: 'upperCase' }}>
+                    Create a project
+                  </NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>

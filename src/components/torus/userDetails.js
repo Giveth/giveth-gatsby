@@ -103,7 +103,7 @@ const UserDetails = () => {
         <img
           alt=''
           style={{ width: '30px', borderRadius: '15px' }}
-          src={user?.profileImage}
+          src={user?.avatar}
           className='avatarimage'
         />
 
