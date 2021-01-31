@@ -49,11 +49,15 @@ const metamask = {
   },
   isLoggedIn: () => {
     return false
-  }
+  },
+  isTorus: false,
+  type: 'metamask'
 }
 export const wallets = {
   metamask,
   torus: {
+    type: 'torus',
+    isTorus: true,
     setweb3: function (provider) {
       const web3Inst = new Web3(provider)
       wallets.torus.web3 = web3Inst
@@ -70,8 +74,17 @@ export const wallets = {
 
       wallets.torus.torus = torus
       wallets.torus.setweb3(torus.provider)
+      wallets.torus.provider = torus.provider
     },
     login: async () => {
+      console.log(
+        ` typeof wallets.torus.torus : ${JSON.stringify(
+          typeof wallets.torus.torus,
+          null,
+          2
+        )}`
+      )
+
       await wallets.torus.torus.login()
       return wallets.torus.torus
     },

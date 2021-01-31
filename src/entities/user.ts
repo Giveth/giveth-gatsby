@@ -33,7 +33,9 @@ export default class User {
 
   parseInitUser(initUser) {
     if(this.walletType === 'torus') {
-      this.parseTorusUser(initUser) 
+      console.log(`parseInitUser initUser : ${JSON.stringify(initUser, null, 2)}`)
+      
+      this.parseTorusUser(initUser, true) 
     } else {
       console.log(`JJJ initUser : ${JSON.stringify(initUser, null, 2)}`)
       this.walletType = initUser.walletType
@@ -70,10 +72,13 @@ export default class User {
   }
 
   addWalletAddress(address, activeWallet) {
+    console.log(`updateUser: Adding address ---> : ${address}`)
+    console.log(`updateUser: Adding activeWallet ---> : ${activeWallet}`)
     this.walletAddresses.push(address)
   
     if(activeWallet) {
       this.activeWalletIndex = this.walletAddresses.indexOf(address)
+      console.log(`updateUser: this.activeWalletIndex ---> : ${this.activeWalletIndex}`)
     }
     
     
@@ -106,12 +111,17 @@ export default class User {
   // organisations: Organisation[]
   
   parseTorusUser(torusUser) {
-    console.log("here", {torusUser})
+    console.log(`updateUser: parse torusUser : ${JSON.stringify(torusUser, null, 2)}`)
+    
     if(this.walletType !== 'torus') throw Error ('Only valid for Torus wallets')
     this.avatar = torusUser.profileImage || torusUser.avatar
     this.name = torusUser.name
     this.email = torusUser.email
     this.walletAddresses = torusUser.addresses || torusUser.walletAddresses
     this.id = torusUser.id
+    // this.addWalletAddress(walletAddress, true)
+    torusUser.walletAddresses.forEach(address => {
+      this.addWalletAddress(address, true)
+    })
   }
 }
