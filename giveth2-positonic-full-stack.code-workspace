@@ -8,7 +8,7 @@
       //To see our status with StandardJS we can use problem highlighting - in hindsight, properly configured this could be all we need
       "chenxsan.vscode-standardjs",
       //to get SVG previews
-      "simonsiefke.svg-preview"
+      "simonsiefke.svg-preview",
     ]
   },
   "folders": [
@@ -41,6 +41,9 @@
     //   "activityBarBadge.foreground": "#e7e7e7"
     // },
     "peacock.color": "#C2449F",
-    "editor.multiCursorModifier": "ctrlCmd"
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.tabCompletion": "on",
+    "editor.snippetSuggestions": "top",
+    "editor.action.goToTypeDefinition": "on"
   }
 }

@@ -5,8 +5,9 @@ import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import useComponentVisible from '../../utils/useComponentVisible'
 import { Link } from 'gatsby'
-import { TorusContext } from '../../contextProvider/torusProvider'
-import { ProveWalletContext } from '../../contextProvider/proveWalletProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
+
+import { FiExternalLink } from 'react-icons/fi'
 
 const AccountDetails = styled.div`
   width: 200px;
@@ -74,10 +75,10 @@ const UserDetails = () => {
     setIsComponentVisible
   } = useComponentVisible(false)
 
-  const { logout, user, balance, network } = useContext(TorusContext)
-  const { proveWallet, isWalletProved } = useContext(ProveWalletContext)
-
-  const address = (user?.addresses && user.addresses[0]) || ''
+  const { isLoggedIn, logout, user, balance, network } = useWallet()
+  console.log(`jpf user : ${JSON.stringify(user, null, 2)}`)
+  console.log(`typeof user ---> : ${typeof user.getName}`)
+  const address = isLoggedIn ? user.getWalletAddress() : '?'
   const truncAddress = `${address.substring(0, 14)}...${address.substring(
     address.length - 4,
     address.length
@@ -102,7 +103,7 @@ const UserDetails = () => {
         <img
           alt=''
           style={{ width: '30px', borderRadius: '15px' }}
-          src={user?.profileImage}
+          src={user?.avatar}
           className='avatarimage'
         />
 
@@ -115,9 +116,7 @@ const UserDetails = () => {
             color: 'secondary'
           }}
         >
-          {/(.+)@(.+){2,}\.(.+){2,}/.test(user?.name)
-            ? user?.name?.toUpperCase()
-            : user?.name}
+          {user.getName()}
         </Text>
       </Button>
       {isComponentVisible ? (
@@ -173,18 +172,7 @@ const UserDetails = () => {
               My Account
             </MenuItem>
           </Link>
-          {!isWalletProved && (
-            <MenuItem
-              sx={{
-                variant: 'text.medium'
-              }}
-              onClick={proveWallet}
-              className='boxheight'
-            >
-              Verify Your Wallet
-            </MenuItem>
-          )}
-          <Link
+          <a
             href='https://app.tor.us'
             target='_blank'
             rel='noopener noreferrer'
@@ -196,9 +184,9 @@ const UserDetails = () => {
               }}
               className='shadow boxheight'
             >
-              Settings
+              My Wallet <FiExternalLink size='18px' />
             </MenuItem>
-          </Link>
+          </a>
           <Link
             to='/account?data=all&view=projects'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}

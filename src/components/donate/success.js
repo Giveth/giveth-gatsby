@@ -8,7 +8,7 @@ import { base64ToBlob, getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../confetti'
 import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
 const Content = styled.div`
@@ -37,7 +37,7 @@ const DownloadReceipt = styled(Box)`
 `
 
 const Success = props => {
-  const { isLoggedIn, login } = useContext(TorusContext)
+  const { isLoggedIn, login } = useWallet()
   const { project, sessionId, hash } = props
   const [pdfBase64, setPdfBase64] = useState(null)
 

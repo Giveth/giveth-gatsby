@@ -6,10 +6,12 @@ export default {
     background: '#fff',
     headerbackground: '#ffffffcc',
     primary: '#C2449F',
-    hover: '#DB5CB8',
+    hover: '#B93193',
     muted: '#DFDAE8',
     secondary: '#303B72',
     secondaryDark: '#29325E',
+    secondaryHover: '#16215B',
+    secondaryMuted: '#CBCFE5',
     accent: '#109CF1',
     attention: '#E01C6B',
     bodyDark: '#6B7087',
@@ -247,8 +249,50 @@ export default {
         outline: 'none'
       },
       '&:hover': {
-        scale: '1.1'
+        backgroundColor: 'hover'
       }
+    },
+    secondary: {
+      cursor: 'pointer',
+      fontFamily: 'body',
+      py: '1rem',
+      px: '1.5rem',
+      fontSize: 3,
+      fontWeight: 'bold',
+      lineHeight: 'button',
+      textTransform: ['capitalize', 'uppercase'],
+      borderRadius: '88px',
+      backgroundColor: 'secondary',
+      '&:focus': {
+        outline: 'none'
+      },
+      '&:hover': {
+        backgroundColor: 'secondaryHover'
+      }
+    },
+    disabled: {
+      cursor: 'pointer',
+      fontFamily: 'body',
+      py: '1rem',
+      px: '1.5rem',
+      fontSize: 3,
+      fontWeight: 'bold',
+      lineHeight: 'button',
+      textTransform: ['capitalize', 'uppercase'],
+      borderRadius: '88px',
+      backgroundColor: 'muted'
+    },
+    disabledSecondary: {
+      cursor: 'pointer',
+      fontFamily: 'body',
+      py: '1rem',
+      px: '1.5rem',
+      fontSize: 3,
+      fontWeight: 'bold',
+      lineHeight: 'button',
+      textTransform: ['capitalize', 'uppercase'],
+      borderRadius: '88px',
+      backgroundColor: 'secondaryMuted'
     },
     big: {
       cursor: 'pointer',
@@ -264,7 +308,7 @@ export default {
         outline: 'none'
       },
       '&:hover': {
-        scale: '1.1'
+        backgroundColor: 'hover'
       }
     },
     small: {
@@ -294,7 +338,10 @@ export default {
       fontSize: 2,
       textTransform: 'capitalize',
       borderRadius: '48px',
-      outline: 'none'
+      outline: 'none',
+      '&:hover': {
+        backgroundColor: 'secondaryHover'
+      }
     },
     tiny: {
       cursor: 'pointer',
@@ -313,8 +360,14 @@ export default {
       textDecoration: 'none',
       color: 'primary',
       cursor: 'pointer',
+      fontWeight: 'body',
       '&:hover': {
-        color: 'accent'
+        color: 'hover',
+        fontWeight: 'heading'
+      },
+      '&:active': {
+        color: 'secondary',
+        fontWeight: 'heading'
       }
     },
     secondary: {
@@ -322,8 +375,14 @@ export default {
       textDecoration: 'none',
       color: 'secondary',
       cursor: 'pointer',
+      fontWeight: 'body',
       '&:hover': {
-        color: 'primary'
+        color: 'secondaryHover',
+        fontWeight: 'heading'
+      },
+      '&:active': {
+        color: 'secondary',
+        fontWeight: 'heading'
       }
     },
     nav: {
@@ -331,8 +390,14 @@ export default {
       textDecoration: 'none',
       color: 'primary',
       cursor: 'pointer',
+      fontWeight: 'body',
       '&:hover': {
-        color: 'accent'
+        color: 'hover',
+        fontWeight: 'heading'
+      },
+      '&:active': {
+        color: 'secondary',
+        fontWeight: 'heading'
       }
     },
     readmore: {
@@ -346,7 +411,7 @@ export default {
       fontSize: '2',
       lineHeight: '18px',
       '&:hover': {
-        color: 'accent'
+        color: 'secondary'
       }
     },
     light: {
@@ -356,7 +421,7 @@ export default {
       cursor: 'pointer',
       fontWeight: 'medium',
       '&:hover': {
-        color: 'accent'
+        color: 'hover'
       }
     },
     grey: {
@@ -365,7 +430,7 @@ export default {
       color: 'bodyDark',
       cursor: 'pointer',
       '&:hover': {
-        color: 'accent'
+        color: 'hover'
       }
     }
   },

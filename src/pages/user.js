@@ -8,8 +8,10 @@ import { PublicProfileView } from '../components/user'
 import { FETCH_USER_PROJECTS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import { USERS_DONATIONS } from '../apollo/gql/donations'
+import Web3 from 'web3'
 
 const User = props => {
+  console.log({ props })
   const { address } = props
   const client = useApolloClient()
 
@@ -25,11 +27,10 @@ const User = props => {
         const { data } = await client.query({
           query: GET_USER_BY_ADDRESS,
           variables: {
-            address: address
+            address: address?.toLowerCase()
           }
         })
         setUser(data?.userByAddress)
-
         // GET DONATIONS
         const { data: donations } = await client.query({
           query: USERS_DONATIONS,

@@ -18,7 +18,8 @@ const HighFive = ({
   projectId,
   projectImage,
   projectTitle,
-  projectDescription
+  projectDescription,
+  newProject
 }) => {
   const shareTitle = `Make a donation today to ${project?.title}!`
   const url = `${window.location.origin}/project/${addedProject?.slug}`
@@ -117,6 +118,18 @@ const HighFive = ({
               <FaLinkedin size='24px' />
             </LinkedinShareButton>
           </Flex>
+          {/* not working yet <Link to={`/create`} onClick={newProject}>
+            <Text
+              sx={{
+                fontSize: 3,
+                fontFamily: 'body',
+                color: 'secondary',
+                mt: '16px'
+              }}
+            >
+              Add another project
+            </Text>
+          </Link> */}
           <Link to={`/project/${addedProject?.slug}`}>
             <Text
               sx={{

@@ -8,7 +8,6 @@ import theme from '../gatsby-plugin-theme-ui/index'
 
 // import iconShare from '../images/icon-share.svg'
 // import iconHeart from '../images/icon-heart.svg'
-// import { TorusContext } from '../contextProvider/torusProvider'
 
 import ProjectImageGallery1 from '../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../images/svg/create/projectImageGallery2.svg'
@@ -121,7 +120,6 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectListing = props => {
-  // const { balance } = useContext(TorusContext)
   const [hoverStyle, setHoverStyle] = React.useState(false)
   return (
     <Box

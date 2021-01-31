@@ -5,9 +5,10 @@ import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
-import { TorusContext } from '../../contextProvider/torusProvider'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import { BsArrowLeft } from 'react-icons/bs'
 import LoadingModal from '../../components/loadingModal'
+import { GET_USER_BY_ADDRESS } from '../../apollo/gql/auth'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import AccountTop from '../../components/account/AccountTop'
@@ -27,10 +28,8 @@ const UserSpan = styled.span`
 `
 
 const AccountPage = props => {
-  console.log('Render AccountPage')
-
-  const { user, isLoggedIn } = React.useContext(TorusContext)
-  const fromWalletAddress = user?.addresses && user.addresses[0]
+  const { user, isLoggedIn } = useWallet()
+  const fromWalletAddress = user.getWalletAddress()
   const storageWallets =
     typeof localStorage !== 'undefined'
       ? localStorage.getItem('giveth_donation_wallets')
@@ -46,10 +45,12 @@ const AccountPage = props => {
   })
   const userDonations = donations?.donationsFromWallets
 
+  console.log(`debug: account/index user : ${JSON.stringify(user, null, 2)}`)
+
   const { data: userProjects, loading: projectsLoading } = useQuery(
     FETCH_USER_PROJECTS,
     {
-      variables: { admin: parseFloat(user?.userIDFromDB || -1) },
+      variables: { admin: parseFloat(user?.id || -1) },
       fetchPolicy: 'network-only'
     }
   )
@@ -65,6 +66,7 @@ const AccountPage = props => {
     return (
       <>
         <AccountTop />
+        <Flex sx={{ height: '80vh' }} />
         <LoadingModal isOpen={true} />
       </>
     )

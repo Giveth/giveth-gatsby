@@ -11,7 +11,7 @@ import Logo from './content/Logo'
 import { useLocation } from '@reach/router'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
-import { TorusContext } from '../contextProvider/torusProvider'
+import { useWallet } from '../contextProvider/WalletProvider'
 
 // import graphics
 import iconVerticalLine from '../images/icon-vertical-line.svg'
@@ -129,7 +129,10 @@ const NavLink = styled(Link)`
   line-height: 21px;
   text-decoration: none;
   :hover {
-    color: ${theme.colors.accent};
+    color: ${theme.colors.hover};
+  }
+  :active {
+    color: ${theme.colors.secondary};
   }
 `
 
@@ -144,7 +147,10 @@ const CreateLink = styled.div`
   color: ${theme.colors.primary};
   align-self: center;
   :hover {
-    color: ${theme.colors.accent};
+    color: ${theme.colors.hover};
+  }
+  :active {
+    color: ${theme.colors.secondary};
   }
 `
 
@@ -158,7 +164,7 @@ const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
   const location = useLocation()
-  const { isLoggedIn } = React.useContext(TorusContext)
+  const { isLoggedIn } = useWallet()
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -183,6 +189,10 @@ const Header = ({ siteTitle, isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
+    return true
+    console.log('debug: goCreate Welcom')
+    console.log(`debug: isLoggedIn : ${JSON.stringify(isLoggedIn, null, 2)}`)
+
     if (!isLoggedIn) return triggerPopup('Welcome')
     navigate('/create')
   }
@@ -288,7 +298,10 @@ const Header = ({ siteTitle, isHomePage }) => {
             {isMobile ? null : (
               <Flex>
                 {pathname !== 'projects' && (
-                  <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                  // <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                  <NavLink to='/create' sx={{ textTransform: 'upperCase' }}>
+                    Create a project
+                  </NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>

@@ -5,7 +5,7 @@ import { getEtherscanPrefix } from '../../utils'
 export const ProfileHeader = props => {
   const { user, donations, projects } = props
   const etherscanPrefix = getEtherscanPrefix()
-
+  console.log({ user })
   const TitleBox = ({ title, content }) => {
     return (
       <Box
@@ -67,6 +67,18 @@ export const ProfileHeader = props => {
               }}
             >
               {user?.walletAddress}
+            </Text>
+          </Link>
+          <Link sx={{ textDecoration: 'none' }} href={user?.url}>
+            <Text
+              sx={{
+                color: 'secondary',
+                fontSize: 3,
+                cursor: 'pointer',
+                wordBreak: 'break-all'
+              }}
+            >
+              {user?.url}
             </Text>
           </Link>
         </Box>
