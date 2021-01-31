@@ -8,15 +8,13 @@ import { getToken } from '../services/token'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
 import { PopupContext } from '../contextProvider/popupProvider'
+import detectEthereumProvider from '@metamask/detect-provider'
 
 console.log(`*** User : ${JSON.stringify(User, null, 2)}`)
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
 
-let wallet = {}
-if (typeof window === 'object') {
-  wallet = getWallet('metamask')
-}
+let wallet = false
 
 function useWallet () {
   const context = React.useContext(WalletContext)
@@ -42,9 +40,25 @@ function WalletProvider (props) {
 
   useEffect(() => {
     const initWallet = async () => {
+      const provider = await detectEthereumProvider()
+      if (provider) {
+        wallet = getWallet('metamask')
+      } else {
+        wallet = getWallet('torus')
+      }
+
+      console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
+
       await wallet.init('production', network)
-      wallet.provider.on('accountsChanged', updateUser)
+
+      wallet.provider.on('accountsChanged', () => {
+        if (wallet.type === 'metamask') {
+          console.log('updateUser: accountsChanged')
+          updateUser()
+        }
+      })
     }
+
     initWallet()
   }, [])
 
@@ -90,6 +104,8 @@ function WalletProvider (props) {
   }
 
   async function updateUser (accounts) {
+    console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
+
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
     const balance = await wallet.web3.eth.getBalance(publicAddress)
@@ -98,6 +114,9 @@ function WalletProvider (props) {
     let user
     if (typeof wallet.torus !== 'undefined') {
       const torusUser = await wallet.torus.getUserInfo()
+      torusUser.walletAddresses = []
+      torusUser.walletAddresses.push(publicAddress)
+
       user = new User('torus')
       user.parseTorusUser(torusUser)
     } else {
@@ -107,6 +126,9 @@ function WalletProvider (props) {
     }
 
     const signedMessage = await signMessage('our_secret', publicAddress)
+
+    console.log(`updateUser: user : ${JSON.stringify(user, null, 2)}`)
+    console.log(`signedMessage ---> : ${signedMessage}`)
 
     const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
     user.parseDbUser(dbUser)
@@ -124,12 +146,30 @@ function WalletProvider (props) {
 
   async function login () {
     setLoading(true)
-    if (!wallet.isLoggedIn()) {
+    console.log(
+      `updateUser: typeof wallet : ${JSON.stringify(typeof wallet, null, 2)}`
+    )
+    console.log(
+      `updateUser: wallet.torus : ${JSON.stringify(
+        typeof wallet.torus,
+        null,
+        2
+      )}`
+    )
+    console.log(
+      `updateUser: wallet.isLoggedIn()  : ${JSON.stringify(
+        wallet.isLoggedIn(),
+        null,
+        2
+      )}`
+    )
+
+    if (wallet && !(wallet.isLoggedIn() && isLoggedIn)) {
       await wallet.login()
-    } else {
-      const userInfo = await wallet.torus.getUserInfo()
+      console.log('updateUser: awaiting login')
+      wallet.web3.eth.getAccounts().then(updateUser)
     }
-    wallet.web3.eth.getAccounts().then(updateUser)
+    console.log('updateUser: post')
 
     setLoading(false)
   }
