@@ -172,7 +172,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -183,12 +183,16 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
   const goCreate = async () => {
+    return true
+    console.log('debug: goCreate Welcom')
+    console.log(`debug: isLoggedIn : ${JSON.stringify(isLoggedIn, null, 2)}`)
+
     if (!isLoggedIn) return triggerPopup('Welcome')
     navigate('/create')
   }
@@ -294,7 +298,10 @@ const Header = ({ siteTitle, isHomePage }) => {
             {isMobile ? null : (
               <Flex>
                 {pathname !== 'projects' && (
-                  <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                  // <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                  <NavLink to='/create' sx={{ textTransform: 'upperCase' }}>
+                    Create a project
+                  </NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>

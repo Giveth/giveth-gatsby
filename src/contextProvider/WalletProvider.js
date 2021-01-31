@@ -6,13 +6,17 @@ import * as Auth from '../services/auth'
 import LoadingModal from '../components/loadingModal'
 import { getToken } from '../services/token'
 import { getWallet } from '../wallets'
+import User from '../entities/user'
+import Toast from '../components/toast'
+import detectEthereumProvider from '@metamask/detect-provider'
 
+console.log(`*** User : ${JSON.stringify(User, null, 2)}`)
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
-
+const DEFAULT_WALLET = 'torus'
 let wallet = {}
 if (typeof window === 'object') {
-  wallet = getWallet('torus')
+  wallet = getWallet(DEFAULT_WALLET)
 }
 
 function useWallet() {
@@ -24,14 +28,35 @@ function useWallet() {
 }
 
 function WalletProvider(props) {
+  const localStorageUser = Auth.getUser()
+  const initUser = new User(localStorageUser.walletType, localStorageUser)
+  console.log(`debug: initUser : ${JSON.stringify(initUser, null, 2)}`)
+
+  const [user, setUser] = useState(initUser)
   const [account, setAccount] = useState('')
   const [balance, setBalance] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [user, setUser] = useState(Auth.getUser())
+  console.log(`debug: Auth.checkIfLoggedIn() ---> : ${Auth.checkIfLoggedIn()}`)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
 
+  const initWallet = async () => {
+    // const provider = await detectEthereumProvider()
+    // if (provider) {
+    //   wallet = getWallet('metamask')
+    // } else {
+    //   wallet = getWallet('torus')
+    // }
+
+    // console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
+
+    await wallet.init('production', network)
+    wallet?.provider?.on('accountsChanged', function (accounts) {
+      Toast({ content: 'Account changed', type: 'warn' })
+    })
+  }
+
   useEffect(() => {
-    wallet.init('production', network)
+    initWallet()
   }, [])
 
   async function logout() {
@@ -39,18 +64,12 @@ function WalletProvider(props) {
 
     Auth.handleLogout()
     setIsLoggedIn(false)
-    // if (balancePolling) {
-    //   clearInterval(balancePolling)
-    //   balancePolling = 0
-    // }
     setLoading(false)
   }
 
   async function signMessage(message, publicAddress) {
     try {
       let signedMessage = null
-      console.log({ user })
-
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
         `${customPrefix}${message.length.toString()}`,
@@ -60,16 +79,9 @@ function WalletProvider(props) {
         prefixWithLength,
         Buffer.from(message)
       ])
-      const hashedMsg = keccak256(finalMessage)
-      const send = promisify(wallet.web3.currentProvider.send)
 
-      console.log(
-        `message sending : ${JSON.stringify(
-          [publicAddress, hashedMsg, { customPrefix, customMessage: message }],
-          null,
-          2
-        )}`
-      )
+      const hashedMsg = keccak256(finalMessage)
+      const send = promisify(wallet.web3.currentProvider.sendAsync)
 
       const { result } = await send({
         method: 'eth_sign',
@@ -89,46 +101,80 @@ function WalletProvider(props) {
   }
 
   async function updateUser(accounts) {
-    console.log(`Updating User`)
-    setAccount(accounts[0])
-    const balance = await wallet.web3.eth.getBalance(accounts[0])
-    // .then(balance => {
-    //   setBalance(balance)
-    // })
-    setBalance(balance)
-    const user = await wallet.torus.getUserInfo()
-    user.addresses = accounts
+    console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
 
-    const publicAddress = wallet.web3.utils.toChecksumAddress(
-      user?.addresses[0]
-    )
+    const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
+    setAccount(publicAddress)
+    const balance = await wallet.web3.eth.getBalance(publicAddress)
+    setBalance(balance)
+    // let user
+    let user
+    if (typeof wallet.torus !== 'undefined') {
+      const torusUser = await wallet.torus.getUserInfo()
+      torusUser.walletAddresses = []
+      torusUser.walletAddresses.push(publicAddress)
+      user = new User('torus')
+      user.parseTorusUser(torusUser)
+      // user.addresses = accounts
+    } else {
+      user = new User('other')
+      console.log(`debug: publicAddress ---> : ${publicAddress}`)
+      user.addWalletAddress(publicAddress, true)
+    }
 
     const signedMessage = await signMessage('our_secret', publicAddress)
 
-    const { data, token } = await getToken(user, signedMessage)
-    user.userIDFromDB = data?.userIDFromDB
-    user.profile = data?.profile
+    console.log(`updateUser: user : ${JSON.stringify(user, null, 2)}`)
+    console.log(`signedMessage ---> : ${signedMessage}`)
 
-    localStorage.setItem('token', token)
+    const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
+    user.parseDbUser(dbUser)
+
+    user.setUserId(userIDFromDB)
+    user.setToken(token)
+
     Auth.setUser(user)
+    console.log('debug: setting logged in')
+    console.log(`user : ${JSON.stringify(user, null, 2)}`)
     setIsLoggedIn(true)
     setUser(user)
   }
 
-  async function login() {
-    console.log(`torus: login WalletProvider.login`)
+  async function login({ walletProvider = DEFAULT_WALLET }) {
+    wallet = getWallet(walletProvider)
+    if (walletProvider !== DEFAULT_WALLET) await initWallet()
+    console.log(`torus: login WalletProvider.login`, {
+      wallet,
+      walletProvider
+    })
     console.log(
       `torus: login  wallet.torus is loaded : ${typeof wallet.torus === true}`
     )
-
     setLoading(true)
-    console.log(`wallet.torus.isLoggedIn ---> : ${wallet.torus.isLoggedIn}`)
-    if (!wallet.torus.isLoggedIn) {
+    console.log(
+      `updateUser: typeof wallet : ${JSON.stringify(typeof wallet, null, 2)}`
+    )
+    console.log(
+      `updateUser: wallet.torus : ${JSON.stringify(
+        typeof wallet.torus,
+        null,
+        2
+      )}`
+    )
+    console.log(
+      `updateUser: wallet.isLoggedIn()  : ${JSON.stringify(
+        wallet.isLoggedIn(),
+        null,
+        2
+      )}`
+    )
+
+    if (wallet && !(wallet.isLoggedIn() && isLoggedIn)) {
       await wallet.login()
-    } else {
-      const userInfo = await wallet.torus.getUserInfo()
+      console.log('updateUser: awaiting login')
+      wallet.web3.eth.getAccounts().then(updateUser)
     }
-    wallet.web3.eth.getAccounts().then(updateUser)
+    console.log('updateUser: post')
 
     setLoading(false)
   }
@@ -142,9 +188,6 @@ function WalletProvider(props) {
   }
 
   function isAddressENS(address) {
-    console.log(
-      `isAddressENS ---> : ${address.toLowerCase().indexOf('.eth') > -1}`
-    )
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
@@ -165,7 +208,6 @@ function WalletProvider(props) {
   }
 
   const value = React.useMemo(() => {
-    console.log(`torus: useMemo wallet.web3 ---> : ${wallet.web3}`)
     return {
       login,
       account,
@@ -180,7 +222,6 @@ function WalletProvider(props) {
       getAddressFromENS
     }
   }, [account, balance, isLoggedIn, user, network])
-  //return <WalletContext.Provider value={value} {...props} />
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}

@@ -10,10 +10,10 @@ export async function getToken(user, signedMessage) {
       const { data } = await client.mutate({
         mutation: DO_LOGIN,
         variables: {
-          walletAddress: Web3.utils.toChecksumAddress(user?.addresses[0]),
+          walletAddress: Web3.utils.toChecksumAddress(user?.getWalletAddress()),
           signature: signedMessage,
           email: user?.email,
-          avatar: user?.profileImage,
+          avatar: user?.avatar,
           name: user?.name,
           hostname: window.location.hostname
         }
@@ -24,10 +24,8 @@ export async function getToken(user, signedMessage) {
 
       if (!userIDFromDB) throw new Error('No userId returned from the database')
       return {
-        data: {
-          userIDFromDB,
-          profile: data?.loginWallet?.user
-        },
+        userIDFromDB,
+        dbUser: data?.loginWallet?.user,
         token
       }
     } catch (error) {

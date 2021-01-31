@@ -10,9 +10,9 @@ const DO_LOGIN = gql`
   mutation DoLoginWallet(
     $walletAddress: String!
     $signature: String!
-    $email: String!
-    $avatar: String!
-    $name: String!
+    $email: String
+    $avatar: String
+    $name: String
     $hostname: String!
   ) {
     loginWallet(

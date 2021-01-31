@@ -76,7 +76,9 @@ const UserDetails = () => {
   } = useComponentVisible(false)
 
   const { isLoggedIn, logout, user, balance, network } = useWallet()
-  const address = (user?.addresses && user.addresses[0]) || ''
+  console.log(`jpf user : ${JSON.stringify(user, null, 2)}`)
+  console.log(`typeof user ---> : ${typeof user.getName}`)
+  const address = isLoggedIn ? user.getWalletAddress() : '?'
   const truncAddress = `${address.substring(0, 14)}...${address.substring(
     address.length - 4,
     address.length
@@ -101,7 +103,7 @@ const UserDetails = () => {
         <img
           alt=''
           style={{ width: '30px', borderRadius: '15px' }}
-          src={user?.profileImage}
+          src={user?.avatar}
           className='avatarimage'
         />
 
@@ -114,9 +116,7 @@ const UserDetails = () => {
             color: 'secondary'
           }}
         >
-          {/(.+)@(.+){2,}\.(.+){2,}/.test(user?.name)
-            ? user?.name?.toUpperCase()
-            : user?.name}
+          {user.getName()}
         </Text>
       </Button>
       {isComponentVisible ? (

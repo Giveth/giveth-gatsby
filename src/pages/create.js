@@ -229,6 +229,8 @@ const IndexPage = ({ data, location }) => {
   }
 
   function ProjectForm () {
+    console.log('debug: in ProjectForm')
+
     if (!projectAdded && !projectId) {
       return (
         <>

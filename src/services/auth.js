@@ -6,18 +6,27 @@ export const getUser = () =>
     ? JSON.parse(window.localStorage.getItem(gatsbyUser))
     : {}
 
-export function setUser(user) {
+export function setUser (user) {
   return window.localStorage.setItem(gatsbyUser, JSON.stringify(user))
 }
 
-export function handleLogout() {
+export function handleLogout () {
   logout()
 }
 
 export const checkIfLoggedIn = () => {
   const user = getUser()
 
-  return !!user.addresses
+  console.log(`debug: checkIfLoggd in user : ${JSON.stringify(user, null, 2)}`)
+  console.log(
+    `debug: checkIfLoggd in !!user.walletAddresses : ${JSON.stringify(
+      !!user.walletAddresses,
+      null,
+      2
+    )}`
+  )
+
+  return !!user.walletAddresses
 }
 
 export const logout = (callback = () => {}) => {

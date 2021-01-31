@@ -35,7 +35,7 @@ const customStyles = {
   }
 }
 
-function EditProfileModal(props) {
+function EditProfileModal (props) {
   const { user } = props
   const wallet = useWallet()
   const { register, handleSubmit, watch, errors } = useForm()
@@ -87,7 +87,7 @@ function EditProfileModal(props) {
       })
       if (response?.updateUser === true) {
         props.onRequestClose()
-        wallet?.updateUser && wallet.updateUser(user?.addresses)
+        wallet?.updateUser && wallet.updateUser(user?.walletAddresses)
         return Toast({
           content: 'Profile updated successfully',
           type: 'success'
