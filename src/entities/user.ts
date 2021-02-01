@@ -117,7 +117,6 @@ export default class User {
     this.avatar = torusUser.profileImage || torusUser.avatar
     this.name = torusUser.name
     this.email = torusUser.email
-    this.walletAddresses = torusUser.addresses || torusUser.walletAddresses
     this.id = torusUser.id
     // this.addWalletAddress(walletAddress, true)
     torusUser.walletAddresses.forEach(address => {

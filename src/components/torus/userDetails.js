@@ -4,6 +4,7 @@ import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import useComponentVisible from '../../utils/useComponentVisible'
+import Jdenticon from 'react-jdenticon'
 import { Link } from 'gatsby'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
@@ -100,12 +101,21 @@ const UserDetails = () => {
         }}
         onClick={() => setIsComponentVisible(!isComponentVisible)}
       >
-        <img
-          alt=''
-          style={{ width: '30px', borderRadius: '15px' }}
-          src={user?.avatar}
-          className='avatarimage'
-        />
+        {user?.avatar ? (
+          <img
+            alt=''
+            style={{
+              width: '30px',
+              height: '30px',
+              borderRadius: '15px'
+            }}
+            onerror={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}
+            src={user?.avatar}
+            className='avatarimage'
+          />
+        ) : (
+          <Jdenticon size='32' value={address} />
+        )}
 
         <Text
           p={1}

@@ -15,6 +15,7 @@ import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
 import { projectWalletAlreadyUsed, getProjectWallet } from './utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
+import { PopupContext } from '../../contextProvider/popupProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
@@ -34,11 +35,13 @@ import Toast from '../toast'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
+  const [incompleteProfile, setIncompleteProfile] = useState(false)
   const { isLoggedIn, user } = useWallet()
   console.log(`debug: CreateProjectForm ---> : ${isLoggedIn}`)
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
+  const usePopup = React.useContext(PopupContext)
   const client = useApolloClient()
 
   const [currentStep, setCurrentStep] = useState(0)
@@ -209,6 +212,9 @@ const CreateProjectForm = props => {
     }
     if (!isLoggedIn) {
       navigate('/', { state: { welcome: true } })
+    } else if (!user?.name) {
+      usePopup?.triggerPopup('IncompleteProfile')
+      setIncompleteProfile(true)
     } else {
       checkProjectWallet()
     }
@@ -219,6 +225,10 @@ const CreateProjectForm = props => {
     const localCreateForm = window?.localStorage.getItem('create-form')
     localCreateForm && setFormData(JSON.parse(localCreateForm))
   }, [])
+
+  if (incompleteProfile) {
+    return null
+  }
 
   if (loading) {
     return (
@@ -326,14 +336,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep (currentStep) {
+function isCategoryStep(currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep (currentStep, steps) {
+function isFinalConfirmationStep(currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep (currentStep, steps) {
+function isLastStep(currentStep, steps) {
   return currentStep === steps.length - 1
 }
