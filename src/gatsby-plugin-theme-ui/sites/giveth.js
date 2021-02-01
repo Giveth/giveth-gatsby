@@ -21,7 +21,7 @@ export default {
     blue: '#3F91E4',
     lightBlue: '#F0F6FC',
     lightestBlue: '#EDF0FA',
-    yellow: '#FFEF9D',
+    yellow: 'rgba(253, 239, 167, 1)',
     warnYellow: '#F6AB2F',
     green: '#37B4A9',
     greenishBlue: '#36CDD7',

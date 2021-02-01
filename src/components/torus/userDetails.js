@@ -123,7 +123,8 @@ const UserDetails = () => {
             variant: 'text.default',
             fontWeight: 'normal',
             ml: 2,
-            color: 'secondary'
+            color: 'secondary',
+            textTransform: 'capitalize'
           }}
         >
           {user.getName()}

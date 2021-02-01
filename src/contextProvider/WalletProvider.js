@@ -3,6 +3,8 @@ import Web3 from 'web3'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import * as Auth from '../services/auth'
+import { useApolloClient } from '@apollo/client'
+import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
 import { getToken } from '../services/token'
 import { getWallet } from '../wallets'
@@ -38,6 +40,7 @@ function WalletProvider(props) {
   const [loading, setLoading] = useState(false)
   console.log(`debug: Auth.checkIfLoggedIn() ---> : ${Auth.checkIfLoggedIn()}`)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
+  const client = useApolloClient()
 
   const initWallet = async () => {
     // const provider = await detectEthereumProvider()
@@ -69,6 +72,7 @@ function WalletProvider(props) {
 
   async function signMessage(message, publicAddress) {
     try {
+      console.log('look at here', { message, publicAddress })
       let signedMessage = null
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
@@ -98,6 +102,20 @@ function WalletProvider(props) {
     } catch (error) {
       console.log('Signing Error!', error)
     }
+  }
+
+  async function updateUserInfoOnly() {
+    if (!user) return null
+    const { data } = await client.query({
+      query: GET_USER_BY_ADDRESS,
+      variables: {
+        address: user?.walletAddresses[0]?.toLowerCase()
+      }
+    })
+    user.parseDbUser(data?.userByAddress)
+    console.log('UPDATED: ', { user })
+    Auth.setUser(user)
+    setUser(user)
   }
 
   async function updateUser(accounts) {
@@ -214,6 +232,7 @@ function WalletProvider(props) {
       balance,
       isLoggedIn,
       updateUser,
+      updateUserInfoOnly,
       logout,
       user,
       network,
