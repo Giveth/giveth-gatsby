@@ -119,7 +119,7 @@ function EditProfileModal(props) {
         <Flex
           sx={{
             flexDirection: 'column',
-            minWidth: '250px',
+            minWidth: '350px',
             p: 4,
             alignItems: 'center'
           }}
