@@ -1,7 +1,9 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { Avatar, Button, Box, Flex, Text, jsx } from 'theme-ui'
+import { Button, Box, Flex, Text, jsx } from 'theme-ui'
+import Notification from '../notification'
+import Avatar from '../avatar'
 import EditProfileModal from './editProfileModal'
 
 const MyAccount = ({ info }) => {
@@ -28,9 +30,21 @@ const MyAccount = ({ info }) => {
         onRequestClose={() => setOpenModal(false)}
         user={user}
       />
+      {!user?.name && (
+        <Notification
+          content='Please finish setting up your public profile.'
+          action={{ title: 'Complete Profile', do: () => setOpenModal(true) }}
+          type='warn'
+        />
+      )}
+
       <Flex>
-        <Avatar src={user?.profileImage} sx={{ width: 100, height: 100 }} />
-        <Box sx={{ ml: '27px' }}>
+        <Avatar
+          img={user?.profileImage || user?.avatar}
+          size={100}
+          address={user.getWalletAddress()}
+        />
+        <Box sx={{ ml: '27px', textAlign: 'flex-end' }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
           <Text

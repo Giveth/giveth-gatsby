@@ -21,7 +21,6 @@ export async function getToken(user, signedMessage) {
 
       const token = data?.loginWallet?.token
       const userIDFromDB = data?.loginWallet?.user?.id
-
       if (!userIDFromDB) throw new Error('No userId returned from the database')
       return {
         userIDFromDB,

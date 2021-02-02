@@ -34,7 +34,6 @@ export default class User {
   parseInitUser(initUser) {
     if(this.walletType === 'torus') {
       console.log(`parseInitUser initUser : ${JSON.stringify(initUser, null, 2)}`)
-      
       this.parseTorusUser(initUser, true) 
     } else {
       console.log(`JJJ initUser : ${JSON.stringify(initUser, null, 2)}`)
@@ -43,6 +42,7 @@ export default class User {
       this.walletAddresses = initUser.walletAddresses
       this.id = initUser.id
       this.token = initUser.token
+      this.parseDbUser(initUser)
     }
   }
 
@@ -55,7 +55,7 @@ export default class User {
     this.avatar = dbUser.avatar
     this.email = dbUser.email
     this.id = dbUser.id
-    this.token = dbUser.firstName
+    this.firstName = dbUser.firstName
     this.lastName = dbUser.lastName
     this.location = dbUser.location
     this.name = dbUser.name
@@ -117,7 +117,6 @@ export default class User {
     this.avatar = torusUser.profileImage || torusUser.avatar
     this.name = torusUser.name
     this.email = torusUser.email
-    this.walletAddresses = torusUser.addresses || torusUser.walletAddresses
     this.id = torusUser.id
     // this.addWalletAddress(walletAddress, true)
     torusUser.walletAddresses.forEach(address => {
