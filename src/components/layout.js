@@ -23,6 +23,7 @@ import { PopupProvider } from '../contextProvider/popupProvider'
 import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
 import Footer from './footer'
+import Toast from './toast'
 import Popup from './popup'
 import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify'
@@ -74,14 +75,29 @@ const CookieBanner = styled(Flex)`
 
 const CookiesBanner = () => {
   const [cookiesAccepted, setCookiesAccepted] = React.useState('none')
-
+  const [softLaunchSeen, setSoftLaunchSeen] = React.useState('none')
   React.useEffect(() => {
-    const accepted =
+    const cookies =
       typeof window !== 'undefined' &&
       window.localStorage.getItem('cookiesAccepted')
-    // console.log({ accepted })
-    setCookiesAccepted(accepted)
+    setCookiesAccepted(cookies)
+    const softLaunch =
+      typeof window !== 'undefined' &&
+      window.localStorage.getItem('softLaunchSeen')
+    if (!softLaunch) {
+      setSoftLaunchSeen('false')
+      // now the user has seen it
+      window.localStorage.setItem('softLaunchSeen', 'true')
+    } else {
+      setSoftLaunchSeen('true')
+    }
   }, [])
+  if (softLaunchSeen === 'false') {
+    Toast({
+      content: `We're in Softlaunch mode`,
+      type: 'info'
+    })
+  }
   if (cookiesAccepted || cookiesAccepted === 'none') return null
   // TODO: We may build this reusable for possible future banners on the app
   return (

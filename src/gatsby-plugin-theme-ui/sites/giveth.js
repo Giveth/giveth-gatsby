@@ -16,6 +16,7 @@ export default {
     attention: '#E01C6B',
     bodyDark: '#6B7087',
     bodyLight: '#AAAFCA',
+    lightGray: '#F3F5FB',
     softGray: '#F4F6FC',
     anotherGrey: '#C9D0E8',
     blue: '#3F91E4',
