@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Web3 from 'web3'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
@@ -110,17 +110,19 @@ function WalletProvider(props) {
       query: GET_USER_BY_ADDRESS,
       variables: {
         address: user?.walletAddresses[0]?.toLowerCase()
-      }
+      },
+      fetchPolicy: 'network-only'
     })
-    user.parseDbUser(data?.userByAddress)
-    console.log('UPDATED: ', { user })
-    Auth.setUser(user)
-    setUser(user)
+    const localStorageUser = Auth.getUser()
+    const newUser = new User(localStorageUser.walletType, localStorageUser)
+    newUser.parseDbUser(data?.userByAddress)
+    setUser(newUser)
+    Auth.setUser(newUser)
   }
 
   async function updateUser(accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
-
+    if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
     const balance = await wallet.web3.eth.getBalance(publicAddress)

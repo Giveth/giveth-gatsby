@@ -76,6 +76,11 @@ function EditProfileModal(props) {
   const onSubmit = async data => {
     try {
       const { firstName, lastName, location, url } = data
+      if (!firstName && !lastName && !location && !url)
+        return Toast({
+          content: 'Please fill at least one field',
+          type: 'error'
+        })
       const newProfile = {
         firstName: firstName || wallet?.user?.firstName || '',
         lastName: lastName || wallet?.user?.lastName || '',
@@ -85,6 +90,7 @@ function EditProfileModal(props) {
       const { data: response, error } = await updateUser({
         variables: newProfile
       })
+      console.log('new year', { data, response })
       if (response?.updateUser === true) {
         props.onRequestClose()
         wallet?.updateUser && wallet.updateUserInfoOnly()
