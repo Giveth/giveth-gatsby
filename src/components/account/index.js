@@ -29,15 +29,8 @@ const UserSpan = styled.span`
 const AccountPage = props => {
   const { user, isLoggedIn } = useWallet()
   const fromWalletAddress = user.getWalletAddress()
-  const storageWallets =
-    typeof localStorage !== 'undefined'
-      ? localStorage.getItem('giveth_donation_wallets')
-      : ''
 
-  const userWallets = storageWallets
-    ? storageWallets.split(',').concat(fromWalletAddress)
-    : [fromWalletAddress]
-
+  const userWallets = user.walletAddresses
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
     variables: { fromWalletAddresses: userWallets },
     fetchPolicy: 'network-only'

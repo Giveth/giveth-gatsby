@@ -3,8 +3,30 @@ import * as Auth from '../services/auth'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
 import Web3 from 'web3'
+import Logger from '../Logger'
+/**
+ * Ok the user has a token, but is it still valid?
+ * @param {} user
+ * @param {*} signedMessage
+ */
+export async function validateAuthToken (token) {
+  try {
+    const { data } = await client.mutate({
+      mutation: VALIDATE_TOKEN,
+      variables: {
+        token
+      }
+    })
 
-export async function getToken(user, signedMessage) {
+    const isValid = data.validateToken
+    return isValid
+  } catch (error) {
+    console.error('Error in token login', error)
+    Logger.captureException(error)
+  }
+}
+
+export async function getToken (user, signedMessage) {
   if (signedMessage) {
     try {
       const { data } = await client.mutate({
@@ -29,7 +51,7 @@ export async function getToken(user, signedMessage) {
       }
     } catch (error) {
       console.log('Error in token login', error)
-      throw new Error(error)
+      Logger.captureException(error)
     }
   }
 }

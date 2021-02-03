@@ -6,7 +6,7 @@ import * as Auth from '../services/auth'
 import { useApolloClient } from '@apollo/client'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
-import { getToken } from '../services/token'
+import { getToken, validateAuthToken } from '../services/token'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
 import Toast from '../components/toast'
@@ -17,7 +17,7 @@ const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
 let wallet = {}
 
-function useWallet() {
+function useWallet () {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -25,7 +25,7 @@ function useWallet() {
   return context
 }
 
-function WalletProvider(props) {
+function WalletProvider (props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
   console.log(`debug: initUser : ${JSON.stringify(initUser, null, 2)}`)
@@ -62,7 +62,7 @@ function WalletProvider(props) {
     initWallet()
   }, [])
 
-  async function logout() {
+  async function logout () {
     setLoading(true)
 
     Auth.handleLogout()
@@ -70,7 +70,7 @@ function WalletProvider(props) {
     setLoading(false)
   }
 
-  async function signMessage(message, publicAddress) {
+  async function signMessage (message, publicAddress) {
     try {
       console.log('look at here', { message, publicAddress })
       let signedMessage = null
@@ -104,7 +104,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function updateUserInfoOnly() {
+  async function updateUserInfoOnly () {
     if (!user) return null
     const { data } = await client.query({
       query: GET_USER_BY_ADDRESS,
@@ -120,7 +120,7 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
-  async function updateUser(accounts) {
+  async function updateUser (accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
@@ -160,7 +160,12 @@ function WalletProvider(props) {
     setUser(user)
   }
 
-  async function login({ walletProvider }) {
+  async function validateToken () {
+    const isValid = await validateAuthToken(Auth.getUserToken())
+    return isValid
+  }
+
+  async function login ({ walletProvider }) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
@@ -203,7 +208,7 @@ function WalletProvider(props) {
     }
   }
 
-  function isWalletAddressValid(address) {
+  function isWalletAddressValid (address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -211,11 +216,11 @@ function WalletProvider(props) {
     }
   }
 
-  function isAddressENS(address) {
+  function isAddressENS (address) {
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function getAddressFromENS(address) {
+  async function getAddressFromENS (address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {
@@ -234,6 +239,7 @@ function WalletProvider(props) {
   const value = React.useMemo(() => {
     return {
       login,
+      validateToken,
       ethEnabled,
       account,
       balance,

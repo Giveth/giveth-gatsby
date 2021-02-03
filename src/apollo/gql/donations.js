@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 const SAVE_DONATION = gql`
-  mutation($transactionId: String!, $anonymous: Boolean!) {
-    saveDonation(transactionId: $transactionId, anonymous: $anonymous)
+  mutation($transactionId: String!) {
+    saveDonation(transactionId: $transactionId)
   }
 `
 const USERS_DONATIONS = gql`

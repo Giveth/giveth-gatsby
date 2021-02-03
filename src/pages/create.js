@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
-import { graphql, navigate } from 'gatsby'
+import { graphql, navigate, Link } from 'gatsby'
 import Web3 from 'web3'
 import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
@@ -16,6 +16,8 @@ import HighFive from '../components/create-project-form/highFive'
 import fetch from 'isomorphic-fetch'
 import { useWallet } from '../contextProvider/WalletProvider'
 import GithubIssue from '../components/GithubIssue'
+import Logger from '../Logger'
+import { logout } from '../services/auth'
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
 const IndexPage = ({ data, location }) => {
@@ -92,13 +94,27 @@ const IndexPage = ({ data, location }) => {
         window?.localStorage.removeItem('create-form')
       }
     } catch (error) {
-      console.log(`Error adding project: ---> : ${error.message}`)
-      console.log(`${JSON.stringify(projectData, null, 2)}`)
       if (error.message === 'Access denied') {
-        // navigate('/', { state: { welcome: true } })
+        Logger.captureException(error)
+        logout(
+          setErrorMessage(
+            <>
+              <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
+                {`We're so sorry but ${error.message}`}
+              </Text>
+              <Text sx={{ variant: 'text.default' }}>
+                We have logged you out to resolve this.
+              </Text>
+              <Text sx={{ variant: 'text.default' }}>
+                <Link to='/'>Please login and start again</Link>
+              </Text>
+            </>
+          )
+        )
+      } else {
+        setErrorMessage(error.message)
       }
       setInError(true)
-      setErrorMessage(error.message)
     }
   }
 
@@ -215,9 +231,9 @@ const IndexPage = ({ data, location }) => {
             <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
               Something went wrong while adding your project
             </Text>
-            <Text sx={{ variant: 'headings.h3', color: 'secondary', mb: 3 }}>
-              {errorMessage}
-            </Text>
+
+            {errorMessage}
+
             <Text sx={{ variant: 'headings.h4', color: 'secondary', mb: 3 }}>
               Please report this issue
             </Text>
