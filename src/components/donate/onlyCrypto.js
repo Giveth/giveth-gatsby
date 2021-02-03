@@ -16,6 +16,7 @@ import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
 import styled from '@emotion/styled'
+import { useWallet } from '../../contextProvider/WalletProvider'
 
 let provider
 
@@ -93,6 +94,7 @@ const OnlyCrypto = props => {
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const { isLoggedIn, user } = useWallet()
 
   const client = useApolloClient()
 
@@ -213,24 +215,16 @@ const OnlyCrypto = props => {
 
       props.setHashSent({ hash, subtotal })
 
+      const loggedInUserId = isLoggedIn ? Number(user.id) : null
       // Send tx hash to our graph
       try {
         const { data } = await client.mutate({
           mutation: SAVE_DONATION,
           variables: {
-            transactionId: hash?.toString(),
-            anonymous: false
+            transactionId: hash?.toString()
           }
         })
         const ob = onboard.getState()
-
-        const storageWallets = localStorage.getItem('giveth_donation_wallets')
-
-        const donatingWallets = storageWallets ? storageWallets.split(',') : []
-        if (donatingWallets.indexOf(ob.address) === -1) {
-          donatingWallets.push(ob.address)
-        }
-        localStorage.setItem('giveth_donation_wallets', donatingWallets)
       } catch (error) {
         console.log({ error })
       }
@@ -542,7 +536,7 @@ const OnlyCrypto = props => {
               }
               const ready = await readyToTransact()
               if (!ready) return
-              sendTx()
+              sendTx(isLoggedIn, user)
             }}
             sx={{
               variant: 'buttons.default',
