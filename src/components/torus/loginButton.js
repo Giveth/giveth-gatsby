@@ -55,13 +55,17 @@ const LoginButton = props => {
     isComponentVisible,
     setIsComponentVisible
   } = useComponentVisible(false)
-  const { login } = useWallet()
+  const { login, ethEnabled } = useWallet()
   return (
     <Container ref={ref}>
       <Text
         p='10px'
         sx={{ variant: 'text.medium', color: 'primary', cursor: 'pointer' }}
-        onClick={() => setIsComponentVisible(!isComponentVisible)}
+        onClick={() =>
+          ethEnabled
+            ? setIsComponentVisible(!isComponentVisible)
+            : login({ walletProvider: 'torus' })
+        }
       >
         Sign in
       </Text>

@@ -164,7 +164,7 @@ const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
   const location = useLocation()
-  const { isLoggedIn } = useWallet()
+  const { isLoggedIn, user } = useWallet()
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -189,11 +189,11 @@ const Header = ({ siteTitle, isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
-    return true
     console.log('debug: goCreate Welcom')
     console.log(`debug: isLoggedIn : ${JSON.stringify(isLoggedIn, null, 2)}`)
 
     if (!isLoggedIn) return triggerPopup('Welcome')
+    if (!user?.name) return triggerPopup('IncompleteProfile')
     navigate('/create')
   }
 
@@ -280,7 +280,7 @@ const Header = ({ siteTitle, isHomePage }) => {
               to='/'
               sx={{
                 display: ['none', 'block', 'block'],
-                color: isHomePage ? 'secondary' : 'primary'
+                color: isHomePage ? 'primary' : 'secondary'
               }}
             >
               Home
@@ -288,7 +288,7 @@ const Header = ({ siteTitle, isHomePage }) => {
             {/* <NavLink to='/causes'>Causes</NavLink> */}
             <NavLink
               to='/projects'
-              sx={{ color: pathname === 'projects' ? 'secondary' : 'primary' }}
+              sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
             >
               Projects
             </NavLink>
@@ -298,10 +298,13 @@ const Header = ({ siteTitle, isHomePage }) => {
             {isMobile ? null : (
               <Flex>
                 {pathname !== 'projects' && (
-                  // <CreateLink onClick={goCreate}>Create a project</CreateLink>
-                  <NavLink to='/create' sx={{ textTransform: 'upperCase' }}>
-                    Create a project
-                  </NavLink>
+                  <CreateLink onClick={goCreate}>Create a project</CreateLink>
+                  // <NavLink
+                  //   to='/create'
+                  //   sx={{ color: 'secondary', textTransform: 'upperCase' }}
+                  // >
+                  //   Create a project
+                  // </NavLink>
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>

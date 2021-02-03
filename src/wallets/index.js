@@ -63,6 +63,7 @@ export const wallets = {
       wallets.torus.web3 = web3Inst
     },
     init: async (buildEnv, network) => {
+      if (wallets?.torus?.torus?.isInitialized) return true
       const torus = new Torus()
       await torus.init({
         buildEnv: buildEnv || 'production',
@@ -71,7 +72,6 @@ export const wallets = {
         whiteLabel: true
       })
       //await torus.login()
-
       wallets.torus.torus = torus
       wallets.torus.setweb3(torus.provider)
       wallets.torus.provider = torus.provider

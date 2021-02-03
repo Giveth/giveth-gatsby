@@ -363,39 +363,51 @@ const OnlyCrypto = props => {
           sx={{
             flexDirection: 'column',
             alignItems: 'center',
-            pt: 5,
+            py: 5,
             px: 4,
             maxWidth: ['85vw', '60vw', '60vw'],
             textAlign: 'center'
           }}
         >
-          <QRCode value={project?.walletAddress} size={250} />
-          <Text sx={{ variant: ['headings.h5', 'headings.h5'], mt: 4, mb: 2 }}>
-            Donate to {project?.title}
-          </Text>
-          <Text sx={{ variant: ['headings.h6', 'headings.h6'] }}>
-            send ETH or ERC20 tokens using this address
-          </Text>
           <Text
             sx={{
-              variant: ['text.medium', 'text.large'],
-              fontWeight: 'bold',
-              py: 4
+              color: 'secondary',
+              variant: ['headings.h4', 'headings.h4'],
+              mt: 2,
+              mb: 4
             }}
           >
-            {project?.walletAddress}
+            Support {project?.title}
           </Text>
-          <Button
-            onClick={() => setIsOpen(false)}
-            sx={{
-              variant: 'buttons.default',
-              padding: '1.063rem 7.375rem',
-              mt: 2
-            }}
-          >
-            Close
-          </Button>
+          <QRCode value={project?.walletAddress} size={250} />
+          <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
+            Please send ETH or ERC20 tokens using this address
+          </Text>
+          <Flex sx={{ backgroundColor: 'lightGray', px: 3 }}>
+            <Text
+              sx={{
+                variant: 'text.default',
+                color: 'secondary',
+                py: 2
+              }}
+            >
+              {project?.walletAddress}
+            </Text>
+          </Flex>
         </Flex>
+        <Text
+          onClick={() => setIsOpen(false)}
+          sx={{
+            cursor: 'pointer',
+            color: 'secondary',
+            position: 'absolute',
+            top: '20px',
+            right: '24px',
+            variant: 'text.default'
+          }}
+        >
+          Close
+        </Text>
       </Modal>
       <AmountSection>
         <AmountContainer sx={{ width: ['100%', '100%'] }}>
@@ -544,7 +556,7 @@ const OnlyCrypto = props => {
               mt: 2
             }}
           >
-            DONATE
+            CONFIRM DONATION
           </Button>
           <SVGLogo
             onClick={() => setIsOpen(true)}

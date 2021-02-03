@@ -1,10 +1,12 @@
 import React from 'react'
 import { Box, Button, Flex, Text } from 'theme-ui'
 import Modal from './modal'
+import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import signupBg from '../images/popup1.png'
+import IncompleteProfileImg from '../images/incomplete_profile.png'
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -14,7 +16,7 @@ import {
   TwitterIcon
 } from 'react-share'
 
-function WelcomePopup ({ close }) {
+function WelcomePopup({ close }) {
   const { isLoggedIn, login } = useWallet()
 
   if (isLoggedIn) {
@@ -68,7 +70,71 @@ function WelcomePopup ({ close }) {
   )
 }
 
-function SharePopup () {
+function IncompleteProfilePopup({ close }) {
+  return (
+    <Flex
+      sx={{
+        alignItems: 'center',
+        flexDirection: 'column',
+        px: '36px',
+        py: 5,
+        textAlign: 'center'
+      }}
+    >
+      <img
+        src={IncompleteProfileImg}
+        style={{ width: '157px' }}
+        alt='no-profile-bg'
+      />
+      <Text sx={{ variant: 'headings.h4', color: 'secondary', mt: 3 }}>
+        Please complete your profile
+      </Text>
+      <Text
+        sx={{
+          variant: 'text.default',
+          color: 'secondary',
+          my: 3,
+          width: '90%'
+        }}
+      >
+        Please finish setting up your public profile before proceeding
+      </Text>
+      <Link to='/account'>
+        <Button
+          mt={4}
+          sx={{
+            width: '290px',
+            variant: 'buttons.default',
+            backgroundColor: 'secondary'
+          }}
+          onClick={() => {
+            try {
+            } catch (error) {
+              console.log({ error })
+            }
+          }}
+        >
+          COMPLETE PROFILE
+        </Button>
+      </Link>
+      <Text
+        sx={{
+          position: 'absolute',
+          top: '15px',
+          right: '32px',
+          color: 'secondary',
+          variant: 'text.default',
+          cursor: 'pointer'
+        }}
+        onClick={close}
+      >
+        Close
+      </Text>
+    </Flex>
+  )
+}
+
+function SharePopup() {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
@@ -109,13 +175,15 @@ function SharePopup () {
   )
 }
 
-function Popup () {
+function Popup() {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
   const setView = () => {
     switch (value?.type) {
       case 'Welcome':
         return <WelcomePopup close={clearPopup} />
+      case 'IncompleteProfile':
+        return <IncompleteProfilePopup close={clearPopup} />
       case 'share':
         return (
           <SharePopup
