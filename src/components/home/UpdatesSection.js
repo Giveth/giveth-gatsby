@@ -81,7 +81,17 @@ const UpdatesSection = () => {
                   sx={{ maxWidth: '500px' }}
                   p={[2, 0, 0]}
                 >
-                  <Text sx={{ variant: 'headings.h5', color: 'secondary' }}>
+                  <Text
+                    as='a'
+                    href={url}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    sx={{
+                      variant: 'headings.h5',
+                      color: 'secondary',
+                      textDecoration: 'none'
+                    }}
+                  >
                     {title}
                   </Text>
                   <Text sx={{ variant: 'text.large', color: 'secondary' }}>
