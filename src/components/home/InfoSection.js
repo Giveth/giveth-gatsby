@@ -34,7 +34,7 @@ const Decorator = styled.div`
   position: absolute;
 `
 
-const InfoSection = () => {
+const InfoSection = ({ content }) => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Main
@@ -59,7 +59,7 @@ const InfoSection = () => {
         }}
       >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          What is Giveth?
+          {content.infoHead}
         </Text>
         <Text
           pb={5}
@@ -68,8 +68,7 @@ const InfoSection = () => {
             color: 'background'
           }}
         >
-          A Decentralized Altruistic Community using blockchain technology to
-          make the world a better place.
+          {content.infoSubtitle}
         </Text>
         <a
           href='https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8'
@@ -87,7 +86,7 @@ const InfoSection = () => {
               mb: '6rem'
             }}
           >
-            Read our story on the future of giving
+            {content.infoButtonText}
           </Button>
         </a>
       </Box>
@@ -104,7 +103,7 @@ const InfoSection = () => {
               py: '1.5rem'
             }}
           >
-            Altruistic
+            {content.feature1}
           </Text>
           <Text
             sx={{
@@ -112,9 +111,7 @@ const InfoSection = () => {
               color: 'background'
             }}
           >
-            We build tools for the common good and support others in doing so as
-            well. On the Giveth DApp, 100% of the funds donated go to the cause
-            the donor intended to support.
+            {content.feature1Text}
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
@@ -126,12 +123,10 @@ const InfoSection = () => {
               py: '1.5rem'
             }}
           >
-            Decentralized
+            {content.feature2}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            We are an open, non-hierarchical global initiative - empowering
-            communities with novel decentralized technologies to address their
-            collective needs.{' '}
+            {content.feature2Text}
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
@@ -143,12 +138,10 @@ const InfoSection = () => {
               py: '1.5rem'
             }}
           >
-            Community
+            {content.feature3}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            We build tools that can create strong bonds and alignment for people
-            and the planet. We see donations as an opportunity to connect Givers
-            to the people on the ground doing the good work.
+            {content.feature3Text}
           </Text>
         </Box>
       </Grid>
@@ -165,21 +158,19 @@ const InfoSection = () => {
               letterSpacing: 'more'
             }}
           >
-            Join the future of giving
+            {content.featureCta}
           </Button>
         </a>
       </Box>
       <Box sx={{ justifySelf: 'center', textAlign: 'center' }}>
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          How it works
+          {content.infoHead2}
         </Text>
         <Text
           pb={5}
           sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}
         >
-          Our system connects the people on the ground directly to the Givers,
-          and provides a level of transparency and accountability no other
-          platform can offer.
+          {content.infoSubtitle2}
         </Text>
       </Box>
       <Grid gap={1} columns={[1, 3, 3]} sx={{ justifyItems: 'center' }}>
@@ -195,7 +186,7 @@ const InfoSection = () => {
           }}
         >
           <Text sx={{ variant: 'headings.h4', color: 'background' }}>
-            For Makers
+            {content.userType1Title}
           </Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
             Create a Project and get donations in crypto.{' '}
