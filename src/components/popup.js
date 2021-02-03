@@ -15,8 +15,10 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+import metamaskLogo from '../images/logos/metamask.svg'
+import torusLogo from '../images/logos/torus.svg'
 
-function WelcomePopup({ close }) {
+function WelcomePopup ({ close }) {
   const { isLoggedIn, login } = useWallet()
 
   if (isLoggedIn) {
@@ -56,13 +58,34 @@ function WelcomePopup({ close }) {
           onClick={() => {
             try {
               close()
-              login()
+              login({ walletProvider: 'metamask' })
             } catch (error) {
               console.log({ error })
             }
           }}
         >
-          SIGN IN
+          <img
+            src={metamaskLogo}
+            alt='metamask logo'
+            style={{ width: '50%' }}
+          />
+        </Button>
+        <Button
+          mt={4}
+          sx={{
+            width: '290px',
+            variant: 'buttons.default'
+          }}
+          onClick={() => {
+            try {
+              close()
+              login({ walletProvider: 'torus' })
+            } catch (error) {
+              console.log({ error })
+            }
+          }}
+        >
+          <img src={torusLogo} alt='torus logo' style={{ width: '41%' }} />
         </Button>
       </Box>
       <img src={signupBg} style={{ width: '100%' }} alt='signup-bg' />
@@ -70,7 +93,7 @@ function WelcomePopup({ close }) {
   )
 }
 
-function IncompleteProfilePopup({ close }) {
+function IncompleteProfilePopup ({ close }) {
   return (
     <Flex
       sx={{
@@ -134,7 +157,7 @@ function IncompleteProfilePopup({ close }) {
   )
 }
 
-function SharePopup() {
+function SharePopup () {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
@@ -175,7 +198,7 @@ function SharePopup() {
   )
 }
 
-function Popup() {
+function Popup () {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
   const setView = () => {

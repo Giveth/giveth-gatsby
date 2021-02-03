@@ -36,7 +36,8 @@ import Toast from '../toast'
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
-  const { isLoggedIn, user } = useWallet()
+  const { isLoggedIn, user, validateToken, logout } = useWallet()
+  const [flashMessage, setFlashMessage] = useState('')
   console.log(`debug: CreateProjectForm ---> : ${isLoggedIn}`)
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
@@ -48,6 +49,21 @@ const CreateProjectForm = props => {
   const nextStep = () => setCurrentStep(currentStep + 1)
   const goBack = () => setCurrentStep(currentStep - 1)
 
+  useEffect(() => {
+    doValidateToken()
+    async function doValidateToken () {
+      const isValid = await validateToken()
+      console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
+
+      setFlashMessage('Your session has expired')
+      if (!isValid) {
+        await logout()
+      }
+
+      // usePopup?.triggerPopup('Welcome')
+      // navigate('/', { state: { welcome: true } })
+    }
+  }, [])
   const steps = [
     ({ animationStyle }) => (
       <ProjectNameInput
@@ -211,7 +227,7 @@ const CreateProjectForm = props => {
       setLoading(false)
     }
     if (!isLoggedIn) {
-      navigate('/', { state: { welcome: true } })
+      navigate('/', { state: { welcome: true, flashMessage } })
     } else if (!user?.name) {
       usePopup?.triggerPopup('IncompleteProfile')
       setIncompleteProfile(true)
@@ -336,14 +352,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep(currentStep) {
+function isCategoryStep (currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep(currentStep, steps) {
+function isFinalConfirmationStep (currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep(currentStep, steps) {
+function isLastStep (currentStep, steps) {
   return currentStep === steps.length - 1
 }

@@ -53,5 +53,10 @@ export function getLocalStorageUserLabel () {
 export function getLocalStorageTokenLabel () {
   const tokenLabel = getLocalStorageUserLabel() + '_token'
 
-  return getLocalStorageUserLabel(tokenLabel)
+  return tokenLabel
+}
+
+export function getUserToken () {
+  const userToken = window.localStorage.getItem(getLocalStorageTokenLabel())
+  return userToken || ''
 }
