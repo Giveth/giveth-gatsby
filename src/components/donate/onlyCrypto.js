@@ -583,7 +583,7 @@ const OnlyCrypto = props => {
         >
           <Flex sx={{ flexDirection: 'column' }}>
             <Button
-              onClick={() => confirmDonation(true)}
+              onClick={() => confirmDonation(isLoggedIn)}
               sx={{
                 variant: 'buttons.default',
                 padding: '1.063rem 7.375rem',
