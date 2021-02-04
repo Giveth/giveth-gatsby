@@ -17,7 +17,8 @@ const IndexContent = ({ hideInfo, content, location }) => {
     if (location?.state?.welcome) {
       console.log('debug: index.js')
       // TODO: make this better
-      // popup.triggerPopup('Welcome')
+      const extra = location?.state?.flashMessage || false
+      popup.triggerPopup('Welcome', extra)
     }
   }, [])
 

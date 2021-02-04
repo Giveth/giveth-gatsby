@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 
 const VALIDATE_TOKEN = gql`
-  mutation DoLoginWallet($token: String!) {
+  mutation ValidateToken($token: String!) {
     validateToken(token: $token)
   }
 `

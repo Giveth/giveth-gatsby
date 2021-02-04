@@ -2,6 +2,13 @@
 import { ProjectNameInput } from '../components/create-project-form/inputs/ProjectNameInput';
 import { isAddressENS } from '../services/wallet';
 import { Location } from '@reach/router';
+import {
+  getLocalStorageUserLabel,
+  getLocalStorageTokenLabel
+} from '../services/auth'
+
+const gatsbyUser = getLocalStorageUserLabel()
+const tokenLabel = getLocalStorageTokenLabel()
 
 export default class User {
   id: number
@@ -68,7 +75,8 @@ export default class User {
 
   setToken(token) {
     this.token = token
-    localStorage.setItem('token', token)
+    
+    localStorage.setItem(tokenLabel, token)
   }
 
   addWalletAddress(address, activeWallet) {
