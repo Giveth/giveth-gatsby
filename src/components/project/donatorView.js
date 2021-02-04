@@ -74,7 +74,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
             skip: 0
           }
         })
-        console.log('admin', { project })
 
         // Get project admin Info
         const admin = !isNaN(project?.admin)
@@ -93,7 +92,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
           admin: admin?.data?.user,
           updates: updates?.data?.getProjectUpdates
         })
-        console.log('AHAHA', { donations })
         setTotalGivers(
           [...new Set(donations?.map(data => data?.fromWalletAddress))].length
         )
