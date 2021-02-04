@@ -60,7 +60,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
         //   client,
         //   true
         // )
-
         let donations = project?.donations
         const ethBalance = donations?.reduce(
           (prev, current) => prev + current?.amount,
@@ -75,14 +74,17 @@ export const ProjectDonatorView = ({ pageContext }) => {
             skip: 0
           }
         })
+        console.log('admin', { project })
 
         // Get project admin Info
-        const admin = await client?.query({
-          query: GET_USER,
-          variables: {
-            userId: parseInt(project?.admin)
-          }
-        })
+        const admin = !isNaN(project?.admin)
+          ? await client?.query({
+              query: GET_USER,
+              variables: {
+                userId: parseInt(project?.admin)
+              }
+            })
+          : null
 
         setCurrentProjectView({
           ...currentProjectView,
@@ -91,7 +93,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           admin: admin?.data?.user,
           updates: updates?.data?.getProjectUpdates
         })
-
+        console.log('AHAHA', { donations })
         setTotalGivers(
           [...new Set(donations?.map(data => data?.fromWalletAddress))].length
         )
@@ -342,8 +344,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 }}
               >
                 Donations{' '}
-                {currentProjectView?.donations
-                  ? `( ${currentProjectView?.donations.length} )`
+                {currentProjectView?.donations?.length > 0
+                  ? `( ${currentProjectView.donations.length} )`
                   : ''}
               </Text>
             </Button>
