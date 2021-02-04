@@ -222,8 +222,9 @@ function WalletProvider(props) {
 
   async function checkNetwork() {
     if (!wallet) throw new Error('No Eth Provider')
-    const currentNetworkId = await wallet?.web3.eth.getNodeInfo()
-    if (currentNetworkId === networkId) {
+    const currentNetworkId = await wallet?.web3.eth.getChainId()
+    console.log({ currentNetworkId, networkId })
+    if (currentNetworkId?.toString() === networkId) {
       return true
     } else {
       throw new Error(`Wrong network, please change to ${network}`)
