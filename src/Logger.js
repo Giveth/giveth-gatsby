@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/gatsby'
 
-const sentryId = process.env.SENTRY_ID
+// const sentryId = process.env.SENTRY_ID
+const sentryId = 'de31cb89ac0045afbb9d28322cc9c040@o510515'
 
 Sentry.init({
   dsn: `https://${sentryId}.ingest.sentry.io/5606310`,
