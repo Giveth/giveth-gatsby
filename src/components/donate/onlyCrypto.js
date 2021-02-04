@@ -222,7 +222,8 @@ const OnlyCrypto = props => {
         const { data, error } = await client.mutate({
           mutation: SAVE_DONATION,
           variables: {
-            transactionId: hash?.toString()
+            transactionId: hash?.toString(),
+            anonymous: false
           }
         })
         console.log({ data, error })
