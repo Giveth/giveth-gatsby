@@ -10,6 +10,7 @@ import Modal from '../modal'
 import QRCode from 'qrcode.react'
 import { ensRegex } from '../../utils'
 import { initOnboard, initNotify } from '../../services/onBoard'
+import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
@@ -218,12 +219,14 @@ const OnlyCrypto = props => {
       const loggedInUserId = isLoggedIn ? Number(user.id) : null
       // Send tx hash to our graph
       try {
-        const { data } = await client.mutate({
+        const { data, error } = await client.mutate({
           mutation: SAVE_DONATION,
           variables: {
-            transactionId: hash?.toString()
+            transactionId: hash?.toString(),
+            anonymous: false
           }
         })
+        console.log({ data, error })
         const ob = onboard.getState()
       } catch (error) {
         console.log({ error })
@@ -383,7 +386,14 @@ const OnlyCrypto = props => {
           <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
             Please send ETH or ERC20 tokens using this address
           </Text>
-          <Flex sx={{ backgroundColor: 'lightGray', px: 3 }}>
+          <Flex
+            sx={{
+              backgroundColor: 'lightGray',
+              alignItems: 'center',
+              px: 3,
+              mt: 3
+            }}
+          >
             <Text
               sx={{
                 variant: 'text.default',
@@ -393,6 +403,7 @@ const OnlyCrypto = props => {
             >
               {project?.walletAddress}
             </Text>
+            <CopyToClipboard size='18px' text={project?.walletAddress} />
           </Flex>
         </Flex>
         <Text
@@ -553,10 +564,11 @@ const OnlyCrypto = props => {
             sx={{
               variant: 'buttons.default',
               padding: '1.063rem 7.375rem',
-              mt: 2
+              mt: 2,
+              textTransform: 'uppercase'
             }}
           >
-            CONFIRM DONATION
+            Donate
           </Button>
           <SVGLogo
             onClick={() => setIsOpen(true)}

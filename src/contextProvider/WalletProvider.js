@@ -51,7 +51,6 @@ function WalletProvider (props) {
 
     await wallet.init('production', network)
     wallet?.provider?.on('accountsChanged', function (accounts) {
-      console.log('compare', { account, accounts: accounts[0] })
       if (accounts[0] && accounts[0] !== account) {
         Toast({ content: 'Account changed', type: 'warn' })
       }
