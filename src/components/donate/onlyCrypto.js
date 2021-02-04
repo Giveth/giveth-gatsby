@@ -9,6 +9,7 @@ import { SAVE_DONATION } from '../../apollo/gql/donations'
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
 import { ensRegex } from '../../utils'
+import LoadingModal from '../../components/loadingModal'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
@@ -94,8 +95,9 @@ const OnlyCrypto = props => {
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [anonymous, setAnonymous] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
-  const { isLoggedIn, user } = useWallet()
+  const { isLoggedIn, user, sendTransaction, checkNetwork } = useWallet()
 
   const client = useApolloClient()
 
@@ -199,21 +201,30 @@ const OnlyCrypto = props => {
   }
 
   // FOR REGULAR TX
-  const sendTx = async () => {
+  const sendTx = async fromOwnProvider => {
     try {
+      setLoading(true)
       // CHECK ADDRESS
       let toAddress = project?.walletAddress
       if (ensRegex(project?.walletAddress)) {
         toAddress = await provider.resolveName(project?.walletAddress)
       }
-      const signer = getSigner(provider)
-      // console.log(ethers.utils.parseEther(subtotal.toString()))
 
-      const { hash } = await signer.sendTransaction({
+      const transaction = {
         to: toAddress,
         value: ethers.utils.parseEther(subtotal.toString())
-      })
+      }
 
+      let hash
+      if (fromOwnProvider && isLoggedIn) {
+        const regularTransaction = await sendTransaction(transaction)
+        hash = regularTransaction?.transactionHash
+      } else {
+        const signer = getSigner(provider)
+        const signerTransaction = await signer.sendTransaction(transaction)
+        hash = signerTransaction?.hash
+      }
+      if (!hash) throw new Error('Transaction failed')
       props.setHashSent({ hash, subtotal })
 
       const loggedInUserId = isLoggedIn ? Number(user.id) : null
@@ -230,8 +241,9 @@ const OnlyCrypto = props => {
         const ob = onboard.getState()
       } catch (error) {
         console.log({ error })
+        setLoading(false)
       }
-
+      setLoading(false)
       // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
       if (process.env.GATSBY_NETWORK === 'ropsten') return
 
@@ -258,6 +270,7 @@ const OnlyCrypto = props => {
       })
     } catch (error) {
       console.log({ error })
+      setLoading(false)
       return Toast({ content: error?.message, type: 'error' })
     }
   }
@@ -355,8 +368,30 @@ const OnlyCrypto = props => {
   //   }
   // }
 
+  const confirmDonation = async fromOwnProvider => {
+    try {
+      if (!project?.walletAddress) {
+        return Toast({
+          content: 'There is no eth address assigned for this project',
+          type: 'error'
+        })
+      }
+      if (!amountTyped || parseFloat(amountTyped) <= 0) {
+        return Toast({ content: 'Please set an amount', type: 'warn' })
+      }
+      if (!fromOwnProvider) {
+        const ready = await readyToTransact()
+        if (!ready) return
+      }
+      sendTx(fromOwnProvider)
+    } catch (error) {
+      return Toast({ content: error?.message || error, type: 'error' })
+    }
+  }
+
   return (
     <Content>
+      {loading && <LoadingModal isOpen={loading} />}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setIsOpen(false)}
@@ -546,30 +581,36 @@ const OnlyCrypto = props => {
             textAlign: 'center'
           }}
         >
-          <Button
-            onClick={async () => {
-              if (!project?.walletAddress) {
-                return Toast({
-                  content: 'There is no eth address assigned for this project',
-                  type: 'error'
-                })
-              }
-              if (!amountTyped || parseFloat(amountTyped) <= 0) {
-                return Toast({ content: 'Please set an amount', type: 'warn' })
-              }
-              const ready = await readyToTransact()
-              if (!ready) return
-              sendTx(isLoggedIn, user)
-            }}
-            sx={{
-              variant: 'buttons.default',
-              padding: '1.063rem 7.375rem',
-              mt: 2,
-              textTransform: 'uppercase'
-            }}
-          >
-            Donate
-          </Button>
+          <Flex sx={{ flexDirection: 'column' }}>
+            <Button
+              onClick={() => confirmDonation(true)}
+              sx={{
+                variant: 'buttons.default',
+                padding: '1.063rem 7.375rem',
+                mt: 2,
+                textTransform: 'uppercase'
+              }}
+            >
+              Donate
+            </Button>
+            {isLoggedIn && (
+              <Text
+                sx={{
+                  mt: 2,
+                  mx: 'auto',
+                  cursor: 'pointer',
+                  color: 'background',
+                  '&:hover': {
+                    color: 'accent'
+                  }
+                }}
+                onClick={() => confirmDonation(false)}
+              >
+                click here to use another wallet
+              </Text>
+            )}
+          </Flex>
+
           <SVGLogo
             onClick={() => setIsOpen(true)}
             sx={{ cursor: 'pointer', ml: 3 }}
