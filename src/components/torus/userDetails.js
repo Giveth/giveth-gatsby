@@ -145,7 +145,7 @@ const UserDetails = () => {
           <MenuTitle
             sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
           >
-            Torus Network
+            Network
           </MenuTitle>
           <MenuTitle
             sx={{
