@@ -74,9 +74,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
             skip: 0
           }
         })
-
         // Get project admin Info
-        const admin = !isNaN(project?.admin)
+        const admin = /^\d+$/.test(project?.admin)
           ? await client?.query({
               query: GET_USER,
               variables: {
@@ -84,7 +83,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
               }
             })
           : null
-
         setCurrentProjectView({
           ...currentProjectView,
           ethBalance,
@@ -92,10 +90,11 @@ export const ProjectDonatorView = ({ pageContext }) => {
           admin: admin?.data?.user,
           updates: updates?.data?.getProjectUpdates
         })
+        console.log({ user, pageContext })
         setTotalGivers(
           [...new Set(donations?.map(data => data?.fromWalletAddress))].length
         )
-        setIsOwner(pageContext?.project?.admin === user.userIDFromDB)
+        setIsOwner(pageContext?.project?.admin === user.id)
       } catch (error) {
         console.log({ error })
       }
