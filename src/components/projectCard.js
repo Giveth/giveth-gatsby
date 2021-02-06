@@ -138,7 +138,7 @@ const ProjectCard = props => {
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
   let reactionCount = project?.reactions?.length
-  const strUserId = user.id.toString()
+  const strUserId = user?.id?.toString()
   const initUserHearted =
     project.reactions.filter(o => o.userId === strUserId).length > 0
   const [hearted, setHearted] = useState(initUserHearted)
