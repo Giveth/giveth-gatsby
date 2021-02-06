@@ -12,6 +12,7 @@ import {
 import { BsHeartFill } from 'react-icons/bs'
 import { FaShareAlt } from 'react-icons/fa'
 import { PopupContext } from '../contextProvider/popupProvider'
+import { useWallet } from '../contextProvider/WalletProvider'
 
 const CardContainer = styled(Card)`
   position: relative;
@@ -131,14 +132,17 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectCard = props => {
+  const { user, isLoggedIn } = useWallet()
   const { project, shadowed } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
-  const reactions = useQuery(GET_PROJECT_REACTIONS, {
-    variables: { projectId: parseFloat(project?.id) }
-  })
-  const reactionAmount = reactions?.data?.getProjectReactions?.length
+  let reactionCount = project.reactions.length
+  const strUserId = user.id.toString()
+  const initUserHearted =
+    project.reactions.filter(o => o.userId === strUserId).length > 0
+  const [hearted, setHearted] = useState(initUserHearted)
+  const [heartedCount, setHeartedCount] = useState(project.reactions.length)
 
   const reactToProject = async () => {
     try {
@@ -147,14 +151,15 @@ const ProjectCard = props => {
         variables: {
           reaction: 'heart',
           projectId: parseFloat(project?.id)
-        },
-        refetchQueries: [
-          {
-            query: GET_PROJECT_REACTIONS,
-            variables: { projectId: parseFloat(project?.id) }
-          }
-        ]
+        }
       })
+
+      const { data } = reaction
+      const { toggleProjectReaction } = data
+      const { reaction: hearted, reactionCount } = toggleProjectReaction
+
+      setHeartedCount(reactionCount)
+      setHearted(hearted)
     } catch (error) {
       usePopup?.triggerPopup('Welcome')
       console.log({ error })
@@ -236,14 +241,12 @@ const ProjectCard = props => {
               <BsHeartFill
                 style={{ cursor: 'pointer' }}
                 size='18px'
-                color={
-                  reactionAmount > 0 ? theme.colors.red : theme.colors.muted
-                }
+                color={hearted ? theme.colors.red : theme.colors.muted}
                 onClick={() => reactToProject()}
               />
-              {reactionAmount && reactionAmount > 0 && (
+              {heartedCount && heartedCount > 0 && (
                 <Text sx={{ variant: 'text.default', ml: 2 }}>
-                  {reactionAmount}
+                  {heartedCount}
                 </Text>
               )}
             </Flex>
