@@ -87,6 +87,7 @@ const SmRow = styled(Flex)`
 
 const OnlyCrypto = props => {
   // ON BOARD
+  const { logout } = useWallet()
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
   const [notify, setNotify] = useState(null)
@@ -240,6 +241,10 @@ const OnlyCrypto = props => {
         console.log({ data, error })
         const ob = onboard.getState()
       } catch (error) {
+        alert(
+          `There was an error saving your donation to our datbase. Your payment may stil have gone through. Please report this issue, and reference your transaction id ${hash?.toString()}`
+        )
+        await logout()
         console.log({ error })
         setLoading(false)
       }
