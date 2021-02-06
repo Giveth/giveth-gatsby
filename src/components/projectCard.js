@@ -140,7 +140,7 @@ const ProjectCard = props => {
   let reactionCount = project?.reactions?.length
   const strUserId = user?.id?.toString()
   const initUserHearted =
-    project.reactions.filter(o => o.userId === strUserId).length > 0
+    project?.reactions?.filter(o => o.userId === strUserId).length > 0
   const [hearted, setHearted] = useState(initUserHearted)
   const [heartedCount, setHeartedCount] = useState(project?.reactions?.length)
 
