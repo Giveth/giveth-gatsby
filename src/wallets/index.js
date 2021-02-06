@@ -4,6 +4,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 
 const metamask = {
   isInitialized: false,
+  supportLink: 'https://metamask.zendesk.com/hc/en-us',
   setweb3: function (provider) {
     const web3Inst = new Web3(provider)
     metamask.web3 = web3Inst
@@ -58,6 +59,7 @@ export const wallets = {
   torus: {
     type: 'torus',
     isTorus: true,
+    supportLink: 'https://app.tor.us',
     setweb3: function (provider) {
       const web3Inst = new Web3(provider)
       wallets.torus.web3 = web3Inst

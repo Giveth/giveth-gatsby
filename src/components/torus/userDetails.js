@@ -3,6 +3,7 @@ import { Button, Text, jsx } from 'theme-ui'
 import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
+import CopyToClipboard from '../copyToClipboard'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
 import { Link } from 'gatsby'
@@ -76,14 +77,57 @@ const UserDetails = () => {
     setIsComponentVisible
   } = useComponentVisible(false)
 
-  const { isLoggedIn, logout, user, balance, network } = useWallet()
+  const {
+    isLoggedIn,
+    logout,
+    user,
+    balance,
+    currentNetwork,
+    wallet
+  } = useWallet()
   console.log(`jpf user : ${JSON.stringify(user, null, 2)}`)
   console.log(`typeof user ---> : ${typeof user.getName}`)
   const address = isLoggedIn ? user.getWalletAddress() : '?'
-  const truncAddress = `${address.substring(0, 14)}...${address.substring(
+  const truncAddress = `${address.substring(0, 10)}...${address.substring(
     address.length - 4,
     address.length
   )}`
+
+  const parseNetwork = () => {
+    let dotColor
+    switch (currentNetwork) {
+      case 'main':
+        dotColor = 'greenishBlue'
+        break
+      case 'ropsten':
+        dotColor = 'ropstenPink'
+        break
+      case 'kovan':
+        dotColor = 'kovanPurple'
+        break
+      case 'rinkeby':
+        dotColor = 'rinkebyYellow'
+        break
+      case 'goerli':
+        dotColor = 'goerliBlue'
+        break
+      default:
+        dotColor = 'softGray'
+    }
+    return (
+      <MenuTitle
+        sx={{
+          variant: 'text.medium',
+          pb: 2,
+          color: 'secondary',
+          textTransform: 'capitalize'
+        }}
+      >
+        <Dot sx={{ backgroundColor: dotColor }} />
+        {currentNetwork}
+      </MenuTitle>
+    )
+  }
 
   const handleLogout = () => {
     logout()
@@ -137,39 +181,31 @@ const UserDetails = () => {
           >
             Wallet Address
           </MenuTitle>
-          <MenuItem
-            sx={{ variant: 'text.medium', color: 'secondary' }}
-            onClick={() => navigator.clipboard.writeText(address)}
-          >
+          <MenuTitle sx={{ variant: 'text.medium', color: 'secondary' }}>
             {truncAddress}
-          </MenuItem>
-          <MenuTitle
-            sx={{
-              variant: 'text.small',
-              pb: 2,
-              '&:focus': { color: 'red' }
-            }}
-            className='balance'
-          >
-            Balance: {balance ? `${balance} ETH` : ''}
           </MenuTitle>
+          {balance ? (
+            <MenuTitle
+              sx={{
+                variant: 'text.small',
+                pb: 2,
+                '&:focus': { color: 'red' }
+              }}
+              className='balance'
+            >
+              Balance: {balance ? `${balance} ETH` : ''}
+            </MenuTitle>
+          ) : null}
           <MenuTitle
             sx={{ variant: 'text.overlineSmall', pt: 2, color: 'bodyDark' }}
           >
-            Torus Network
+            {wallet
+              ? wallet.isTorus
+                ? 'Torus Network'
+                : 'Metamask Network'
+              : 'No network'}
           </MenuTitle>
-          <MenuTitle
-            sx={{
-              variant: 'text.medium',
-              pb: 2,
-              color: 'secondary',
-              textTransform: 'capitalize'
-            }}
-            onClick={() => navigator.clipboard.writeText(address)}
-          >
-            <Dot sx={{ backgroundColor: network ? 'greenishBlue' : 'red' }} />
-            {network || 'No network'}
-          </MenuTitle>
+          {parseNetwork()}
           <Link
             to='/account'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
@@ -184,7 +220,7 @@ const UserDetails = () => {
             </MenuItem>
           </Link>
           <a
-            href='https://app.tor.us'
+            href={wallet?.supportLink}
             target='_blank'
             rel='noopener noreferrer'
             sx={{ textDecoration: 'none' }}

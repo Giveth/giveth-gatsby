@@ -26,7 +26,11 @@ export default {
     warnYellow: '#F6AB2F',
     green: '#37B4A9',
     greenishBlue: '#36CDD7',
-    red: '#D74036'
+    red: '#D74036',
+    ropstenPink: 'rgba(236, 90, 141, 1)',
+    kovanPurple: 'rgba(105, 93, 246, 1)',
+    rinkebyYellow: 'rgba(239, 196, 92, 1)',
+    goerliBlue: 'rgba(75, 153, 235, 1)'
   },
   fonts: {
     body: 'Red Hat Text, sans serif',
