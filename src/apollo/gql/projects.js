@@ -17,6 +17,12 @@ const FETCH_PROJECTS = gql`
         categories {
           name
         }
+        reactions {
+          reaction
+          id
+          projectUpdateId
+          userId
+        }
       }
       totalCount
     }
@@ -273,7 +279,10 @@ const TOGGLE_UPDATE_REACTION = gql`
 
 const TOGGLE_PROJECT_REACTION = gql`
   mutation ToggleProjectReaction($reaction: String!, $projectId: Float!) {
-    toggleProjectReaction(reaction: $reaction, projectId: $projectId)
+    toggleProjectReaction(reaction: $reaction, projectId: $projectId) {
+      reaction
+      reactionCount
+    }
   }
 `
 
