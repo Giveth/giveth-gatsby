@@ -137,12 +137,12 @@ const ProjectCard = props => {
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
-  let reactionCount = project.reactions.length
+  let reactionCount = project?.reactions?.length
   const strUserId = user.id.toString()
   const initUserHearted =
     project.reactions.filter(o => o.userId === strUserId).length > 0
   const [hearted, setHearted] = useState(initUserHearted)
-  const [heartedCount, setHeartedCount] = useState(project.reactions.length)
+  const [heartedCount, setHeartedCount] = useState(project?.reactions?.length)
 
   const reactToProject = async () => {
     try {
@@ -185,9 +185,9 @@ const ProjectCard = props => {
           key={props.listingId || project?.title + '_div'}
           src={image}
           onClick={() =>
-            (window.location.href = `/project/${props?.slug ||
-              project?.slug ||
-              ''}`)
+            (window.location.href = `/project/${
+              props?.slug || project?.slug || ''
+            }`)
           }
           style={{
             width: '100%',
