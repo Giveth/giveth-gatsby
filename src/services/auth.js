@@ -19,15 +19,6 @@ export function handleLogout () {
 export const checkIfLoggedIn = () => {
   const user = getUser()
 
-  console.log(`debug: checkIfLoggd in user : ${JSON.stringify(user, null, 2)}`)
-  console.log(
-    `debug: checkIfLoggd in !!user.walletAddresses : ${JSON.stringify(
-      !!user.walletAddresses,
-      null,
-      2
-    )}`
-  )
-
   return !!user.walletAddresses
 }
 

@@ -58,7 +58,6 @@ export default class User {
    * @param initUser 
    */
   parseDbUser(dbUser) {   
-    console.log(`debug: updating user details from the db`)
     this.avatar = dbUser.avatar
     this.email = dbUser.email
     this.id = dbUser.id
@@ -112,15 +111,11 @@ export default class User {
     //         : this.name
   }
   getWalletAddress() {
-    console.log(`debug: this.walletAddresses : ${JSON.stringify(this.walletAddresses, null, 2)}`)
-    
     return this.walletAddresses && this.walletAddresses.length > 0 ? this.walletAddresses[0] : ''
   }  
   // organisations: Organisation[]
   
   parseTorusUser(torusUser) {
-    console.log(`updateUser: parse torusUser : ${JSON.stringify(torusUser, null, 2)}`)
-    
     if(this.walletType !== 'torus') throw Error ('Only valid for Torus wallets')
     this.avatar = torusUser.profileImage || torusUser.avatar
     this.name = torusUser.name

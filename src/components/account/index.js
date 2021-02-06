@@ -37,8 +37,6 @@ const AccountPage = props => {
   })
   const userDonations = donations?.donationsFromWallets
 
-  console.log(`debug: account/index user : ${JSON.stringify(user, null, 2)}`)
-
   const { data: userProjects, loading: projectsLoading } = useQuery(
     FETCH_USER_PROJECTS,
     {

@@ -15,7 +15,6 @@ const IndexContent = ({ hideInfo, content, location }) => {
 
   React.useEffect(() => {
     if (location?.state?.welcome) {
-      console.log('debug: index.js')
       // TODO: make this better
       const extra = location?.state?.flashMessage || false
       popup.triggerPopup('Welcome', extra)

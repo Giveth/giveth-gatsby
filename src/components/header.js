@@ -172,7 +172,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -183,15 +183,12 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
   const goCreate = async () => {
-    console.log('debug: goCreate Welcom')
-    console.log(`debug: isLoggedIn : ${JSON.stringify(isLoggedIn, null, 2)}`)
-
     if (!isLoggedIn) return triggerPopup('Welcome')
     if (!user?.name) return triggerPopup('IncompleteProfile')
     navigate('/create')

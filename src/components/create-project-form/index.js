@@ -38,7 +38,7 @@ const CreateProjectForm = props => {
   const [incompleteProfile, setIncompleteProfile] = useState(false)
   const { isLoggedIn, user, validateToken, logout } = useWallet()
   const [flashMessage, setFlashMessage] = useState('')
-  console.log(`debug: CreateProjectForm ---> : ${isLoggedIn}`)
+
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
@@ -207,9 +207,6 @@ const CreateProjectForm = props => {
   useEffect(() => {
     const checkProjectWallet = async () => {
       if (!user) return null
-      console.log(
-        `debug: creat project user : ${JSON.stringify(user, null, 2)}`
-      )
 
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
       // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
