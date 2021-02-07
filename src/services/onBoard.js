@@ -4,7 +4,7 @@ import Onboard from 'bnc-onboard'
 const networkId = process.env.GATSBY_NETWORK_ID
 const rpcUrl = process.env.GATSBY_ETHEREUM_NODE
 const dappId = process.env.BLOCK_NATIVE_DAPP_ID
-const portisKey = process.env.PORTIS_KEY
+const portisKey = process.env.GATSBY_PORTIS_KEY
 export function initOnboard(subscriptions) {
   return Onboard({
     dappId,
