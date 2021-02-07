@@ -1,8 +1,8 @@
 ---
 slug: 'giveth-home'
-mainHead: 'Sustainable fundraising for'
-headBold: 'social impact'
-mainText: 'Our mission is to connect people, ideas, and resources to facilitate and incentivize social impact with a transparent framework for distributing funds.'
+mainHead: 'Welcome to the'
+headBold: 'future of giving'
+mainText: 'Donate directly to social good projects with zero added fees.'
 mainButton: 'DONATE'
 mainButtonText: 'Start raising funds for your project'
 ---
