@@ -32,10 +32,9 @@ const AccountPage = props => {
 
   const userWallets = user.walletAddresses
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
-    variables: { fromWalletAddresses: userWallets },
     fetchPolicy: 'network-only'
   })
-  const userDonations = donations?.donationsFromWallets
+  const userDonations = donations?.donationsByDonor
 
   const { data: userProjects, loading: projectsLoading } = useQuery(
     FETCH_USER_PROJECTS,
