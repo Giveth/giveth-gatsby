@@ -2,6 +2,13 @@
 import { ProjectNameInput } from '../components/create-project-form/inputs/ProjectNameInput';
 import { isAddressENS } from '../services/wallet';
 import { Location } from '@reach/router';
+import {
+  getLocalStorageUserLabel,
+  getLocalStorageTokenLabel
+} from '../services/auth'
+
+const gatsbyUser = getLocalStorageUserLabel()
+const tokenLabel = getLocalStorageTokenLabel()
 
 export default class User {
   id: number
@@ -34,7 +41,6 @@ export default class User {
   parseInitUser(initUser) {
     if(this.walletType === 'torus') {
       console.log(`parseInitUser initUser : ${JSON.stringify(initUser, null, 2)}`)
-      
       this.parseTorusUser(initUser, true) 
     } else {
       console.log(`JJJ initUser : ${JSON.stringify(initUser, null, 2)}`)
@@ -43,6 +49,7 @@ export default class User {
       this.walletAddresses = initUser.walletAddresses
       this.id = initUser.id
       this.token = initUser.token
+      this.parseDbUser(initUser)
     }
   }
 
@@ -51,11 +58,10 @@ export default class User {
    * @param initUser 
    */
   parseDbUser(dbUser) {   
-    console.log(`debug: updating user details from the db`)
     this.avatar = dbUser.avatar
     this.email = dbUser.email
     this.id = dbUser.id
-    this.token = dbUser.firstName
+    this.firstName = dbUser.firstName
     this.lastName = dbUser.lastName
     this.location = dbUser.location
     this.name = dbUser.name
@@ -68,7 +74,8 @@ export default class User {
 
   setToken(token) {
     this.token = token
-    localStorage.setItem('token', token)
+    
+    localStorage.setItem(tokenLabel, token)
   }
 
   addWalletAddress(address, activeWallet) {
@@ -104,20 +111,15 @@ export default class User {
     //         : this.name
   }
   getWalletAddress() {
-    console.log(`debug: this.walletAddresses : ${JSON.stringify(this.walletAddresses, null, 2)}`)
-    
     return this.walletAddresses && this.walletAddresses.length > 0 ? this.walletAddresses[0] : ''
   }  
   // organisations: Organisation[]
   
   parseTorusUser(torusUser) {
-    console.log(`updateUser: parse torusUser : ${JSON.stringify(torusUser, null, 2)}`)
-    
     if(this.walletType !== 'torus') throw Error ('Only valid for Torus wallets')
     this.avatar = torusUser.profileImage || torusUser.avatar
     this.name = torusUser.name
     this.email = torusUser.email
-    this.walletAddresses = torusUser.addresses || torusUser.walletAddresses
     this.id = torusUser.id
     // this.addWalletAddress(walletAddress, true)
     torusUser.walletAddresses.forEach(address => {

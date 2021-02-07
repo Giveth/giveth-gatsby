@@ -189,7 +189,7 @@ const ShowProject = props => {
           />
           <OptionType
             title={CREDIT}
-            subtitle='2.9% + 0.30 USD'
+            subtitle={`Bank's Fee`}
             style={LEFT_BOX_STYLE}
           />
         </Options>

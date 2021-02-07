@@ -55,7 +55,7 @@ export default function Dialog({ children }) {
     <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
       <LeftConfetti />
       <Clouds src={decoratorClouds} alt='' className='hide' />
-      <BackButton onClick={() => window.history.back()}>
+      <BackButton href='/'>
         <LeftArrow />
         <Text
           sx={{ variant: 'text.default' }}

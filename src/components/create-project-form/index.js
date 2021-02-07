@@ -15,6 +15,7 @@ import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
 import { projectWalletAlreadyUsed, getProjectWallet } from './utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
+import { PopupContext } from '../../contextProvider/popupProvider'
 import { useForm } from 'react-hook-form'
 import { useTransition } from 'react-spring'
 
@@ -34,17 +35,35 @@ import Toast from '../toast'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
-  const { isLoggedIn, user } = useWallet()
-  console.log(`debug: CreateProjectForm ---> : ${isLoggedIn}`)
+  const [incompleteProfile, setIncompleteProfile] = useState(false)
+  const { isLoggedIn, user, validateToken, logout } = useWallet()
+  const [flashMessage, setFlashMessage] = useState('')
+
   const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
   const [walletUsed, setWalletUsed] = useState(false)
+  const usePopup = React.useContext(PopupContext)
   const client = useApolloClient()
 
   const [currentStep, setCurrentStep] = useState(0)
   const nextStep = () => setCurrentStep(currentStep + 1)
   const goBack = () => setCurrentStep(currentStep - 1)
 
+  useEffect(() => {
+    doValidateToken()
+    async function doValidateToken () {
+      const isValid = await validateToken()
+      console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
+
+      setFlashMessage('Your session has expired')
+      if (!isValid) {
+        await logout()
+      }
+
+      // usePopup?.triggerPopup('Welcome')
+      // navigate('/', { state: { welcome: true } })
+    }
+  }, [])
   const steps = [
     ({ animationStyle }) => (
       <ProjectNameInput
@@ -188,9 +207,6 @@ const CreateProjectForm = props => {
   useEffect(() => {
     const checkProjectWallet = async () => {
       if (!user) return null
-      console.log(
-        `debug: creat project user : ${JSON.stringify(user, null, 2)}`
-      )
 
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
       // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
@@ -208,7 +224,10 @@ const CreateProjectForm = props => {
       setLoading(false)
     }
     if (!isLoggedIn) {
-      navigate('/', { state: { welcome: true } })
+      navigate('/', { state: { welcome: true, flashMessage } })
+    } else if (!user?.name) {
+      usePopup?.triggerPopup('IncompleteProfile')
+      setIncompleteProfile(true)
     } else {
       checkProjectWallet()
     }
@@ -219,6 +238,10 @@ const CreateProjectForm = props => {
     const localCreateForm = window?.localStorage.getItem('create-form')
     localCreateForm && setFormData(JSON.parse(localCreateForm))
   }, [])
+
+  if (incompleteProfile) {
+    return null
+  }
 
   if (loading) {
     return (

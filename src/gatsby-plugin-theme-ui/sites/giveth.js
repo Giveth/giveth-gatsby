@@ -16,16 +16,21 @@ export default {
     attention: '#E01C6B',
     bodyDark: '#6B7087',
     bodyLight: '#AAAFCA',
+    lightGray: '#F3F5FB',
     softGray: '#F4F6FC',
     anotherGrey: '#C9D0E8',
     blue: '#3F91E4',
     lightBlue: '#F0F6FC',
     lightestBlue: '#EDF0FA',
-    yellow: '#FFEF9D',
+    yellow: 'rgba(253, 239, 167, 1)',
     warnYellow: '#F6AB2F',
     green: '#37B4A9',
     greenishBlue: '#36CDD7',
-    red: '#D74036'
+    red: '#D74036',
+    ropstenPink: 'rgba(236, 90, 141, 1)',
+    kovanPurple: 'rgba(105, 93, 246, 1)',
+    rinkebyYellow: 'rgba(239, 196, 92, 1)',
+    goerliBlue: 'rgba(75, 153, 235, 1)'
   },
   fonts: {
     body: 'Red Hat Text, sans serif',

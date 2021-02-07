@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Web3 from 'web3'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import * as Auth from '../services/auth'
+import { useApolloClient } from '@apollo/client'
+import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
-import { getToken } from '../services/token'
+import { getToken, validateAuthToken } from '../services/token'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
 import Toast from '../components/toast'
@@ -13,11 +15,9 @@ import detectEthereumProvider from '@metamask/detect-provider'
 console.log(`*** User : ${JSON.stringify(User, null, 2)}`)
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
-const DEFAULT_WALLET = 'torus'
+const networkId = process.env.GATSBY_NETWORK_ID
+
 let wallet = {}
-if (typeof window === 'object') {
-  wallet = getWallet(DEFAULT_WALLET)
-}
 
 function useWallet() {
   const context = React.useContext(WalletContext)
@@ -30,33 +30,39 @@ function useWallet() {
 function WalletProvider(props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
-  console.log(`debug: initUser : ${JSON.stringify(initUser, null, 2)}`)
 
   const [user, setUser] = useState(initUser)
   const [account, setAccount] = useState('')
   const [balance, setBalance] = useState(0)
+  const [ethEnabled, setEthEnabled] = useState(false)
+  const [currentNetwork, setCurrentNetwork] = useState(null)
   const [loading, setLoading] = useState(false)
-  console.log(`debug: Auth.checkIfLoggedIn() ---> : ${Auth.checkIfLoggedIn()}`)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
+  const client = useApolloClient()
 
-  const initWallet = async () => {
-    // const provider = await detectEthereumProvider()
-    // if (provider) {
-    //   wallet = getWallet('metamask')
-    // } else {
-    //   wallet = getWallet('torus')
-    // }
-
-    // console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
+  const initWallet = async walletProvider => {
+    const provider = await detectEthereumProvider()
+    if (provider && walletProvider !== 'torus') {
+      setEthEnabled(provider)
+      wallet = getWallet('metamask')
+    } else {
+      wallet = getWallet('torus')
+    }
+    console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
 
     await wallet.init('production', network)
+    const networkName = await wallet?.web3.eth.net.getNetworkType()
+    setCurrentNetwork(networkName)
+
     wallet?.provider?.on('accountsChanged', function (accounts) {
-      Toast({ content: 'Account changed', type: 'warn' })
+      if (accounts[0] && accounts[0] !== account) {
+        Toast({ content: 'Account changed', type: 'warn' })
+      }
     })
   }
 
   useEffect(() => {
-    initWallet()
+    initWallet(localStorageUser?.walletType)
   }, [])
 
   async function logout() {
@@ -100,9 +106,25 @@ function WalletProvider(props) {
     }
   }
 
+  async function updateUserInfoOnly() {
+    if (!user) return null
+    const { data } = await client.query({
+      query: GET_USER_BY_ADDRESS,
+      variables: {
+        address: user?.walletAddresses[0]?.toLowerCase()
+      },
+      fetchPolicy: 'network-only'
+    })
+    const localStorageUser = Auth.getUser()
+    const newUser = new User(localStorageUser.walletType, localStorageUser)
+    newUser.parseDbUser(data?.userByAddress)
+    setUser(newUser)
+    Auth.setUser(newUser)
+  }
+
   async function updateUser(accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
-
+    if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
     const balance = await wallet.web3.eth.getBalance(publicAddress)
@@ -118,12 +140,11 @@ function WalletProvider(props) {
       // user.addresses = accounts
     } else {
       user = new User('other')
-      console.log(`debug: publicAddress ---> : ${publicAddress}`)
       user.addWalletAddress(publicAddress, true)
     }
 
     const signedMessage = await signMessage('our_secret', publicAddress)
-
+    if (!signedMessage) return
     console.log(`updateUser: user : ${JSON.stringify(user, null, 2)}`)
     console.log(`signedMessage ---> : ${signedMessage}`)
 
@@ -134,49 +155,56 @@ function WalletProvider(props) {
     user.setToken(token)
 
     Auth.setUser(user)
-    console.log('debug: setting logged in')
-    console.log(`user : ${JSON.stringify(user, null, 2)}`)
     setIsLoggedIn(true)
     setUser(user)
   }
 
-  async function login({ walletProvider = DEFAULT_WALLET }) {
-    wallet = getWallet(walletProvider)
-    if (walletProvider !== DEFAULT_WALLET) await initWallet()
-    console.log(`torus: login WalletProvider.login`, {
-      wallet,
-      walletProvider
-    })
-    console.log(
-      `torus: login  wallet.torus is loaded : ${typeof wallet.torus === true}`
-    )
-    setLoading(true)
-    console.log(
-      `updateUser: typeof wallet : ${JSON.stringify(typeof wallet, null, 2)}`
-    )
-    console.log(
-      `updateUser: wallet.torus : ${JSON.stringify(
-        typeof wallet.torus,
-        null,
-        2
-      )}`
-    )
-    console.log(
-      `updateUser: wallet.isLoggedIn()  : ${JSON.stringify(
-        wallet.isLoggedIn(),
-        null,
-        2
-      )}`
-    )
+  async function validateToken() {
+    const isValid = await validateAuthToken(Auth.getUserToken())
+    return isValid
+  }
 
-    if (wallet && !(wallet.isLoggedIn() && isLoggedIn)) {
-      await wallet.login()
-      console.log('updateUser: awaiting login')
-      wallet.web3.eth.getAccounts().then(updateUser)
+  async function login({ walletProvider }) {
+    try {
+      wallet = getWallet(walletProvider)
+      setLoading(true)
+      await initWallet(walletProvider)
+      console.log(`torus: login WalletProvider.login`, {
+        wallet,
+        walletProvider
+      })
+      console.log(
+        `torus: login  wallet.torus is loaded : ${typeof wallet.torus === true}`
+      )
+      console.log(
+        `updateUser: typeof wallet : ${JSON.stringify(typeof wallet, null, 2)}`
+      )
+      console.log(
+        `updateUser: wallet.torus : ${JSON.stringify(
+          typeof wallet.torus,
+          null,
+          2
+        )}`
+      )
+      console.log(
+        `updateUser: wallet.isLoggedIn()  : ${JSON.stringify(
+          wallet.isLoggedIn(),
+          null,
+          2
+        )}`
+      )
+
+      if (wallet && !(wallet.isLoggedIn() && isLoggedIn)) {
+        await wallet.login()
+        console.log('updateUser: awaiting login')
+        wallet.web3.eth.getAccounts().then(updateUser)
+      }
+      console.log('updateUser: post')
+
+      setLoading(false)
+    } catch (error) {
+      setLoading(false)
     }
-    console.log('updateUser: post')
-
-    setLoading(false)
   }
 
   function isWalletAddressValid(address) {
@@ -189,6 +217,32 @@ function WalletProvider(props) {
 
   function isAddressENS(address) {
     return address.toLowerCase().indexOf('.eth') > -1
+  }
+
+  async function checkNetwork() {
+    if (!wallet) throw new Error('No Eth Provider')
+    const currentNetworkId = await wallet?.web3.eth.getChainId()
+    console.log({ currentNetworkId, networkId })
+    if (currentNetworkId?.toString() === networkId) {
+      return true
+    } else {
+      throw new Error(`Wrong network, please change to ${network}`)
+    }
+  }
+
+  async function sendTransaction(params) {
+    try {
+      await checkNetwork()
+      const fromAccount = await wallet?.web3.eth.getAccounts()
+      return wallet?.web3.eth.sendTransaction({
+        from: fromAccount[0],
+        to: params?.to,
+        value: params?.value
+      })
+    } catch (error) {
+      console.log('Error sending transaction: ', { error })
+      throw new Error(error)
+    }
   }
 
   async function getAddressFromENS(address) {
@@ -210,18 +264,25 @@ function WalletProvider(props) {
   const value = React.useMemo(() => {
     return {
       login,
+      validateToken,
+      sendTransaction,
+      checkNetwork,
+      ethEnabled,
       account,
       balance,
       isLoggedIn,
       updateUser,
+      updateUserInfoOnly,
       logout,
       user,
       network,
+      currentNetwork,
       isWalletAddressValid,
       isAddressENS,
-      getAddressFromENS
+      getAddressFromENS,
+      wallet
     }
-  }, [account, balance, isLoggedIn, user, network])
+  }, [account, balance, ethEnabled, isLoggedIn, user, currentNetwork])
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}

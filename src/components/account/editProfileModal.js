@@ -1,5 +1,5 @@
 import React from 'react'
-import { Avatar, Box, Button, Input, Text, Flex } from 'theme-ui'
+import { Box, Button, Input, Text, Flex } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as Auth from '../../services/auth'
 import { useMutation } from '@apollo/client'
@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import { UPDATE_USER } from '../../apollo/gql/auth'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import Modal from 'react-modal'
+import Avatar from '../avatar'
 import Toast from '../../components/toast'
 
 const customStyles = {
@@ -35,12 +36,11 @@ const customStyles = {
   }
 }
 
-function EditProfileModal (props) {
+function EditProfileModal(props) {
   const { user } = props
   const wallet = useWallet()
   const { register, handleSubmit, watch, errors } = useForm()
   const [updateUser] = useMutation(UPDATE_USER)
-
   const InputBox = props => {
     const { title, placeholderText, defaultValue, name } = props
     return (
@@ -76,23 +76,30 @@ function EditProfileModal (props) {
   const onSubmit = async data => {
     try {
       const { firstName, lastName, location, url } = data
+      if (!firstName && !lastName && !location && !url)
+        return Toast({
+          content: 'Please fill at least one field',
+          type: 'error'
+        })
       const newProfile = {
-        firstName: firstName || user?.profile?.firstName,
-        lastName: lastName || user?.profile?.lastName,
-        location: location || user?.profile?.location,
-        url: url || user?.profile?.url
+        firstName: firstName || wallet?.user?.firstName || '',
+        lastName: lastName || wallet?.user?.lastName || '',
+        location: location || wallet?.user?.location || '',
+        url: url || wallet?.user?.url || ''
       }
-      const { data: response } = await updateUser({
+      const { data: response, error } = await updateUser({
         variables: newProfile
       })
+      console.log('new year', { data, response })
       if (response?.updateUser === true) {
         props.onRequestClose()
-        wallet?.updateUser && wallet.updateUser(user?.walletAddresses)
+        wallet?.updateUser && wallet.updateUserInfoOnly()
         return Toast({
           content: 'Profile updated successfully',
           type: 'success'
         })
       } else {
+        console.log({ error })
         return Toast({ content: 'There was an error', type: 'error' })
       }
     } catch (error) {
@@ -109,9 +116,20 @@ function EditProfileModal (props) {
       contentLabel={props.contentLabel}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Flex sx={{ flexDirection: 'column', p: 4, alignItems: 'center' }}>
+        <Flex
+          sx={{
+            flexDirection: 'column',
+            minWidth: '350px',
+            p: 4,
+            alignItems: 'center'
+          }}
+        >
           <Flex sx={{ mb: 2 }}>
-            <Avatar src={user?.profileImage} sx={{ width: 100, height: 100 }} />
+            <Avatar
+              img={user?.profileImage || user?.avatar}
+              size={100}
+              address={user.getWalletAddress()}
+            />
             <Box sx={{ ml: '27px' }}>
               <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
               <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
@@ -121,25 +139,25 @@ function EditProfileModal (props) {
             title='First Name'
             name='firstName'
             placeholderText='First Name'
-            defaultValue={user?.profile?.firstName}
+            defaultValue={user?.firstName}
           />
           <InputBox
             title='Last Name'
             placeholderText='Last Name'
             name='lastName'
-            defaultValue={user?.profile?.lastName}
+            defaultValue={user?.lastName}
           />
           <InputBox
             title='Location'
             placeholderText='Location'
             name='location'
-            defaultValue={user?.profile?.location}
+            defaultValue={user?.location}
           />
           <InputBox
             title='Website or URL'
             placeholderText='website'
             name='url'
-            defaultValue={user?.profile?.url}
+            defaultValue={user?.url}
           />
           <Button
             type='button'

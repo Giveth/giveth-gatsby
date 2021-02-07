@@ -8,7 +8,6 @@ import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { BsArrowLeft } from 'react-icons/bs'
 import LoadingModal from '../../components/loadingModal'
-import { GET_USER_BY_ADDRESS } from '../../apollo/gql/auth'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
 import AccountTop from '../../components/account/AccountTop'
@@ -30,22 +29,12 @@ const UserSpan = styled.span`
 const AccountPage = props => {
   const { user, isLoggedIn } = useWallet()
   const fromWalletAddress = user.getWalletAddress()
-  const storageWallets =
-    typeof localStorage !== 'undefined'
-      ? localStorage.getItem('giveth_donation_wallets')
-      : ''
 
-  const userWallets = storageWallets
-    ? storageWallets.split(',').concat(fromWalletAddress)
-    : [fromWalletAddress]
-
+  const userWallets = user.walletAddresses
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
-    variables: { fromWalletAddresses: userWallets },
     fetchPolicy: 'network-only'
   })
-  const userDonations = donations?.donationsFromWallets
-
-  console.log(`debug: account/index user : ${JSON.stringify(user, null, 2)}`)
+  const userDonations = donations?.donationsByDonor
 
   const { data: userProjects, loading: projectsLoading } = useQuery(
     FETCH_USER_PROJECTS,
