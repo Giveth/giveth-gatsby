@@ -226,7 +226,7 @@ const Tos = ({ data }) => {
               and payment card expiration date, so that we can complete your
               transactions and contact you as needed. Sales tax will be added to
               the price of purchases as deemed required by us. We may change
-              prices at any time. All payments shall be in __________.
+              prices at any time.
             </p>
             <p>
               You agree to pay all charges at the prices then in effect for your
@@ -235,16 +235,6 @@ const Tos = ({ data }) => {
               placing your order. We reserve the right to correct any errors or
               mistakes in pricing, even if we have already requested or received
               payment.
-            </p>
-            <p>
-              We reserve the right to refuse any order placed through the Site.
-              We may, in our sole discretion, limit or cancel quantities
-              purchased per person, per household, or per order. These
-              restrictions may include orders placed by or under the same
-              customer account, the same payment method, and/or orders that use
-              the same billing or shipping address. We reserve the right to
-              limit or prohibit orders that, in our sole judgment, appear to be
-              placed by dealers, resellers, or distributors.
             </p>
           </section>
           <section id='refunds'>
@@ -994,7 +984,6 @@ const Tos = ({ data }) => {
                 <li>#154</li>
                 <li>Cartersville, GA 30121</li>
                 <li>United States</li>
-                <li>Phone: __________</li>
                 <li>info@giveth.io</li>
               </strong>
             </ul>
