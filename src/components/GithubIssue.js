@@ -60,8 +60,10 @@ const GithubIssue = props => {
           aria-label='edit project name'
           variant='nofill'
           onClick={() =>
-            (window.location.href =
-              'https://github.com/Giveth/giveth-2/issues/new/choose')
+            window.open(
+              'https://github.com/Giveth/giveth-2/issues/new/choose',
+              '_blank'
+            )
           }
           sx={{
             backgroundColor: 'secondary',
