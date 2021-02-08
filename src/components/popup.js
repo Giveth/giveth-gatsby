@@ -1,10 +1,12 @@
 import React from 'react'
 import { Box, Button, Flex, Text } from 'theme-ui'
 import Modal from './modal'
+import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import signupBg from '../images/popup1.png'
+import IncompleteProfileImg from '../images/incomplete_profile.png'
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -13,6 +15,8 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+import metamaskLogo from '../images/logos/metamask.svg'
+import torusLogo from '../images/logos/torus.svg'
 
 function WelcomePopup ({ close }) {
   const { isLoggedIn, login } = useWallet()
@@ -54,16 +58,101 @@ function WelcomePopup ({ close }) {
           onClick={() => {
             try {
               close()
-              login()
+              login({ walletProvider: 'metamask' })
             } catch (error) {
               console.log({ error })
             }
           }}
         >
-          SIGN IN
+          <img
+            src={metamaskLogo}
+            alt='metamask logo'
+            style={{ width: '50%' }}
+          />
+        </Button>
+        <Button
+          mt={4}
+          sx={{
+            width: '290px',
+            variant: 'buttons.default'
+          }}
+          onClick={() => {
+            try {
+              close()
+              login({ walletProvider: 'torus' })
+            } catch (error) {
+              console.log({ error })
+            }
+          }}
+        >
+          <img src={torusLogo} alt='torus logo' style={{ width: '41%' }} />
         </Button>
       </Box>
       <img src={signupBg} style={{ width: '100%' }} alt='signup-bg' />
+    </Flex>
+  )
+}
+
+function IncompleteProfilePopup ({ close }) {
+  return (
+    <Flex
+      sx={{
+        alignItems: 'center',
+        flexDirection: 'column',
+        px: '36px',
+        py: 5,
+        textAlign: 'center'
+      }}
+    >
+      <img
+        src={IncompleteProfileImg}
+        style={{ width: '157px' }}
+        alt='no-profile-bg'
+      />
+      <Text sx={{ variant: 'headings.h4', color: 'secondary', mt: 3 }}>
+        Please complete your profile
+      </Text>
+      <Text
+        sx={{
+          variant: 'text.default',
+          color: 'secondary',
+          my: 3,
+          width: '90%'
+        }}
+      >
+        Please finish setting up your public profile before proceeding
+      </Text>
+      <Link to='/account'>
+        <Button
+          mt={4}
+          sx={{
+            width: '290px',
+            variant: 'buttons.default',
+            backgroundColor: 'secondary'
+          }}
+          onClick={() => {
+            try {
+            } catch (error) {
+              console.log({ error })
+            }
+          }}
+        >
+          COMPLETE PROFILE
+        </Button>
+      </Link>
+      <Text
+        sx={{
+          position: 'absolute',
+          top: '15px',
+          right: '32px',
+          color: 'secondary',
+          variant: 'text.default',
+          cursor: 'pointer'
+        }}
+        onClick={close}
+      >
+        Close
+      </Text>
     </Flex>
   )
 }
@@ -116,6 +205,8 @@ function Popup () {
     switch (value?.type) {
       case 'Welcome':
         return <WelcomePopup close={clearPopup} />
+      case 'IncompleteProfile':
+        return <IncompleteProfilePopup close={clearPopup} />
       case 'share':
         return (
           <SharePopup

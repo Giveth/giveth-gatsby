@@ -37,7 +37,7 @@ const User = props => {
           variables: { fromWalletAddresses: [address] },
           fetchPolicy: 'network-only'
         })
-        setDonations(donations?.donationsFromWallets)
+        setDonations(donations?.donationsByDonor)
 
         // GET PROJECTS
         const { data: projects } = await client.query({

@@ -15,9 +15,9 @@ const IndexContent = ({ hideInfo, content, location }) => {
 
   React.useEffect(() => {
     if (location?.state?.welcome) {
-      console.log('debug: index.js')
       // TODO: make this better
-      // popup.triggerPopup('Welcome')
+      const extra = location?.state?.flashMessage || false
+      popup.triggerPopup('Welcome', extra)
     }
   }, [])
 
@@ -25,8 +25,8 @@ const IndexContent = ({ hideInfo, content, location }) => {
     <>
       <Hero content={content} />
       <HomeTopProjects />
-      {!hideInfo === true ? <InfoSection /> : null}
-      <UpdatesSection />
+      {!hideInfo === true ? <InfoSection content={content} /> : null}
+      <UpdatesSection content={content} />
     </>
   )
 }
@@ -43,7 +43,12 @@ const IndexPage = props => {
   return (
     <Layout isHomePage='true'>
       <Seo title='Home' />
-      <IndexContent hideInfo={hideInfo} content={content} location={location} />
+      <IndexContent
+        hideInfo={hideInfo}
+        content={content}
+        html={html}
+        location={location}
+      />
     </Layout>
   )
 }
@@ -59,6 +64,22 @@ export const pageQuery = graphql`
         mainText
         mainButton
         mainButtonText
+        infoHead
+        infoSubtitle
+        infoButtonText
+        feature1
+        feature1Text
+        feature2
+        feature2Text
+        feature3
+        feature3Text
+        featureCta
+        infoHead2
+        infoSubtitle2
+        userType1Title
+        userType1Cta
+        userType2Title
+        userType2Cta
       }
     }
   }

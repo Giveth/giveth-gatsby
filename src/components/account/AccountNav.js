@@ -28,7 +28,7 @@ const options = [
 ]
 const AccountNav = props => {
   const { setQuery, query, projectsList, userDonations } = props
-  const { logout } = useWallet()
+  const { logout, wallet } = useWallet()
   const handleLogout = () => {
     logout()
   }
@@ -81,7 +81,7 @@ const AccountNav = props => {
       </Box>
       <Box sx={{ mt: ['35px', '70px', '70px'] }}>
         <Link
-          href='https://app.tor.us'
+          href={wallet?.supportLink}
           target='_blank'
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}
