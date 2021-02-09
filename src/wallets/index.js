@@ -13,6 +13,7 @@ const metamask = {
 
     metamask.provider = provider
   },
+  enable: async () => window.ethereum.enable(),
   init: async (buildEnv, network) => {
     const provider = await detectEthereumProvider()
     if (provider) {
@@ -36,6 +37,7 @@ const metamask = {
     }
 
     await metamask.init()
+    await metamask.enable()
     metamask.web3.eth.personal.sign(
       metamask.web3.utils.fromUtf8('Hello from Giveth'),
       '0x514eD72f1396107EB2d280F26B88d460836946C0',
