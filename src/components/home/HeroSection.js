@@ -58,7 +58,7 @@ const Hero = ({ content }) => {
         <Heading
           sx={{
             variant: 'headings.h1',
-            width: ['100%', null, '45%'],
+            width: ['100%', null, '100%'],
             fontWeight: 'bold',
             fontSize: ['8', '11', '11'],
             color: 'secondaryDark'
@@ -71,7 +71,7 @@ const Hero = ({ content }) => {
           pb={2}
           sx={{
             variant: 'text.large',
-            width: ['95%', '50%', '45%'],
+            width: ['95%', '60%', '70%'],
             color: 'secondary',
             lineHeight: 'taller'
           }}
