@@ -51,7 +51,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken () {
+    async function doValidateToken() {
       const isValid = await validateToken()
       console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -60,7 +60,7 @@ const CreateProjectForm = props => {
         await logout()
       }
 
-      // usePopup?.triggerPopup('Welcome')
+      // usePopup?.triggerPopup('WelcomeLoggedOut')
       // navigate('/', { state: { welcome: true } })
     }
   }, [])
@@ -349,14 +349,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep (currentStep) {
+function isCategoryStep(currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep (currentStep, steps) {
+function isFinalConfirmationStep(currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep (currentStep, steps) {
+function isLastStep(currentStep, steps) {
   return currentStep === steps.length - 1
 }

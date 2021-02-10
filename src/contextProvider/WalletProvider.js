@@ -52,6 +52,10 @@ function WalletProvider(props) {
 
     await wallet.init('production', network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
+    updateBalance(
+      localStorageUser?.walletAddresses?.length > 0 &&
+        localStorageUser.walletAddresses[0]
+    )
     setCurrentNetwork(networkName)
 
     wallet?.provider?.on('accountsChanged', function (accounts) {
@@ -122,13 +126,18 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
+  async function updateBalance(publicAddress) {
+    if (!publicAddress) return null
+    const balance = await wallet.web3.eth.getBalance(publicAddress)
+    setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
+  }
+
   async function updateUser(accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
-    const balance = await wallet.web3.eth.getBalance(publicAddress)
-    setBalance(balance)
+    updateBalance(publicAddress)
     // let user
     let user
     if (typeof wallet.torus !== 'undefined') {
