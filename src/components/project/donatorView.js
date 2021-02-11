@@ -12,6 +12,7 @@ import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.s
 import ProjectImageGallery4 from '../../images/svg/create/projectImageGallery4.svg'
 import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
+import { BsHeartFill } from 'react-icons/bs'
 
 import { Link } from 'gatsby'
 import { useQuery, useApolloClient } from '@apollo/client'
@@ -49,6 +50,13 @@ export const ProjectDonatorView = ({ pageContext }) => {
   )
 
   const project = pageContext?.project
+  const reactions = project?.reactions
+  const initUserHearted =
+    reactions?.filter(o => o.userId === user?.id?.toString()).length > 0
+
+  const [hearted, setHearted] = useState(initUserHearted)
+  const [heartedCount, setHeartedCount] = useState(reactions?.length)
+
   useEffect(() => {
     const firstFetch = async () => {
       try {
@@ -484,6 +492,19 @@ export const ProjectDonatorView = ({ pageContext }) => {
               })
             }}
           >
+            <Flex sx={{ alignItems: 'center', mr: 4 }}>
+              <BsHeartFill
+                style={{ cursor: 'pointer' }}
+                size='18px'
+                color={hearted ? theme.colors.red : theme.colors.muted}
+                onClick={() => null}
+              />
+              {heartedCount && heartedCount > 0 && (
+                <Text sx={{ variant: 'text.default', ml: 2 }}>
+                  {heartedCount}
+                </Text>
+              )}
+            </Flex>
             <FaShareAlt size={'12px'} color={theme.colors.secondary} />
             <Text
               sx={{
