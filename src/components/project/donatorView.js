@@ -18,6 +18,7 @@ import { Link } from 'gatsby'
 import { useQuery, useApolloClient } from '@apollo/client'
 import {
   GET_STRIPE_PROJECT_DONATIONS,
+  TOGGLE_PROJECT_REACTION,
   GET_PROJECT_UPDATES
 } from '../../apollo/gql/projects'
 import { GET_USER } from '../../apollo/gql/auth'
@@ -56,6 +57,28 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
   const [hearted, setHearted] = useState(initUserHearted)
   const [heartedCount, setHeartedCount] = useState(reactions?.length)
+
+  const reactToProject = async () => {
+    try {
+      const reaction = await client?.mutate({
+        mutation: TOGGLE_PROJECT_REACTION,
+        variables: {
+          reaction: 'heart',
+          projectId: parseFloat(project?.id)
+        }
+      })
+
+      const { data } = reaction
+      const { toggleProjectReaction } = data
+      const { reaction: hearted, reactionCount } = toggleProjectReaction
+
+      setHeartedCount(reactionCount)
+      setHearted(hearted)
+    } catch (error) {
+      usePopup?.triggerPopup('WelcomeLoggedOut')
+      console.log({ error })
+    }
+  }
 
   useEffect(() => {
     const firstFetch = async () => {
@@ -110,6 +133,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
     firstFetch()
   }, [])
+  console.log({ heartedCount })
   const showMap = process.env.OPEN_FOREST_MAP
     ? process.env.OPEN_FOREST_MAP
     : false
@@ -480,42 +504,47 @@ export const ProjectDonatorView = ({ pageContext }) => {
               justifyContent: 'center',
               textAlign: 'center',
               alignItems: 'center',
-              width: '100%',
-              cursor: 'pointer',
-              mt: '5px'
-            }}
-            onClick={() => {
-              usePopup?.triggerPopup('share', {
-                title: project?.title,
-                description: project?.description,
-                slug: project?.slug
-              })
+              width: '100%'
             }}
           >
-            <Flex sx={{ alignItems: 'center', mr: 4 }}>
+            <Flex sx={{ alignItems: 'center', mr: 3 }}>
               <BsHeartFill
                 style={{ cursor: 'pointer' }}
                 size='18px'
                 color={hearted ? theme.colors.red : theme.colors.muted}
-                onClick={() => null}
+                onClick={reactToProject}
               />
-              {heartedCount && heartedCount > 0 && (
+              {heartedCount && heartedCount > 0 ? (
                 <Text sx={{ variant: 'text.default', ml: 2 }}>
                   {heartedCount}
                 </Text>
-              )}
+              ) : null}
             </Flex>
-            <FaShareAlt size={'12px'} color={theme.colors.secondary} />
-            <Text
+            <Flex
               sx={{
-                variant: 'text.medium',
-                color: 'secondary',
-                textDecoration: 'none',
-                ml: '10px'
+                cursor: 'pointer',
+                alignItems: 'center'
+              }}
+              onClick={() => {
+                usePopup?.triggerPopup('share', {
+                  title: project?.title,
+                  description: project?.description,
+                  slug: project?.slug
+                })
               }}
             >
-              Share
-            </Text>
+              <FaShareAlt size={'12px'} color={theme.colors.secondary} />
+              <Text
+                sx={{
+                  variant: 'text.medium',
+                  color: 'secondary',
+                  textDecoration: 'none',
+                  ml: '10px'
+                }}
+              >
+                Share
+              </Text>
+            </Flex>
           </Flex>
         </FloatingDonateView>
       </Flex>

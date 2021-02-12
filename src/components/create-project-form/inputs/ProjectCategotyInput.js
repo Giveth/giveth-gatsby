@@ -38,7 +38,7 @@ export const ProjectCategoryInput = ({
           // overflow: 'scroll'
         }}
       >
-        {categoryList.map(category => {
+        {categoryList?.map(category => {
           return (
             <Label
               sx={{ mb: '10px', display: 'flex', alignItems: 'center' }}

@@ -63,6 +63,17 @@ function WalletProvider(props) {
         Toast({ content: 'Account changed', type: 'warn' })
       }
     })
+    wallet?.provider?.on('chainChanged', async chainId => {
+      // needs to be fetched again as chainId is being returned like 0x
+      const chainID = await wallet?.web3.eth.net.getId()
+      console.log({ chainID, networkId })
+      if (networkId !== chainID?.toString()) {
+        Toast({
+          content: `Ethereum network changed please use ${network}`,
+          type: 'warn'
+        })
+      }
+    })
   }
 
   useEffect(() => {

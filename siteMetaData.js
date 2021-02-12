@@ -3,7 +3,7 @@ let siteMetaData
 
 if (siteId === 'giveth') {
   siteMetaData = {
-    title: 'Giveth Simple Donation Application',
+    title: 'Giveth Donation Application',
     description: 'Building the Future of Giving #Blockchain4Good',
     author: '@giveth'
   }

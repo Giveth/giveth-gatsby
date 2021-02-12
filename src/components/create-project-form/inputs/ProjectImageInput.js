@@ -33,8 +33,13 @@ export const ProjectImageInput = ({
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     multiple: false,
+    // maxSize: 16000, // This isn't working, bug with library
     onDrop: async acceptedFile => {
-      setDisplayImage(await toBase64(acceptedFile[0]))
+      try {
+        setDisplayImage(await toBase64(acceptedFile[0]))
+      } catch (error) {
+        console.log({ error })
+      }
     }
   })
 
@@ -105,7 +110,7 @@ export const ProjectImageInput = ({
               src={placeHolder}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
-          ) : displayImage.startsWith('data:') ? (
+          ) : displayImage?.startsWith('data:') ? (
             <Image
               src={displayImage}
               sx={{ objectFit: 'cover', maxHeight: '150px' }}

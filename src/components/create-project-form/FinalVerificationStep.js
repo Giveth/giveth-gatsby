@@ -294,7 +294,7 @@ const FinalVerificationStep = ({
         </Text>
       </>
       <>
-        {formData.projectImage.startsWith('data:') ? (
+        {formData.projectImage?.startsWith('data:') ? (
           <Image
             src={formData.projectImage}
             sx={{
