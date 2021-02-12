@@ -16,8 +16,8 @@ const IndexContent = ({ hideInfo, content, location }) => {
 
   React.useEffect(() => {
     if (location?.state?.welcome && !popupShown) {
-      const extra = location?.state?.flashMessage || false
-      popup.triggerPopup('WelcomeLoggedOut', extra)
+      // const extra = location?.state?.flashMessage || false
+      // popup.triggerPopup('WelcomeLoggedOut', extra)
       setPopupShown(true)
     }
   }, [])

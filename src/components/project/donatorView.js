@@ -133,7 +133,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
     firstFetch()
   }, [])
-  console.log({ heartedCount })
   const showMap = process.env.OPEN_FOREST_MAP
     ? process.env.OPEN_FOREST_MAP
     : false
@@ -169,7 +168,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
       return false
     }
   }
-  console.log({ currentProjectView })
   return (
     <>
       <Flex>

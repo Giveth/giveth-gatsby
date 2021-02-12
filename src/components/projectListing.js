@@ -126,7 +126,8 @@ const ProjectListing = props => {
       key={props.listingId + '_box'}
       style={{
         width: '100%',
-        flexDirection: 'row'
+        flexDirection: 'row',
+        cursor: props.wholeClickable ? 'pointer' : 'default'
       }}
       onMouseOver={() => setHoverStyle(true)}
       onMouseLeave={() => setHoverStyle(false)}
@@ -135,6 +136,9 @@ const ProjectListing = props => {
         <ProjectCard
           key={props.listingId + '_card'}
           onClick={() => {
+            console.log(props)
+            if (props.wholeClickable)
+              return navigate(`/project/${props?.project?.slug}`)
             if (hoverStyle) return
             !props.disabled &&
               (props?.action
@@ -142,8 +146,15 @@ const ProjectListing = props => {
                 : navigate(`/donate/${props?.id}`))
           }}
           style={{
-            cursor: props.disabled || hoverStyle ? 'default' : 'pointer',
-            border: props.disabled ? null : `1px solid ${theme.colors.muted}`,
+            cursor: props.wholeClickable
+              ? 'pointer'
+              : props.disabled || hoverStyle
+              ? 'default'
+              : 'pointer',
+            border:
+              props.disabled || props.wholeClickable
+                ? null
+                : `1px solid ${theme.colors.muted}`,
             boxShadow:
               props.shadowed || hoverStyle
                 ? '0px 28px 52px rgba(44, 13, 83, 0.2)'
