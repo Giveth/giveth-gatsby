@@ -28,7 +28,11 @@ function ImageSection({ image, register }) {
     accept: 'image/*',
     multiple: false,
     onDrop: async acceptedFile => {
-      setDisplayImage(await toBase64(acceptedFile[0]))
+      try {
+        setDisplayImage(await toBase64(acceptedFile[0]))
+      } catch (error) {
+        console.log({ error })
+      }
     }
   })
 

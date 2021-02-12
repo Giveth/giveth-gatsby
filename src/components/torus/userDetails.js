@@ -220,7 +220,11 @@ const UserDetails = () => {
             </MenuItem>
           </Link>
           <a
-            href={wallet?.supportLink}
+            href={
+              wallet?.isTorus
+                ? wallet?.supportLink
+                : `${wallet?.supportLink}${address}`
+            }
             target='_blank'
             rel='noopener noreferrer'
             sx={{ textDecoration: 'none' }}

@@ -176,7 +176,10 @@ const CreateProjectForm = props => {
         project.projectWalletAddress = projectWalletAddress
       }
 
-      window?.localStorage.setItem('create-form', JSON.stringify(project))
+      window?.localStorage.setItem(
+        'create-form',
+        JSON.stringify({ ...project, projectImage: null })
+      )
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
@@ -209,7 +212,6 @@ const CreateProjectForm = props => {
       if (!user) return null
 
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
-      // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {

@@ -304,7 +304,9 @@ const DonationsTable = ({ donations }) => {
                           ml: 2
                         }}
                       >
-                        {i?.user?.firstName
+                        {i?.user?.name
+                          ? i?.user?.name
+                          : i?.user?.firstName
                           ? i?.user?.lastName
                             ? i?.user?.firstName + ' ' + i?.user?.lastName
                             : i?.user?.firstName
