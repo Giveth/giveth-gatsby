@@ -89,6 +89,7 @@ function WalletProvider (props) {
 
   async function signMessage (message, publicAddress) {
     try {
+      await checkNetwork()
       let signedMessage = null
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
@@ -102,21 +103,46 @@ function WalletProvider (props) {
 
       const hashedMsg = keccak256(finalMessage)
       const send = promisify(wallet.web3.currentProvider.sendAsync)
+      const msgParams = JSON.stringify({
+        primaryType: 'Login',
+        types: {
+          EIP712Domain: [
+            { name: 'name', type: 'string' },
+            { name: 'chainId', type: 'uint256' },
+            { name: 'version', type: 'string' }
+            // { name: 'verifyingContract', type: 'address' }
+          ],
+          Login: [{ name: 'user', type: 'User' }],
+          User: [{ name: 'wallets', type: 'address[]' }]
+        },
+        domain: {
+          name: 'Giveth Login',
+          chainId: process.env.GATSBY_NETWORK_ID,
+          version: '1'
+        },
+        message: {
+          contents: hashedMsg,
+          user: {
+            wallets: [publicAddress]
+          }
+        }
+      })
 
       const { result } = await send({
-        method: 'eth_sign',
-        params: [
-          publicAddress,
-          hashedMsg,
-          { customPrefix, customMessage: message }
-        ],
+        method: 'eth_signTypedData_v4',
+        params: [publicAddress, msgParams],
         from: publicAddress
       })
       signedMessage = result
 
       return signedMessage
     } catch (error) {
-      console.log('Signing Error!', error)
+      console.log('Signing Error!', { error })
+      Toast({
+        content: error?.message || 'There was an error',
+        type: 'error'
+      })
+      return false
     }
   }
 
@@ -165,7 +191,7 @@ function WalletProvider (props) {
     const signedMessage = await signMessage('our_secret', publicAddress)
     if (!signedMessage) return
     console.log(`updateUser: user : ${JSON.stringify(user, null, 2)}`)
-    console.log(`signedMessage ---> : ${signedMessage}`)
+    console.log(`signedMessage ---> : ${signedMessage}`, { publicAddress })
 
     const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
     user.parseDbUser(dbUser)
@@ -241,7 +267,6 @@ function WalletProvider (props) {
   async function checkNetwork () {
     if (!wallet) throw new Error('No Eth Provider')
     const currentNetworkId = await wallet?.web3.eth.getChainId()
-    console.log({ currentNetworkId, networkId })
     if (currentNetworkId?.toString() === networkId) {
       return true
     } else {
