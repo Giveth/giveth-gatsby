@@ -244,7 +244,8 @@ const ShowProject = props => {
       <>
         <ProjectContainer>
           <ProjectListing
-            disabled
+            wholeClickable
+            project={project}
             name={project?.title}
             description={project?.description}
             image={
@@ -271,8 +272,9 @@ const ShowProject = props => {
     <>
       <ProjectContainer>
         <ProjectListing
-          disabled
+          wholeClickable
           name={project?.title}
+          project={project}
           description={project?.description}
           image={
             project?.image ||
