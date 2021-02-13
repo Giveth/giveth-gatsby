@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React from 'react'
-import { Link } from 'gatsby'
+import { navigate } from 'gatsby'
 import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
@@ -62,16 +62,8 @@ const AccountPage = props => {
   }
 
   if (!isLoggedIn) {
-    return (
-      <Text
-        sx={{
-          variant: 'headings.h3',
-          m: 20
-        }}
-      >
-        unavailable page
-      </Text>
-    )
+    navigate('/', { state: { welcome: true } })
+    return null
   }
 
   return (

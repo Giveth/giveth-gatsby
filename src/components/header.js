@@ -172,7 +172,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -183,13 +183,13 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
   const goCreate = async () => {
-    if (!isLoggedIn) return triggerPopup('Welcome')
+    if (!isLoggedIn) return triggerPopup('WelcomeLoggedOut')
     if (!user?.name) return triggerPopup('IncompleteProfile')
     navigate('/create')
   }

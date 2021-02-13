@@ -161,7 +161,7 @@ const ProjectCard = props => {
       setHeartedCount(reactionCount)
       setHearted(hearted)
     } catch (error) {
-      usePopup?.triggerPopup('Welcome')
+      usePopup?.triggerPopup('WelcomeLoggedOut')
       console.log({ error })
     }
   }

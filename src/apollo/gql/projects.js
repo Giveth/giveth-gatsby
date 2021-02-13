@@ -88,6 +88,10 @@ const FETCH_PROJECT_BY_SLUG = gql`
       categories {
         name
       }
+      reactions {
+        reaction
+        userId
+      }
       donations {
         transactionId
         toWalletAddress
@@ -97,6 +101,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
         valueUsd
         user {
           id
+          name
           firstName
           lastName
           avatar

@@ -52,11 +52,26 @@ function WalletProvider(props) {
 
     await wallet.init('production', network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
+    updateBalance(
+      localStorageUser?.walletAddresses?.length > 0 &&
+        localStorageUser.walletAddresses[0]
+    )
     setCurrentNetwork(networkName)
 
     wallet?.provider?.on('accountsChanged', function (accounts) {
       if (accounts[0] && accounts[0] !== account) {
         Toast({ content: 'Account changed', type: 'warn' })
+      }
+    })
+    wallet?.provider?.on('chainChanged', async chainId => {
+      // needs to be fetched again as chainId is being returned like 0x
+      const chainID = await wallet?.web3.eth.net.getId()
+      console.log({ chainID, networkId })
+      if (networkId !== chainID?.toString()) {
+        Toast({
+          content: `Ethereum network changed please use ${network}`,
+          type: 'warn'
+        })
       }
     })
   }
@@ -122,13 +137,18 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
+  async function updateBalance(publicAddress) {
+    if (!publicAddress) return null
+    const balance = await wallet.web3.eth.getBalance(publicAddress)
+    setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
+  }
+
   async function updateUser(accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
-    const balance = await wallet.web3.eth.getBalance(publicAddress)
-    setBalance(balance)
+    updateBalance(publicAddress)
     // let user
     let user
     if (typeof wallet.torus !== 'undefined') {

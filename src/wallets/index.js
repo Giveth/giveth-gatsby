@@ -2,9 +2,10 @@ import Web3 from 'web3'
 import Torus from '@toruslabs/torus-embed'
 import detectEthereumProvider from '@metamask/detect-provider'
 
+// TODO: SET wallet address to this link
 const metamask = {
   isInitialized: false,
-  supportLink: 'https://metamask.zendesk.com/hc/en-us',
+  supportLink: `https://etherscan.io/address/`,
   setweb3: function (provider) {
     const web3Inst = new Web3(provider)
     metamask.web3 = web3Inst

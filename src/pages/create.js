@@ -20,7 +20,9 @@ import Logger from '../Logger'
 import { logout } from '../services/auth'
 // import { ProjectBankAccountInput } from '../components/create-project-form/inputs'
 
-const IndexPage = ({ data, location }) => {
+const IndexPage = props => {
+  const { data, location } = props
+  console.log({ props })
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)
@@ -118,10 +120,10 @@ const IndexPage = ({ data, location }) => {
     }
   }
 
-  function newProject () {
+  function newProject() {
     setAddedProject(null)
   }
-  function AfterCreation () {
+  function AfterCreation() {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -244,7 +246,7 @@ const IndexPage = ({ data, location }) => {
     )
   }
 
-  function ProjectForm () {
+  function ProjectForm() {
     if (!projectAdded && !projectId) {
       return (
         <>

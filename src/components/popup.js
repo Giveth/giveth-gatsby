@@ -5,7 +5,7 @@ import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import decoratorClouds from '../images/decorator-clouds.svg'
-import signupBg from '../images/popup1.png'
+import signupBg from '../images/arcs.png'
 import IncompleteProfileImg from '../images/incomplete_profile.png'
 import {
   FacebookShareButton,
@@ -18,7 +18,7 @@ import {
 import metamaskLogo from '../images/logos/metamask.svg'
 import torusLogo from '../images/logos/torus.svg'
 
-function WelcomePopup ({ close }) {
+function WelcomeLoggedOutPopup({ close }) {
   const { isLoggedIn, login } = useWallet()
 
   if (isLoggedIn) {
@@ -26,7 +26,13 @@ function WelcomePopup ({ close }) {
     return null
   }
   return (
-    <Flex sx={{ flexDirection: 'column', width: '645px' }}>
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        width: '645px',
+        height: '520px'
+      }}
+    >
       <img
         src={decoratorClouds}
         alt='signup-clouds'
@@ -44,17 +50,14 @@ function WelcomePopup ({ close }) {
       >
         Close
       </Text>
-      <Box sx={{ textAlign: 'center', py: 4 }}>
-        <Text sx={{ variant: 'headings.h4', pt: 6 }}>Welcome to Giveth</Text>
+      <Box sx={{ textAlign: 'center', py: 4, my: 4, mb: 6 }}>
+        <Text sx={{ variant: 'headings.h4', pt: 5 }}>Welcome to Giveth</Text>
         <Text sx={{ variant: 'text.default' }}>
           Please Sign in to your account and start using Giveth.
         </Text>
-        <Button
-          mt={4}
-          sx={{
-            width: '290px',
-            variant: 'buttons.default'
-          }}
+        <img
+          src={metamaskLogo}
+          alt='metamask logo'
           onClick={() => {
             try {
               close()
@@ -63,19 +66,11 @@ function WelcomePopup ({ close }) {
               console.log({ error })
             }
           }}
-        >
-          <img
-            src={metamaskLogo}
-            alt='metamask logo'
-            style={{ width: '50%' }}
-          />
-        </Button>
-        <Button
-          mt={4}
-          sx={{
-            width: '290px',
-            variant: 'buttons.default'
-          }}
+          style={{ width: '22%', margin: '4% 2% 0 2%', cursor: 'pointer' }}
+        />
+        <img
+          src={torusLogo}
+          alt='torus logo'
           onClick={() => {
             try {
               close()
@@ -84,16 +79,24 @@ function WelcomePopup ({ close }) {
               console.log({ error })
             }
           }}
-        >
-          <img src={torusLogo} alt='torus logo' style={{ width: '41%' }} />
-        </Button>
+          style={{ width: '22%', margin: '4% 2% 0 2%', cursor: 'pointer' }}
+        />
       </Box>
-      <img src={signupBg} style={{ width: '100%' }} alt='signup-bg' />
+      <img
+        src={signupBg}
+        style={{
+          width: '50%',
+          position: 'absolute',
+          right: -10,
+          bottom: -20
+        }}
+        alt='signup-bg'
+      />
     </Flex>
   )
 }
 
-function IncompleteProfilePopup ({ close }) {
+function IncompleteProfilePopup({ close }) {
   return (
     <Flex
       sx={{
@@ -157,7 +160,7 @@ function IncompleteProfilePopup ({ close }) {
   )
 }
 
-function SharePopup () {
+function SharePopup() {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
@@ -198,13 +201,13 @@ function SharePopup () {
   )
 }
 
-function Popup () {
+function Popup() {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
   const setView = () => {
     switch (value?.type) {
-      case 'Welcome':
-        return <WelcomePopup close={clearPopup} />
+      case 'WelcomeLoggedOut':
+        return <WelcomeLoggedOutPopup close={clearPopup} />
       case 'IncompleteProfile':
         return <IncompleteProfilePopup close={clearPopup} />
       case 'share':

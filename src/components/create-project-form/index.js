@@ -51,7 +51,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken () {
+    async function doValidateToken() {
       const isValid = await validateToken()
       console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -60,7 +60,7 @@ const CreateProjectForm = props => {
         await logout()
       }
 
-      // usePopup?.triggerPopup('Welcome')
+      // usePopup?.triggerPopup('WelcomeLoggedOut')
       // navigate('/', { state: { welcome: true } })
     }
   }, [])
@@ -176,7 +176,10 @@ const CreateProjectForm = props => {
         project.projectWalletAddress = projectWalletAddress
       }
 
-      window?.localStorage.setItem('create-form', JSON.stringify(project))
+      window?.localStorage.setItem(
+        'create-form',
+        JSON.stringify({ ...project, projectImage: null })
+      )
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
@@ -209,7 +212,6 @@ const CreateProjectForm = props => {
       if (!user) return null
 
       if (JSON.stringify(user) === JSON.stringify({})) return setLoading(false)
-      // TODO CHECK IF THERE IS A PROJECT WITH THIS WALLET
       const { data } = await client.query({
         query: GET_PROJECT_BY_ADDRESS,
         variables: {
@@ -349,14 +351,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep (currentStep) {
+function isCategoryStep(currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep (currentStep, steps) {
+function isFinalConfirmationStep(currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep (currentStep, steps) {
+function isLastStep(currentStep, steps) {
   return currentStep === steps.length - 1
 }
