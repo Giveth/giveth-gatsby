@@ -24,8 +24,6 @@ const ProjectListing = props => {
   return <MyProjects projects={[]} />
 }
 const AccountPage = props => {
-  console.log(`props : ${JSON.stringify(props, null, 2)}`)
-
   return (
     <Layout noHeader>
       <AccountTop />

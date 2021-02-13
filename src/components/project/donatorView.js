@@ -121,7 +121,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           admin: admin?.data?.user,
           updates: updates?.data?.getProjectUpdates
         })
-        console.log({ user, pageContext })
+
         setTotalGivers(
           [...new Set(donations?.map(data => data?.fromWalletAddress))].length
         )
@@ -133,7 +133,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
     firstFetch()
   }, [])
-  console.log({ heartedCount })
+
   const showMap = process.env.OPEN_FOREST_MAP
     ? process.env.OPEN_FOREST_MAP
     : false
@@ -169,7 +169,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
       return false
     }
   }
-  console.log({ currentProjectView })
+
   return (
     <>
       <Flex>
