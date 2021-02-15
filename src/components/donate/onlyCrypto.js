@@ -250,7 +250,7 @@ const OnlyCrypto = props => {
       }
       setLoading(false)
       // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
-      // if (process.env.GATSBY_NETWORK === 'ropsten') return
+      if (process.env.GATSBY_NETWORK === 'ropsten') return
 
       notify.config({ desktopPosition: 'topRight' })
       const { emitter } = notify.hash(hash)
