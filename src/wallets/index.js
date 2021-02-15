@@ -88,8 +88,11 @@ export const wallets = {
       return wallets.torus.torus
     },
     logout: async () => {
-      //No need to logout of Torus it happens automatically when the user closes the window
-      // wallet.torus.logout()
+      try {
+        wallets.torus.torus.logout()
+      } catch (error) {
+        console.log({ error })
+      }
     },
     isLoggedIn: () => {
       return wallets.torus.torus.isLoggedIn

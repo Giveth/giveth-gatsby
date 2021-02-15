@@ -241,10 +241,10 @@ const OnlyCrypto = props => {
         console.log({ data, error })
         const ob = onboard.getState()
       } catch (error) {
-        alert(
-          `There was an error saving your donation to our datbase. Your payment may stil have gone through. Please report this issue, and reference your transaction id ${hash?.toString()}`
-        )
-        await logout()
+        Toast({
+          content: `There was an error saving your donation to our database. Your payment may still have gone through. Please report this issue, and reference your transaction id ${hash?.toString()}`,
+          type: 'error'
+        })
         console.log({ error })
         setLoading(false)
       }
