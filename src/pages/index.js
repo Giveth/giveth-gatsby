@@ -12,12 +12,13 @@ import { PopupContext } from '../contextProvider/popupProvider'
 
 const IndexContent = ({ hideInfo, content, location }) => {
   const popup = React.useContext(PopupContext)
+  const [popupShown, setPopupShown] = React.useState(false)
 
   React.useEffect(() => {
-    if (location?.state?.welcome) {
-      // TODO: make this better
-      const extra = location?.state?.flashMessage || false
-      popup.triggerPopup('Welcome', extra)
+    if (location?.state?.welcome && !popupShown) {
+      // const extra = location?.state?.flashMessage || false
+      // popup.triggerPopup('WelcomeLoggedOut', extra)
+      setPopupShown(true)
     }
   }, [])
 
