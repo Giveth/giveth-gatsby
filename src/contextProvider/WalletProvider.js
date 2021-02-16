@@ -81,7 +81,6 @@ function WalletProvider (props) {
 
   async function logout () {
     setLoading(true)
-
     Auth.handleLogout()
     setIsLoggedIn(false)
     setLoading(false)
@@ -117,7 +116,7 @@ function WalletProvider (props) {
         },
         domain: {
           name: 'Giveth Login',
-          chainId: process.env.GATSBY_NETWORK_ID,
+          chainId: parseInt(process.env.GATSBY_NETWORK_ID),
           version: '1'
         },
         message: {
