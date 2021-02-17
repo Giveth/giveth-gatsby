@@ -1,25 +1,27 @@
+import detectEthereumProvider from '@metamask/detect-provider'
 import React, { useState, useEffect, useRef } from 'react'
-import Web3 from 'web3'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
-import * as Auth from '../services/auth'
-import { useApolloClient } from '@apollo/client'
+import { ethers } from 'ethers'
+import Web3 from 'web3'
+
+import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
-import { getToken, validateAuthToken } from '../services/token'
+import getSigner from '../services/ethersSigner'
+import { useApolloClient } from '@apollo/client'
+import * as Auth from '../services/auth'
+import Toast from '../components/toast'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
-import Toast from '../components/toast'
-import detectEthereumProvider from '@metamask/detect-provider'
 
-console.log(`*** User : ${JSON.stringify(User, null, 2)}`)
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
 const networkId = process.env.GATSBY_NETWORK_ID
 
 let wallet = {}
 
-function useWallet() {
+function useWallet () {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -27,7 +29,7 @@ function useWallet() {
   return context
 }
 
-function WalletProvider(props) {
+function WalletProvider (props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
@@ -80,7 +82,7 @@ function WalletProvider(props) {
     initWallet(localStorageUser?.walletType)
   }, [])
 
-  async function logout() {
+  async function logout () {
     wallet?.logout()
     setLoading(true)
     Auth.handleLogout()
@@ -88,7 +90,7 @@ function WalletProvider(props) {
     setLoading(false)
   }
 
-  async function signMessage(message, publicAddress) {
+  async function signMessage (message, publicAddress) {
     try {
       await checkNetwork()
       let signedMessage = null
@@ -147,7 +149,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function updateUserInfoOnly() {
+  async function updateUserInfoOnly () {
     if (!user) return null
     const { data } = await client.query({
       query: GET_USER_BY_ADDRESS,
@@ -163,13 +165,13 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
-  async function updateBalance(publicAddress) {
+  async function updateBalance (publicAddress) {
     if (!publicAddress) return null
     const balance = await wallet.web3.eth.getBalance(publicAddress)
     setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
   }
 
-  async function updateUser(accounts) {
+  async function updateUser (accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
@@ -205,12 +207,12 @@ function WalletProvider(props) {
     setUser(user)
   }
 
-  async function validateToken() {
+  async function validateToken () {
     const isValid = await validateAuthToken(Auth.getUserToken())
     return isValid
   }
 
-  async function login({ walletProvider }) {
+  async function login ({ walletProvider }) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
@@ -253,7 +255,7 @@ function WalletProvider(props) {
     }
   }
 
-  function isWalletAddressValid(address) {
+  function isWalletAddressValid (address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -261,11 +263,11 @@ function WalletProvider(props) {
     }
   }
 
-  function isAddressENS(address) {
+  function isAddressENS (address) {
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function checkNetwork() {
+  async function checkNetwork () {
     if (!wallet) throw new Error('No Eth Provider')
     const currentNetworkId = await wallet?.web3.eth.getChainId()
     if (currentNetworkId?.toString() === networkId) {
@@ -275,22 +277,37 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendTransaction(params) {
+  async function sendEthersTransaction (toAddress, amount, provider) {
+    const transaction = {
+      to: toAddress,
+      value: ethers.utils.parseEther(amount.toString())
+    }
+
+    // console.log(`JF wallet?.provider : ${JSON.stringify(wallet, null, 2)}`)
+
+    const signer = getSigner(wallet)
+    const signerTransaction = await signer.sendTransaction(transaction)
+    return signerTransaction
+  }
+  async function sendTransaction (params) {
     try {
       await checkNetwork()
       const fromAccount = await wallet?.web3.eth.getAccounts()
-      return wallet?.web3.eth.sendTransaction({
+      const txn = await wallet?.web3.eth.sendTransaction({
         from: fromAccount[0],
         to: params?.to,
         value: params?.value
       })
+
+      console.log(`stTxn ---> : ${txn}`)
+      return txn
     } catch (error) {
       console.log('Error sending transaction: ', { error })
       throw new Error(error)
     }
   }
 
-  async function getAddressFromENS(address) {
+  async function getAddressFromENS (address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {

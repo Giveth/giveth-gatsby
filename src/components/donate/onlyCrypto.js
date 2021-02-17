@@ -19,6 +19,8 @@ import getSigner from '../../services/ethersSigner'
 import Toast from '../../components/toast'
 import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
+import * as transaction from '../../services/transaction'
+import { saveDonation, saveDonationTransaction } from '../../services/donation'
 
 let provider
 
@@ -204,7 +206,6 @@ const OnlyCrypto = props => {
   // FOR REGULAR TX
   const sendTx = async fromOwnProvider => {
     try {
-      setLoading(true)
       // CHECK ADDRESS
       let toAddress = project?.walletAddress
       if (ensRegex(project?.walletAddress)) {
@@ -280,99 +281,6 @@ const OnlyCrypto = props => {
     }
   }
 
-  // Contract call example
-  // const sendTx = async () => {
-  //   try {
-  //     await setProvider()
-  //     const signer = getSigner(provider)
-  //     console.log(ethers.utils.parseEther(subtotal.toString()))
-
-  //     const abi = [
-  //       {
-  //         anonymous: false,
-  //         inputs: [
-  //           {
-  //             indexed: false,
-  //             internalType: 'address',
-  //             name: 'origin',
-  //             type: 'address'
-  //           },
-  //           {
-  //             indexed: false,
-  //             internalType: 'address',
-  //             name: 'target',
-  //             type: 'address'
-  //           },
-  //           {
-  //             indexed: false,
-  //             internalType: 'uint256',
-  //             name: 'amount',
-  //             type: 'uint256'
-  //           }
-  //         ],
-  //         name: 'Transfer',
-  //         type: 'event'
-  //       },
-  //       {
-  //         constant: false,
-  //         inputs: [
-  //           {
-  //             internalType: 'address payable',
-  //             name: 'target',
-  //             type: 'address'
-  //           }
-  //         ],
-  //         name: 'transfer',
-  //         outputs: [],
-  //         payable: true,
-  //         stateMutability: 'payable',
-  //         type: 'function'
-  //       }
-  //     ]
-
-  //     const contractAddress = '0x4248bfcfae44942D1C26296CCB554C66926E639D'
-
-  //     const contract = new ethers.Contract(contractAddress, abi, signer)
-
-  //     const overrides = {
-  //       gasLimit: 500000,
-  //       gasPrice: ethers.BigNumber.from('20000000000'),
-  //       value: ethers.utils.parseEther(subtotal.toString())
-  //     }
-
-  //     const { hash } = await contract.transfer(
-  //       '0x3Db054B9a0D6A76db171542bb049999dC191B817',
-  //       overrides
-  //     )
-
-  //     console.log({ hash })
-
-  //     notify.config({ desktopPosition: 'topRight' })
-  //     const { emitter } = notify.hash(hash)
-
-  //     emitter.on('txPool', transaction => {
-  //       return {
-  //         // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
-  //         // or you could use onclick for when someone clicks on the notification itself
-  //         onclick: () =>
-  //           window.open(`https://ropsten.etherscan.io/tx/${transaction.hash}`)
-  //       }
-  //     })
-
-  //     emitter.on('txSent', console.log)
-  //     emitter.on('txConfirmed', console.log)
-  //     emitter.on('txSpeedUp', console.log)
-  //     emitter.on('txCancel', console.log)
-  //     emitter.on('txFailed', console.log)
-
-  //     emitter.on('all', event => {
-  //       console.log('ALLLLLLL', event)
-  //     })
-  //   } catch (error) {
-  //     console.log({ error })
-  //   }
-  // }
-
   const confirmDonation = async fromOwnProvider => {
     try {
       if (!project?.walletAddress) {
@@ -388,7 +296,56 @@ const OnlyCrypto = props => {
         const ready = await readyToTransact()
         if (!ready) return
       }
-      sendTx(fromOwnProvider)
+      setLoading(true)
+      //await sendTx(fromOwnProvider)
+
+      const toAddress = ensRegex(project?.walletAddress)
+        ? await provider.resolveName(project?.walletAddress)
+        : project?.walletAddress
+
+      //MateoRocks
+      const token = 'ETH'
+      const fromAddress = '0x63A32F1595a68E811496D820680B74A5ccA303c5'
+
+      const {
+        donationId,
+        savedDonation,
+        saveDonationErrors
+      } = await saveDonation(
+        fromAddress,
+        toAddress,
+        Number(subtotal),
+        token,
+        Number(project.id)
+      )
+
+      //Save initial txn details to db
+      if (savedDonation) {
+        const transactionHash = await transaction.send(
+          toAddress,
+          subtotal,
+          fromOwnProvider,
+          isLoggedIn,
+          sendTransaction,
+          provider
+        )
+        setLoading(false)
+
+        const savedDonationTransaction = await saveDonationTransaction(
+          transactionHash,
+          donationId
+        )
+
+        //do we need this? const ob = onboard.getState()
+        transaction.notify(transactionHash)
+        props.setHashSent({ transactionHash, subtotal })
+      } else {
+        setLoading(false)
+        return Toast({
+          content: `${saveDonationErrors[0]}. You have not made any sort of payment and your funds are safe.`,
+          type: 'warn'
+        })
+      }
     } catch (error) {
       return Toast({ content: error?.message || error, type: 'error' })
     }

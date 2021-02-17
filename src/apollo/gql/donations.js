@@ -1,7 +1,27 @@
 import gql from 'graphql-tag'
 const SAVE_DONATION = gql`
-  mutation($transactionId: String!) {
-    saveDonation(transactionId: $transactionId)
+  mutation(
+    $fromAddress: String!
+    $toAddress: String!
+    $amount: Float!
+    $token: String!
+    $projectId: Float!
+  ) {
+    saveDonation(
+      fromAddress: $fromAddress
+      toAddress: $toAddress
+      amount: $amount
+      token: $token
+      projectId: $projectId
+    )
+  }
+`
+const SAVE_DONATION_TRANSACTION = gql`
+  mutation($transactionId: String!, $donationId: Float!) {
+    saveDonationTransaction(
+      transactionId: $transactionId
+      donationId: $donationId
+    )
   }
 `
 const WALLET_DONATIONS = gql`
@@ -48,4 +68,4 @@ const USERS_DONATIONS = gql`
     }
   }
 `
-export { SAVE_DONATION, USERS_DONATIONS }
+export { SAVE_DONATION, USERS_DONATIONS, SAVE_DONATION_TRANSACTION }
