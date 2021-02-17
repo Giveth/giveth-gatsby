@@ -12,9 +12,10 @@
 
 [[redirects]]
   from = "/donate"
-  to = "/donate/giveth"
+  to = "/donate/:id"
   status = 200
   force = true
+  query = {id = "giveth"}
 
 [[redirects]]
   from = "/project/:id"
