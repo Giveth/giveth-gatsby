@@ -11,13 +11,6 @@
   force = true
 
 [[redirects]]
-  from = "/donate"
-  to = "/donate"
-  status = 302
-  force = true
-  query = {id = "giveth"}
-
-[[redirects]]
   from = "/project/:id"
   to = "/project"
   status = 200
