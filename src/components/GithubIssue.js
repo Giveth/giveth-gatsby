@@ -7,16 +7,16 @@ import theme from '../gatsby-plugin-theme-ui/index'
 
 const GithubIssue = props => {
   const { fixed } = props
-  const [showIssuePopup, setShowIssuePopup] = React.useState(false)
+  const [showIssuePopup, setShowIssuePopup] = React.useState(true)
 
   React.useEffect(() => {
-    // check local storage
-    const issueAlreadyClosed =
-      typeof window !== 'undefined' &&
-      window.localStorage.getItem('githubIssueClosed')
-    if (!issueAlreadyClosed) {
-      setShowIssuePopup(true)
-    }
+    // Commenting this as we want to show the popup everywhere even after closed
+    // const issueAlreadyClosed =
+    //   typeof window !== 'undefined' &&
+    //   window.localStorage.getItem('githubIssueClosed')
+    // if (!issueAlreadyClosed) {
+    //   setShowIssuePopup(true)
+    // }
   })
 
   if (!showIssuePopup) return null
@@ -50,7 +50,7 @@ const GithubIssue = props => {
         }}
       >
         <Text variant='headings.h5' mb={1} color='secondary'>
-          Give feedback
+          Soft Launch Mode
         </Text>
         <Text variant='text.default' color='secondary' mb={2}>
           Share your feedback or report an issue
