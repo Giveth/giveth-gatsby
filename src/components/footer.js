@@ -40,6 +40,7 @@ const FooterExternalLink = styled.a`
   text-decoration: none;
   font-family: ${theme.fonts.heading}, sans-serif;
   color: ${theme.colors.bodyDark};
+  cursor: pointer;
   :hover {
     color: ${theme.colors.accent};
   }
@@ -144,10 +145,10 @@ const Footer = () => {
             <FooterLink to='/about'>About Us</FooterLink>
             <FooterLink to='/faq'>FAQ</FooterLink>
             <FooterLink to='/partnerships'>Partnerships</FooterLink>
-            <FooterExternalLink to='https://wiki.giveth.io'>
+            <FooterExternalLink href='https://wiki.giveth.io'>
               Wiki <FiExternalLink size='18px' />
             </FooterExternalLink>
-            <FooterExternalLink to='https://medium.com/giveth'>
+            <FooterExternalLink href='https://medium.com/giveth'>
               Blog <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterLink to='/contact'>Contact</FooterLink>
@@ -157,39 +158,39 @@ const Footer = () => {
           </LinkBox>
           <LinkBox>
             <FooterExternalLink
-              to='https://beta.giveth.io'
+              href='https://beta.giveth.io'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Giveth DApp
+              Giveth TRACE <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterExternalLink
-              to='https://commonsstack.org'
+              href='https://commonsstack.org'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Commons Stack
+              Commons Stack <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterExternalLink
-              to='https://wiki.giveth.io/governance/'
+              href='https://wiki.giveth.io/governance/'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Governance
+              Governance <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterExternalLink
-              to='https://giveth.io/'
+              href='https://galaxy.giveth.io/'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Galaxy Projects
+              Galaxy Projects <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterExternalLink
-              to='https://giveth.io/#socialcoding'
+              href='https://galaxy.giveth.io/#socialcoding'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Social Coding
+              Social Coding <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterLink to='/join'>Join Our Community</FooterLink>
           </LinkBox>
