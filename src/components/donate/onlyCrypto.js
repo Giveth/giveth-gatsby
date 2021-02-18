@@ -235,7 +235,6 @@ const OnlyCrypto = props => {
 
       const token = 'ETH'
       const fromAddress = isLoggedIn ? user.getWalletAddress() : 'anon'
-
       //Save initial txn details to db
       const {
         donationId,
@@ -248,7 +247,6 @@ const OnlyCrypto = props => {
         token,
         Number(project.id)
       )
-
       if (savedDonation) {
         await transaction.send(
           toAddress,
@@ -261,6 +259,7 @@ const OnlyCrypto = props => {
             onTransactionHash: async transactionHash => {
               // onTransactionHash callback for event emitter
               transaction.confirmEtherTransaction(transactionHash, res => {
+                if (!res) return
                 toast.dismiss()
                 if (res?.tooSlow) {
                   // Tx is being too slow

@@ -19,15 +19,14 @@ export async function send(
     let hash
 
     if (fromOwnProvider && isLoggedIn) {
-      const start = Date.now()
       const regularTransaction = await sendTransaction(transaction, txCallbacks)
-
       hash = regularTransaction?.transactionHash
     } else {
       const signer = getSigner(provider)
-      const signerTransaction = await signer.sendTransaction(
+      const signerTransaction = await sendTransaction(
         transaction,
-        txCallbacks
+        txCallbacks,
+        signer
       )
 
       hash = signerTransaction?.hash
@@ -83,7 +82,7 @@ export async function confirmEtherTransaction(
   count = 0
 ) {
   const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
-  const MAX_INTENTS = 1 // one every second
+  const MAX_INTENTS = 20 // one every second
   web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
     if (err) {
       throw Error(err)

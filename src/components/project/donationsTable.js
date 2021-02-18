@@ -271,7 +271,6 @@ const DonationsTable = ({ donations }) => {
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((i, key) => {
                 if (!i) return null
-                console.log({ i })
                 return (
                   <tr key={key}>
                     <td

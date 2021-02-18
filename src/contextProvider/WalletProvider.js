@@ -289,21 +289,32 @@ function WalletProvider(props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
-  async function sendTransaction(params, txCallbacks) {
+  async function sendTransaction(params, txCallbacks, fromSigner) {
     try {
       await checkNetwork()
-      const fromAccount = await wallet?.web3.eth.getAccounts()
-      let txn
+      let web3Provider = wallet?.web3.eth
+      let txn = null
       const txParams = {
-        from: fromAccount[0],
         to: params?.to,
         value: params?.value
       }
-      if (!txCallbacks) {
-        txn = await wallet?.web3.eth.sendTransaction(txParams)
+
+      if (!fromSigner) {
+        // can be signed instantly by current provider
+        const fromAccount = await web3Provider.getAccounts()
+        txParams.from = fromAccount[0]
+      } else {
+        // It will be signed later by provider
+        web3Provider = fromSigner
+      }
+
+      if (!txCallbacks || fromSigner) {
+        // gets hash and checks until it's mined
+        txn = await web3Provider.sendTransaction(txParams)
+        txCallbacks?.onTransactionHash(txn?.hash)
       } else {
         // using the event emitter
-        return wallet?.web3.eth
+        return web3Provider
           .sendTransaction(txParams)
           .on('transactionHash', txCallbacks?.onTransactionHash)
           .on('receipt', function (receipt) {
