@@ -17,6 +17,8 @@ import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
+import { toast } from 'react-toastify'
+import InProgressModal from './inProgressModal'
 import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as transaction from '../../services/transaction'
@@ -97,10 +99,11 @@ const OnlyCrypto = props => {
   const [ethPrice, setEthPrice] = useState(1)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
+  const [inProgress, setInProgress] = useState(false)
+  const [txHash, setTxHash] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
-  const { isLoggedIn, user, sendTransaction, checkNetwork } = useWallet()
+  const { isLoggedIn, sendTransaction, user } = useWallet()
 
   const client = useApolloClient()
 
@@ -218,17 +221,22 @@ const OnlyCrypto = props => {
         const ready = await readyToTransact()
         if (!ready) return
       }
-      setLoading(true)
-      //await sendTx(fromOwnProvider)
+      Toast({
+        content: 'Donation in progress...',
+        type: 'dark',
+        customPosition: 'top-left',
+        isLoading: true,
+        noAutoClose: true
+      })
 
       const toAddress = ensRegex(project?.walletAddress)
         ? await provider.resolveName(project?.walletAddress)
         : project?.walletAddress
 
-      //MateoRocks
       const token = 'ETH'
-      const fromAddress = '0x00d18ca9782bE1CaEF611017c2Fbc1a39779A57C'
+      const fromAddress = isLoggedIn ? user.getWalletAddress() : 'anon'
 
+      //Save initial txn details to db
       const {
         donationId,
         savedDonation,
@@ -241,42 +249,77 @@ const OnlyCrypto = props => {
         Number(project.id)
       )
 
-      //Save initial txn details to db
       if (savedDonation) {
-        const transactionHash = await transaction.send(
+        await transaction.send(
           toAddress,
           subtotal,
           fromOwnProvider,
           isLoggedIn,
           sendTransaction,
-          provider
+          provider,
+          {
+            onTransactionHash: async transactionHash => {
+              // onTransactionHash callback for event emitter
+              transaction.confirmEtherTransaction(transactionHash, res => {
+                toast.dismiss()
+                if (res?.tooSlow) {
+                  // Tx is being too slow
+                  toast.dismiss()
+                  setTxHash(transactionHash)
+                  setInProgress(true)
+                } else if (res?.status) {
+                  // Tx was successful
+                  props.setHashSent({ transactionHash, subtotal })
+                } else {
+                  // EVM reverted the transaction, it failed
+                  Toast({
+                    content: 'Transaction failed',
+                    type: 'error'
+                  })
+                }
+              })
+              await saveDonationTransaction(transactionHash, donationId)
+            },
+            onReceiptGenerated: receipt => {
+              props.setHashSent({
+                transactionHash: receipt?.transactionHash,
+                subtotal
+              })
+            },
+            onError: error => {
+              Toast({
+                content: error?.message || error?.error?.message || error,
+                type: 'error'
+              })
+            }
+          }
         )
-        setLoading(false)
 
-        const savedDonationTransaction = await saveDonationTransaction(
-          transactionHash,
-          donationId
-        )
-
-        //do we need this? const ob = onboard.getState()
-        transaction.notify(transactionHash)
-        props.setHashSent({ transactionHash, subtotal })
+        // Commented notify and instead we are using our own service
+        // transaction.notify(transactionHash)
       } else {
-        setLoading(false)
+        toast.dismiss()
         return Toast({
           content: `${saveDonationErrors[0]}. You have not made any sort of payment and your funds are safe.`,
           type: 'warn'
         })
       }
     } catch (error) {
-      setLoading(false)
-      return Toast({ content: error?.message || error, type: 'error' })
+      toast.dismiss()
+      return Toast({
+        content: error?.message || error?.error?.message || error,
+        type: 'error'
+      })
     }
   }
 
   return (
     <Content>
-      {loading && <LoadingModal isOpen={loading} />}
+      <InProgressModal
+        showModal={inProgress}
+        setShowModal={val => setInProgress(val)}
+        txHash={txHash}
+      />
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setIsOpen(false)}

@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import Web3 from 'web3'
 import getSigner from './ethersSigner'
 
 export async function send(
@@ -7,7 +8,8 @@ export async function send(
   fromOwnProvider,
   isLoggedIn,
   sendTransaction,
-  provider
+  provider,
+  txCallbacks
 ) {
   try {
     const transaction = {
@@ -18,12 +20,15 @@ export async function send(
 
     if (fromOwnProvider && isLoggedIn) {
       const start = Date.now()
-      const regularTransaction = await sendTransaction(transaction)
+      const regularTransaction = await sendTransaction(transaction, txCallbacks)
 
       hash = regularTransaction?.transactionHash
     } else {
       const signer = getSigner(provider)
-      const signerTransaction = await signer.sendTransaction(transaction)
+      const signerTransaction = await signer.sendTransaction(
+        transaction,
+        txCallbacks
+      )
 
       hash = signerTransaction?.hash
     }
@@ -57,5 +62,45 @@ export function notify(hash) {
 
   emitter.on('all', event => {
     console.log('ALLLLLLL', event)
+  })
+}
+
+export async function getHashInfo(txHash) {
+  try {
+    const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+    const txInfo = await web3.eth.getTransaction(txHash)
+    console.log({ txInfo })
+    return txInfo
+  } catch (error) {
+    console.log({ error })
+    throw new Error(error)
+  }
+}
+
+export async function confirmEtherTransaction(
+  transactionHash,
+  callbackFunction,
+  count = 0
+) {
+  const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+  const MAX_INTENTS = 1 // one every second
+  web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
+    if (err) {
+      throw Error(err)
+    }
+
+    if (receipt !== null) {
+      // Transaction went through
+      if (callbackFunction) {
+        callbackFunction({ ...receipt, tooSlow: false })
+      }
+    } else if (count >= MAX_INTENTS) {
+      callbackFunction({ tooSlow: true })
+    } else {
+      // Try again in 1 second
+      setTimeout(function () {
+        confirmEtherTransaction(transactionHash, callbackFunction, ++count)
+      }, 1000)
+    }
   })
 }
