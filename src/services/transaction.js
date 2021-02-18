@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
 import getSigner from './ethersSigner'
 
-export async function send (
+export async function send(
   toAddress,
   subtotal,
   fromOwnProvider,
@@ -9,29 +9,33 @@ export async function send (
   sendTransaction,
   provider
 ) {
-  const transaction = {
-    to: toAddress,
-    value: ethers.utils.parseEther(subtotal.toString())
+  try {
+    const transaction = {
+      to: toAddress,
+      value: ethers.utils.parseEther(subtotal.toString())
+    }
+    let hash
+
+    if (fromOwnProvider && isLoggedIn) {
+      const start = Date.now()
+      const regularTransaction = await sendTransaction(transaction)
+
+      hash = regularTransaction?.transactionHash
+    } else {
+      const signer = getSigner(provider)
+      const signerTransaction = await signer.sendTransaction(transaction)
+
+      hash = signerTransaction?.hash
+    }
+    if (!hash) throw new Error('Transaction failed')
+
+    return hash
+  } catch (error) {
+    throw new Error(error?.message || error)
   }
-  let hash
-
-  if (fromOwnProvider && isLoggedIn) {
-    const start = Date.now()
-    const regularTransaction = await sendTransaction(transaction)
-
-    hash = regularTransaction?.transactionHash
-  } else {
-    const signer = getSigner(provider)
-    const signerTransaction = signer.sendTransaction(transaction)
-
-    hash = signerTransaction?.hash
-  }
-  if (!hash) throw new Error('Transaction failed')
-
-  return hash
 }
 
-export function notify (hash) {
+export function notify(hash) {
   if (process.env.GATSBY_NETWORK === 'ropsten') return
 
   notify.config({ desktopPosition: 'topRight' })

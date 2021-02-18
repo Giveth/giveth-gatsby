@@ -203,84 +203,6 @@ const OnlyCrypto = props => {
     return ready
   }
 
-  // FOR REGULAR TX
-  const sendTx = async fromOwnProvider => {
-    try {
-      // CHECK ADDRESS
-      let toAddress = project?.walletAddress
-      if (ensRegex(project?.walletAddress)) {
-        toAddress = await provider.resolveName(project?.walletAddress)
-      }
-
-      const transaction = {
-        to: toAddress,
-        value: ethers.utils.parseEther(subtotal.toString())
-      }
-
-      let hash
-      if (fromOwnProvider && isLoggedIn) {
-        const regularTransaction = await sendTransaction(transaction)
-        hash = regularTransaction?.transactionHash
-      } else {
-        const signer = getSigner(provider)
-        const signerTransaction = await signer.sendTransaction(transaction)
-        hash = signerTransaction?.hash
-      }
-      if (!hash) throw new Error('Transaction failed')
-      props.setHashSent({ hash, subtotal })
-
-      const loggedInUserId = isLoggedIn ? Number(user.id) : null
-      // Send tx hash to our graph
-      try {
-        const { data, error } = await client.mutate({
-          mutation: SAVE_DONATION,
-          variables: {
-            transactionId: hash?.toString()
-            // anonymous: false
-          }
-        })
-        console.log({ data, error })
-        const ob = onboard.getState()
-      } catch (error) {
-        Toast({
-          content: `There was an error saving your donation to our database. Your payment may still have gone through. Please report this issue, and reference your transaction id ${hash?.toString()}`,
-          type: 'error'
-        })
-        console.log({ error })
-        setLoading(false)
-      }
-      setLoading(false)
-      // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
-      if (process.env.GATSBY_NETWORK === 'ropsten') return
-
-      notify.config({ desktopPosition: 'topRight' })
-      const { emitter } = notify.hash(hash)
-
-      emitter.on('txPool', transaction => {
-        return {
-          // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
-          // or you could use onclick for when someone clicks on the notification itself
-          onclick: () =>
-            window.open(`https://etherscan.io/tx/${transaction.hash}`)
-        }
-      })
-
-      emitter.on('txSent', console.log)
-      emitter.on('txConfirmed', console.log)
-      emitter.on('txSpeedUp', console.log)
-      emitter.on('txCancel', console.log)
-      emitter.on('txFailed', console.log)
-
-      emitter.on('all', event => {
-        console.log('ALLLLLLL', event)
-      })
-    } catch (error) {
-      console.log({ error })
-      setLoading(false)
-      return Toast({ content: error?.message, type: 'error' })
-    }
-  }
-
   const confirmDonation = async fromOwnProvider => {
     try {
       if (!project?.walletAddress) {
@@ -305,7 +227,7 @@ const OnlyCrypto = props => {
 
       //MateoRocks
       const token = 'ETH'
-      const fromAddress = '0x63A32F1595a68E811496D820680B74A5ccA303c5'
+      const fromAddress = '0x00d18ca9782bE1CaEF611017c2Fbc1a39779A57C'
 
       const {
         donationId,
@@ -347,6 +269,7 @@ const OnlyCrypto = props => {
         })
       }
     } catch (error) {
+      setLoading(false)
       return Toast({ content: error?.message || error, type: 'error' })
     }
   }
