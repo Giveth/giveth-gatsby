@@ -100,6 +100,6 @@ export const wallets = {
   }
 }
 
-export function getWallet(wallet) {
+export function getWallet (wallet) {
   return wallets[wallet]
 }

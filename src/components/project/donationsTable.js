@@ -271,7 +271,7 @@ const DonationsTable = ({ donations }) => {
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((i, key) => {
                 if (!i) return null
-                console.log({ i })
+                console.log('donation', { i })
                 return (
                   <tr key={key}>
                     <td
@@ -304,15 +304,9 @@ const DonationsTable = ({ donations }) => {
                           ml: 2
                         }}
                       >
-                        {i?.user?.name
-                          ? i?.user?.name
-                          : i?.user?.firstName
-                          ? i?.user?.lastName
-                            ? i?.user?.firstName + ' ' + i?.user?.lastName
-                            : i?.user?.firstName
-                          : !i?.anonymous
-                          ? i?.fromWalletAddress
-                          : ''}
+                        {i?.user?.firstName && i?.user?.lastName
+                          ? i?.user?.firstName + ' ' + i?.user?.lastName
+                          : i?.user?.name || i?.user?.walletAddress}
                       </Text>
                     </DonorBox>
                     <td
