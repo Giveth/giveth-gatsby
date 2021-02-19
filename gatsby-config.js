@@ -144,7 +144,7 @@ module.exports = {
         // Segment docs:
         //   - https://segment.com/docs/connections/sources/custom-domains
         //   - https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/#proxy
-        host: `https://override-segment-endpoint`,
+        host: `https://cdn.segment.io`,
 
         // boolean (defaults to false); whether to delay load Segment
         // ADVANCED FEATURE: only use if you leverage client-side routing (ie, Gatsby <Link>)
