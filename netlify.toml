@@ -23,7 +23,7 @@
   force = true
 
 [context.develop]
-  NODE_ENV = "development"
+  SEGMENT_PRODUCTION_WRITE_KEY = "MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB"
 
 [context.staging]
-  NODE_ENV = "development"
+  SEGMENT_PRODUCTION_WRITE_KEY = "MHK95b7o6FRNHt0ZZJU9bNGUT5MNCEyB"
