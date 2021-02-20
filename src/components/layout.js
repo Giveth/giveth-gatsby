@@ -41,6 +41,12 @@ const StyledToastContainer = styled(ToastContainer)`
   .Toastify__toast--info {
     border-left: 6px solid ${theme.colors.blue};
   }
+  .Toastify__toast--dark {
+    background-color: ${theme.colors.primary};
+    .Toastify__close-button {
+      color: ${theme.colors.background};
+    }
+  }
   .Toastify__toast--error {
     border-left: 6px solid ${theme.colors.red};
   }

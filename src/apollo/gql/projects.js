@@ -105,6 +105,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
           firstName
           lastName
           avatar
+          walletAddress
         }
         project {
           title
