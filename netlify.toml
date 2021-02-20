@@ -23,7 +23,7 @@
   force = true
 
 [context.develop]
-  environment = "development"
+  NODE_ENV = "development"
 
 [context.staging]
-  environment = "development"
+  NODE_ENV = "development"
