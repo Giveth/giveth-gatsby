@@ -21,3 +21,9 @@
   to = "/user"
   status = 200
   force = true
+
+[context.develop]
+  environment = "development"
+
+[context.staging]
+  environment = "development"
