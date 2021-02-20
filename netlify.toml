@@ -21,9 +21,3 @@
   to = "/user"
   status = 200
   force = true
-
-[context.develop]
-  NODE_ENV = "development"
-
-[context.staging]
-  NODE_ENV = "development"
