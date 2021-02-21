@@ -3,9 +3,9 @@
 slug: 'giveth-home'
 
 # herosection
-mainHead: 'Sustainable fundraising'
-headBold: 'for social impact'
-mainText: 'Our mission is to connect people, ideas, and resources to facilitate and incentivize social impact with a transparent framework for distributing funds.'
+mainHead: 'Welcome to the'
+headBold: 'future of giving'
+mainText: 'Donate directly to social good projects with zero fees.'
 mainButton: 'DONATE'
 mainButtonText: 'Start raising funds for your project'
 
