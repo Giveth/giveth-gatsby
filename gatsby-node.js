@@ -222,17 +222,28 @@ exports.createSchemaCustomization = ({ actions }) => {
       # create relationships between Project and Donation nodes
       # donations: Donation @link(from: "author.name" by: "name")
       donations: [Donation]
+      impactLocation: String
+      categories: [Category]
       
+    }
+    type Category implements Node {
+      id: ID!
+      name: String
+      value: String!
+      source: String!
     }
     type Donation implements Node {
       id: ID!
-      transactionId: String!
+      transactionId: String
       toWalletAddress: String!
       fromWalletAddress: String!
       anonymous: Boolean!
       amount: Float!
-      valueUsd: Float!
+      valueUsd: Float
       user: User!
+      project: Project!
+      createdAt: Date @dateformat
+      currency: String
     }
     type User implements Node {
       id: ID!
