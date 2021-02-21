@@ -96,7 +96,7 @@ const Success = props => {
                   cursor: 'pointer'
                 }}
                 target='_blank'
-                href={`https://${etherscanPrefix}etherscan.io/tx/${hash?.hash}`}
+                href={`https://${etherscanPrefix}etherscan.io/tx/${hash?.transactionHash}`}
               >
                 View transaction details
               </Link>

@@ -484,7 +484,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
               })}
           </Flex>
 
-          <Flex sx={{ justifyContent: 'center', mt: 2 }}>
+          {/* <Flex sx={{ justifyContent: 'center', mt: 2 }}>
             <Link to='/projects' style={{ textDecoration: 'none' }}>
               <Text
                 sx={{
@@ -497,7 +497,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
                 View similar projects
               </Text>
             </Link>
-          </Flex>
+          </Flex> */}
           <Flex
             sx={{
               mt: 2,

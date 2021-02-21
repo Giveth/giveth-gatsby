@@ -7,7 +7,7 @@ import { useApolloClient } from '@apollo/client'
 import { PublicProfileView } from '../components/user'
 import { FETCH_USER_PROJECTS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
-import { USERS_DONATIONS } from '../apollo/gql/donations'
+import { WALLET_DONATIONS } from '../apollo/gql/donations'
 import Web3 from 'web3'
 
 const User = props => {
@@ -31,13 +31,6 @@ const User = props => {
           }
         })
         setUser(data?.userByAddress)
-        // GET DONATIONS
-        const { data: donations } = await client.query({
-          query: USERS_DONATIONS,
-          variables: { fromWalletAddresses: [address] },
-          fetchPolicy: 'network-only'
-        })
-        setDonations(donations?.donationsByDonor)
 
         // GET PROJECTS
         const { data: projects } = await client.query({
@@ -45,7 +38,16 @@ const User = props => {
           variables: { admin: parseFloat(data?.userByAddress?.id || -1) },
           fetchPolicy: 'network-only'
         })
+        console.log({ projects })
         setProjects(projects?.projects)
+
+        // GET DONATIONS
+        const { data: donations } = await client.query({
+          query: WALLET_DONATIONS,
+          variables: { fromWalletAddresses: [address] },
+          fetchPolicy: 'network-only'
+        })
+        setDonations(donations?.donationsByDonor)
 
         setLoading(false)
       } catch (error) {

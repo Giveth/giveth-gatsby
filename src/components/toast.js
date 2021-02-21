@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Text } from 'theme-ui'
+import { Flex, Text, Spinner } from 'theme-ui'
 import { Slide, toast } from 'react-toastify'
 import {
   IoMdWarning,
@@ -11,10 +11,16 @@ import 'react-toastify/dist/ReactToastify.css'
 import theme from '../gatsby-plugin-theme-ui/index'
 import styled from '@emotion/styled'
 
-export default function Toast({ content = 'default msg', type }) {
+export default function Toast({
+  content = 'default msg',
+  type,
+  noAutoClose,
+  isLoading,
+  customPosition
+}) {
   const config = {
-    position: 'top-right',
-    autoClose: 5000,
+    position: customPosition || 'top-right',
+    autoClose: noAutoClose ? false : 5000,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -36,12 +42,34 @@ export default function Toast({ content = 'default msg', type }) {
         icon = <IoMdWarning size={size} color={theme.colors.warnYellow} />
         break
       default:
-        icon = <IoIosInformationCircle size={size} color={theme.colors.blue} />
+        icon = (
+          <IoIosInformationCircle
+            size={size}
+            color={
+              type === 'dark' ? theme.colors.background : theme.colors.blue
+            }
+          />
+        )
+    }
+    if (isLoading) {
+      icon = (
+        <Spinner
+          size={24}
+          color={
+            type === 'dark' ? theme.colors.background : theme.colors.secondary
+          }
+        />
+      )
     }
     return (
       <Flex sx={{ alignItems: 'center' }}>
         <div style={{ marginRight: '10px' }}>{icon}</div>
-        <Text sx={{ wordBreak: 'break-word', color: 'bodyDark' }}>
+        <Text
+          sx={{
+            wordBreak: 'break-word',
+            color: type === 'dark' ? 'background' : 'bodyDark'
+          }}
+        >
           {content}
         </Text>
       </Flex>
