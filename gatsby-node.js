@@ -45,7 +45,22 @@ exports.onCreatePage = async ({ page, actions }) => {
 }
 
 exports.createPages = async ({ graphql, actions }) => {
-  const { createPage } = actions
+  const { createRedirect, createPage } = actions
+
+  createRedirect({
+    fromPath: '/donate',
+    toPath: `/donate/${process.env.GATSBY_SITE_ID}`,
+    redirectInBrowser: true,
+    isPermanent: true
+  })
+
+  createRedirect({
+    fromPath: '/project',
+    toPath: `/project/${process.env.GATSBY_SITE_ID}`,
+    redirectInBrowser: true,
+    isPermanent: true
+  })
+
   // Mateo: This is being done on the client for now, not generated on the server.
   // const projectResults = await graphql(`
   //   query {

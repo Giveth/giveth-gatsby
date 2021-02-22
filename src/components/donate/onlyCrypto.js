@@ -17,8 +17,12 @@ import { ethers } from 'ethers'
 import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
+import { toast } from 'react-toastify'
+import InProgressModal from './inProgressModal'
 import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
+import * as transaction from '../../services/transaction'
+import { saveDonation, saveDonationTransaction } from '../../services/donation'
 
 let provider
 
@@ -95,10 +99,11 @@ const OnlyCrypto = props => {
   const [ethPrice, setEthPrice] = useState(1)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
+  const [inProgress, setInProgress] = useState(false)
+  const [txHash, setTxHash] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
-  const { isLoggedIn, user, sendTransaction, checkNetwork } = useWallet()
+  const { isLoggedIn, sendTransaction, user } = useWallet()
 
   const client = useApolloClient()
 
@@ -201,178 +206,6 @@ const OnlyCrypto = props => {
     return ready
   }
 
-  // FOR REGULAR TX
-  const sendTx = async fromOwnProvider => {
-    try {
-      setLoading(true)
-      // CHECK ADDRESS
-      let toAddress = project?.walletAddress
-      if (ensRegex(project?.walletAddress)) {
-        toAddress = await provider.resolveName(project?.walletAddress)
-      }
-
-      const transaction = {
-        to: toAddress,
-        value: ethers.utils.parseEther(subtotal.toString())
-      }
-
-      let hash
-      if (fromOwnProvider && isLoggedIn) {
-        const regularTransaction = await sendTransaction(transaction)
-        hash = regularTransaction?.transactionHash
-      } else {
-        const signer = getSigner(provider)
-        const signerTransaction = await signer.sendTransaction(transaction)
-        hash = signerTransaction?.hash
-      }
-      if (!hash) throw new Error('Transaction failed')
-      props.setHashSent({ hash, subtotal })
-
-      const loggedInUserId = isLoggedIn ? Number(user.id) : null
-      // Send tx hash to our graph
-      try {
-        const { data, error } = await client.mutate({
-          mutation: SAVE_DONATION,
-          variables: {
-            transactionId: hash?.toString()
-            // anonymous: false
-          }
-        })
-        console.log({ data, error })
-        const ob = onboard.getState()
-      } catch (error) {
-        alert(
-          `There was an error saving your donation to our datbase. Your payment may stil have gone through. Please report this issue, and reference your transaction id ${hash?.toString()}`
-        )
-        await logout()
-        console.log({ error })
-        setLoading(false)
-      }
-      setLoading(false)
-      // DO THIS ONLY IN PROD BECAUSE WE HAVE A LIMIT
-      if (process.env.GATSBY_NETWORK === 'ropsten') return
-
-      notify.config({ desktopPosition: 'topRight' })
-      const { emitter } = notify.hash(hash)
-
-      emitter.on('txPool', transaction => {
-        return {
-          // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
-          // or you could use onclick for when someone clicks on the notification itself
-          onclick: () =>
-            window.open(`https://etherscan.io/tx/${transaction.hash}`)
-        }
-      })
-
-      emitter.on('txSent', console.log)
-      emitter.on('txConfirmed', console.log)
-      emitter.on('txSpeedUp', console.log)
-      emitter.on('txCancel', console.log)
-      emitter.on('txFailed', console.log)
-
-      emitter.on('all', event => {
-        console.log('ALLLLLLL', event)
-      })
-    } catch (error) {
-      console.log({ error })
-      setLoading(false)
-      return Toast({ content: error?.message, type: 'error' })
-    }
-  }
-
-  // Contract call example
-  // const sendTx = async () => {
-  //   try {
-  //     await setProvider()
-  //     const signer = getSigner(provider)
-  //     console.log(ethers.utils.parseEther(subtotal.toString()))
-
-  //     const abi = [
-  //       {
-  //         anonymous: false,
-  //         inputs: [
-  //           {
-  //             indexed: false,
-  //             internalType: 'address',
-  //             name: 'origin',
-  //             type: 'address'
-  //           },
-  //           {
-  //             indexed: false,
-  //             internalType: 'address',
-  //             name: 'target',
-  //             type: 'address'
-  //           },
-  //           {
-  //             indexed: false,
-  //             internalType: 'uint256',
-  //             name: 'amount',
-  //             type: 'uint256'
-  //           }
-  //         ],
-  //         name: 'Transfer',
-  //         type: 'event'
-  //       },
-  //       {
-  //         constant: false,
-  //         inputs: [
-  //           {
-  //             internalType: 'address payable',
-  //             name: 'target',
-  //             type: 'address'
-  //           }
-  //         ],
-  //         name: 'transfer',
-  //         outputs: [],
-  //         payable: true,
-  //         stateMutability: 'payable',
-  //         type: 'function'
-  //       }
-  //     ]
-
-  //     const contractAddress = '0x4248bfcfae44942D1C26296CCB554C66926E639D'
-
-  //     const contract = new ethers.Contract(contractAddress, abi, signer)
-
-  //     const overrides = {
-  //       gasLimit: 500000,
-  //       gasPrice: ethers.BigNumber.from('20000000000'),
-  //       value: ethers.utils.parseEther(subtotal.toString())
-  //     }
-
-  //     const { hash } = await contract.transfer(
-  //       '0x3Db054B9a0D6A76db171542bb049999dC191B817',
-  //       overrides
-  //     )
-
-  //     console.log({ hash })
-
-  //     notify.config({ desktopPosition: 'topRight' })
-  //     const { emitter } = notify.hash(hash)
-
-  //     emitter.on('txPool', transaction => {
-  //       return {
-  //         // message: `Your transaction is pending, click <a href="https://rinkeby.etherscan.io/tx/${transaction.hash}" rel="noopener noreferrer" target="_blank">here</a> for more info.`,
-  //         // or you could use onclick for when someone clicks on the notification itself
-  //         onclick: () =>
-  //           window.open(`https://ropsten.etherscan.io/tx/${transaction.hash}`)
-  //       }
-  //     })
-
-  //     emitter.on('txSent', console.log)
-  //     emitter.on('txConfirmed', console.log)
-  //     emitter.on('txSpeedUp', console.log)
-  //     emitter.on('txCancel', console.log)
-  //     emitter.on('txFailed', console.log)
-
-  //     emitter.on('all', event => {
-  //       console.log('ALLLLLLL', event)
-  //     })
-  //   } catch (error) {
-  //     console.log({ error })
-  //   }
-  // }
-
   const confirmDonation = async fromOwnProvider => {
     try {
       if (!project?.walletAddress) {
@@ -388,15 +221,104 @@ const OnlyCrypto = props => {
         const ready = await readyToTransact()
         if (!ready) return
       }
-      sendTx(fromOwnProvider)
+      Toast({
+        content: 'Donation in progress...',
+        type: 'dark',
+        customPosition: 'top-left',
+        isLoading: true,
+        noAutoClose: true
+      })
+
+      const toAddress = ensRegex(project?.walletAddress)
+        ? await provider.resolveName(project?.walletAddress)
+        : project?.walletAddress
+
+      const token = 'ETH'
+      const fromAddress = isLoggedIn ? user.getWalletAddress() : 'anon'
+      //Save initial txn details to db
+      const {
+        donationId,
+        savedDonation,
+        saveDonationErrors
+      } = await saveDonation(
+        fromAddress,
+        toAddress,
+        Number(subtotal),
+        token,
+        Number(project.id)
+      )
+      if (savedDonation) {
+        await transaction.send(
+          toAddress,
+          subtotal,
+          fromOwnProvider,
+          isLoggedIn,
+          sendTransaction,
+          provider,
+          {
+            onTransactionHash: async transactionHash => {
+              // onTransactionHash callback for event emitter
+              transaction.confirmEtherTransaction(transactionHash, res => {
+                if (!res) return
+                toast.dismiss()
+                if (res?.tooSlow) {
+                  // Tx is being too slow
+                  toast.dismiss()
+                  setTxHash(transactionHash)
+                  setInProgress(true)
+                } else if (res?.status) {
+                  // Tx was successful
+                  props.setHashSent({ transactionHash, subtotal })
+                } else {
+                  // EVM reverted the transaction, it failed
+                  Toast({
+                    content: 'Transaction failed',
+                    type: 'error'
+                  })
+                }
+              })
+              await saveDonationTransaction(transactionHash, donationId)
+            },
+            onReceiptGenerated: receipt => {
+              props.setHashSent({
+                transactionHash: receipt?.transactionHash,
+                subtotal
+              })
+            },
+            onError: error => {
+              Toast({
+                content: error?.message || error?.error?.message || error,
+                type: 'error'
+              })
+            }
+          }
+        )
+
+        // Commented notify and instead we are using our own service
+        // transaction.notify(transactionHash)
+      } else {
+        toast.dismiss()
+        return Toast({
+          content: `${saveDonationErrors[0]}. You have not made any sort of payment and your funds are safe.`,
+          type: 'warn'
+        })
+      }
     } catch (error) {
-      return Toast({ content: error?.message || error, type: 'error' })
+      toast.dismiss()
+      return Toast({
+        content: error?.message || error?.error?.message || error,
+        type: 'error'
+      })
     }
   }
 
   return (
     <Content>
-      {loading && <LoadingModal isOpen={loading} />}
+      <InProgressModal
+        showModal={inProgress}
+        setShowModal={val => setInProgress(val)}
+        txHash={txHash}
+      />
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setIsOpen(false)}

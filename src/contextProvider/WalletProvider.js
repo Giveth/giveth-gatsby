@@ -1,18 +1,20 @@
+import detectEthereumProvider from '@metamask/detect-provider'
 import React, { useState, useEffect, useRef } from 'react'
-import Web3 from 'web3'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
-import * as Auth from '../services/auth'
-import { useApolloClient } from '@apollo/client'
+import { ethers } from 'ethers'
+import Web3 from 'web3'
+
+import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
-import { getToken, validateAuthToken } from '../services/token'
+import getSigner from '../services/ethersSigner'
+import { useApolloClient } from '@apollo/client'
+import * as Auth from '../services/auth'
+import Toast from '../components/toast'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
-import Toast from '../components/toast'
-import detectEthereumProvider from '@metamask/detect-provider'
 
-console.log(`*** User : ${JSON.stringify(User, null, 2)}`)
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
 const networkId = process.env.GATSBY_NETWORK_ID
@@ -52,11 +54,26 @@ function WalletProvider(props) {
 
     await wallet.init('production', network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
+    updateBalance(
+      localStorageUser?.walletAddresses?.length > 0 &&
+        localStorageUser.walletAddresses[0]
+    )
     setCurrentNetwork(networkName)
 
     wallet?.provider?.on('accountsChanged', function (accounts) {
       if (accounts[0] && accounts[0] !== account) {
         Toast({ content: 'Account changed', type: 'warn' })
+      }
+    })
+    wallet?.provider?.on('chainChanged', async chainId => {
+      // needs to be fetched again as chainId is being returned like 0x
+      const chainID = await wallet?.web3.eth.net.getId()
+      console.log({ chainID, networkId })
+      if (networkId !== chainID?.toString()) {
+        Toast({
+          content: `Ethereum network changed please use ${network}`,
+          type: 'warn'
+        })
       }
     })
   }
@@ -66,8 +83,8 @@ function WalletProvider(props) {
   }, [])
 
   async function logout() {
+    wallet?.logout()
     setLoading(true)
-
     Auth.handleLogout()
     setIsLoggedIn(false)
     setLoading(false)
@@ -75,6 +92,7 @@ function WalletProvider(props) {
 
   async function signMessage(message, publicAddress) {
     try {
+      await checkNetwork()
       let signedMessage = null
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
@@ -88,21 +106,46 @@ function WalletProvider(props) {
 
       const hashedMsg = keccak256(finalMessage)
       const send = promisify(wallet.web3.currentProvider.sendAsync)
+      const msgParams = JSON.stringify({
+        primaryType: 'Login',
+        types: {
+          EIP712Domain: [
+            { name: 'name', type: 'string' },
+            { name: 'chainId', type: 'uint256' },
+            { name: 'version', type: 'string' }
+            // { name: 'verifyingContract', type: 'address' }
+          ],
+          Login: [{ name: 'user', type: 'User' }],
+          User: [{ name: 'wallets', type: 'address[]' }]
+        },
+        domain: {
+          name: 'Giveth Login',
+          chainId: parseInt(process.env.GATSBY_NETWORK_ID),
+          version: '1'
+        },
+        message: {
+          contents: hashedMsg,
+          user: {
+            wallets: [publicAddress]
+          }
+        }
+      })
 
       const { result } = await send({
-        method: 'eth_sign',
-        params: [
-          publicAddress,
-          hashedMsg,
-          { customPrefix, customMessage: message }
-        ],
+        method: 'eth_signTypedData_v4',
+        params: [publicAddress, msgParams],
         from: publicAddress
       })
       signedMessage = result
 
       return signedMessage
     } catch (error) {
-      console.log('Signing Error!', error)
+      console.log('Signing Error!', { error })
+      Toast({
+        content: error?.message || 'There was an error',
+        type: 'error'
+      })
+      return false
     }
   }
 
@@ -122,13 +165,18 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
+  async function updateBalance(publicAddress) {
+    if (!publicAddress) return null
+    const balance = await wallet.web3.eth.getBalance(publicAddress)
+    setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
+  }
+
   async function updateUser(accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
-    const balance = await wallet.web3.eth.getBalance(publicAddress)
-    setBalance(balance)
+    updateBalance(publicAddress)
     // let user
     let user
     if (typeof wallet.torus !== 'undefined') {
@@ -146,7 +194,7 @@ function WalletProvider(props) {
     const signedMessage = await signMessage('our_secret', publicAddress)
     if (!signedMessage) return
     console.log(`updateUser: user : ${JSON.stringify(user, null, 2)}`)
-    console.log(`signedMessage ---> : ${signedMessage}`)
+    console.log(`signedMessage ---> : ${signedMessage}`, { publicAddress })
 
     const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
     user.parseDbUser(dbUser)
@@ -222,7 +270,6 @@ function WalletProvider(props) {
   async function checkNetwork() {
     if (!wallet) throw new Error('No Eth Provider')
     const currentNetworkId = await wallet?.web3.eth.getChainId()
-    console.log({ currentNetworkId, networkId })
     if (currentNetworkId?.toString() === networkId) {
       return true
     } else {
@@ -230,18 +277,58 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendTransaction(params) {
+  async function sendEthersTransaction(toAddress, amount, provider) {
+    const transaction = {
+      to: toAddress,
+      value: ethers.utils.parseEther(amount.toString())
+    }
+
+    // console.log(`JF wallet?.provider : ${JSON.stringify(wallet, null, 2)}`)
+
+    const signer = getSigner(wallet)
+    const signerTransaction = await signer.sendTransaction(transaction)
+    return signerTransaction
+  }
+  async function sendTransaction(params, txCallbacks, fromSigner) {
     try {
       await checkNetwork()
-      const fromAccount = await wallet?.web3.eth.getAccounts()
-      return wallet?.web3.eth.sendTransaction({
-        from: fromAccount[0],
+      let web3Provider = wallet?.web3.eth
+      let txn = null
+      const txParams = {
         to: params?.to,
         value: params?.value
-      })
+      }
+
+      if (!fromSigner) {
+        // can be signed instantly by current provider
+        const fromAccount = await web3Provider.getAccounts()
+        txParams.from = fromAccount[0]
+      } else {
+        // It will be signed later by provider
+        web3Provider = fromSigner
+      }
+
+      if (!txCallbacks || fromSigner) {
+        // gets hash and checks until it's mined
+        txn = await web3Provider.sendTransaction(txParams)
+        txCallbacks?.onTransactionHash(txn?.hash)
+      } else {
+        // using the event emitter
+        return web3Provider
+          .sendTransaction(txParams)
+          .on('transactionHash', txCallbacks?.onTransactionHash)
+          .on('receipt', function (receipt) {
+            console.log('receipt>>>', receipt)
+            txCallbacks?.onReceiptGenerated(receipt)
+          })
+          .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
+      }
+
+      console.log(`stTxn ---> : `, { txn })
+      return txn
     } catch (error) {
       console.log('Error sending transaction: ', { error })
-      throw new Error(error)
+      throw new Error(error?.message || error)
     }
   }
 
