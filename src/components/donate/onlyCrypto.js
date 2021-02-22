@@ -110,7 +110,7 @@ const OnlyCrypto = props => {
   useEffect(() => {
     const init = async () => {
       fetch(
-        'https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP'
+        `https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
       )
         .then(response => response.json())
         .then(data => setEthPrice(data.USD))
