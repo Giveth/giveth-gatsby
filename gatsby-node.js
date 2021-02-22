@@ -55,6 +55,64 @@ exports.onCreatePage = async ({ page, actions }) => {
   }
 }
 
+exports.createPages = async ({ graphql, actions }) => {
+  const { createRedirect, createPage } = actions
+
+  createRedirect({
+    fromPath: '/donate',
+    toPath: `/donate/${process.env.GATSBY_SITE_ID}`,
+    redirectInBrowser: true,
+    isPermanent: true
+  })
+
+  createRedirect({
+    fromPath: '/project',
+    toPath: `/project/${process.env.GATSBY_SITE_ID}`,
+    redirectInBrowser: true,
+    isPermanent: true
+  })
+
+  // Mateo: This is being done on the client for now, not generated on the server.
+  // const projectResults = await graphql(`
+  //   query {
+  //     giveth {
+  //       projects {
+  //         id
+  //         title
+  //         description
+  //         slug
+  //         creationDate
+  //         admin
+  //         image
+  //         walletAddress
+  //         categories {
+  //           name
+  //         }
+  //       }
+  //     }
+  //   }
+  // `)
+  // const projectPageTemplate = require.resolve('./src/templates/project.js')
+  // if (projectResults.data) {
+  //   projectResults.data.giveth.projects.forEach(project => {
+  //     createPage({
+  //       path: `/project/${project.slug}`,
+  //       component: projectPageTemplate,
+  //       context: {
+  //         // entire project is passed down as context
+  //         project: project
+  //       }
+  //     })
+  //   })
+  // }
+}
+
+exports.onCreateNode = ({ node }) => {
+  if (node.internal.type === `File`) {
+    // console.log(node)
+  }
+}
+
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   if (stage === 'build-html') {
     actions.setWebpackConfig({
@@ -164,17 +222,28 @@ exports.createSchemaCustomization = ({ actions }) => {
       # create relationships between Project and Donation nodes
       # donations: Donation @link(from: "author.name" by: "name")
       donations: [Donation]
+      impactLocation: String
+      categories: [Category]
       
+    }
+    type Category implements Node {
+      id: ID!
+      name: String
+      value: String!
+      source: String!
     }
     type Donation implements Node {
       id: ID!
-      transactionId: String!
+      transactionId: String
       toWalletAddress: String!
       fromWalletAddress: String!
       anonymous: Boolean!
       amount: Float!
-      valueUsd: Float!
+      valueUsd: Float
       user: User!
+      project: Project!
+      createdAt: Date @dateformat
+      currency: String
     }
     type User implements Node {
       id: ID!

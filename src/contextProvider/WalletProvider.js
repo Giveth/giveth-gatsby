@@ -1,16 +1,19 @@
+import detectEthereumProvider from '@metamask/detect-provider'
 import React, { useState, useEffect, useRef } from 'react'
-import Web3 from 'web3'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
-import * as Auth from '../services/auth'
-import { useApolloClient } from '@apollo/client'
+import { ethers } from 'ethers'
+import Web3 from 'web3'
+
+import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
-import { getToken, validateAuthToken } from '../services/token'
+import getSigner from '../services/ethersSigner'
+import { useApolloClient } from '@apollo/client'
+import * as Auth from '../services/auth'
+import Toast from '../components/toast'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
-import Toast from '../components/toast'
-import detectEthereumProvider from '@metamask/detect-provider'
 
 const WalletContext = React.createContext()
 const network = process.env.GATSBY_NETWORK
@@ -274,18 +277,58 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendTransaction(params) {
+  async function sendEthersTransaction(toAddress, amount, provider) {
+    const transaction = {
+      to: toAddress,
+      value: ethers.utils.parseEther(amount.toString())
+    }
+
+    // console.log(`JF wallet?.provider : ${JSON.stringify(wallet, null, 2)}`)
+
+    const signer = getSigner(wallet)
+    const signerTransaction = await signer.sendTransaction(transaction)
+    return signerTransaction
+  }
+  async function sendTransaction(params, txCallbacks, fromSigner) {
     try {
       await checkNetwork()
-      const fromAccount = await wallet?.web3.eth.getAccounts()
-      return wallet?.web3.eth.sendTransaction({
-        from: fromAccount[0],
+      let web3Provider = wallet?.web3.eth
+      let txn = null
+      const txParams = {
         to: params?.to,
         value: params?.value
-      })
+      }
+
+      if (!fromSigner) {
+        // can be signed instantly by current provider
+        const fromAccount = await web3Provider.getAccounts()
+        txParams.from = fromAccount[0]
+      } else {
+        // It will be signed later by provider
+        web3Provider = fromSigner
+      }
+
+      if (!txCallbacks || fromSigner) {
+        // gets hash and checks until it's mined
+        txn = await web3Provider.sendTransaction(txParams)
+        txCallbacks?.onTransactionHash(txn?.hash)
+      } else {
+        // using the event emitter
+        return web3Provider
+          .sendTransaction(txParams)
+          .on('transactionHash', txCallbacks?.onTransactionHash)
+          .on('receipt', function (receipt) {
+            console.log('receipt>>>', receipt)
+            txCallbacks?.onReceiptGenerated(receipt)
+          })
+          .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
+      }
+
+      console.log(`stTxn ---> : `, { txn })
+      return txn
     } catch (error) {
       console.log('Error sending transaction: ', { error })
-      throw new Error(error)
+      throw new Error(error?.message || error)
     }
   }
 

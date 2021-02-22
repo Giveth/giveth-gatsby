@@ -156,7 +156,7 @@ const Partnerships = ({ data }) => {
         >
           {data.contentFriends.edges.map(edges => (
             <ContentItem key={edges.node.id}>
-              <Link
+              <a
                 to={edges.node.link}
                 sx={{
                   textDecoration: 'none',
@@ -176,7 +176,7 @@ const Partnerships = ({ data }) => {
                 <Text pt={3} sx={{ variant: 'text.default' }}>
                   {edges.node.description}
                 </Text>
-              </Link>
+              </a>
             </ContentItem>
           ))}
         </Grid>
