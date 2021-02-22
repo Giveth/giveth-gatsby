@@ -300,7 +300,7 @@ function WalletProvider(props) {
       }
 
       if (!fromSigner) {
-        // can be signed instantly by current provider
+        // Can be signed instantly by current provider
         const fromAccount = await web3Provider.getAccounts()
         txParams.from = fromAccount[0]
       } else {
