@@ -306,7 +306,9 @@ const DonationsTable = ({ donations }) => {
                       >
                         {i?.user?.firstName && i?.user?.lastName
                           ? i?.user?.firstName + ' ' + i?.user?.lastName
-                          : i?.user?.name || i?.user?.walletAddress}
+                          : i?.user?.name ||
+                            i?.user?.walletAddress ||
+                            i?.fromWalletAddress}
                       </Text>
                     </DonorBox>
                     <td

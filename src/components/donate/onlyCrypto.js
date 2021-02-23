@@ -103,7 +103,7 @@ const OnlyCrypto = props => {
   const [txHash, setTxHash] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
-  const { isLoggedIn, sendTransaction, user } = useWallet()
+  const { isLoggedIn, sendTransaction, user, ready } = useWallet()
 
   const client = useApolloClient()
 
@@ -234,75 +234,71 @@ const OnlyCrypto = props => {
         : project?.walletAddress
 
       const token = 'ETH'
-      const fromAddress = isLoggedIn ? user.getWalletAddress() : 'anon'
-      //Save initial txn details to db
-      const {
-        donationId,
-        savedDonation,
-        saveDonationErrors
-      } = await saveDonation(
-        fromAddress,
-        toAddress,
-        Number(subtotal),
-        token,
-        Number(project.id)
-      )
-      if (savedDonation) {
-        await transaction.send(
-          toAddress,
-          subtotal,
-          fromOwnProvider,
-          isLoggedIn,
-          sendTransaction,
-          provider,
-          {
-            onTransactionHash: async transactionHash => {
-              // onTransactionHash callback for event emitter
-              transaction.confirmEtherTransaction(transactionHash, res => {
-                if (!res) return
-                toast.dismiss()
-                if (res?.tooSlow) {
-                  // Tx is being too slow
-                  toast.dismiss()
-                  setTxHash(transactionHash)
-                  setInProgress(true)
-                } else if (res?.status) {
-                  // Tx was successful
-                  props.setHashSent({ transactionHash, subtotal })
-                } else {
-                  // EVM reverted the transaction, it failed
-                  Toast({
-                    content: 'Transaction failed',
-                    type: 'error'
-                  })
-                }
-              })
-              await saveDonationTransaction(transactionHash, donationId)
-            },
-            onReceiptGenerated: receipt => {
-              props.setHashSent({
-                transactionHash: receipt?.transactionHash,
-                subtotal
-              })
-            },
-            onError: error => {
-              Toast({
-                content: error?.message || error?.error?.message || error,
-                type: 'error'
-              })
-            }
-          }
-        )
+      const fromAddress = isLoggedIn ? user.getWalletAddress() : null
 
-        // Commented notify and instead we are using our own service
-        // transaction.notify(transactionHash)
-      } else {
-        toast.dismiss()
-        return Toast({
-          content: `${saveDonationErrors[0]}. You have not made any sort of payment and your funds are safe.`,
-          type: 'warn'
-        })
-      }
+      await transaction.send(
+        toAddress,
+        subtotal,
+        fromOwnProvider,
+        isLoggedIn,
+        sendTransaction,
+        provider,
+        {
+          onTransactionHash: async transactionHash => {
+            const instantReceipt = await transaction.getTxFromHash(
+              transactionHash
+            )
+            //Save initial txn details to db
+            const {
+              donationId,
+              savedDonation,
+              saveDonationErrors
+            } = await saveDonation(
+              fromAddress || instantReceipt?.from,
+              toAddress,
+              Number(subtotal),
+              token,
+              Number(project.id)
+            )
+            // onTransactionHash callback for event emitter
+            transaction.confirmEtherTransaction(transactionHash, res => {
+              if (!res) return
+              toast.dismiss()
+              if (res?.tooSlow) {
+                // Tx is being too slow
+                toast.dismiss()
+                setTxHash(transactionHash)
+                setInProgress(true)
+              } else if (res?.status) {
+                // Tx was successful
+                props.setHashSent({ transactionHash, subtotal })
+              } else {
+                // EVM reverted the transaction, it failed
+                Toast({
+                  content: 'Transaction failed',
+                  type: 'error'
+                })
+              }
+            })
+            await saveDonationTransaction(transactionHash, donationId)
+          },
+          onReceiptGenerated: receipt => {
+            props.setHashSent({
+              transactionHash: receipt?.transactionHash,
+              subtotal
+            })
+          },
+          onError: error => {
+            Toast({
+              content: error?.message || error?.error?.message || error,
+              type: 'error'
+            })
+          }
+        }
+      )
+
+      // Commented notify and instead we are using our own service
+      // transaction.notify(transactionHash)
     } catch (error) {
       toast.dismiss()
       return Toast({
@@ -510,7 +506,7 @@ const OnlyCrypto = props => {
         >
           <Flex sx={{ flexDirection: 'column' }}>
             <Button
-              onClick={() => confirmDonation(isLoggedIn)}
+              onClick={() => confirmDonation(isLoggedIn && ready)}
               sx={{
                 variant: 'buttons.default',
                 padding: '1.063rem 7.375rem',
@@ -520,7 +516,7 @@ const OnlyCrypto = props => {
             >
               Donate
             </Button>
-            {isLoggedIn && (
+            {isLoggedIn && ready && (
               <Text
                 sx={{
                   mt: 2,
