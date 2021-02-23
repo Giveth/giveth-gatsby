@@ -76,6 +76,12 @@ export async function getHashInfo(txHash) {
   }
 }
 
+export async function getTxFromHash(transactionHash) {
+  const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+  const tx = await web3.eth.getTransaction(transactionHash)
+  return tx
+}
+
 export async function confirmEtherTransaction(
   transactionHash,
   callbackFunction,
