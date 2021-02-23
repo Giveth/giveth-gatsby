@@ -34,6 +34,7 @@ function WalletProvider(props) {
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
   const [user, setUser] = useState(initUser)
+  const [ready, setReady] = useState(false)
   const [account, setAccount] = useState('')
   const [balance, setBalance] = useState(0)
   const [ethEnabled, setEthEnabled] = useState(false)
@@ -54,12 +55,17 @@ function WalletProvider(props) {
 
     await wallet.init('production', network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
+
+    // Checks if Torus needs to re-login
+    if (wallet?.isTorus && !wallet?.isLoggedIn()) {
+      await logout(true)
+    }
     updateBalance(
       localStorageUser?.walletAddresses?.length > 0 &&
         localStorageUser.walletAddresses[0]
     )
     setCurrentNetwork(networkName)
-
+    setReady(true)
     wallet?.provider?.on('accountsChanged', function (accounts) {
       if (accounts[0] && accounts[0] !== account) {
         Toast({ content: 'Account changed', type: 'warn' })
@@ -82,8 +88,8 @@ function WalletProvider(props) {
     initWallet(localStorageUser?.walletType)
   }, [])
 
-  async function logout() {
-    wallet?.logout()
+  async function logout(walletLoggedOut) {
+    !walletLoggedOut && wallet?.logout()
     setLoading(true)
     Auth.handleLogout()
     setIsLoggedIn(false)
@@ -362,6 +368,7 @@ function WalletProvider(props) {
       updateUserInfoOnly,
       logout,
       user,
+      ready,
       network,
       currentNetwork,
       isWalletAddressValid,
@@ -369,7 +376,7 @@ function WalletProvider(props) {
       getAddressFromENS,
       wallet
     }
-  }, [account, balance, ethEnabled, isLoggedIn, user, currentNetwork])
+  }, [account, ready, balance, ethEnabled, isLoggedIn, user, currentNetwork])
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}
