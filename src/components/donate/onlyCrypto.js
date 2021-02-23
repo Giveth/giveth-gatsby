@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
-import { Button, Flex, Label, Text, jsx } from 'theme-ui'
+import { Button, Flex, Label, Select, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
@@ -94,9 +94,10 @@ const OnlyCrypto = props => {
   const { logout } = useWallet()
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
+  const [selectedToken, setSelectedToken] = useState('ETH')
   const [notify, setNotify] = useState(null)
   const { project } = props
-  const [ethPrice, setEthPrice] = useState(1)
+  const [tokenPrice, setTokenPrice] = useState(1)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [inProgress, setInProgress] = useState(false)
@@ -110,10 +111,10 @@ const OnlyCrypto = props => {
   useEffect(() => {
     const init = async () => {
       fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
+        `https://min-api.cryptocompare.com/data/price?fsym=${selectedToken}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
       )
         .then(response => response.json())
-        .then(data => setEthPrice(data.USD))
+        .then(data => setTokenPrice(data.USD))
       setOnboard(
         initOnboard({
           wallet: wallet => {
@@ -136,7 +137,7 @@ const OnlyCrypto = props => {
     }
     // console.log(ethers.utils.parseEther('1.0'))
     init()
-  }, [])
+  }, [selectedToken])
 
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
@@ -150,12 +151,12 @@ const OnlyCrypto = props => {
 
   const donation = parseFloat(amountTyped)
   const givethFee =
-    Math.round((GIVETH_DONATION_AMOUNT * 100.0) / ethPrice) / 100
+    Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
 
   const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
 
   const eth2usd = eth => {
-    return (eth * ethPrice).toFixed(2)
+    return (eth * tokenPrice).toFixed(2)
   }
 
   const SummaryRow = ({ title, amount, style }) => {
@@ -381,22 +382,32 @@ const OnlyCrypto = props => {
       <AmountSection>
         <AmountContainer sx={{ width: ['100%', '100%'] }}>
           <Text sx={{ variant: 'text.large', mb: 1, color: 'background' }}>
-            Enter your Ether amount
+            Enter your {selectedToken} amount
           </Text>
           <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
-            {ethPrice && `1 ETH ≈ USD $${ethPrice}`}
+            {tokenPrice && `1 ${selectedToken} ≈ USD $${tokenPrice}`}
           </Text>
           <OpenAmount>
-            <Text
-              sx={{
-                variant: 'text.large',
-                color: 'secondary',
-                position: 'absolute',
-                ml: 3
-              }}
-            >
-              ETH
-            </Text>
+            <Flex sx={{ position: 'absolute' }}>
+              <Select
+                defaultValue={selectedToken}
+                onChange={e => {
+                  e.preventDefault()
+                  setSelectedToken(e.target.value)
+                }}
+                sx={{
+                  borderColor: 'white',
+                  width: '60px',
+                  backgroundColor: 'background',
+                  color: 'secondary'
+                }}
+              >
+                {['ETH', 'DAI'].map(i => {
+                  return <option>{i}</option>
+                })}
+              </Select>
+            </Flex>
+
             <InputComponent
               sx={{
                 variant: 'text.large',
@@ -473,7 +484,7 @@ const OnlyCrypto = props => {
                   title='Support Giveth'
                   amount={[
                     `$${GIVETH_DONATION_AMOUNT}`,
-                    `≈ ETH ${(GIVETH_DONATION_AMOUNT / ethPrice).toFixed(2)}`
+                    `≈ ETH ${(GIVETH_DONATION_AMOUNT / tokenPrice).toFixed(2)}`
                   ]}
                 />
               )}
