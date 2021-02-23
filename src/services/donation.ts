@@ -5,6 +5,7 @@ import { client } from '../apollo/client'
 export async function saveDonation (
   fromAddress: string,
   toAddress: string,
+  transactionId: string,
   amount: number,
   token: string,
   projectId: number
@@ -17,6 +18,7 @@ export async function saveDonation (
       variables: {
         fromAddress,
         toAddress,
+        transactionId,
         amount,
         token,
         projectId

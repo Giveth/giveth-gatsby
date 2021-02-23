@@ -3,6 +3,7 @@ const SAVE_DONATION = gql`
   mutation(
     $fromAddress: String!
     $toAddress: String!
+    $transactionId: String!
     $amount: Float!
     $token: String!
     $projectId: Float!
@@ -10,6 +11,7 @@ const SAVE_DONATION = gql`
     saveDonation(
       fromAddress: $fromAddress
       toAddress: $toAddress
+      transactionId: $transactionId
       amount: $amount
       token: $token
       projectId: $projectId

@@ -309,6 +309,8 @@ function ProjectEdition(props) {
   const [showCancelModal, setCancelModal] = useState(false)
   const [mapLocation, setMapLocation] = useState(null)
 
+  const { wallet } = useWallet()
+
   const { data: fetchedProject, loadingProject } = useQuery(
     FETCH_PROJECT_BY_SLUG,
     {
@@ -316,7 +318,6 @@ function ProjectEdition(props) {
     }
   )
   useEffect(() => {
-    wallet = getWallet('torus')
     web3 = wallet.web3
   }, [])
 
@@ -363,6 +364,7 @@ function ProjectEdition(props) {
       let ethAddress = data.editWalletAddress
       if (project?.walletAddress !== data.editWalletAddress) {
         // CHECK IF STRING IS ENS AND VALID
+        console.log({ wallet })
         const ens = await wallet?.web3.eth.ens.getOwner(ethAddress)
         if (ens !== '0x0000000000000000000000000000000000000000') {
           ethAddress = ens

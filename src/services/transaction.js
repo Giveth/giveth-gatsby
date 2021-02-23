@@ -4,6 +4,7 @@ import getSigner from './ethersSigner'
 
 export async function send(
   toAddress,
+  contractAddress, // if none is set, it defaults to ETH
   subtotal,
   fromOwnProvider,
   isLoggedIn,
@@ -19,13 +20,18 @@ export async function send(
     let hash
 
     if (fromOwnProvider && isLoggedIn) {
-      const regularTransaction = await sendTransaction(transaction, txCallbacks)
+      const regularTransaction = await sendTransaction(
+        transaction,
+        txCallbacks,
+        contractAddress
+      )
       hash = regularTransaction?.transactionHash
     } else {
       const signer = getSigner(provider)
       const signerTransaction = await sendTransaction(
         transaction,
         txCallbacks,
+        contractAddress,
         signer
       )
 

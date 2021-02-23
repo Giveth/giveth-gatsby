@@ -271,7 +271,6 @@ const DonationsTable = ({ donations }) => {
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((i, key) => {
                 if (!i) return null
-                console.log('donation', { i })
                 return (
                   <tr key={key}>
                     <td
@@ -332,10 +331,7 @@ const DonationsTable = ({ donations }) => {
                           ? `${
                               i?.amount ? `${i?.amount} ETH` : ''
                             } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount?.toLocaleString('en-US', {
-                              style: 'currency',
-                              currency: 'USD'
-                            })}
+                          : i?.amount}
                       </Text>
                     </td>
                   </tr>

@@ -8,7 +8,7 @@ import { SAVE_DONATION } from '../../apollo/gql/donations'
 
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
-import { ensRegex } from '../../utils'
+import { ensRegex, erc20List } from '../../utils'
 import LoadingModal from '../../components/loadingModal'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
@@ -95,6 +95,7 @@ const OnlyCrypto = props => {
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
   const [selectedToken, setSelectedToken] = useState('ETH')
+  const [tokenSymbol, setTokenSymbol] = useState('ETH')
   const [notify, setNotify] = useState(null)
   const { project } = props
   const [tokenPrice, setTokenPrice] = useState(1)
@@ -111,7 +112,7 @@ const OnlyCrypto = props => {
   useEffect(() => {
     const init = async () => {
       fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${selectedToken}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
+        `https://min-api.cryptocompare.com/data/price?fsym=${tokenSymbol}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
       )
         .then(response => response.json())
         .then(data => setTokenPrice(data.USD))
@@ -137,17 +138,16 @@ const OnlyCrypto = props => {
     }
     // console.log(ethers.utils.parseEther('1.0'))
     init()
-  }, [selectedToken])
+  }, [tokenSymbol])
 
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
       'selectedWallet'
     )
-
     if (previouslySelectedWallet && onboard) {
       onboard.walletSelect(previouslySelectedWallet)
     }
-  }, [onboard])
+  })
 
   const donation = parseFloat(amountTyped)
   const givethFee =
@@ -234,11 +234,12 @@ const OnlyCrypto = props => {
         ? await provider.resolveName(project?.walletAddress)
         : project?.walletAddress
 
-      const token = 'ETH'
+      const token = tokenSymbol
       const fromAddress = isLoggedIn ? user.getWalletAddress() : null
 
       await transaction.send(
         toAddress,
+        token !== 'ETH' ? selectedToken?.address : false,
         subtotal,
         fromOwnProvider,
         isLoggedIn,
@@ -257,6 +258,7 @@ const OnlyCrypto = props => {
             } = await saveDonation(
               fromAddress || instantReceipt?.from,
               toAddress,
+              transactionHash,
               Number(subtotal),
               token,
               Number(project.id)
@@ -272,7 +274,7 @@ const OnlyCrypto = props => {
                 setInProgress(true)
               } else if (res?.status) {
                 // Tx was successful
-                props.setHashSent({ transactionHash, subtotal })
+                props.setHashSent({ transactionHash, tokenSymbol, subtotal })
               } else {
                 // EVM reverted the transaction, it failed
                 Toast({
@@ -286,7 +288,8 @@ const OnlyCrypto = props => {
           onReceiptGenerated: receipt => {
             props.setHashSent({
               transactionHash: receipt?.transactionHash,
-              subtotal
+              subtotal,
+              tokenSymbol
             })
           },
           onError: error => {
@@ -382,18 +385,23 @@ const OnlyCrypto = props => {
       <AmountSection>
         <AmountContainer sx={{ width: ['100%', '100%'] }}>
           <Text sx={{ variant: 'text.large', mb: 1, color: 'background' }}>
-            Enter your {selectedToken} amount
+            Enter your {tokenSymbol} amount
           </Text>
           <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
-            {tokenPrice && `1 ${selectedToken} ≈ USD $${tokenPrice}`}
+            {tokenPrice && `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
           </Text>
           <OpenAmount>
             <Flex sx={{ position: 'absolute' }}>
               <Select
-                defaultValue={selectedToken}
+                defaultValue='ETH'
                 onChange={e => {
                   e.preventDefault()
-                  setSelectedToken(e.target.value)
+                  const tokenContent =
+                    e.target.value !== 'ETH'
+                      ? JSON.parse(e.target.value)
+                      : 'ETH'
+                  setSelectedToken(tokenContent)
+                  setTokenSymbol(tokenContent?.symbol || tokenContent)
                 }}
                 sx={{
                   borderColor: 'white',
@@ -402,8 +410,13 @@ const OnlyCrypto = props => {
                   color: 'secondary'
                 }}
               >
-                {['ETH', 'DAI'].map(i => {
-                  return <option>{i}</option>
+                <option>ETH</option>
+                {erc20List?.tokens.map((i, index) => {
+                  return (
+                    <option value={JSON.stringify(i)} key={index}>
+                      {i.symbol}
+                    </option>
+                  )
                 })}
               </Select>
             </Flex>

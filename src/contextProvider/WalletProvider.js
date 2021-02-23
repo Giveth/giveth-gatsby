@@ -9,6 +9,7 @@ import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
 import getSigner from '../services/ethersSigner'
+import tokenAbi from 'human-standard-token-abi'
 import { useApolloClient } from '@apollo/client'
 import * as Auth from '../services/auth'
 import Toast from '../components/toast'
@@ -295,7 +296,12 @@ function WalletProvider(props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
-  async function sendTransaction(params, txCallbacks, fromSigner) {
+  async function sendTransaction(
+    params,
+    txCallbacks,
+    contractAddress,
+    fromSigner
+  ) {
     try {
       await checkNetwork()
       let web3Provider = wallet?.web3.eth
@@ -314,6 +320,31 @@ function WalletProvider(props) {
         web3Provider = fromSigner
       }
 
+      // ERC20 TRANSFER
+      if (contractAddress) {
+        const instance = fromSigner
+          ? new ethers.Contract(contractAddress, tokenAbi, fromSigner)
+          : new web3Provider.Contract(tokenAbi, contractAddress)
+        if (fromSigner) {
+          txn = await instance.transfer(params?.to, params?.value)
+          txCallbacks?.onTransactionHash(txn?.hash)
+          return txn
+        }
+        const from = await web3Provider.getAccounts()
+        return instance.methods
+          .transfer(params?.to, params?.value)
+          .send({
+            from: from[0]
+          })
+          .on('transactionHash', txCallbacks?.onTransactionHash)
+          .on('receipt', function (receipt) {
+            console.log('receipt>>>', receipt)
+            txCallbacks?.onReceiptGenerated(receipt)
+          })
+          .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
+      }
+
+      // REGULAR ETH TRANSFER
       if (!txCallbacks || fromSigner) {
         // gets hash and checks until it's mined
         txn = await web3Provider.sendTransaction(txParams)
