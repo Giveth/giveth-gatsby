@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "giveth-donation",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
-  "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "description": "Peer to peer donations",
+  "version": "0.0.9",
+  "author": "James Farrell <james@giveth.io>",
   "dependencies": {
     "@apollo/client": "^3.3.7",
     "@contentful/rich-text-react-renderer": "^14.1.2",
