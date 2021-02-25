@@ -83,6 +83,7 @@ const UserDetails = () => {
     user,
     balance,
     currentNetwork,
+    currentChainId,
     wallet
   } = useWallet()
   console.log(`jpf user : ${JSON.stringify(user, null, 2)}`)
@@ -95,6 +96,7 @@ const UserDetails = () => {
 
   const parseNetwork = () => {
     let dotColor
+    console.log({ currentNetwork })
     switch (currentNetwork) {
       case 'main':
         dotColor = 'greenishBlue'
@@ -114,6 +116,12 @@ const UserDetails = () => {
       default:
         dotColor = 'softGray'
     }
+    // special for xDAI
+    let isXDai = false
+    if (currentChainId === 100) {
+      dotColor = 'greenishBlue'
+      isXDai = true
+    }
     return (
       <MenuTitle
         sx={{
@@ -124,7 +132,7 @@ const UserDetails = () => {
         }}
       >
         <Dot sx={{ backgroundColor: dotColor }} />
-        {currentNetwork}
+        {isXDai ? 'xDai' : currentNetwork}
       </MenuTitle>
     )
   }

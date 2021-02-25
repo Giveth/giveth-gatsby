@@ -114,4 +114,4 @@ export function getEtherscanPrefix() {
     : ''
 }
 
-export const erc20List = ERC20List
+export const getERC20List = ERC20List

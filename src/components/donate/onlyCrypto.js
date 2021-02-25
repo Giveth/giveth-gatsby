@@ -8,7 +8,7 @@ import { SAVE_DONATION } from '../../apollo/gql/donations'
 
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
-import { ensRegex, erc20List } from '../../utils'
+import { ensRegex, getERC20List } from '../../utils'
 import LoadingModal from '../../components/loadingModal'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
@@ -91,11 +91,11 @@ const SmRow = styled(Flex)`
 
 const OnlyCrypto = props => {
   // ON BOARD
-  const { logout } = useWallet()
   const [wallet, setWallet] = useState(null)
   const [onboard, setOnboard] = useState(null)
-  const [selectedToken, setSelectedToken] = useState('ETH')
-  const [tokenSymbol, setTokenSymbol] = useState('ETH')
+  const [mainToken, setMainToken] = useState(null)
+  const [selectedToken, setSelectedToken] = useState(null)
+  const [tokenSymbol, setTokenSymbol] = useState(null)
   const [notify, setNotify] = useState(null)
   const { project } = props
   const [tokenPrice, setTokenPrice] = useState(1)
@@ -105,7 +105,14 @@ const OnlyCrypto = props => {
   const [txHash, setTxHash] = useState(null)
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
-  const { isLoggedIn, sendTransaction, user, ready } = useWallet()
+  const {
+    isLoggedIn,
+    currentChainId,
+    currentNetwork,
+    sendTransaction,
+    user,
+    ready
+  } = useWallet()
 
   const client = useApolloClient()
 
@@ -147,6 +154,10 @@ const OnlyCrypto = props => {
     if (previouslySelectedWallet && onboard) {
       onboard.walletSelect(previouslySelectedWallet)
     }
+    const mainToken = currentChainId === 100 ? 'XDAI' : 'ETH'
+    setMainToken(mainToken)
+    setSelectedToken(mainToken)
+    setTokenSymbol(mainToken)
   })
 
   const donation = parseFloat(amountTyped)
@@ -239,7 +250,7 @@ const OnlyCrypto = props => {
 
       await transaction.send(
         toAddress,
-        token !== 'ETH' ? selectedToken?.address : false,
+        token !== mainToken ? selectedToken?.address : false,
         subtotal,
         fromOwnProvider,
         isLoggedIn,
@@ -312,6 +323,8 @@ const OnlyCrypto = props => {
     }
   }
 
+  const erc20List = getERC20List(currentChainId)
+  const isMainnet = currentChainId === 1
   return (
     <Content>
       <InProgressModal
@@ -384,22 +397,24 @@ const OnlyCrypto = props => {
       </Modal>
       <AmountSection>
         <AmountContainer sx={{ width: ['100%', '100%'] }}>
-          <Text sx={{ variant: 'text.large', mb: 1, color: 'background' }}>
+          <Text sx={{ variant: 'text.large', mb: 3, color: 'background' }}>
             Enter your {tokenSymbol} amount
           </Text>
-          <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
-            {tokenPrice && `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
-          </Text>
+          {isMainnet && (
+            <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
+              {tokenPrice && `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
+            </Text>
+          )}
           <OpenAmount>
             <Flex sx={{ position: 'absolute' }}>
               <Select
-                defaultValue='ETH'
+                defaultValue={mainToken}
                 onChange={e => {
                   e.preventDefault()
                   const tokenContent =
-                    e.target.value !== 'ETH'
+                    e.target.value !== mainToken
                       ? JSON.parse(e.target.value)
-                      : 'ETH'
+                      : mainToken
                   setSelectedToken(tokenContent)
                   setTokenSymbol(tokenContent?.symbol || tokenContent)
                 }}
@@ -410,8 +425,8 @@ const OnlyCrypto = props => {
                   color: 'secondary'
                 }}
               >
-                <option>ETH</option>
-                {erc20List?.tokens.map((i, index) => {
+                <option>{mainToken}</option>
+                {erc20List?.tokens?.map((i, index) => {
                   return (
                     <option value={JSON.stringify(i)} key={index}>
                       {i.symbol}
@@ -489,7 +504,7 @@ const OnlyCrypto = props => {
                 title={`Support ${project?.title}`}
                 amount={[
                   `$${eth2usd(donation)}`,
-                  `ETH ${parseFloat(donation)}`
+                  `${selectedToken} ${parseFloat(donation)}`
                 ]}
               />
               {donateToGiveth && (
@@ -497,7 +512,9 @@ const OnlyCrypto = props => {
                   title='Support Giveth'
                   amount={[
                     `$${GIVETH_DONATION_AMOUNT}`,
-                    `≈ ETH ${(GIVETH_DONATION_AMOUNT / tokenPrice).toFixed(2)}`
+                    `≈ ${selectedToken} ${(
+                      GIVETH_DONATION_AMOUNT / tokenPrice
+                    ).toFixed(2)}`
                   ]}
                 />
               )}
@@ -516,7 +533,7 @@ const OnlyCrypto = props => {
                   textAlign: 'right'
                 }}
               >
-                ETH {parseFloat(subtotal)}
+                {selectedToken} {parseFloat(subtotal)}
               </Text>
             </Summary>
           )}

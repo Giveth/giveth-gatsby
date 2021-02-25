@@ -1,4 +1,4 @@
-const network = process.env.ETHEREUM_NETWORK
+// const network = process.env.ETHEREUM_NETWORK
 
 const mainnetTokens = {
   name: 'CMC200 ERC20',
@@ -512,11 +512,35 @@ const ropstenTokens = {
   ]
 }
 
-let tokens = {}
-if (network === 'ropsten') {
-  tokens = ropstenTokens
-} else if (network === 'mainnet') {
-  tokens = mainnetTokens
+const xDaiTokens = {
+  name: 'CUSTOM XDAI ERC20 LIST',
+  timestamp: null,
+  keywords: ['custom', 'erc20'],
+  tokens: [
+    {
+      chainId: 100,
+      address: '0x71850b7E9Ee3f13Ab46d67167341E4bDc905Eef9',
+      symbol: 'HNY',
+      name: 'Honey',
+      decimals: 18
+    }
+  ]
 }
 
-export default tokens
+const getTokens = network => {
+  let tokens = {}
+  switch (network) {
+    case 1:
+      tokens = tokens = mainnetTokens
+      break
+    case 3:
+      tokens = ropstenTokens
+      break
+    case 100:
+      tokens = xDaiTokens
+      break
+  }
+  return tokens
+}
+
+export default getTokens

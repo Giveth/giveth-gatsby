@@ -40,6 +40,7 @@ function WalletProvider(props) {
   const [balance, setBalance] = useState(0)
   const [ethEnabled, setEthEnabled] = useState(false)
   const [currentNetwork, setCurrentNetwork] = useState(null)
+  const [currentChainId, setCurrentChainId] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
   const client = useApolloClient()
@@ -56,6 +57,7 @@ function WalletProvider(props) {
 
     await wallet.init('production', network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
+    const currentChainId = await wallet?.web3.eth.net.getId()
 
     // Checks if Torus needs to re-login
     if (wallet?.isTorus && !wallet?.isLoggedIn()) {
@@ -66,6 +68,7 @@ function WalletProvider(props) {
         localStorageUser.walletAddresses[0]
     )
     setCurrentNetwork(networkName)
+    setCurrentChainId(currentChainId)
     setReady(true)
     wallet?.provider?.on('accountsChanged', function (accounts) {
       if (accounts[0] && accounts[0] !== account) {
@@ -75,8 +78,10 @@ function WalletProvider(props) {
     wallet?.provider?.on('chainChanged', async chainId => {
       // needs to be fetched again as chainId is being returned like 0x
       const chainID = await wallet?.web3.eth.net.getId()
+      setCurrentChainId(chainID)
       console.log({ chainID, networkId })
-      if (networkId !== chainID?.toString()) {
+      if (networkId !== chainID?.toString() && chainID !== 100) {
+        // 100 is xDAI
         Toast({
           content: `Ethereum network changed please use ${network}`,
           type: 'warn'
@@ -276,8 +281,9 @@ function WalletProvider(props) {
 
   async function checkNetwork() {
     if (!wallet) throw new Error('No Eth Provider')
+    const byPassXDAI = currentChainId === 100
     const currentNetworkId = await wallet?.web3.eth.getChainId()
-    if (currentNetworkId?.toString() === networkId) {
+    if (currentNetworkId?.toString() === networkId || byPassXDAI) {
       return true
     } else {
       throw new Error(`Wrong network, please change to ${network}`)
@@ -303,7 +309,7 @@ function WalletProvider(props) {
     fromSigner
   ) {
     try {
-      await checkNetwork()
+      await checkNetwork(true)
       let web3Provider = wallet?.web3.eth
       let txn = null
       const txParams = {
@@ -402,12 +408,22 @@ function WalletProvider(props) {
       ready,
       network,
       currentNetwork,
+      currentChainId,
       isWalletAddressValid,
       isAddressENS,
       getAddressFromENS,
       wallet
     }
-  }, [account, ready, balance, ethEnabled, isLoggedIn, user, currentNetwork])
+  }, [
+    account,
+    ready,
+    balance,
+    ethEnabled,
+    isLoggedIn,
+    user,
+    currentNetwork,
+    currentChainId
+  ])
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}
