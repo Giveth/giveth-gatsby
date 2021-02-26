@@ -94,6 +94,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       }
       donations {
         transactionId
+        transactionNetworkId
         toWalletAddress
         fromWalletAddress
         anonymous

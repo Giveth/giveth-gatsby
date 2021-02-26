@@ -1,15 +1,17 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
-import { Button, Flex, Label, Select, Text, jsx } from 'theme-ui'
+import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
 import Modal from '../modal'
+import Select from '../selectWIthAutocomplete'
 import QRCode from 'qrcode.react'
 import { ensRegex, getERC20List } from '../../utils'
 import LoadingModal from '../../components/loadingModal'
+import useComponentVisible from '../../utils/useComponentVisible'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
@@ -103,8 +105,14 @@ const OnlyCrypto = props => {
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [inProgress, setInProgress] = useState(false)
   const [txHash, setTxHash] = useState(null)
+  const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const {
+    ref,
+    isComponentVisible,
+    setIsComponentVisible
+  } = useComponentVisible(false)
   const {
     isLoggedIn,
     currentChainId,
@@ -124,28 +132,31 @@ const OnlyCrypto = props => {
         .then(response => response.json())
         .then(data => setTokenPrice(data.USD))
       setOnboard(
-        initOnboard({
-          wallet: wallet => {
-            if (wallet.provider) {
-              setWallet(wallet)
+        initOnboard(
+          {
+            wallet: wallet => {
+              if (wallet.provider) {
+                setWallet(wallet)
 
-              const ethersProvider = new ethers.providers.Web3Provider(
-                wallet.provider
-              )
-              provider = ethersProvider
-              window.localStorage.setItem('selectedWallet', wallet.name)
-            } else {
-              provider = null
-              setWallet({})
+                const ethersProvider = new ethers.providers.Web3Provider(
+                  wallet.provider
+                )
+                provider = ethersProvider
+                window.localStorage.setItem('selectedWallet', wallet.name)
+              } else {
+                provider = null
+                setWallet({})
+              }
             }
-          }
-        })
+          },
+          currentChainId === 100 ? currentChainId : null
+        )
       )
       setNotify(initNotify())
     }
     // console.log(ethers.utils.parseEther('1.0'))
     init()
-  }, [tokenSymbol])
+  }, [tokenSymbol, currentChainId])
 
   useEffect(() => {
     const previouslySelectedWallet = window.localStorage.getItem(
@@ -155,10 +166,31 @@ const OnlyCrypto = props => {
       onboard.walletSelect(previouslySelectedWallet)
     }
     const mainToken = currentChainId === 100 ? 'XDAI' : 'ETH'
+    const currentMainToken = {
+      symbol: mainToken,
+      name: `${mainToken} Token`
+    }
     setMainToken(mainToken)
-    setSelectedToken(mainToken)
+    setSelectedToken(currentMainToken)
     setTokenSymbol(mainToken)
-  })
+
+    const tokenList = getERC20List(currentChainId)
+    const formattedTokenList = tokenList?.tokens
+      ? Array.from(tokenList?.tokens, token => {
+          return {
+            value: token,
+            label: token?.symbol
+          }
+        })
+      : []
+    setErc20List([
+      {
+        value: currentMainToken,
+        label: mainToken
+      },
+      ...formattedTokenList
+    ])
+  }, [currentChainId])
 
   const donation = parseFloat(amountTyped)
   const givethFee =
@@ -167,7 +199,8 @@ const OnlyCrypto = props => {
   const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
 
   const eth2usd = eth => {
-    return (eth * tokenPrice).toFixed(2)
+    if (!tokenPrice) return ''
+    return `$ ${(eth * tokenPrice).toFixed(2)}`
   }
 
   const SummaryRow = ({ title, amount, style }) => {
@@ -218,8 +251,13 @@ const OnlyCrypto = props => {
     return ready
   }
 
-  const confirmDonation = async fromOwnProvider => {
+  const confirmDonation = async isFromOwnProvider => {
     try {
+      let fromOwnProvider = isFromOwnProvider
+      // Until we accept every other network we will offer xDAI if detected only through metamask
+      if (isXDAI) {
+        fromOwnProvider = true
+      }
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
@@ -230,6 +268,7 @@ const OnlyCrypto = props => {
         return Toast({ content: 'Please set an amount', type: 'warn' })
       }
       if (!fromOwnProvider) {
+        // Is not logged in, should try donation through onBoard
         const ready = await readyToTransact()
         if (!ready) return
       }
@@ -270,6 +309,7 @@ const OnlyCrypto = props => {
               fromAddress || instantReceipt?.from,
               toAddress,
               transactionHash,
+              currentChainId,
               Number(subtotal),
               token,
               Number(project.id)
@@ -323,10 +363,11 @@ const OnlyCrypto = props => {
     }
   }
 
-  const erc20List = getERC20List(currentChainId)
   const isMainnet = currentChainId === 1
+  const isXDAI = currentChainId === 100
+
   return (
-    <Content>
+    <Content ref={ref}>
       <InProgressModal
         showModal={inProgress}
         setShowModal={val => setInProgress(val)}
@@ -402,40 +443,39 @@ const OnlyCrypto = props => {
           </Text>
           {isMainnet && (
             <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
-              {tokenPrice && `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
+              {tokenPrice &&
+                tokenSymbol &&
+                `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
             </Text>
           )}
           <OpenAmount>
-            <Flex sx={{ position: 'absolute' }}>
-              <Select
-                defaultValue={mainToken}
-                onChange={e => {
-                  e.preventDefault()
-                  const tokenContent =
-                    e.target.value !== mainToken
-                      ? JSON.parse(e.target.value)
-                      : mainToken
-                  setSelectedToken(tokenContent)
-                  setTokenSymbol(tokenContent?.symbol || tokenContent)
-                }}
+            <Text
+              sx={{ position: 'absolute', cursor: 'pointer', pl: 3 }}
+              onClick={() => setIsComponentVisible(!isComponentVisible)}
+            >
+              {tokenSymbol}
+            </Text>
+            {isComponentVisible && (
+              <Flex
                 sx={{
-                  borderColor: 'white',
-                  width: '60px',
+                  position: 'absolute',
                   backgroundColor: 'background',
-                  color: 'secondary'
+                  marginTop: '80px'
                 }}
               >
-                <option>{mainToken}</option>
-                {erc20List?.tokens?.map((i, index) => {
-                  return (
-                    <option value={JSON.stringify(i)} key={index}>
-                      {i.symbol}
-                    </option>
-                  )
-                })}
-              </Select>
-            </Flex>
-
+                <Select
+                  width='200px'
+                  content={erc20List}
+                  menuIsOpen
+                  onSelect={i => {
+                    setSelectedToken(i?.value || selectedToken)
+                    setTokenSymbol(i?.label || tokenSymbol)
+                    setIsComponentVisible(false)
+                  }}
+                  placeholder='choose a token'
+                />
+              </Flex>
+            )}
             <InputComponent
               sx={{
                 variant: 'text.large',
@@ -503,8 +543,8 @@ const OnlyCrypto = props => {
               <SummaryRow
                 title={`Support ${project?.title}`}
                 amount={[
-                  `$${eth2usd(donation)}`,
-                  `${selectedToken} ${parseFloat(donation)}`
+                  `${eth2usd(donation)}`,
+                  `${selectedToken?.symbol} ${parseFloat(donation)}`
                 ]}
               />
               {donateToGiveth && (
@@ -512,7 +552,7 @@ const OnlyCrypto = props => {
                   title='Support Giveth'
                   amount={[
                     `$${GIVETH_DONATION_AMOUNT}`,
-                    `≈ ${selectedToken} ${(
+                    `≈ ${selectedToken?.symbol} ${(
                       GIVETH_DONATION_AMOUNT / tokenPrice
                     ).toFixed(2)}`
                   ]}
@@ -533,7 +573,7 @@ const OnlyCrypto = props => {
                   textAlign: 'right'
                 }}
               >
-                {selectedToken} {parseFloat(subtotal)}
+                {selectedToken?.symbol} {parseFloat(subtotal)}
               </Text>
             </Summary>
           )}
@@ -557,7 +597,7 @@ const OnlyCrypto = props => {
             >
               Donate
             </Button>
-            {isLoggedIn && ready && (
+            {isLoggedIn && ready && !isXDAI && (
               <Text
                 sx={{
                   mt: 2,

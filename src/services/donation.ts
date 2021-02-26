@@ -6,6 +6,7 @@ export async function saveDonation (
   fromAddress: string,
   toAddress: string,
   transactionId: string,
+  transactionNetworkId: number,
   amount: number,
   token: string,
   projectId: number
@@ -19,6 +20,7 @@ export async function saveDonation (
         fromAddress,
         toAddress,
         transactionId,
+        transactionNetworkId,
         amount,
         token,
         projectId

@@ -4,6 +4,7 @@ const SAVE_DONATION = gql`
     $fromAddress: String!
     $toAddress: String!
     $transactionId: String!
+    $transactionNetworkId: Float!
     $amount: Float!
     $token: String!
     $projectId: Float!
@@ -12,6 +13,7 @@ const SAVE_DONATION = gql`
       fromAddress: $fromAddress
       toAddress: $toAddress
       transactionId: $transactionId
+      transactionNetworkId: $transactionNetworkId
       amount: $amount
       token: $token
       projectId: $projectId
@@ -30,6 +32,7 @@ const WALLET_DONATIONS = gql`
   query donationsFromWallets($fromWalletAddresses: [String!]!) {
     donationsFromWallets(fromWalletAddresses: $fromWalletAddresses) {
       transactionId
+      transactionNetworkId
       toWalletAddress
       fromWalletAddress
       anonymous
@@ -52,6 +55,7 @@ const USERS_DONATIONS = gql`
   query {
     donationsByDonor {
       transactionId
+      transactionNetworkId
       toWalletAddress
       fromWalletAddress
       anonymous
