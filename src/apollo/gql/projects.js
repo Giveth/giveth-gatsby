@@ -348,6 +348,11 @@ const EDIT_PROJECT = gql`
   }
 `
 
+const DEACTIVATE_PROJECT = gql`
+  mutation deactivateProject($projectId: Float!) {
+    deactivateProject(projectId: $projectId)
+  }
+`
 export {
   FETCH_PROJECTS,
   FETCH_USER_PROJECTS,
@@ -366,5 +371,6 @@ export {
   GET_PROJECT_REACTIONS,
   GET_PROJECT_BY_ADDRESS,
   REGISTER_PROJECT_DONATION,
-  EDIT_PROJECT
+  EDIT_PROJECT,
+  DEACTIVATE_PROJECT
 }

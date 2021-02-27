@@ -68,7 +68,27 @@ export const wallets = {
         buildEnv: buildEnv || 'production',
         network: { host: network },
         showTorusButton: false,
-        whiteLabel: true
+        whiteLabel: true,
+        paymentProviders: {
+          moonpay: {
+            minOrderValue: 24.99,
+            maxOrderValue: 2000,
+            validCurrencies: ['USD', 'EUR', 'GBP'],
+            validCryptoCurrencies: ['ETH', 'DAI', 'TUSD', 'USDC', 'USDT']
+          },
+          wyre: {
+            minOrderValue: 20,
+            maxOrderValue: 250,
+            validCurrencies: ['USD'],
+            validCryptoCurrencies: ['ETH', 'DAI', 'USDC']
+          },
+          rampnetwork: {
+            minOrderValue: 1,
+            maxOrderValue: 10000,
+            validCurrencies: ['GBP', 'EUR'],
+            validCryptoCurrencies: ['ETH', 'DAI', 'USDC']
+          }
+        }
       })
       //await torus.login()
       wallets.torus.torus = torus

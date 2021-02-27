@@ -20,6 +20,7 @@ import {
   GET_PROJECT_BY_ADDRESS,
   FETCH_PROJECT_BY_SLUG
 } from '../../../apollo/gql/projects'
+import { deactivateProject } from '../../../services/project'
 import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
@@ -37,7 +38,7 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEditionForm(props) {
+function ProjectEditionForm (props) {
   const {
     goBack,
     setCancelModal,
@@ -46,7 +47,8 @@ function ProjectEditionForm(props) {
     project,
     client,
     mapLocation,
-    setMapLocation
+    setMapLocation,
+    deactivateProject
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -109,6 +111,41 @@ function ProjectEditionForm(props) {
         >
           My Projects
         </Text>
+
+        <form onSubmit={handleSubmit(deactivateProject)}>
+          <input
+            type='hidden'
+            name='projectId'
+            ref={register}
+            value={project.id}
+          />
+          <Button
+            aria-label='Next'
+            sx={{
+              mt: '39px',
+              width: '240px',
+              height: '52px',
+              borderRadius: '48px',
+              cursor: 'pointer'
+            }}
+            type='submit'
+          >
+            {' '}
+            <Text
+              sx={{
+                fontFamily: 'body',
+                fontWeight: 'bold',
+                fontSize: 2,
+                letterSpacing: '4%',
+                textTransform: 'uppercase',
+                textAlign: 'center',
+                color: 'white'
+              }}
+            >
+              Deactivate project
+            </Text>
+          </Button>
+        </form>
       </Flex>
       <form onSubmit={handleSubmit(updateProject)}>
         <>
@@ -300,7 +337,7 @@ function ProjectEditionForm(props) {
   )
 }
 
-function ProjectEdition(props) {
+function ProjectEdition (props) {
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -358,7 +395,7 @@ function ProjectEdition(props) {
     }
   }, [project])
 
-  async function updateProject(data) {
+  async function updateProject (data) {
     try {
       // Validate eth address
       let ethAddress = data.editWalletAddress
@@ -436,6 +473,7 @@ function ProjectEdition(props) {
         client={client}
         mapLocation={mapLocation}
         setMapLocation={setMapLocation}
+        deactivateProject={deactivateProject}
       />
       <ConfirmationModal
         showModal={showModal}

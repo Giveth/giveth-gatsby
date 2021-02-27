@@ -17,16 +17,14 @@ const Funds = styled.div`
 const DonationsTab = ({ project, showModal, setShowModal }) => {
   const [loading, setLoading] = React.useState(true)
   const { currentProjectView } = React.useContext(ProjectContext)
-  // james const total = currentProjectView?.ethBalance
   const donations = project.donations
-  const totalDonations = donations.reduce(
-    (total, donation) => total + donation.amount,
-    0
-  )
-  const totalUSDonations = donations.reduce(
-    (total, donation) => total + donation.valueUsd,
-    0
-  )
+
+  const totalDonations = donations
+    ? donations.reduce((total, donation) => total + donation.amount, 0)
+    : 0
+  const totalUSDonations = donations
+    ? donations.reduce((total, donation) => total + donation.valueUsd, 0)
+    : 0
   React.useEffect(() => {
     setLoading(false)
   }, [])
