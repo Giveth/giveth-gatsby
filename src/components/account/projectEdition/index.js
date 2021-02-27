@@ -38,7 +38,7 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEditionForm (props) {
+function ProjectEditionForm(props) {
   const {
     goBack,
     setCancelModal,
@@ -100,17 +100,19 @@ function ProjectEditionForm (props) {
   return (
     <>
       {loading && <LoadingModal isOpen={loading} />}
-      <Flex sx={{ alignItems: 'center' }}>
-        <BiArrowBack
-          color={theme.colors.secondary}
-          style={{ marginRight: 2 }}
-        />
-        <Text
-          onClick={goBack}
-          sx={{ fontFamily: 'body', color: 'secondary', cursor: 'pointer' }}
-        >
-          My Projects
-        </Text>
+      <Flex sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <Flex>
+          <BiArrowBack
+            color={theme.colors.secondary}
+            style={{ marginRight: 2 }}
+          />
+          <Text
+            onClick={goBack}
+            sx={{ fontFamily: 'body', color: 'secondary', cursor: 'pointer' }}
+          >
+            My Projects
+          </Text>
+        </Flex>
 
         <form onSubmit={handleSubmit(deactivateProject)}>
           <input
@@ -122,7 +124,7 @@ function ProjectEditionForm (props) {
           <Button
             aria-label='Next'
             sx={{
-              mt: '39px',
+              my: '20px',
               width: '240px',
               height: '52px',
               borderRadius: '48px',
@@ -337,7 +339,7 @@ function ProjectEditionForm (props) {
   )
 }
 
-function ProjectEdition (props) {
+function ProjectEdition(props) {
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -395,7 +397,7 @@ function ProjectEdition (props) {
     }
   }, [project])
 
-  async function updateProject (data) {
+  async function updateProject(data) {
     try {
       // Validate eth address
       let ethAddress = data.editWalletAddress

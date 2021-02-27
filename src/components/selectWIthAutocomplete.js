@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import styled from '@emotion/styled'
 import Select from 'react-select'
 import theme from '../gatsby-plugin-theme-ui/index'
 
@@ -18,6 +19,16 @@ const SelectWithAutocomplete = ({
 
   const CustomOption = props => {
     const { children, value, innerProps, isDisabled } = props
+
+    const StyledOption = styled.div`
+      &:hover {
+        div {
+          color: ${theme.colors.background};
+        }
+        background-color: ${theme.colors.hover};
+      }
+    `
+
     if (isDisabled) return null
     let toShow = children
     // Special render for tokens, showing extra info
@@ -27,7 +38,7 @@ const SelectWithAutocomplete = ({
       )
     }
     return (
-      <div
+      <StyledOption
         {...innerProps}
         style={{
           cursor: 'pointer',
@@ -37,7 +48,7 @@ const SelectWithAutocomplete = ({
         }}
       >
         {toShow}
-      </div>
+      </StyledOption>
     )
   }
 
@@ -64,6 +75,10 @@ const SelectWithAutocomplete = ({
         menu: provided => ({
           ...provided,
           marginTop: '-5px'
+        }),
+        menuList: provided => ({
+          ...provided,
+          maxHeight: '150px'
         }),
         control: () => ({
           // none of react-select's styles are passed to <Control />

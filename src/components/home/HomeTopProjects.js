@@ -19,8 +19,6 @@ const HomeTopProjects = () => {
     fetchPolicy: 'network-only'
   })
 
-  console.log({ data })
-
   const { topProjects } = data || {}
   const { projects = [], totalCount = 0 } = topProjects || {}
   return (
