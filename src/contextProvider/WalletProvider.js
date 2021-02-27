@@ -203,7 +203,10 @@ function WalletProvider(props) {
       user.addWalletAddress(publicAddress, true)
     }
 
-    const signedMessage = await signMessage('our_secret', publicAddress)
+    const signedMessage = await signMessage(
+      process.env.OUR_SECRET,
+      publicAddress
+    )
     if (!signedMessage) return
     console.log(`updateUser: user : ${JSON.stringify(user, null, 2)}`)
     console.log(`signedMessage ---> : ${signedMessage}`, { publicAddress })
