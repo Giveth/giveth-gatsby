@@ -1,30 +1,69 @@
 import React, { useState, useEffect } from 'react'
 import Select from 'react-select'
+import theme from '../gatsby-plugin-theme-ui/index'
 
 const SelectWithAutocomplete = ({
   content,
   width,
   placeholder,
   onSelect,
-  menuIsOpen
+  menuIsOpen,
+  isTokenList
 }) => {
   const options = content || [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' }
   ]
+
+  const CustomOption = props => {
+    const { children, value, innerProps, isDisabled } = props
+    if (isDisabled) return null
+    let toShow = children
+    // Special render for tokens, showing extra info
+    if (isTokenList) {
+      toShow = (
+        <div>{`${value?.symbol} ${value?.name ? `- ${value.name}` : ''}`}</div>
+      )
+    }
+    return (
+      <div
+        {...innerProps}
+        style={{
+          cursor: 'pointer',
+          color: theme.colors.secondary,
+          fontFamily: theme.fonts.body,
+          padding: 20
+        }}
+      >
+        {toShow}
+      </div>
+    )
+  }
+
   return (
     <Select
       options={options}
+      components={{ Option: CustomOption }}
       placeholder={placeholder || 'Select an option'}
       onChange={onSelect}
       menuIsOpen={menuIsOpen}
       styles={{
-        option: (provided, state) => ({
+        placeholder: provided => ({
           ...provided,
-          borderBottom: '1px dotted pink',
-          color: state.isSelected ? 'red' : 'blue',
-          padding: 20
+          color: theme.colors.anotherGrey
+        }),
+        valueContainer: provided => ({
+          ...provided,
+          padding: 15,
+          margin: 0,
+          fontSize: '18px',
+          fontFamily: theme.fonts.body,
+          color: theme.colors.secondary
+        }),
+        menu: provided => ({
+          ...provided,
+          marginTop: '-5px'
         }),
         control: () => ({
           // none of react-select's styles are passed to <Control />

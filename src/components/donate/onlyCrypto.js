@@ -9,6 +9,7 @@ import { SAVE_DONATION } from '../../apollo/gql/donations'
 import Modal from '../modal'
 import Select from '../selectWIthAutocomplete'
 import QRCode from 'qrcode.react'
+import { BsCaretDownFill } from 'react-icons/bs'
 import { ensRegex, getERC20List } from '../../utils'
 import LoadingModal from '../../components/loadingModal'
 import useComponentVisible from '../../utils/useComponentVisible'
@@ -16,6 +17,7 @@ import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
+import theme from '../../gatsby-plugin-theme-ui'
 import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
@@ -65,7 +67,7 @@ const InputComponent = styled.input`
   background: white;
   border: none;
   border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 4rem;
+  padding: 1rem 0.4rem 1rem 5rem;
   outline: none;
 `
 
@@ -168,7 +170,7 @@ const OnlyCrypto = props => {
     const mainToken = currentChainId === 100 ? 'XDAI' : 'ETH'
     const currentMainToken = {
       symbol: mainToken,
-      name: `${mainToken} Token`
+      name: null
     }
     setMainToken(mainToken)
     setSelectedToken(currentMainToken)
@@ -449,30 +451,38 @@ const OnlyCrypto = props => {
             </Text>
           )}
           <OpenAmount>
-            <Text
-              sx={{ position: 'absolute', cursor: 'pointer', pl: 3 }}
+            <Flex
               onClick={() => setIsComponentVisible(!isComponentVisible)}
+              sx={{
+                alignItems: 'center',
+                position: 'absolute',
+                cursor: 'pointer',
+                ml: 3
+              }}
             >
-              {tokenSymbol}
-            </Text>
+              <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
+              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
+            </Flex>
+
             {isComponentVisible && (
               <Flex
                 sx={{
                   position: 'absolute',
                   backgroundColor: 'background',
-                  marginTop: '80px'
+                  marginTop: '100px'
                 }}
               >
                 <Select
                   width='200px'
                   content={erc20List}
+                  isTokenList
                   menuIsOpen
                   onSelect={i => {
                     setSelectedToken(i?.value || selectedToken)
                     setTokenSymbol(i?.label || tokenSymbol)
                     setIsComponentVisible(false)
                   }}
-                  placeholder='choose a token'
+                  placeholder='search a token'
                 />
               </Flex>
             )}
