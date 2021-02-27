@@ -157,6 +157,7 @@ exports.sourceNodes = async ({
             admin
             walletAddress
             impactLocation
+            balance
             categories {
               name
             }
@@ -179,6 +180,12 @@ exports.sourceNodes = async ({
               createdAt
               currency
             }
+            reactions {
+              reaction
+              id
+              projectUpdateId
+              userId
+            }
           }
         }
       `
@@ -187,6 +194,18 @@ exports.sourceNodes = async ({
     const { projects } = data
 
     if (projects && projects.length) {
+      createNode({
+        id: 'giveth',
+        projects: projects,
+        parent: null,
+        children: [],
+        internal: {
+          type: 'Projects',
+          content: JSON.stringify(projects),
+          contentDigest: createContentDigest(projects)
+        }
+      })
+
       projects.forEach(project => {
         createNode({
           ...project,
@@ -213,6 +232,9 @@ exports.sourceNodes = async ({
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions
   createTypes(`
+    type Projects implements Node {
+      projects: [Project]
+    }
     type Project implements Node {
       id: ID!
       title: String!
@@ -224,13 +246,19 @@ exports.createSchemaCustomization = ({ actions }) => {
       donations: [Donation]
       impactLocation: String
       categories: [Category]
-      
+      reactions: [Reaction]
     }
     type Category implements Node {
       id: ID!
       name: String
       value: String!
       source: String!
+    }
+    type Reaction implements Node {
+      id: ID!
+      projectUpdateId: Float
+      userId: Float
+      reaction: String!
     }
     type Donation implements Node {
       id: ID!

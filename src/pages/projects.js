@@ -10,7 +10,7 @@ import ProjectsList, {
   OrderByField
 } from '../components/ProjectsList'
 
-const Projects = props => {
+const Projects = ({ data }) => {
   const [limit, setLimit] = useState(12)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
   const orderBy = {
@@ -18,13 +18,9 @@ const Projects = props => {
     direction: OrderByDirection.DESC
   }
 
-  const { data } = useQuery(FETCH_PROJECTS, {
-    variables: { orderBy },
-    fetchPolicy: 'network-only'
-  })
-
-  const { topProjects } = data || {}
-  const { projects = [], totalCount = 0 } = topProjects || {}
+  const { giveth } = data
+  const { projects } = giveth
+  const totalCount = projects.length
   const showingProjects = projects.slice(0, limit)
 
   const AllProjects = () => (
@@ -53,3 +49,57 @@ const Projects = props => {
 }
 
 export default Projects
+
+export const query = graphql`
+  query FetchProjects {
+    giveth {
+      projects {
+        id
+        title
+        balance
+        image
+        slug
+        creationDate
+        admin
+        description
+        walletAddress
+        impactLocation
+        categories {
+          name
+        }
+        reactions {
+          reaction
+          id
+          projectUpdateId
+          userId
+        }
+      }
+    }
+    allProject {
+      edges {
+        node {
+          id
+          title
+          balance
+          image
+          slug
+          creationDate
+          admin
+          description
+          walletAddress
+          impactLocation
+          categories {
+            name
+          }
+          reactions {
+            reaction
+            id
+            projectUpdateId
+            userId
+          }
+        }
+      }
+      totalCount
+    }
+  }
+`
