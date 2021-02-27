@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Button, Text, jsx } from 'theme-ui'
+import { Grid, Box, Button, Image, Text, jsx } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import styled from '@emotion/styled'
 
@@ -207,7 +207,7 @@ const InfoSection = ({ content }) => {
           {isMobile ? (
             <div sx={{ height: '20px' }} />
           ) : (
-            <img src={decoratorPuzzleguy} alt='' />
+            <Image src={decoratorPuzzleguy} alt='' />
           )}
         </Box>
         <Grid
