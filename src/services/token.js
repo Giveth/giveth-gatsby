@@ -1,4 +1,3 @@
-import * as Auth from '../services/auth'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
 import Web3 from 'web3'
