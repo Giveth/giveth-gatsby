@@ -36,7 +36,7 @@ export const logout = (callback = () => {}) => {
 export function getLocalStorageUserLabel () {
   const gatsbyUser = process.env.GATSBY_LOCAL_USER_LABEL
     ? process.env.GATSBY_LOCAL_USER_LABEL + '_' + process.env.ENVIRONMENT
-    : 'gatsbyUser' + '_' + process.env.ENVIRONMENT
+    : 'gatsbyUser_' + process.env.ENVIRONMENT
 
   return gatsbyUser
 }
