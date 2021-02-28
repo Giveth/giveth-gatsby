@@ -2,7 +2,6 @@
 import React from 'react'
 import { jsx, Text, Box } from 'theme-ui'
 import { Link } from 'gatsby'
-import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
@@ -33,84 +32,86 @@ const AccountNav = props => {
     logout()
   }
   return (
-    <Box sx={{ width: ['100%', '30%', '30%'] }}>
-      <Text
-        sx={{
-          fontFamily: 'heading',
-          color: 'secondary',
-          fontSize: 8,
-          mt: '40px',
-          mb: '68px'
-          // variant: 'links.secondary',
-        }}
-      >
-        My Account
-      </Text>
-      <Box>
-        {options.map((i, index) => {
-          return (
-            <a
-              key={index}
-              style={{ textDecoration: 'none', cursor: 'pointer' }}
-              onClick={() => {
-                switch (i.route) {
-                  case 'projects':
-                    return setQuery({ view: 'projects', data: 'all' })
-                  case 'account':
-                    return setQuery({ view: undefined, data: undefined })
-                  default:
-                    return setQuery({ view: i.route, data: undefined })
-                }
-              }}
-            >
-              <Text
-                sx={{
-                  mb: '8px',
-                  color:
-                    query?.view === i.route ||
-                    (!query?.view && i.route === 'account')
-                      ? 'primary'
-                      : 'secondary'
+    <React.Fragment>
+      <Box sx={{ width: ['100%', '30%', '30%'] }}>
+        <Text
+          sx={{
+            fontFamily: 'heading',
+            color: 'secondary',
+            fontSize: 8,
+            mt: '40px',
+            mb: '68px'
+            // variant: 'links.secondary',
+          }}
+        >
+          My Account
+        </Text>
+        <Box>
+          {options.map((i, index) => {
+            return (
+              <a
+                key={index}
+                style={{ textDecoration: 'none', cursor: 'pointer' }}
+                onClick={() => {
+                  switch (i.route) {
+                    case 'projects':
+                      return setQuery({ view: 'projects', data: 'all' })
+                    case 'account':
+                      return setQuery({ view: undefined, data: undefined })
+                    default:
+                      return setQuery({ view: i.route, data: undefined })
+                  }
                 }}
               >
-                {formatTitle(i.name, projectsList, userDonations)}
-              </Text>
-            </a>
-          )
-        })}
+                <Text
+                  sx={{
+                    mb: '8px',
+                    color:
+                      query?.view === i.route ||
+                      (!query?.view && i.route === 'account')
+                        ? 'primary'
+                        : 'secondary'
+                  }}
+                >
+                  {formatTitle(i.name, projectsList, userDonations)}
+                </Text>
+              </a>
+            )
+          })}
+        </Box>
+        <Box sx={{ mt: ['35px', '70px', '70px'] }}>
+          <Link
+            href={wallet?.supportLink}
+            target='_blank'
+            rel='noopener noreferrer'
+            sx={{ textDecoration: 'none' }}
+          >
+            <Text sx={{ mb: '8px', variant: 'links.grey' }}>
+              My Wallet <FiExternalLink size='18px' />
+            </Text>
+          </Link>
+          <Link
+            href='https://github.com/Giveth/giveth-2/issues/new/choose'
+            target='_blank'
+            rel='noopener noreferrer'
+            sx={{ textDecoration: 'none' }}
+          >
+            <Text sx={{ mb: '8px', variant: 'links.grey' }}>Report A Bug</Text>
+          </Link>
+          <Link
+            href='https://discord.gg/JYNBDuFUpG'
+            target='_blank'
+            rel='noopener noreferrer'
+            sx={{ textDecoration: 'none' }}
+          >
+            <Text sx={{ mb: '8px', variant: 'links.grey' }}>Support</Text>
+          </Link>
+          <Link to='/' sx={{ textDecoration: 'none' }} onClick={handleLogout}>
+            <Text sx={{ mb: '8px', variant: 'links.grey' }}>Sign Out</Text>
+          </Link>
+        </Box>
       </Box>
-      <Box sx={{ mt: ['35px', '70px', '70px'] }}>
-        <Link
-          href={wallet?.supportLink}
-          target='_blank'
-          rel='noopener noreferrer'
-          sx={{ textDecoration: 'none' }}
-        >
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>
-            My Wallet <FiExternalLink size='18px' />
-          </Text>
-        </Link>
-        <Link
-          href='https://github.com/Giveth/giveth-2/issues/new/choose'
-          target='_blank'
-          rel='noopener noreferrer'
-          sx={{ textDecoration: 'none' }}
-        >
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>Report A Bug</Text>
-        </Link>
-        <Link
-          href='https://discord.gg/JYNBDuFUpG'
-          target='_blank'
-          rel='noopener noreferrer'
-          sx={{ textDecoration: 'none' }}
-        >
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>Support</Text>
-        </Link>
-        <Link to='/' sx={{ textDecoration: 'none' }} onClick={handleLogout}>
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>Sign Out</Text>
-        </Link>
-      </Box>
-    </Box>
+    </React.Fragment>
   )
 }
 export default AccountNav

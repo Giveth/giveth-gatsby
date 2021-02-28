@@ -1,4 +1,3 @@
-import React, { useContext, useEffect, useState } from 'react'
 import * as Auth from '../services/auth'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'

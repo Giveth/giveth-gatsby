@@ -20,13 +20,12 @@ import {
 } from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/client'
-import { navigate } from 'gatsby'
 import Toast from '../../toast'
 import styled from '@emotion/styled'
 
 import theme from '../../../gatsby-plugin-theme-ui'
 
-import iconShare from '../../../images/icon-share.svg'
+// import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHands from '../../../images/decorator-raised-hands.png'

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+// import { Link } from 'gatsby'
 import { Button, Text } from 'theme-ui'
 
 export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (

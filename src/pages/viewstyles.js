@@ -124,7 +124,9 @@ const ViewStyles = () => {
               <Container>
                 <Text sx={{ variant: 'text.quote' }}>Quote</Text>
                 <Text sx={{ variant: 'text.overline' }}>Overline</Text>
-                <Text sx={{ variant: 'text.overlineSmall' }}>Overline small</Text>
+                <Text sx={{ variant: 'text.overlineSmall' }}>
+                  Overline small
+                </Text>
                 <Text sx={{ variant: 'text.caption' }}>Caption</Text>
                 <Text sx={{ variant: 'text.microbold' }}>Microbold</Text>
               </Container>
@@ -225,6 +227,9 @@ const ViewStyles = () => {
               <Text sx={{ variant: 'text.styleGuide' }}>Other Assets</Text>
               <Container>
                 <img src={noImage} alt='' />
+              </Container>
+              <Container>
+                <UserDetails />
               </Container>
             </StyleGuide>
           </Grid>

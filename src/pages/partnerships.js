@@ -12,7 +12,6 @@ import useMediaQuery from 'react-responsive'
 
 import Layout from '../components/layout'
 
-import { FaMediumM, FaGithub } from 'react-icons/fa'
 import decoratorPuzzle from '../images/decorator-puzzlepieces.svg'
 import DarkClouds from '../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHands from '../images/decorator-raised-one-hand.png'

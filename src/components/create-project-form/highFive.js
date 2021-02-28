@@ -5,11 +5,8 @@ import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
 import {
   FacebookShareButton,
-  FacebookIcon,
   LinkedinShareButton,
-  LinkedinIcon,
-  TwitterShareButton,
-  TwitterIcon
+  TwitterShareButton
 } from 'react-share'
 
 const HighFive = ({

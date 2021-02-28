@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Text, Flex, Box } from 'theme-ui'
+import { jsx, Text, Flex } from 'theme-ui'
 import { Link } from 'gatsby'
 import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'

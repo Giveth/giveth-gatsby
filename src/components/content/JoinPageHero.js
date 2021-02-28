@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Link } from 'gatsby'
+//import { Link } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'

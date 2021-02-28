@@ -18,11 +18,13 @@ if (siteId === 'giveth') {
 const HeroSide = () => {
   //if (!heroSide) return null
   return (
-    <img
-      src={heroSide}
-      alt=''
-      sx={{ position: 'absolute', bottom: '10vh', left: '-70px' }}
-    />
+    <React.Fragment>
+      <img
+        src={heroSide}
+        alt=''
+        sx={{ position: 'absolute', bottom: '10vh', left: '-70px' }}
+      />
+    </React.Fragment>
   )
 }
 export default HeroSide

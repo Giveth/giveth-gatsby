@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, Flex } from 'theme-ui'
+import { Flex } from 'theme-ui'
 import DonationsTable from './donationsTable'
 
 export const UserDonations = props => {

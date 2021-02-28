@@ -1,8 +1,8 @@
 /**
  * Decorative images
  */
-import React from 'react'
-import givethHeroSide from '../../images/decorator-leaf.svg'
+// import React from 'react'
+// import givethHeroSide from '../../images/decorator-leaf.svg'
 // import co2kenHeroSide from ''
 import givethHeroMain from '../../images/people-header.svg'
 import co2kenHeroMain from '../../images/tree-planting.jpg'

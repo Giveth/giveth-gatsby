@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { Button, Box, Flex, Text, jsx } from 'theme-ui'
+import { Box, Flex, Text, jsx } from 'theme-ui'
 import Notification from '../notification'
 import Avatar from '../avatar'
 import EditProfileModal from './editProfileModal'
@@ -24,7 +24,7 @@ const MyAccount = ({ info }) => {
     init()
   })
   return (
-    <>
+    <React.Fragment>
       <EditProfileModal
         isOpen={openModal}
         onRequestClose={() => setOpenModal(false)}
@@ -165,7 +165,7 @@ const MyAccount = ({ info }) => {
           </Text>
         </Flex>
       </Box>
-    </>
+    </React.Fragment>
   )
 }
 

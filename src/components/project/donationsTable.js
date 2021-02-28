@@ -1,24 +1,14 @@
 /** @jsx jsx */
 import React from 'react'
-import { ethers } from 'ethers'
-import { ProjectContext } from '../../contextProvider/projectProvider'
-import { useApolloClient } from '@apollo/client'
-import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
+// import { ethers } from 'ethers'
+// import { ProjectContext } from '../../contextProvider/projectProvider'
+// import { useApolloClient } from '@apollo/client'
+// import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import {
-  Avatar,
-  Badge,
-  Button,
-  Box,
-  Input,
-  Flex,
-  Spinner,
-  Text,
-  jsx
-} from 'theme-ui'
+import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import Jdenticon from 'react-jdenticon'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -165,7 +155,7 @@ const DonationsTable = ({ donations }) => {
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
-  const client = useApolloClient()
+  // const client = useApolloClient()
 
   React.useEffect(() => {
     const setup = async () => {

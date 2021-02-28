@@ -1,9 +1,9 @@
 /** @jsx jsx */
 import { Button, Text, jsx } from 'theme-ui'
-import { useContext, useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
-import CopyToClipboard from '../copyToClipboard'
+// import CopyToClipboard from '../copyToClipboard'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
 import { Link } from 'gatsby'
@@ -133,7 +133,7 @@ const UserDetails = () => {
     logout()
   }
   return (
-    <div ref={ref}>
+    <React.Fragment ref={ref}>
       <Button
         sx={{ variant: 'buttons.nofill' }}
         style={{
@@ -290,7 +290,7 @@ const UserDetails = () => {
           </MenuItem>
         </AccountDetails>
       ) : null}
-    </div>
+    </React.Fragment>
   )
 }
 

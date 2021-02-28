@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { ethers } from 'ethers'
+// import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { Spinner, Flex, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui'

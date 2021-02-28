@@ -9,9 +9,8 @@ import {
 } from 'react-icons/io'
 import 'react-toastify/dist/ReactToastify.css'
 import theme from '../gatsby-plugin-theme-ui/index'
-import styled from '@emotion/styled'
 
-export default function Toast({
+export default function Toast ({
   content = 'default msg',
   type,
   noAutoClose,

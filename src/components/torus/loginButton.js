@@ -5,7 +5,7 @@ import { Text, jsx } from 'theme-ui'
 import { wallets } from '../../wallets'
 import useComponentVisible from '../../utils/useComponentVisible'
 import theme from '../../gatsby-plugin-theme-ui/index'
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 
 const AccountDetails = styled.div`
   width: 200px;

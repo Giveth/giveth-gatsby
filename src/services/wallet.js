@@ -1,5 +1,4 @@
 import Web3 from 'web3'
-import React from 'react'
 import { getWallet } from '../wallets'
 
 export function isAddressENS (address) {

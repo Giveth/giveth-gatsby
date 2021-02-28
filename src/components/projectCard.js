@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import theme from '../gatsby-plugin-theme-ui/index'
 // import Donate from '../components/donateForm'
 import {
@@ -185,9 +185,9 @@ const ProjectCard = props => {
           key={props.listingId || project?.title + '_div'}
           src={image}
           onClick={() =>
-            (window.location.href = `/project/${
-              props?.slug || project?.slug || ''
-            }`)
+            (window.location.href = `/project/${props?.slug ||
+              project?.slug ||
+              ''}`)
           }
           style={{
             width: '100%',

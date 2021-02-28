@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
@@ -9,10 +9,10 @@ import theme from '../gatsby-plugin-theme-ui/index'
 // import iconShare from '../images/icon-share.svg'
 // import iconHeart from '../images/icon-heart.svg'
 
-import ProjectImageGallery1 from '../images/svg/create/projectImageGallery1.svg'
-import ProjectImageGallery2 from '../images/svg/create/projectImageGallery2.svg'
-import ProjectImageGallery3 from '../images/svg/create/projectImageGallery3.svg'
-import ProjectImageGallery4 from '../images/svg/create/projectImageGallery4.svg'
+// import ProjectImageGallery1 from '../images/svg/create/projectImageGallery1.svg'
+// import ProjectImageGallery2 from '../images/svg/create/projectImageGallery2.svg'
+// import ProjectImageGallery3 from '../images/svg/create/projectImageGallery3.svg'
+// import ProjectImageGallery4 from '../images/svg/create/projectImageGallery4.svg'
 
 const CardContainer = styled(Card)`
   position: relative;

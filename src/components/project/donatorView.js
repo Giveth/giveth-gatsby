@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Image, Badge, Text, Box, Button } from 'theme-ui'
-import { getEtherscanTxs } from '../../utils'
+// import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
@@ -15,7 +15,7 @@ import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
 
 import { Link } from 'gatsby'
-import { useQuery, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import {
   GET_STRIPE_PROJECT_DONATIONS,
   TOGGLE_PROJECT_REACTION,
@@ -39,7 +39,7 @@ const FloatingDonateView = styled(Flex)`
 export const ProjectDonatorView = ({ pageContext }) => {
   const { user } = useWallet()
   const [currentTab, setCurrentTab] = useState('description')
-  const [totalDonations, setTotalDonations] = useState(null)
+  // const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
   const usePopup = React.useContext(PopupContext)
@@ -552,6 +552,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         <iframe
           width='100%'
           height='600'
+          title='map'
           src='https://explorer.land/embed/project/balam1'
           frameborder='0'
           allowfullscreen

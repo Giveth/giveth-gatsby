@@ -1,8 +1,8 @@
 /** @jsx jsx */
-import { jsx, Text, Flex, Box } from 'theme-ui'
+import { jsx, Box } from 'theme-ui'
 import React from 'react'
-import { Link } from 'gatsby'
-import { BsArrowLeft } from 'react-icons/bs'
+// import { Link } from 'gatsby'
+// import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import MyProjects from './myProjects'
 const MyAccount = React.lazy(() => import('../../components/account/myAccount'))

@@ -4,11 +4,10 @@ import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import { Badge, Flex, Spinner, Text, jsx } from 'theme-ui'
-import { useQuery } from '@apollo/client'
+import { Badge, Flex, Text, jsx } from 'theme-ui'
+// import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
-import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
 dayjs.extend(localizedFormat)
 
@@ -193,7 +192,7 @@ const DonationsTable = props => {
       navigator.clipboard.writeText(hash)
     }
 
-    const etherscanPrefix = getEtherscanPrefix()
+    // const etherscanPrefix = getEtherscanPrefix()
 
     return (
       <Flex sx={{ flexDirection: 'column', mx: [2, 5, 5] }}>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as queryString from 'query-string'
-import { graphql, navigate, Link } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import Web3 from 'web3'
 import Seo from '../components/seo'
 import CreateProjectForm from '../components/create-project-form'
@@ -14,7 +14,7 @@ import decoratorFizzySquare from '../images/decorator-fizzy-square.svg'
 import peopleStretching from '../images/people-stretching.png'
 import HighFive from '../components/create-project-form/highFive'
 import fetch from 'isomorphic-fetch'
-import { useWallet } from '../contextProvider/WalletProvider'
+// import { useWallet } from '../contextProvider/WalletProvider'
 import GithubIssue from '../components/GithubIssue'
 import Logger from '../Logger'
 import { logout } from '../services/auth'
@@ -120,10 +120,10 @@ const IndexPage = props => {
     }
   }
 
-  function newProject() {
+  function newProject () {
     setAddedProject(null)
   }
-  function AfterCreation() {
+  function AfterCreation () {
     // TODO: Get project id after creation
     // if (!projectAdded && !projectId) {
     //   return <h3>loading</h3>
@@ -246,7 +246,7 @@ const IndexPage = props => {
     )
   }
 
-  function ProjectForm() {
+  function ProjectForm () {
     if (!projectAdded && !projectId) {
       return (
         <>

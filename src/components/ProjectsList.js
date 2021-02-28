@@ -94,7 +94,7 @@ const projectSearch = process.env.PROJECT_SEARCH
 const ProjectsList = props => {
   const { projects, totalCount, loadMore, hasMore } = props
   return (
-    <>
+    <React.Fragment>
       <Flex
         sx={{
           p: ['0 1em', '0 5em', '0 5em'],
@@ -274,7 +274,7 @@ const ProjectsList = props => {
           )}
         </div>
       </ProjectSection>
-    </>
+    </React.Fragment>
   )
 }
 

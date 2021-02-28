@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
+import { jsx, Text, Heading } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import React, { useState, useEffect } from 'react'
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer'
@@ -153,76 +153,78 @@ const ContentFaq = ({ data, isopen }) => {
   }, [hash])
 
   return (
-    <ContentContainer>
-      <Collapsible
-        trigger={
-          <QuestionSpan>
-            <Category>{data[0].node.category.category}</Category>
-            <ArrowDown />
-          </QuestionSpan>
-        }
-        triggerWhenOpen={
-          <QuestionSpan>
-            <Category>{data[0].node.category.category}</Category>
-            <ArrowUp />
-          </QuestionSpan>
-        }
-        open={isopen}
-      >
-        {data.map(edges => (
-          <ContentItem id={edges.node.linkId} key={edges.node.id}>
-            {hash === `#${edges.node.linkId}` ? (
-              <Collapsible
-                trigger={
-                  <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
-                    <ArrowDown />
-                  </QuestionSpan>
-                }
-                triggerWhenOpen={
-                  <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
-                    <ArrowUp />
-                  </QuestionSpan>
-                }
-                open={true}
-              >
-                <LongDescription
-                  sx={{ variant: 'text.default', color: 'colors.secondary' }}
+    <React.Fragment>
+      <ContentContainer>
+        <Collapsible
+          trigger={
+            <QuestionSpan>
+              <Category>{data[0].node.category.category}</Category>
+              <ArrowDown />
+            </QuestionSpan>
+          }
+          triggerWhenOpen={
+            <QuestionSpan>
+              <Category>{data[0].node.category.category}</Category>
+              <ArrowUp />
+            </QuestionSpan>
+          }
+          open={isopen}
+        >
+          {data.map(edges => (
+            <ContentItem id={edges.node.linkId} key={edges.node.id}>
+              {hash === `#${edges.node.linkId}` ? (
+                <Collapsible
+                  trigger={
+                    <QuestionSpan>
+                      <Question>{edges.node.question}</Question>
+                      <ArrowDown />
+                    </QuestionSpan>
+                  }
+                  triggerWhenOpen={
+                    <QuestionSpan>
+                      <Question>{edges.node.question}</Question>
+                      <ArrowUp />
+                    </QuestionSpan>
+                  }
+                  open={true}
                 >
-                  {documentToReactComponents(edges.node.answer.json)}
-                </LongDescription>
-              </Collapsible>
-            ) : (
-              <Collapsible
-                trigger={
-                  <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
-                    <ArrowDown />
-                  </QuestionSpan>
-                }
-                triggerWhenOpen={
-                  <QuestionSpan>
-                    <Question>{edges.node.question}</Question>
-                    <ArrowUp />
-                  </QuestionSpan>
-                }
-                open={false}
-              >
-                <LongDescription
-                  sx={{ variant: 'text.default', color: 'colors.secondary' }}
+                  <LongDescription
+                    sx={{ variant: 'text.default', color: 'colors.secondary' }}
+                  >
+                    {documentToReactComponents(edges.node.answer.json)}
+                  </LongDescription>
+                </Collapsible>
+              ) : (
+                <Collapsible
+                  trigger={
+                    <QuestionSpan>
+                      <Question>{edges.node.question}</Question>
+                      <ArrowDown />
+                    </QuestionSpan>
+                  }
+                  triggerWhenOpen={
+                    <QuestionSpan>
+                      <Question>{edges.node.question}</Question>
+                      <ArrowUp />
+                    </QuestionSpan>
+                  }
+                  open={false}
                 >
-                  {documentToReactComponents(
-                    edges.node.answer.json,
-                    richTextOptions
-                  )}
-                </LongDescription>
-              </Collapsible>
-            )}
-          </ContentItem>
-        ))}
-      </Collapsible>
-    </ContentContainer>
+                  <LongDescription
+                    sx={{ variant: 'text.default', color: 'colors.secondary' }}
+                  >
+                    {documentToReactComponents(
+                      edges.node.answer.json,
+                      richTextOptions
+                    )}
+                  </LongDescription>
+                </Collapsible>
+              )}
+            </ContentItem>
+          ))}
+        </Collapsible>
+      </ContentContainer>
+    </React.Fragment>
   )
 }
 

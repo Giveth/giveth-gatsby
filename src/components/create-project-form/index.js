@@ -1,15 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Box,
-  Heading,
-  Flex,
-  Button,
-  Spinner,
-  Progress,
-  Link,
-  Text
-} from 'theme-ui'
+import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
@@ -51,7 +42,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken() {
+    async function doValidateToken () {
       const isValid = await validateToken()
       console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -351,14 +342,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep(currentStep) {
+function isCategoryStep (currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep(currentStep, steps) {
+function isFinalConfirmationStep (currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep(currentStep, steps) {
+function isLastStep (currentStep, steps) {
   return currentStep === steps.length - 1
 }

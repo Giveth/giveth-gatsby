@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Flex,
@@ -25,8 +25,8 @@ import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
-import { useWallet } from '../../../contextProvider/WalletProvider'
-import useIsClient from '../../../utils/useIsClient'
+// import { useWallet } from '../../../contextProvider/WalletProvider'
+// import useIsClient from '../../../utils/useIsClient'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'

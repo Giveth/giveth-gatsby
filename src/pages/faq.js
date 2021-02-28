@@ -14,13 +14,15 @@ const Main = styled(Box)``
 const Faq = ({ data }) => {
   // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
-    <Layout>
-      <Seo title='FAQ' />
-      <Main>
-        <Text sx={{ variant: 'headings.h2', textAlign: 'center' }}>FAQ</Text>
-        <ContentFaq data={data.faqA.edges} isopen />
-      </Main>
-    </Layout>
+    <React.Fragment>
+      <Layout>
+        <Seo title='FAQ' />
+        <Main>
+          <Text sx={{ variant: 'headings.h2', textAlign: 'center' }}>FAQ</Text>
+          <ContentFaq data={data.faqA.edges} isopen />
+        </Main>
+      </Layout>
+    </React.Fragment>
   )
 }
 

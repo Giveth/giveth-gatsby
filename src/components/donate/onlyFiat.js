@@ -229,134 +229,140 @@ const OnlyFiat = props => {
           Coming Soon
         </Text>
         <Flex>
-          <img src={ComingSoon1} sx={{ ml: -6 }} />
-          <img src={ComingSoon2} sx={{ position: 'absolute', mt: 5, ml: 4 }} />
+          <img src={ComingSoon1} alt='' sx={{ ml: -6 }} />
+          <img
+            src={ComingSoon2}
+            alt=''
+            sx={{ position: 'absolute', mt: 5, ml: 4 }}
+          />
         </Flex>
       </Flex>
     )
   }
 
   return (
-    <Content>
-      <AmountSection>
-        <AmountSelection />
-        <AmountContainer>
-          <Text sx={{ variant: 'text.medium', color: 'background' }}>
-            Or enter your amount:
-          </Text>
-          <OpenAmount>
-            <Text sx={{ variant: 'text.large', color: 'background' }}>$</Text>
-            <InputComponent
-              sx={{
-                variant: 'text.large',
-                '::placeholder': {
-                  color: 'anotherGrey'
-                }
-              }}
-              placeholder='Amount'
-              type='number'
-              value={amountTyped}
-              onChange={e => {
-                e.preventDefault()
-                setAmountSelect(null)
-                setAmountTyped(e.target.value)
-              }}
-            />
-          </OpenAmount>
-        </AmountContainer>
-        <div>
-          <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox
-                defaultChecked={donateToGiveth}
-                onClick={() => setDonateToGiveth(!donateToGiveth)}
-              />
-              <Text
+    <React.Fragment>
+      <Content>
+        <AmountSection>
+          <AmountSelection />
+          <AmountContainer>
+            <Text sx={{ variant: 'text.medium', color: 'background' }}>
+              Or enter your amount:
+            </Text>
+            <OpenAmount>
+              <Text sx={{ variant: 'text.large', color: 'background' }}>$</Text>
+              <InputComponent
                 sx={{
-                  variant: 'text.medium',
-                  textAlign: 'left',
-                  color: 'white'
+                  variant: 'text.large',
+                  '::placeholder': {
+                    color: 'anotherGrey'
+                  }
                 }}
-              >
-                Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
-                help sustain Giveth
-              </Text>
-            </div>
-            <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
-          </CheckboxLabel>
-          <CheckboxLabel
-            sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
-          >
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Checkbox
-                defaultChecked={anonymous}
-                onClick={() => setAnonymous(!anonymous)}
+                placeholder='Amount'
+                type='number'
+                value={amountTyped}
+                onChange={e => {
+                  e.preventDefault()
+                  setAmountSelect(null)
+                  setAmountTyped(e.target.value)
+                }}
               />
-              <Text
-                sx={{
-                  variant: 'text.medium',
-                  color: 'white',
-                  textAlign: 'left'
-                }}
-              >
-                Donate anonymously
-              </Text>
-            </div>
-            <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
-          </CheckboxLabel>
-          {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
+            </OpenAmount>
+          </AmountContainer>
+          <div>
+            <CheckboxLabel sx={{ mb: '12px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <Checkbox
+                  defaultChecked={donateToGiveth}
+                  onClick={() => setDonateToGiveth(!donateToGiveth)}
+                />
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    textAlign: 'left',
+                    color: 'white'
+                  }}
+                >
+                  Be a hero, add <strong> ${GIVETH_DONATION_AMOUNT}</strong> to
+                  help sustain Giveth
+                </Text>
+              </div>
+              <Tooltip content='When you donate to Giveth you put a smile on our face because we can continue to provide support and further develop the platform.' />
+            </CheckboxLabel>
+            <CheckboxLabel
+              sx={{ mb: '12px', alignItems: 'center', color: 'white' }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <Checkbox
+                  defaultChecked={anonymous}
+                  onClick={() => setAnonymous(!anonymous)}
+                />
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    color: 'white',
+                    textAlign: 'left'
+                  }}
+                >
+                  Donate anonymously
+                </Text>
+              </div>
+              <Tooltip content='When you donate anonymously, your name will never appear in public as a donor. But, your name will be recorded so that we can send a tax donation receipt.' />
+            </CheckboxLabel>
+            {/* <Label sx={{ mb: '10px', alignItems: 'center' }}>
             <Checkbox defaultChecked={false} />
             <Text sx={{ variant: 'text.medium' }}>Dedicate this donation</Text>
           </Label> */}
-          {(amountSelect || amountTyped) && (
-            <Summary>
-              <SummaryRow
-                title={`Support ${project?.title}`}
-                amount={parseFloat(donation).toFixed(2)}
-              />
-              {donateToGiveth && (
+            {(amountSelect || amountTyped) && (
+              <Summary>
                 <SummaryRow
-                  title='Support Giveth'
-                  amount={GIVETH_DONATION_AMOUNT}
+                  title={`Support ${project?.title}`}
+                  amount={parseFloat(donation).toFixed(2)}
                 />
-              )}
-              <SummaryRow
-                title='Coming Soon'
-                amount={parseFloat(donation * 0.029 + 0.3).toFixed(2)}
-                style={{
-                  borderBottom: '1px solid #6B7087',
-                  padding: '0 0 18px 0'
-                }}
-              />
-              <Text
-                sx={{
-                  variant: 'text.medium',
-                  textAlign: 'right',
-                  color: 'background'
-                }}
-              >
-                ${parseFloat(subtotal).toFixed(2)}
-              </Text>
-            </Summary>
-          )}
-        </div>
-        <Button
-          onClick={goCheckout}
-          // onClick={() =>
-          //   alert(
-          //     `Stripe doesn't like us :( \nPlease wait until next integration`
-          //   )
-          // }
-          sx={{
-            variant: 'buttons.default',
-            padding: '1.063rem 7.375rem',
-            marginTop: '2rem'
-          }}
-        >
-          Donate
-        </Button>
-      </AmountSection>
-    </Content>
+                {donateToGiveth && (
+                  <SummaryRow
+                    title='Support Giveth'
+                    amount={GIVETH_DONATION_AMOUNT}
+                  />
+                )}
+                <SummaryRow
+                  title='Coming Soon'
+                  amount={parseFloat(donation * 0.029 + 0.3).toFixed(2)}
+                  style={{
+                    borderBottom: '1px solid #6B7087',
+                    padding: '0 0 18px 0'
+                  }}
+                />
+                <Text
+                  sx={{
+                    variant: 'text.medium',
+                    textAlign: 'right',
+                    color: 'background'
+                  }}
+                >
+                  ${parseFloat(subtotal).toFixed(2)}
+                </Text>
+              </Summary>
+            )}
+          </div>
+          <Button
+            onClick={goCheckout}
+            // onClick={() =>
+            //   alert(
+            //     `Stripe doesn't like us :( \nPlease wait until next integration`
+            //   )
+            // }
+            sx={{
+              variant: 'buttons.default',
+              padding: '1.063rem 7.375rem',
+              marginTop: '2rem'
+            }}
+          >
+            Donate
+          </Button>
+        </AmountSection>
+      </Content>
+    </React.Fragment>
   )
 }
 

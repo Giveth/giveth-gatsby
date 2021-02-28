@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Layout from '../components/layout'
 import Seo from '../components/seo'
-import { useApolloClient, useQuery } from '@apollo/client'
-import { FETCH_PROJECTS, FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
+import { useQuery } from '@apollo/client'
+import { FETCH_PROJECTS } from '../apollo/gql/projects'
 import ProjectsList, {
   OrderByDirection,
   OrderByField

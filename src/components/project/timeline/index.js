@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 
-import { ProjectContext } from '../../../contextProvider/projectProvider'
-import { Button, Flex, Text } from 'theme-ui'
+// import { ProjectContext } from '../../../contextProvider/projectProvider'
+import { Flex, Text } from 'theme-ui'
 import Card from './card'
 import theme from '../../../gatsby-plugin-theme-ui'
 

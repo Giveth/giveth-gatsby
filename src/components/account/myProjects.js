@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, navigate } from 'gatsby'
 import { useQueryParams, StringParam } from 'use-query-params'
 import ProjectCard from '../projectListing'
@@ -65,7 +65,7 @@ const MyProjects = props => {
     navigate('/', { state: { welcome: true } })
   }
   return (
-    <>
+    <React.Fragment>
       <Grid p={4} columns={[1, 2]} style={{ justifyItems: 'center' }}>
         {projects?.map((item, index) => {
           return (
@@ -118,7 +118,7 @@ const MyProjects = props => {
           <RaisedHandImg src={RaisedHand} />
         </SpecialCard>
       </Grid>
-    </>
+    </React.Fragment>
   )
 }
 

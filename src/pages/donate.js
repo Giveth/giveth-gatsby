@@ -1,8 +1,6 @@
 /** @jsx jsx */
 import React from 'react'
-import { Link } from 'gatsby'
-import { Router } from '@reach/router'
-import { Box, Button, Grid, Spinner, Text, jsx } from 'theme-ui'
+import { Box, Grid, Spinner, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 import Seo from '../components/seo'
@@ -124,10 +122,10 @@ const ShowProject = props => {
     const search = getUrlParams(props?.location?.search)
     setIsAfterPayment(search?.success === 'true')
     if (search?.sessionId) setPaymentSessionId(search?.sessionId)
-  }, [])
+  }, [props.location.search])
 
   // TODO: Implement this on a utils file
-  function getUrlParams(search) {
+  function getUrlParams (search) {
     let hashes = search.slice(search.indexOf('?') + 1).split('&')
     return hashes.reduce((params, hash) => {
       let [key, val] = hash.split('=')
@@ -135,7 +133,7 @@ const ShowProject = props => {
     }, {})
   }
 
-  function PaymentOptions() {
+  function PaymentOptions () {
     const isSSR = typeof window === 'undefined'
 
     const ShowPaymentOption = () => {

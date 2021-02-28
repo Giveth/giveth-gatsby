@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Label, Input, Text, Button } from 'theme-ui'
+import React from 'react'
+import { Label, Text, Button } from 'theme-ui'
 import { GET_LINK_BANK_CREATION } from '../../../apollo/gql/projects'
 import { useQuery } from '@apollo/client'
 import { animated } from 'react-spring'

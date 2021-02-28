@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { jsx, Flex, Spinner } from 'theme-ui'
-import { Router } from '@reach/router'
 import { FETCH_PROJECT_BY_SLUG } from '../../apollo/gql/projects'
 import { ProjectDonatorView } from '../../components/project'
 import Layout from '../../components/layout'
@@ -36,25 +35,27 @@ const Project = props => {
     } else {
       setLoading(false)
     }
-  })
+  }, [id, client])
   return (
-    <Layout>
-      <Seo
-        title={
-          slugProject?.title
-            ? `Check out ${slugProject?.title}`
-            : 'Check out this project!'
-        }
-        image={slugProject?.image}
-      />
-      {loading ? (
-        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Spinner variant='spinner.medium' />
-        </Flex>
-      ) : slugProject ? (
-        <ProjectDonatorView pageContext={{ project: slugProject }} />
-      ) : null}
-    </Layout>
+    <React.Fragment>
+      <Layout>
+        <Seo
+          title={
+            slugProject?.title
+              ? `Check out ${slugProject?.title}`
+              : 'Check out this project!'
+          }
+          image={slugProject?.image}
+        />
+        {loading ? (
+          <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+            <Spinner variant='spinner.medium' />
+          </Flex>
+        ) : slugProject ? (
+          <ProjectDonatorView pageContext={{ project: slugProject }} />
+        ) : null}
+      </Layout>
+    </React.Fragment>
   )
 }
 

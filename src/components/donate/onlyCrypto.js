@@ -1,20 +1,20 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import { useMutation } from '@apollo/client'
+// import { useMutation } from '@apollo/client'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
-import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
-import { SAVE_DONATION } from '../../apollo/gql/donations'
+// import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
+// import { SAVE_DONATION } from '../../apollo/gql/donations'
 
 import Modal from '../modal'
 import QRCode from 'qrcode.react'
 import { ensRegex } from '../../utils'
-import LoadingModal from '../../components/loadingModal'
+// import LoadingModal from '../../components/loadingModal'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
 import { ethers } from 'ethers'
-import getSigner from '../../services/ethersSigner'
+// import getSigner from '../../services/ethersSigner'
 // import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
 import { toast } from 'react-toastify'
@@ -160,39 +160,41 @@ const OnlyCrypto = props => {
 
   const SummaryRow = ({ title, amount, style }) => {
     return (
-      <SmRow style={style}>
-        <Text
-          sx={{
-            variant: 'text.medium',
-            textAlign: 'left',
-            width: ['50%', '70%'],
-            color: 'background'
-          }}
-        >
-          {title}
-        </Text>
-        {amount?.length === 2 ? (
-          <Flex sx={{ alignItems: 'center' }}>
-            <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
-              {amount[0]}
-            </Text>
-            <Text sx={{ variant: 'text.medium', color: 'background' }}>
-              {' '}
-              {amount[1]}
-            </Text>
-          </Flex>
-        ) : (
+      <React.Fragment>
+        <SmRow style={style}>
           <Text
             sx={{
-              variant: 'text.small',
-              textAlign: 'right',
-              color: 'anotherGrey'
+              variant: 'text.medium',
+              textAlign: 'left',
+              width: ['50%', '70%'],
+              color: 'background'
             }}
           >
-            {amount}
+            {title}
           </Text>
-        )}
-      </SmRow>
+          {amount?.length === 2 ? (
+            <Flex sx={{ alignItems: 'center' }}>
+              <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
+                {amount[0]}
+              </Text>
+              <Text sx={{ variant: 'text.medium', color: 'background' }}>
+                {' '}
+                {amount[1]}
+              </Text>
+            </Flex>
+          ) : (
+            <Text
+              sx={{
+                variant: 'text.small',
+                textAlign: 'right',
+                color: 'anotherGrey'
+              }}
+            >
+              {amount}
+            </Text>
+          )}
+        </SmRow>
+      </React.Fragment>
     )
   }
 

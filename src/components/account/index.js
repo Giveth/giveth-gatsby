@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import React from 'react'
 import { navigate } from 'gatsby'
-import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
+import { jsx, Flex } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
 import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { BsArrowLeft } from 'react-icons/bs'
+// import { BsArrowLeft } from 'react-icons/bs'
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
 import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
@@ -67,7 +67,7 @@ const AccountPage = props => {
   }
 
   return (
-    <>
+    <React.Fragment>
       <AccountTop />
       <Flex
         sx={{
@@ -91,7 +91,7 @@ const AccountPage = props => {
           projectsList={projectsList}
         />
       </Flex>
-    </>
+    </React.Fragment>
   )
 }
 

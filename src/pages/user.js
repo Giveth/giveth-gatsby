@@ -8,7 +8,6 @@ import { PublicProfileView } from '../components/user'
 import { FETCH_USER_PROJECTS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import { WALLET_DONATIONS } from '../apollo/gql/donations'
-import Web3 from 'web3'
 
 const User = props => {
   console.log({ props })
@@ -60,29 +59,33 @@ const User = props => {
     } else {
       setLoading(false)
     }
-  })
+  }, [address, user, client])
 
   return (
-    <Layout>
-      <Seo title={user?.name ? `${user?.name} at Giveth` : 'Giveth Profile'} />
-      {loading ? (
-        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Spinner variant='spinner.medium' />
-        </Flex>
-      ) : user ? (
-        <PublicProfileView
-          user={user}
-          projects={userProjects}
-          donations={userDonations}
+    <React.Fragment>
+      <Layout>
+        <Seo
+          title={user?.name ? `${user?.name} at Giveth` : 'Giveth Profile'}
         />
-      ) : (
-        <Flex sx={{ m: 'auto' }}>
-          <Text variant='headings.h3' color='secondary'>
-            No user found
-          </Text>
-        </Flex>
-      )}
-    </Layout>
+        {loading ? (
+          <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+            <Spinner variant='spinner.medium' />
+          </Flex>
+        ) : user ? (
+          <PublicProfileView
+            user={user}
+            projects={userProjects}
+            donations={userDonations}
+          />
+        ) : (
+          <Flex sx={{ m: 'auto' }}>
+            <Text variant='headings.h3' color='secondary'>
+              No user found
+            </Text>
+          </Flex>
+        )}
+      </Layout>
+    </React.Fragment>
   )
 }
 

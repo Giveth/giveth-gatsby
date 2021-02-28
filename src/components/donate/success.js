@@ -1,13 +1,13 @@
 /** @jsx jsx */
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Box, Link, Flex, Text, jsx } from 'theme-ui'
 import { navigate } from 'gatsby'
 import { useMediaQuery } from 'react-responsive'
-import { useApolloClient } from '@apollo/client'
+// import { useApolloClient } from '@apollo/client'
 import { base64ToBlob, getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../confetti'
-import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
+// import { GET_STRIPE_DONATION_PDF } from '../../apollo/gql/projects'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import BillIcon from '../../images/svg/donation/bill-icon.svg'
 
@@ -41,7 +41,7 @@ const Success = props => {
   const { project, sessionId, hash } = props
   const [pdfBase64, setPdfBase64] = useState(null)
 
-  const client = useApolloClient()
+  // const client = useApolloClient()
 
   const downloadPDF = () => {
     const blob = base64ToBlob(pdfBase64)
@@ -57,7 +57,7 @@ const Success = props => {
   const etherscanPrefix = getEtherscanPrefix()
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
-    <>
+    <React.Fragment>
       <Flex
         sx={{
           position: 'absolute',
@@ -141,7 +141,7 @@ const Success = props => {
           </Text>
         )}
       </Content>
-    </>
+    </React.Fragment>
   )
 }
 

@@ -1,17 +1,17 @@
 import { ethers } from 'ethers'
 
-class UncheckedJsonRpcSigner extends ethers.Signer {
-  constructor(signer) {
+export class UncheckedJsonRpcSigner extends ethers.Signer {
+  constructor (signer) {
     super()
     ethers.utils.defineReadOnly(this, 'signer', signer)
     ethers.utils.defineReadOnly(this, 'provider', signer.provider)
   }
 
-  getAddress() {
+  getAddress () {
     return this.signer.getAddress()
   }
 
-  sendTransaction(transaction) {
+  sendTransaction (transaction) {
     return this.signer.sendUncheckedTransaction(transaction).then(hash => ({
       hash,
       nonce: null,
@@ -28,7 +28,7 @@ class UncheckedJsonRpcSigner extends ethers.Signer {
   }
 }
 
-function getSigner(provider) {
+function getSigner (provider) {
   try {
     return new ethers.providers.Web3Provider(provider.provider).getSigner()
   } catch (error) {
