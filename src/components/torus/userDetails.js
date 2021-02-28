@@ -85,8 +85,6 @@ const UserDetails = () => {
     currentNetwork,
     wallet
   } = useWallet()
-  console.log(`jpf user : ${JSON.stringify(user, null, 2)}`)
-  console.log(`typeof user ---> : ${typeof user.getName}`)
   const address = isLoggedIn ? user.getWalletAddress() : '?'
   const truncAddress = `${address.substring(0, 10)}...${address.substring(
     address.length - 4,
