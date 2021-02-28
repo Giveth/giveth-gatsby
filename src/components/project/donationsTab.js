@@ -74,13 +74,15 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
               color: 'secondary'
             }}
           >
-            {currentProjectView?.ethBalance
-              ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
-              : totalDonations &&
-                (totalDonations / 10)?.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD'
-                })}
+            {
+              // currentProjectView?.ethBalance
+              //   ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
+              //   : totalDonations &&
+              //     (totalDonations / 10)?.toLocaleString('en-US', {
+              //       style: 'currency',
+              //       currency: 'USD'
+              //     })
+            }
           </Text>
         </Flex>
         <Text

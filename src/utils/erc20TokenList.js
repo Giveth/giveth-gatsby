@@ -508,6 +508,13 @@ const ropstenTokens = {
       symbol: 'YAY',
       name: 'Giveth Ropsten Test',
       decimals: 18
+    },
+    {
+      chainId: 3,
+      address: '0xad6d458402f60fd3bd25163575031acdce07538d',
+      symbol: 'DAI',
+      name: 'DAI Ropsten',
+      decimals: 18
     }
   ]
 }
@@ -577,7 +584,14 @@ const xDaiTokens = {
       chainId: 100,
       address: '0x8e5bBbb09Ed1ebdE8674Cda39A0c169401db4252',
       symbol: 'WBTC',
-      name: '	Wrapped BTC on xDai'
+      name: 'Wrapped BTC on xDai'
+      // decimals: 18
+    },
+    {
+      chainId: 100,
+      address: '0x3a97704a1b25F08aa230ae53B352e2e72ef52843',
+      symbol: 'AGVE',
+      name: 'Agave Token'
       // decimals: 18
     }
   ]
