@@ -75,6 +75,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
       Read this blog post tutorial: <br />
       <a
         target='_blank'
+        rel='noreferrer'
         css={{ textDecoration: 'none' }}
         href='https://knowhow.ncvo.org.uk/how-to/how-to-write-an-overview-of-a-nonprofit-organization#'
       >

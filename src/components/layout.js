@@ -119,7 +119,7 @@ const CookiesBanner = () => {
         <Image src={InfoIcon} sx={{ mb: [2, 0, 0] }} />
         <Text sx={{ color: 'blue', ml: 2, mb: [2, 0, 0] }}>
           This site uses cookies to provide you with an awesome user experience.
-          By using it, you accept our <a>cookies policy</a>.
+          By using it, you accept our <Link to='/tos'>cookies policy</Link>.
         </Text>
       </Flex>
       <Text
