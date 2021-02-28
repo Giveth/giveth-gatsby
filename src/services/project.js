@@ -9,4 +9,5 @@ export async function deactivateProject (data) {
       projectId: parseFloat(projectId)
     }
   })
+  return console.log(edit)
 }
