@@ -17,13 +17,12 @@ const Funds = styled.div`
 const DonationsTab = ({ project, showModal, setShowModal }) => {
   const [loading, setLoading] = React.useState(true)
   const { currentProjectView } = React.useContext(ProjectContext)
-  const donations = project.donations
-
+  const donations = project?.donations?.filter(el => el != null)
   const totalDonations = donations
-    ? donations.reduce((total, donation) => total + donation.amount, 0)
+    ? donations?.reduce((total, donation) => total + donation?.amount || 0, 0)
     : 0
   const totalUSDonations = donations
-    ? donations.reduce((total, donation) => total + donation.valueUsd, 0)
+    ? donations?.reduce((total, donation) => total + donation?.valueUsd || 0, 0)
     : 0
   React.useEffect(() => {
     setLoading(false)
@@ -33,7 +32,7 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
     return <Spinner variant='spinner.medium' />
   }
 
-  if (!totalDonations)
+  if (donations?.length === 0)
     return (
       <Text sx={{ variant: 'text.large', color: 'secondary' }}>
         No donations yet :(

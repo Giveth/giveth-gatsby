@@ -91,7 +91,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
         //   client,
         //   true
         // )
-        let donations = project?.donations
+        let donations = project?.donations?.filter(el => el != null)
         const ethBalance = donations?.reduce(
           (prev, current) => prev + current?.amount,
           0
