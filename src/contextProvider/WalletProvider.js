@@ -9,6 +9,7 @@ import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
 import getSigner from '../services/ethersSigner'
+import tokenAbi from 'human-standard-token-abi'
 import { useApolloClient } from '@apollo/client'
 import * as Auth from '../services/auth'
 import Toast from '../components/toast'
@@ -21,7 +22,7 @@ const networkId = process.env.GATSBY_NETWORK_ID
 
 let wallet = {}
 
-function useWallet () {
+function useWallet() {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -29,15 +30,17 @@ function useWallet () {
   return context
 }
 
-function WalletProvider (props) {
+function WalletProvider(props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
   const [user, setUser] = useState(initUser)
+  const [ready, setReady] = useState(false)
   const [account, setAccount] = useState('')
   const [balance, setBalance] = useState(0)
   const [ethEnabled, setEthEnabled] = useState(false)
   const [currentNetwork, setCurrentNetwork] = useState(null)
+  const [currentChainId, setCurrentChainId] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
   const client = useApolloClient()
@@ -54,12 +57,19 @@ function WalletProvider (props) {
 
     await wallet.init('production', network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
+    const currentChainId = await wallet?.web3.eth.net.getId()
+
+    // Checks if Torus needs to re-login
+    if (wallet?.isTorus && !wallet?.isLoggedIn()) {
+      await logout(true)
+    }
     updateBalance(
       localStorageUser?.walletAddresses?.length > 0 &&
         localStorageUser.walletAddresses[0]
     )
     setCurrentNetwork(networkName)
-
+    setCurrentChainId(currentChainId)
+    setReady(true)
     wallet?.provider?.on('accountsChanged', function (accounts) {
       if (accounts[0] && accounts[0] !== account) {
         Toast({ content: 'Account changed', type: 'warn' })
@@ -68,8 +78,10 @@ function WalletProvider (props) {
     wallet?.provider?.on('chainChanged', async chainId => {
       // needs to be fetched again as chainId is being returned like 0x
       const chainID = await wallet?.web3.eth.net.getId()
+      setCurrentChainId(chainID)
       console.log({ chainID, networkId })
-      if (networkId !== chainID?.toString()) {
+      if (networkId !== chainID?.toString() && chainID !== 100) {
+        // 100 is xDAI
         Toast({
           content: `Ethereum network changed please use ${network}`,
           type: 'warn'
@@ -82,15 +94,15 @@ function WalletProvider (props) {
     initWallet(localStorageUser?.walletType)
   }, [])
 
-  async function logout () {
-    wallet?.logout()
+  async function logout(walletLoggedOut) {
+    !walletLoggedOut && wallet?.logout()
     setLoading(true)
     Auth.handleLogout()
     setIsLoggedIn(false)
     setLoading(false)
   }
 
-  async function signMessage (message, publicAddress) {
+  async function signMessage(message, publicAddress) {
     try {
       await checkNetwork()
       let signedMessage = null
@@ -149,7 +161,7 @@ function WalletProvider (props) {
     }
   }
 
-  async function updateUserInfoOnly () {
+  async function updateUserInfoOnly() {
     if (!user) return null
     const { data } = await client.query({
       query: GET_USER_BY_ADDRESS,
@@ -165,13 +177,13 @@ function WalletProvider (props) {
     Auth.setUser(newUser)
   }
 
-  async function updateBalance (publicAddress) {
+  async function updateBalance(publicAddress) {
     if (!publicAddress) return null
     const balance = await wallet.web3.eth.getBalance(publicAddress)
     setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
   }
 
-  async function updateUser (accounts) {
+  async function updateUser(accounts) {
     console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
@@ -210,12 +222,12 @@ function WalletProvider (props) {
     setUser(user)
   }
 
-  async function validateToken () {
+  async function validateToken() {
     const isValid = await validateAuthToken(Auth.getUserToken())
     return isValid
   }
 
-  async function login ({ walletProvider }) {
+  async function login({ walletProvider }) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
@@ -258,7 +270,7 @@ function WalletProvider (props) {
     }
   }
 
-  function isWalletAddressValid (address) {
+  function isWalletAddressValid(address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -266,21 +278,22 @@ function WalletProvider (props) {
     }
   }
 
-  function isAddressENS (address) {
+  function isAddressENS(address) {
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function checkNetwork () {
+  async function checkNetwork() {
     if (!wallet) throw new Error('No Eth Provider')
+    const byPassXDAI = currentChainId === 100
     const currentNetworkId = await wallet?.web3.eth.getChainId()
-    if (currentNetworkId?.toString() === networkId) {
+    if (currentNetworkId?.toString() === networkId || byPassXDAI) {
       return true
     } else {
       throw new Error(`Wrong network, please change to ${network}`)
     }
   }
 
-  async function sendEthersTransaction (toAddress, amount, provider) {
+  async function sendEthersTransaction(toAddress, amount, provider) {
     const transaction = {
       to: toAddress,
       value: ethers.utils.parseEther(amount.toString())
@@ -292,9 +305,14 @@ function WalletProvider (props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
-  async function sendTransaction (params, txCallbacks, fromSigner) {
+  async function sendTransaction(
+    params,
+    txCallbacks,
+    contractAddress,
+    fromSigner
+  ) {
     try {
-      await checkNetwork()
+      await checkNetwork(true)
       let web3Provider = wallet?.web3.eth
       let txn = null
       const txParams = {
@@ -303,7 +321,7 @@ function WalletProvider (props) {
       }
 
       if (!fromSigner) {
-        // can be signed instantly by current provider
+        // Can be signed instantly by current provider
         const fromAccount = await web3Provider.getAccounts()
         txParams.from = fromAccount[0]
       } else {
@@ -311,6 +329,31 @@ function WalletProvider (props) {
         web3Provider = fromSigner
       }
 
+      // ERC20 TRANSFER
+      if (contractAddress) {
+        const instance = fromSigner
+          ? new ethers.Contract(contractAddress, tokenAbi, fromSigner)
+          : new web3Provider.Contract(tokenAbi, contractAddress)
+        if (fromSigner) {
+          txn = await instance.transfer(params?.to, params?.value)
+          txCallbacks?.onTransactionHash(txn?.hash)
+          return txn
+        }
+        const from = await web3Provider.getAccounts()
+        return instance.methods
+          .transfer(params?.to, params?.value)
+          .send({
+            from: from[0]
+          })
+          .on('transactionHash', txCallbacks?.onTransactionHash)
+          .on('receipt', function (receipt) {
+            console.log('receipt>>>', receipt)
+            txCallbacks?.onReceiptGenerated(receipt)
+          })
+          .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
+      }
+
+      // REGULAR ETH TRANSFER
       if (!txCallbacks || fromSigner) {
         // gets hash and checks until it's mined
         txn = await web3Provider.sendTransaction(txParams)
@@ -335,7 +378,7 @@ function WalletProvider (props) {
     }
   }
 
-  async function getAddressFromENS (address) {
+  async function getAddressFromENS(address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {
@@ -365,14 +408,25 @@ function WalletProvider (props) {
       updateUserInfoOnly,
       logout,
       user,
+      ready,
       network,
       currentNetwork,
+      currentChainId,
       isWalletAddressValid,
       isAddressENS,
       getAddressFromENS,
       wallet
     }
-  }, [account, balance, ethEnabled, isLoggedIn, user, currentNetwork])
+  }, [
+    account,
+    ready,
+    balance,
+    ethEnabled,
+    isLoggedIn,
+    user,
+    currentNetwork,
+    currentChainId
+  ])
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}

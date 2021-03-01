@@ -52,34 +52,37 @@ const DonationsTab = ({ project, showModal, setShowModal }) => {
             alignItems: 'flex-end'
           }}
         >
-          <Text
-            sx={{
-              variant: ['headings.h3', null, 'headings.display'],
-              color: 'secondary'
-            }}
-          >
-            {totalUSDonations
-              ? totalUSDonations?.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD'
-                })
-              : null}
-          </Text>
+          {totalUSDonations && totalDonations > 0 ? (
+            <Text
+              sx={{
+                pr: 4,
+                variant: ['headings.h3', null, 'headings.display'],
+                color: 'secondary'
+              }}
+            >
+              {totalUSDonations?.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD'
+              })}
+            </Text>
+          ) : null}
+
           <Text
             sx={{
               variant: ['headings.h6', null, 'headings.h5'],
-              pl: 4,
               pb: 3,
               color: 'secondary'
             }}
           >
-            {currentProjectView?.ethBalance
-              ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
-              : totalDonations &&
-                (totalDonations / 10)?.toLocaleString('en-US', {
-                  style: 'currency',
-                  currency: 'USD'
-                })}
+            {
+              // currentProjectView?.ethBalance
+              //   ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
+              //   : totalDonations &&
+              //     (totalDonations / 10)?.toLocaleString('en-US', {
+              //       style: 'currency',
+              //       currency: 'USD'
+              //     })
+            }
           </Text>
         </Flex>
         <Text

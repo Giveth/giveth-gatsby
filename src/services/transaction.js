@@ -4,6 +4,7 @@ import getSigner from './ethersSigner'
 
 export async function send(
   toAddress,
+  contractAddress, // if none is set, it defaults to ETH
   subtotal,
   fromOwnProvider,
   isLoggedIn,
@@ -19,13 +20,18 @@ export async function send(
     let hash
 
     if (fromOwnProvider && isLoggedIn) {
-      const regularTransaction = await sendTransaction(transaction, txCallbacks)
+      const regularTransaction = await sendTransaction(
+        transaction,
+        txCallbacks,
+        contractAddress
+      )
       hash = regularTransaction?.transactionHash
     } else {
       const signer = getSigner(provider)
       const signerTransaction = await sendTransaction(
         transaction,
         txCallbacks,
+        contractAddress,
         signer
       )
 
@@ -74,6 +80,12 @@ export async function getHashInfo(txHash) {
     console.log({ error })
     throw new Error(error)
   }
+}
+
+export async function getTxFromHash(transactionHash) {
+  const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+  const tx = await web3.eth.getTransaction(transactionHash)
+  return tx
 }
 
 export async function confirmEtherTransaction(
