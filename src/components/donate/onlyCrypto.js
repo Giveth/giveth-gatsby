@@ -203,7 +203,7 @@ const OnlyCrypto = props => {
       const gwei = userWallet.web3.utils.fromWei(wei, 'gwei')
       const ethFromGwei = userWallet.web3.utils.fromWei(wei, 'ether')
       gwei && setGasPrice(Number(gwei))
-      ethFromGwei && setGasETHPrice(Number(ethFromGwei))
+      ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
     })
   }, [currentChainId])
 
@@ -621,10 +621,13 @@ const OnlyCrypto = props => {
                 {selectedToken?.symbol === 'ETH'
                   ? `${selectedToken?.symbol} ${parseFloat(
                       subtotal + gasETHPrice
-                    )}`
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6
+                    })}`
                   : `${selectedToken?.symbol} ${parseFloat(subtotal).toFixed(
                       2
-                    )} + ETH ${parseFloat(gasETHPrice)}`}
+                    )}`}
               </Text>
             </Summary>
           )}
