@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from '@emotion/styled'
-import { ethers } from 'ethers'
-import { ProjectContext } from '../../contextProvider/projectProvider'
 import { Spinner, Flex, Text } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui'
 import DonationsTable from './donationsTable'
@@ -14,10 +12,9 @@ const Funds = styled.div`
   border-radius: 12px;
 `
 
-const DonationsTab = ({ project, showModal, setShowModal }) => {
+const DonationsTab = ({ project, donations: projectDonations }) => {
   const [loading, setLoading] = React.useState(true)
-  const { currentProjectView } = React.useContext(ProjectContext)
-  const donations = project?.donations?.filter(el => el != null)
+  const donations = projectDonations?.filter(el => el != null)
   const totalDonations = donations
     ? donations?.reduce((total, donation) => total + donation?.amount || 0, 0)
     : 0

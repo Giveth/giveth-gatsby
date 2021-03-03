@@ -504,6 +504,13 @@ const ropstenTokens = {
   tokens: [
     {
       chainId: 3,
+      address: '0xad6d458402f60fd3bd25163575031acdce07538d',
+      symbol: 'DAI',
+      name: 'DAI Ropsten',
+      decimals: 18
+    },
+    {
+      chainId: 3,
       address: '0x067eA48882E6D728A37acfd1535ec03f8E33794a',
       symbol: 'YAY',
       name: 'Giveth Ropsten Test',
@@ -511,10 +518,9 @@ const ropstenTokens = {
     },
     {
       chainId: 3,
-      address: '0xad6d458402f60fd3bd25163575031acdce07538d',
-      symbol: 'DAI',
-      name: 'DAI Ropsten',
-      decimals: 18
+      address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+      symbol: 'UNI',
+      name: 'UNI Ropsten'
     }
   ]
 }
