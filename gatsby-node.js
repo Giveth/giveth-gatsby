@@ -240,6 +240,10 @@ exports.createSchemaCustomization = ({ actions }) => {
       title: String!
       description: String!
       slug: String!
+      image: String
+      admin: String
+      walletAddress: String
+      balance: Float
       creationDate: String!
       # create relationships between Project and Donation nodes
       # donations: Donation @link(from: "author.name" by: "name")
