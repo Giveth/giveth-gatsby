@@ -17,6 +17,7 @@ export async function saveDonation (
     const { data } = await client.mutate({
       mutation: SAVE_DONATION,
       variables: {
+        chainId: transactionNetworkId,
         fromAddress,
         toAddress,
         transactionId,

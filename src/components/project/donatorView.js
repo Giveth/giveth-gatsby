@@ -21,6 +21,7 @@ import {
   TOGGLE_PROJECT_REACTION,
   GET_PROJECT_UPDATES
 } from '../../apollo/gql/projects'
+import { PROJECT_DONATIONS } from '../../apollo/gql/donations'
 import { GET_USER } from '../../apollo/gql/auth'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
@@ -58,6 +59,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [hearted, setHearted] = useState(initUserHearted)
   const [heartedCount, setHeartedCount] = useState(reactions?.length)
 
+  const donations = currentProjectView?.donations?.filter(el => el != null)
   const reactToProject = async () => {
     try {
       const reaction = await client?.mutate({
@@ -91,7 +93,13 @@ export const ProjectDonatorView = ({ pageContext }) => {
         //   client,
         //   true
         // )
-        let donations = project?.donations
+        const { data: donationsToProject } = await client.query({
+          query: PROJECT_DONATIONS,
+          variables: { toWalletAddresses: [project.walletAddress] },
+          fetchPolicy: 'network-only'
+        })
+        const donations = donationsToProject?.donationsToWallets
+
         const ethBalance = donations?.reduce(
           (prev, current) => prev + current?.amount,
           0
@@ -404,7 +412,10 @@ export const ProjectDonatorView = ({ pageContext }) => {
             ) : (
               !isSSR && (
                 <React.Suspense fallback={<div />}>
-                  <DonationsTab project={project} />
+                  <DonationsTab
+                    project={project}
+                    donations={currentProjectView.donations}
+                  />
                 </React.Suspense>
               )
             )}
@@ -445,6 +456,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Button>
           <Flex
             sx={{
+              flexDirection: ['row', 'column', 'row'],
+              alignItems: 'center',
               justifyContent: 'space-around',
               fontFamily: 'heading',
               textTransform: 'uppercase',
@@ -452,9 +465,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             }}
           >
             <Text>Givers: {totalGivers || 0}</Text>
-            <Text sx={{ pl: 4, borderLeft: '2px solid #edf0fa' }}>
-              Donations: {project?.donations?.length || 0}
-            </Text>
+            <Text>Donations: {donations?.length || 0}</Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
             {project?.categories.length > 0 &&

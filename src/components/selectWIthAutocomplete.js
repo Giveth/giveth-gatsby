@@ -1,6 +1,6 @@
 import React from 'react'
-import styled from '@emotion/styled'
 import Select from 'react-select'
+import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
 
 const SelectWithAutocomplete = ({

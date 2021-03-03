@@ -1,8 +1,10 @@
 /** @jsx jsx */
 import React, { useState, useEffect } from 'react'
+import styled from '@emotion/styled'
 import { useMutation } from '@apollo/client'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
+import { PopupContext } from '../../contextProvider/popupProvider'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
@@ -23,7 +25,6 @@ import getSigner from '../../services/ethersSigner'
 import Toast from '../../components/toast'
 import { toast } from 'react-toastify'
 import InProgressModal from './inProgressModal'
-import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as transaction from '../../services/transaction'
 import { saveDonation, saveDonationTransaction } from '../../services/donation'
@@ -103,6 +104,8 @@ const OnlyCrypto = props => {
   const [notify, setNotify] = useState(null)
   const { project } = props
   const [tokenPrice, setTokenPrice] = useState(1)
+  const [gasPrice, setGasPrice] = useState(null)
+  const [gasETHPrice, setGasETHPrice] = useState(null)
   const [amountTyped, setAmountTyped] = useState(null)
   const [donateToGiveth, setDonateToGiveth] = useState(false)
   const [inProgress, setInProgress] = useState(false)
@@ -110,6 +113,7 @@ const OnlyCrypto = props => {
   const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const usePopup = React.useContext(PopupContext)
   const {
     ref,
     isComponentVisible,
@@ -121,10 +125,12 @@ const OnlyCrypto = props => {
     currentNetwork,
     sendTransaction,
     user,
-    ready
+    ready,
+    wallet: userWallet
   } = useWallet()
 
   const client = useApolloClient()
+  const { triggerPopup } = usePopup
 
   useEffect(() => {
     const init = async () => {
@@ -192,6 +198,13 @@ const OnlyCrypto = props => {
       },
       ...formattedTokenList
     ])
+    // GET GAS
+    userWallet?.web3?.eth.getGasPrice().then(wei => {
+      const gwei = userWallet.web3.utils.fromWei(wei, 'gwei')
+      const ethFromGwei = userWallet.web3.utils.fromWei(wei, 'ether')
+      gwei && setGasPrice(Number(gwei))
+      ethFromGwei && setGasETHPrice(Number(ethFromGwei))
+    })
   }, [currentChainId])
 
   const donation = parseFloat(amountTyped)
@@ -223,7 +236,13 @@ const OnlyCrypto = props => {
             <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
               {amount[0]}
             </Text>
-            <Text sx={{ variant: 'text.medium', color: 'background' }}>
+            <Text
+              sx={{
+                variant: 'text.medium',
+                color: 'background',
+                textAlign: 'end'
+              }}
+            >
               {' '}
               {amount[1]}
             </Text>
@@ -316,6 +335,11 @@ const OnlyCrypto = props => {
               token,
               Number(project.id)
             )
+            console.log('DONATION RESPONSE: ', {
+              donationId,
+              savedDonation,
+              saveDonationErrors
+            })
             // onTransactionHash callback for event emitter
             transaction.confirmEtherTransaction(transactionHash, res => {
               if (!res) return
@@ -346,10 +370,11 @@ const OnlyCrypto = props => {
             })
           },
           onError: error => {
-            Toast({
-              content: error?.message || error?.error?.message || error,
-              type: 'error'
-            })
+            // the outside catch handles any error here
+            // Toast({
+            //   content: error?.error?.message || error?.message || error,
+            //   type: 'error'
+            // })
           }
         }
       )
@@ -358,8 +383,16 @@ const OnlyCrypto = props => {
       // transaction.notify(transactionHash)
     } catch (error) {
       toast.dismiss()
+      if (error?.data?.code === 'INSUFFICIENT_FUNDS') {
+        // TODO: change this to custom alert
+        return triggerPopup('InsufficientFunds')
+      }
       return Toast({
-        content: error?.message || error?.error?.message || error,
+        content:
+          error?.data?.message ||
+          error?.error?.message ||
+          error?.message ||
+          error,
         type: 'error'
       })
     }
@@ -368,6 +401,7 @@ const OnlyCrypto = props => {
   const isMainnet = currentChainId === 1
   const isXDAI = currentChainId === 100
 
+  console.log({ gasPrice, gasETHPrice, subtotal })
   return (
     <Content ref={ref}>
       <InProgressModal
@@ -568,14 +602,15 @@ const OnlyCrypto = props => {
                   ]}
                 />
               )}
-              <SummaryRow
-                title='Processing Fee'
-                amount={['Network Fee Only']}
-                style={{
-                  borderBottom: '1px solid #6B7087',
-                  padding: '0 0 18px 0'
-                }}
-              />
+              {gasPrice && (
+                <SummaryRow
+                  title='Network Fee'
+                  amount={[
+                    'Gas Price',
+                    `GWEI ${parseFloat(gasPrice).toFixed(2)}`
+                  ]}
+                />
+              )}
               <Text
                 sx={{
                   variant: 'text.medium',
@@ -583,7 +618,13 @@ const OnlyCrypto = props => {
                   textAlign: 'right'
                 }}
               >
-                {selectedToken?.symbol} {parseFloat(subtotal)}
+                {selectedToken?.symbol === 'ETH'
+                  ? `${selectedToken?.symbol} ${parseFloat(
+                      subtotal + gasETHPrice
+                    )}`
+                  : `${selectedToken?.symbol} ${parseFloat(subtotal).toFixed(
+                      2
+                    )} + ETH ${parseFloat(gasETHPrice)}`}
               </Text>
             </Summary>
           )}

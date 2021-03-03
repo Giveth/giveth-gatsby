@@ -374,7 +374,9 @@ function WalletProvider(props) {
       return txn
     } catch (error) {
       console.log('Error sending transaction: ', { error })
-      throw new Error(error?.message || error)
+      const err = new Error(error)
+      err.data = error
+      throw err
     }
   }
 
