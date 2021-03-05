@@ -1,13 +1,11 @@
 /** @jsx jsx */
 import { useState } from 'react'
-import { useAlert } from 'react-alert'
 import addToMailchimp from 'gatsby-plugin-mailchimp'
 import { Grid, Button, Input, jsx } from 'theme-ui'
 
 const MailchimpSignup = () => {
-  const alert = useAlert()
   const [email, setEmail] = useState('')
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     if (email !== '') {
       e.preventDefault()
       const result = await addToMailchimp(email)
@@ -19,7 +17,7 @@ const MailchimpSignup = () => {
     }
   }
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     setEmail(e.target.value)
   }
 

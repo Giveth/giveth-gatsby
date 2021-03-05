@@ -115,43 +115,49 @@ exports.onCreateNode = ({ node }) => {
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
   actions.setWebpackConfig({
-    target: 'node',
+    node: {
+      crypto: true,
+      http: true,
+      https: true,
+      os: true,
+      vm: true,
+      stream: true
+    },
     module: {
       rules: [
         {
           test: /\@toruslabs\/torus-embed/,
           use: loaders.null()
         },
-        {
-          test: /web3/,
-          use: loaders.null()
-        },
+        // {
+        //   test: /web3/,
+        //   use: loaders.null()
+        // },
         {
           test: /\@sentry\/gatsby/,
           use: loaders.null()
         }
       ]
-    },
-    resolve: {
-      alias: {
-        path: require.resolve('path-browserify')
-      },
-      fallback: {
-        fs: false,
-        tls: false,
-        net: false,
-        path: false,
-        zlib: false,
-        http: false,
-        https: false,
-        stream: false,
-        crypto: false,
-        assert: require.resolve('assert'),
-        util: require.resolve('util'),
-        'ethereumjs-util': require.resolve('ethereumjs-util'),
-        'crypto-browserify': require.resolve('crypto-browserify')
-      }
     }
+    // resolve: {
+    //   alias: {
+    //     path: require.resolve('path-browserify'),
+    //     stream: require.resolve('stream-browserify'),
+    //     crypto: require.resolve('crypto-browserify'),
+    //     assert: require.resolve('assert'),
+    //     util: require.resolve('util'),
+    //     'ethereumjs-util': require.resolve('ethereumjs-util')
+    //   }
+    //   // fallback: {
+    //   //   fs: false,
+    //   //   tls: false,
+    //   //   net: false,
+    //   //   path: false,
+    //   //   zlib: false,
+    //   //   http: false,
+    //   //   https: false
+    //   // }
+    // }
   })
 }
 

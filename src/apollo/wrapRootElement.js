@@ -1,5 +1,4 @@
 import React from 'react'
-// import { ApolloProvider } from '@apollo/client'
 import { ApolloProvider } from '@apollo/client'
 import { client } from './client'
 

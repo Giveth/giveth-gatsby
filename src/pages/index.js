@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from 'react'
+import React, { Fragment } from 'react'
 import { jsx } from 'theme-ui'
 import { graphql } from 'gatsby'
 import Layout from '../components/layout'
@@ -10,17 +10,17 @@ import UpdatesSection from '../components/home/UpdatesSection'
 import HomeTopProjects from '../components/home/HomeTopProjects'
 import { PopupContext } from '../contextProvider/popupProvider'
 
-const IndexContent = ({ hideInfo, content, location }) => {
+const IndexContent = ({ hideInfo, content }) => {
   const popup = React.useContext(PopupContext)
   const [popupShown, setPopupShown] = React.useState(false)
 
-  React.useEffect(() => {
-    if (location?.state?.welcome && !popupShown) {
-      const extra = location?.state?.flashMessage || false
-      popup.triggerPopup('WelcomeLoggedOut', extra)
-      setPopupShown(true)
-    }
-  }, [])
+  // React.useEffect(() => {
+  //   if (location?.state?.welcome && !popupShown) {
+  //     const extra = location?.state?.flashMessage || false
+  //     popup.triggerPopup('WelcomeLoggedOut', extra)
+  //     setPopupShown(true)
+  //   }
+  // }, [])
 
   return (
     <>
@@ -33,7 +33,7 @@ const IndexContent = ({ hideInfo, content, location }) => {
 }
 
 const IndexPage = props => {
-  const { data, location } = props
+  const { data } = props
   const { markdownRemark } = data
   const { frontmatter, html } = markdownRemark
   const content = frontmatter
@@ -42,15 +42,17 @@ const IndexPage = props => {
     : false
 
   return (
-    <Layout isHomePage='true'>
-      <Seo title='Home' />
-      <IndexContent
-        hideInfo={hideInfo}
-        content={content}
-        html={html}
-        location={location}
-      />
-    </Layout>
+    <Fragment>
+      <Layout isHomePage='true'>
+        <Seo title='Home' />
+        <IndexContent
+          {...props}
+          hideInfo={hideInfo}
+          content={content}
+          html={html}
+        />
+      </Layout>
+    </Fragment>
   )
 }
 

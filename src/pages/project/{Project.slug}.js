@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react'
 import { useApolloClient } from '@apollo/client'
 import { jsx, Flex, Spinner } from 'theme-ui'
-import { Router } from '@reach/router'
 import { graphql } from 'gatsby'
 import { FETCH_PROJECT_BY_SLUG } from '../../apollo/gql/projects'
 import { ProjectDonatorView } from '../../components/project'

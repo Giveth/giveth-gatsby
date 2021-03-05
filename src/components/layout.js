@@ -7,17 +7,13 @@
 
 import React from 'react'
 import './global.css'
-import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
-import { ThemeProvider, Box, Button, Flex, Image, Text } from 'theme-ui'
-import { positions, Provider } from 'react-alert'
-import AlertTemplate from 'react-alert-template-mui'
+import { ThemeProvider, Box, Flex, Image, Text } from 'theme-ui'
 import InfoIcon from '../images/info_outline.png'
-import CornerLeave from '../images/corner-leave.png'
 import theme from '../gatsby-plugin-theme-ui/index'
-import Header from './header'
+import { Header } from './header'
 import { WalletProvider } from '../contextProvider/WalletProvider'
-import GlobalProvider from '../contextProvider/globalProvider'
+import { GlobalProvider } from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
 
 import Dialog from './dialog'
@@ -57,11 +53,6 @@ const StyledToastContainer = styled(ToastContainer)`
     border-left: 6px solid ${theme.colors.warnYellow};
   }
 `
-
-const AlertOptions = {
-  timeout: 5000,
-  position: positions.BOTTOM_CENTER
-}
 
 const CookieBanner = styled(Flex)`
   position: fixed;
@@ -164,15 +155,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
               isHomePage={isHomePage}
             />
           ) : null}
-          <div
-            sx={{
-              // applies width 100% to all viewport widths,
-              // width 50% above the first breakpoint,
-              // and 25% above the next breakpoint
-              width: ['100%', '50%', '25%'],
-              overflow: 'hidden'
-            }}
-          >
+          <div>
             <main>{children}</main>
             {!noFooter && <Footer />}
           </div>
@@ -181,7 +164,6 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
       )
     }
   }
-
   return (
     <>
       <Helmet>
@@ -236,17 +218,19 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           }
         `}
         </script>
+        <meta
+          http-equiv='Content-Security-Policy'
+          content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'"
+        />
       </Helmet>
       <WalletProvider>
         <GlobalProvider>
           <ThemeProvider theme={theme}>
-            <Provider template={AlertTemplate} {...AlertOptions}>
-              <PopupProvider>
-                <GithubIssue fixed={true} />
-                <Template />
-                <Popup />
-              </PopupProvider>
-            </Provider>
+            <PopupProvider>
+              <GithubIssue fixed={true} />
+              <Template />
+              <Popup />
+            </PopupProvider>
           </ThemeProvider>
         </GlobalProvider>
         <StyledToastContainer />
@@ -254,9 +238,4 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
     </>
   )
 }
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired
-}
-
 export default Layout

@@ -1,6 +1,4 @@
-/** @jsx jsx */
 import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { navigate, Link } from 'gatsby'
 import Loadable from '@loadable/component'
 import { IconButton, Text, jsx, Flex } from 'theme-ui'
@@ -162,7 +160,7 @@ const Login = Loadable(() => import('./torus/login'))
 const siteId = process.env.GATSBY_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
 
-const Header = ({ siteTitle, isHomePage }) => {
+export const Header = ({ isHomePage }) => {
   const location = useLocation()
   const { isLoggedIn, user } = useWallet()
   const usePopup = React.useContext(PopupContext)
@@ -318,13 +316,3 @@ const Header = ({ siteTitle, isHomePage }) => {
     </Headroom>
   )
 }
-
-Header.propTypes = {
-  siteTitle: PropTypes.string
-}
-
-Header.defaultProps = {
-  siteTitle: ''
-}
-
-export default Header

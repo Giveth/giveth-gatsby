@@ -1,9 +1,9 @@
 import React from 'react'
 // import useLocalStorage from './useLocalStorage'
 
-const projectContext = React.createContext({})
+const projectContext = React.createContext()
 
-const ProjectProvider = props => {
+export const ProjectProvider = props => {
   // Use this hook to hydrate from local store. Not tested yet
   // const [value, setValue] = useLocalStorage('name', [])
 
@@ -29,7 +29,6 @@ const ProjectProvider = props => {
 
 export const ProjectConsumer = projectContext.Consumer
 export const ProjectContext = projectContext
-export default ProjectProvider
 
 // EXAMPLE ON CONSUMER
 // const { value, value2 } = React.useContext(MyContext);

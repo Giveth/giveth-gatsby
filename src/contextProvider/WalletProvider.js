@@ -1,10 +1,9 @@
-import detectEthereumProvider from '@metamask/detect-provider'
 import React, { useState, useEffect, useRef } from 'react'
+import detectEthereumProvider from '@metamask/detect-provider'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import { ethers } from 'ethers'
 import Web3 from 'web3'
-
 import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import LoadingModal from '../components/loadingModal'
@@ -22,7 +21,7 @@ const networkId = process.env.GATSBY_NETWORK_ID
 
 let wallet = {}
 
-function useWallet() {
+export const useWallet = () => {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -30,7 +29,7 @@ function useWallet() {
   return context
 }
 
-function WalletProvider(props) {
+export const WalletProvider = props => {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
@@ -436,5 +435,3 @@ function WalletProvider(props) {
     </WalletContext.Provider>
   )
 }
-
-export { WalletProvider, useWallet }

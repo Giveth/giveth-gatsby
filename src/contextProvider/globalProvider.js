@@ -1,12 +1,6 @@
 import React from 'react'
-import ProjectProvider from './projectProvider'
+import { ProjectProvider } from './projectProvider'
 
-const GlobalProvider = props => {
-  return (
-    <>
-      <ProjectProvider>{props.children}</ProjectProvider>
-    </>
-  )
+export const GlobalProvider = props => {
+  return <ProjectProvider>{props.children}</ProjectProvider>
 }
-
-export default GlobalProvider

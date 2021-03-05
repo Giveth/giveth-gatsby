@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx, Flex, Spinner } from 'theme-ui'
 import Layout from '../components/layout'
-import { Router } from '@reach/router'
 import { useApolloClient } from '@apollo/client'
 import { ProjectDonatorView } from '../components/project'
 import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
@@ -52,17 +51,4 @@ const Project = props => {
   )
 }
 
-const ProjectWithoutSlug = () => {
-  return <Layout />
-}
-
-const ProjectIndex = () => {
-  return (
-    <Router basepath='/'>
-      <ProjectWithoutSlug path='project' />
-      <Project path='project/:id' />
-    </Router>
-  )
-}
-
-export default ProjectIndex
+export default Project

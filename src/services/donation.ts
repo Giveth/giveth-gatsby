@@ -1,4 +1,3 @@
-import Logger from '../Logger'
 import { SAVE_DONATION, SAVE_DONATION_TRANSACTION } from '../apollo/gql/donations'
 import { client } from '../apollo/client'
 
@@ -43,7 +42,7 @@ export async function saveDonationTransaction (hash: string, donationId: Number)
   const saveDonationTransactionErrors = []
   let savedDonationTransaction: any = 0
   try {
-    const { data, error } = await client.mutate({
+    const { data } = await client.mutate({
       mutation: SAVE_DONATION_TRANSACTION,
       variables: {
         transactionId: hash?.toString(),
