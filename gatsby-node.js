@@ -114,26 +114,45 @@ exports.onCreateNode = ({ node }) => {
 }
 
 exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
-  if (stage === 'build-html') {
-    actions.setWebpackConfig({
-      module: {
-        rules: [
-          {
-            test: /\@toruslabs\/torus-embed/,
-            use: loaders.null()
-          },
-          {
-            test: /web3/,
-            use: loaders.null()
-          },
-          {
-            test: /\@sentry\/gatsby/,
-            use: loaders.null()
-          }
-        ]
+  actions.setWebpackConfig({
+    target: 'node',
+    module: {
+      rules: [
+        {
+          test: /\@toruslabs\/torus-embed/,
+          use: loaders.null()
+        },
+        {
+          test: /web3/,
+          use: loaders.null()
+        },
+        {
+          test: /\@sentry\/gatsby/,
+          use: loaders.null()
+        }
+      ]
+    },
+    resolve: {
+      alias: {
+        path: require.resolve('path-browserify')
+      },
+      fallback: {
+        fs: false,
+        tls: false,
+        net: false,
+        path: false,
+        zlib: false,
+        http: false,
+        https: false,
+        stream: false,
+        crypto: false,
+        assert: require.resolve('assert'),
+        util: require.resolve('util'),
+        'ethereumjs-util': require.resolve('ethereumjs-util'),
+        'crypto-browserify': require.resolve('crypto-browserify')
       }
-    })
-  }
+    }
+  })
 }
 
 exports.sourceNodes = async ({
@@ -272,7 +291,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       anonymous: Boolean!
       amount: Float!
       valueUsd: Float
-      user: User!
+      user: User
       project: Project!
       createdAt: Date @dateformat
       currency: String
