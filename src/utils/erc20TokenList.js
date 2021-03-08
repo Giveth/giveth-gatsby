@@ -607,13 +607,16 @@ const getTokens = network => {
   let tokens = {}
   switch (network) {
     case 1:
-      tokens = tokens = mainnetTokens
+      tokens = mainnetTokens
       break
     case 3:
       tokens = ropstenTokens
       break
     case 100:
       tokens = xDaiTokens
+      break
+    default:
+      tokens = null
       break
   }
   return tokens
