@@ -18,7 +18,7 @@ if (typeof atob === 'undefined') {
 
 module.exports = {
   flags: {
-    PRESERVE_WEBPACK_CACHE: false
+    PRESERVE_WEBPACK_CACHE: true
   },
   siteMetadata: siteMetaData,
   plugins: [

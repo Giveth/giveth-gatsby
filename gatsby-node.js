@@ -73,38 +73,70 @@ exports.createPages = async ({ graphql, actions }) => {
   })
 
   // Mateo: This is being done on the client for now, not generated on the server.
-  // const projectResults = await graphql(`
-  //   query {
-  //     giveth {
-  //       projects {
-  //         id
-  //         title
-  //         description
-  //         slug
-  //         creationDate
-  //         admin
-  //         image
-  //         walletAddress
-  //         categories {
-  //           name
-  //         }
-  //       }
-  //     }
-  //   }
-  // `)
-  // const projectPageTemplate = require.resolve('./src/templates/project.js')
-  // if (projectResults.data) {
-  //   projectResults.data.giveth.projects.forEach(project => {
-  //     createPage({
-  //       path: `/project/${project.slug}`,
-  //       component: projectPageTemplate,
-  //       context: {
-  //         // entire project is passed down as context
-  //         project: project
-  //       }
-  //     })
-  //   })
-  // }
+  const projectResults = await graphql(`
+    query {
+      giveth {
+        projects {
+          id
+          title
+          description
+          image
+          slug
+          creationDate
+          admin
+          walletAddress
+          impactLocation
+          balance
+          categories {
+            name
+          }
+          donations {
+            transactionId
+            toWalletAddress
+            fromWalletAddress
+            anonymous
+            amount
+            valueUsd
+            user {
+              id
+              firstName
+              lastName
+              avatar
+            }
+            project {
+              title
+            }
+            createdAt
+            currency
+          }
+          reactions {
+            reaction
+            id
+            projectUpdateId
+            userId
+          }
+        }
+      }
+    }
+  `)
+  const projectPageTemplate = require.resolve('./src/templates/project.js')
+  console.log(`projectResults : ${JSON.stringify(projectResults, null, 2)}`)
+
+  if (projectResults.data) {
+    console.log('has results')
+
+    projectResults.data.giveth.projects.forEach(project => {
+      console.log(`creating /project/${project.slug}`)
+      createPage({
+        path: `/project/${project.slug}`,
+        component: projectPageTemplate,
+        context: {
+          // entire project is passed down as context
+          project
+        }
+      })
+    })
+  }
 }
 
 exports.onCreateNode = ({ node }) => {
