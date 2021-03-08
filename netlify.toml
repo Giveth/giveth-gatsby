@@ -11,6 +11,12 @@
   force = true
 
 [[redirects]]
+  from = "/project/:id"
+  to = "/project"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/user/:address"
   to = "/user"
   status = 200
