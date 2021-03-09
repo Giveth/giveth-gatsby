@@ -184,17 +184,12 @@ function WalletProvider (props) {
   }
 
   async function updateUser (accounts) {
-    console.log(`updateUser: accounts : ${JSON.stringify(accounts, null, 2)}`)
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
-    console.log(`jpf debug: before setAccount`, publicAddress)
     setAccount(publicAddress)
-    console.log(`jpf debug: after setAccount`)
     updateBalance(publicAddress)
     // let user
     let user
-    console.log(`jpf debug: `, typeof wallet.torus)
-
     if (typeof wallet.torus !== 'undefined') {
       const torusUser = await wallet.torus.getUserInfo()
       torusUser.walletAddresses = []
@@ -207,18 +202,12 @@ function WalletProvider (props) {
       user.addWalletAddress(publicAddress, true)
     }
 
-    console.log(
-      `jpf debug: before sign message process.env.OUR_SECRET ---> : ${process.env.OUR_SECRET}`
-    )
-    console.log(`jpf debug: publicAddress ---> : ${publicAddress}`)
     const signedMessage = await signMessage(
-      process.env.OUR_SECRET,
+      process.env.GATSBY_OUR_SECRET,
       publicAddress
     )
-    console.log(`jpf debug: signed message ---> : ${signedMessage}`)
+
     if (!signedMessage) return
-    console.log(`updateUser: user : ${JSON.stringify(user, null, 2)}`)
-    console.log(`signedMessage ---> : ${signedMessage}`, { publicAddress })
 
     const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
     user.parseDbUser(dbUser)
