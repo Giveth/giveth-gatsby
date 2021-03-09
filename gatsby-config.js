@@ -23,6 +23,7 @@ module.exports = {
   siteMetadata: siteMetaData,
   plugins: [
     'gatsby-plugin-theme-ui',
+    'gatsby-plugin-netlify',
     'gatsby-plugin-react-helmet',
     {
       resolve: 'gatsby-source-contentful',
