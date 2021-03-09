@@ -616,7 +616,7 @@ const getTokens = network => {
       tokens = xDaiTokens
       break
     default:
-      tokens = null
+      tokens = mainnetTokens
       break
   }
   return tokens
