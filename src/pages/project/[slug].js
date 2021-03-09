@@ -11,7 +11,6 @@ import Seo from '../../components/seo'
 const Project = props => {
   const id = props.params.slug
   const client = useApolloClient()
-
   const [loading, setLoading] = useState(true)
   const [slugProject, setSlugProject] = useState(null)
   useEffect(() => {
