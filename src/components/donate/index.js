@@ -1,15 +1,11 @@
 /** @jsx jsx */
 import React from 'react'
-import { Box, Button, Grid, Spinner, Text, jsx } from 'theme-ui'
+import { Box, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../gatsby-plugin-theme-ui/index'
-import Seo from '../components/seo'
-import { useQuery } from '@apollo/client'
-import OnlyFiat from '../components/donate/onlyFiat'
-import Success from '../components/donate/success'
-import Layout from '../components/layout'
-import ProjectListing from '../components/projectListing'
-import { FETCH_PROJECT_BY_SLUG } from '../apollo/gql/projects'
+import theme from '../../gatsby-plugin-theme-ui/index'
+import OnlyFiat from './onlyFiat'
+import Success from './success'
+import ProjectListing from '../projectListing'
 
 import {
   FacebookShareButton,
@@ -20,7 +16,7 @@ import {
   TwitterIcon
 } from 'react-share'
 
-const OnlyCrypto = React.lazy(() => import('../components/donate/onlyCrypto'))
+const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
 
 // CONSTANTS
 
@@ -35,14 +31,6 @@ const RIGHT_BOX_STYLE = {
   borderTopRightRadius: '0.2rem',
   borderBottomRightRadius: '0.2rem'
 }
-
-const Content = styled(Grid)`
-  display: flex;
-  flex-direction: row;
-  @media (max-width: 800px) {
-    flex-direction: column-reverse;
-  }
-`
 
 const ProjectContainer = styled.div`
   width: 25vw;
@@ -106,11 +94,7 @@ const OptionTypesBox = styled(Box)`
   }
 `
 
-const ProjectNotFound = () => {
-  return <Text>Project Not Found</Text>
-}
-
-const ShowProject = props => {
+const DonateIndex = props => {
   const { location, project } = props
   const [hashSent, setHashSent] = React.useState(false)
   const [paymentType, setPaymentType] = React.useState(CRYPTO)
@@ -292,36 +276,4 @@ const ShowProject = props => {
   )
 }
 
-const Donate = props => {
-  const { id } = props
-
-  const { loading, error, data } = useQuery(FETCH_PROJECT_BY_SLUG, {
-    variables: { slug: id }
-  })
-
-  return (
-    <Layout asDialog>
-      <Seo
-        title={
-          data?.projectBySlug?.title
-            ? `Make a donation to ${data?.projectBySlug?.title}!`
-            : 'Make a donation today!'
-        }
-        image={data?.projectBySlug?.image}
-      />
-      <Content style={{ justifyItems: 'center' }}>
-        {error ? (
-          <Text sx={{ color: 'background' }}>Error</Text>
-        ) : loading ? (
-          <Spinner variant='spinner.medium' />
-        ) : data?.projectBySlug ? (
-          <ShowProject {...props} project={data.projectBySlug} />
-        ) : (
-          <ProjectNotFound />
-        )}
-      </Content>
-    </Layout>
-  )
-}
-
-export default Donate
+export default DonateIndex

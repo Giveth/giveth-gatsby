@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, Flex, Spinner } from 'theme-ui'
+import { jsx } from 'theme-ui'
 import Seo from '../components/seo'
 import Layout from '../components/layout'
 import { ProjectDonatorView } from '../components/project'
