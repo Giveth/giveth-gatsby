@@ -15,7 +15,6 @@ const Content = styled(Grid)`
 
 const Donate = props => {
   const { pageContext } = props
-  console.log('SSR BRUH')
   return (
     <Layout asDialog>
       <Seo
