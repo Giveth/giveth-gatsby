@@ -233,7 +233,13 @@ const OnlyCrypto = props => {
         </Text>
         {amount?.length === 2 ? (
           <Flex sx={{ alignItems: 'center' }}>
-            <Text sx={{ variant: 'text.small', color: 'anotherGrey', pr: 2 }}>
+            <Text
+              sx={{
+                variant: 'text.small',
+                color: 'anotherGrey',
+                paddingRight: '5px'
+              }}
+            >
               {amount[0]}
             </Text>
             <Text
@@ -383,7 +389,10 @@ const OnlyCrypto = props => {
       // transaction.notify(transactionHash)
     } catch (error) {
       toast.dismiss()
-      if (error?.data?.code === 'INSUFFICIENT_FUNDS') {
+      if (
+        error?.data?.code === 'INSUFFICIENT_FUNDS' ||
+        error?.data?.code === 'UNPREDICTABLE_GAS_LIMIT'
+      ) {
         // TODO: change this to custom alert
         return triggerPopup('InsufficientFunds')
       }
