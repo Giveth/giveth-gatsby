@@ -21,6 +21,9 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
   const totalUSDonations = donations
     ? donations?.reduce((total, donation) => total + donation?.valueUsd || 0, 0)
     : 0
+  const totalETHDonations = donations
+    ? donations?.reduce((total, donation) => total + donation?.valueEth || 0, 0)
+    : 0
   React.useEffect(() => {
     setLoading(false)
   }, [])
@@ -39,64 +42,69 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
   return (
     <div>
       <Funds>
-        <Text sx={{ variant: 'text.medium', color: 'secondary' }}>
-          TOTAL FUNDS RAISED:
-        </Text>
-        <Flex
-          sx={{
-            flexDirection: 'row',
-            alignItems: 'flex-end'
-          }}
-        >
-          {totalUSDonations && totalDonations > 0 ? (
-            <Text
+        {totalUSDonations && totalDonations > 0 ? (
+          <Flex
+            sx={{
+              flexDirection: 'column'
+            }}
+          >
+            <Text sx={{ variant: 'text.medium', color: 'secondary' }}>
+              TOTAL FUNDS RAISED:
+            </Text>
+            <Flex
               sx={{
-                pr: 4,
-                variant: ['headings.h3', null, 'headings.display'],
-                color: 'secondary'
+                flexDirection: 'row',
+                alignItems: 'flex-end'
               }}
             >
-              {totalUSDonations?.toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD'
-              })}
-            </Text>
-          ) : null}
+              <Text
+                sx={{
+                  pr: 4,
+                  variant: ['headings.h3', null, 'headings.display'],
+                  color: 'secondary'
+                }}
+              >
+                {totalUSDonations?.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD'
+                })}
+              </Text>
+              <Text
+                sx={{
+                  variant: ['headings.h6', null, 'headings.h5'],
+                  pb: 3,
+                  color: 'secondary'
+                }}
+              >
+                {totalETHDonations
+                  ? `${parseFloat(totalETHDonations).toFixed(4)} ETH`
+                  : null}
+              </Text>
+            </Flex>
+          </Flex>
+        ) : null}
+        <Flex sx={{ flexDirection: 'column' }}>
+          <Text sx={{ variant: 'text.medium', color: 'bodyLight', mb: 2 }}>
+            Project Address
+          </Text>
 
           <Text
             sx={{
-              variant: ['headings.h6', null, 'headings.h5'],
-              pb: 3,
-              color: 'secondary'
+              variant: 'text.medium',
+              color: 'bodyLight',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              mt: -2
             }}
-          >
-            {
-              // currentProjectView?.ethBalance
-              //   ? `${parseFloat(currentProjectView?.ethBalance).toFixed(4)} ETH`
-              //   : totalDonations &&
-              //     (totalDonations / 10)?.toLocaleString('en-US', {
-              //       style: 'currency',
-              //       currency: 'USD'
-              //     })
+            onClick={() =>
+              window.open(
+                `https://etherscan.io/address/${project?.walletAddress}`
+              )
             }
+          >
+            {project?.walletAddress}
           </Text>
         </Flex>
-        <Text
-          sx={{
-            variant: 'text.medium',
-            color: 'bodyLight',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            mt: -2
-          }}
-          onClick={() =>
-            window.open(
-              `https://etherscan.io/address/${project?.walletAddress}`
-            )
-          }
-        >
-          {project?.walletAddress}
-        </Text>
       </Funds>
       <DonationsTable donations={donations} />
     </div>
