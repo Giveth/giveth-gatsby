@@ -120,6 +120,7 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `)
   const projectPageTemplate = require.resolve('./src/templates/project.js')
+  const donatePageTemplate = require.resolve('./src/templates/donate.js')
   console.log(`projectResults : ${JSON.stringify(projectResults, null, 2)}`)
 
   if (projectResults.data) {
@@ -130,6 +131,14 @@ exports.createPages = async ({ graphql, actions }) => {
       createPage({
         path: `/project/${project.slug}`,
         component: projectPageTemplate,
+        context: {
+          // entire project is passed down as context
+          project
+        }
+      })
+      createPage({
+        path: `/donate/${project.slug}`,
+        component: donatePageTemplate,
         context: {
           // entire project is passed down as context
           project

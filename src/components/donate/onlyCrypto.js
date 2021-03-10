@@ -410,7 +410,6 @@ const OnlyCrypto = props => {
   const isMainnet = currentChainId === 1
   const isXDAI = currentChainId === 100
 
-  console.log({ gasPrice, gasETHPrice, subtotal })
   return (
     <Content ref={ref}>
       <InProgressModal

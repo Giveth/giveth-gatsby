@@ -2,10 +2,12 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { Button, Flex, Text, Spinner } from 'theme-ui'
 import { getEtherscanPrefix } from '../../utils'
+import { useWallet } from '../../contextProvider/WalletProvider'
 import theme from '../../gatsby-plugin-theme-ui/index'
 
 const etherscanPrefix = getEtherscanPrefix()
 const InProgressModal = ({ showModal, setShowModal, txHash }) => {
+  const { isLoggedIn } = useWallet()
   if (!showModal) return null
   return (
     <Flex
@@ -57,7 +59,7 @@ const InProgressModal = ({ showModal, setShowModal, txHash }) => {
           variant: 'text.default'
         }}
       >
-        Transaction has beenn submitted and is waiting for confirmation.
+        Transaction has been submitted and is waiting for confirmation.
         <Link
           style={{ textDecoration: 'none', color: theme.colors.primary }}
           href={`https://${etherscanPrefix}etherscan.io/tx/${txHash}`}
@@ -67,15 +69,20 @@ const InProgressModal = ({ showModal, setShowModal, txHash }) => {
         </Link>
       </Text>
       <Text sx={{ mt: 2, mx: 5, textAlign: 'center', variant: 'text.default' }}>
-        You can safely close this window and return to Homepage. Your
-        transaction will show in{' '}
-        <Link
-          style={{ textDecoration: 'none', color: theme.colors.primary }}
-          to='/account?view=donations'
-        >
-          My Account.
-        </Link>
+        You can safely close this window and return to Homepage.{' '}
+        {isLoggedIn &&
+          `Your
+          transaction will show in ${' '}`}
+        {isLoggedIn && (
+          <Link
+            style={{ textDecoration: 'none', color: theme.colors.primary }}
+            to='/account?view=donations'
+          >
+            My Account.
+          </Link>
+        )}
       </Text>
+
       <Button
         type='button'
         variant='nofill'
