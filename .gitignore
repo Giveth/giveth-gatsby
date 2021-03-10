@@ -76,3 +76,6 @@ yarn-error.log
 
 #Dolphin directory listing
 .directory
+
+# Local Netlify folder
+.netlify

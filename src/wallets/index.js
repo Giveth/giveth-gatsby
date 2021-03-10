@@ -10,8 +10,6 @@ const metamask = {
     const web3Inst = new Web3(provider)
     metamask.web3 = web3Inst
     metamask.isInitialized = true
-    console.log(`setweb3 provider : ${JSON.stringify(provider, null, 2)}`)
-
     metamask.provider = provider
   },
   enable: async () => window.ethereum.enable(),
@@ -29,12 +27,8 @@ const metamask = {
     }
   },
   login: async () => {
-    console.log(`jpf: metamask.isInitialized ---> : ${metamask.isInitialized}`)
     if (!metamask.isInitialized) {
-      console.log('Not initialized yet')
-      console.log(
-        `typeof this.init : ${JSON.stringify(typeof this.init, null, 2)}`
-      )
+      console.error('Metamask not initialised')
     }
 
     await metamask.init()
@@ -68,7 +62,27 @@ export const wallets = {
         buildEnv: buildEnv || 'production',
         network: { host: network },
         showTorusButton: false,
-        whiteLabel: true
+        whiteLabel: true,
+        paymentProviders: {
+          moonpay: {
+            minOrderValue: 24.99,
+            maxOrderValue: 2000,
+            validCurrencies: ['USD', 'EUR', 'GBP'],
+            validCryptoCurrencies: ['ETH', 'DAI', 'TUSD', 'USDC', 'USDT']
+          },
+          wyre: {
+            minOrderValue: 20,
+            maxOrderValue: 250,
+            validCurrencies: ['USD'],
+            validCryptoCurrencies: ['ETH', 'DAI', 'USDC']
+          },
+          rampnetwork: {
+            minOrderValue: 1,
+            maxOrderValue: 10000,
+            validCurrencies: ['GBP', 'EUR'],
+            validCryptoCurrencies: ['ETH', 'DAI', 'USDC']
+          }
+        }
       })
       //await torus.login()
       wallets.torus.torus = torus

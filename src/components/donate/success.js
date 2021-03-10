@@ -83,8 +83,9 @@ const Success = props => {
           Thank you for supporting <strong> {project?.title} </strong>.
         </Text>
         <Text sx={{ variant: 'headings.h5', color: 'background', pt: -1 }}>
-          Your <strong> {hash && `${hash.subtotal} ETH`} </strong> contribution
-          goes a long way!
+          Your{' '}
+          <strong> {hash && `${hash.subtotal} ${hash.tokenSymbol}`} </strong>{' '}
+          contribution goes a long way!
         </Text>
         {hash ? (
           <Receipt sx={{ my: 4 }}>

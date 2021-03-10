@@ -20,12 +20,12 @@ import {
   GET_PROJECT_BY_ADDRESS,
   FETCH_PROJECT_BY_SLUG
 } from '../../../apollo/gql/projects'
+import { deactivateProject } from '../../../services/project'
 import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
 import { categoryList } from '../../../utils/constants'
 import { useWallet } from '../../../contextProvider/WalletProvider'
-import useIsClient from '../../../utils/useIsClient'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
@@ -46,7 +46,8 @@ function ProjectEditionForm(props) {
     project,
     client,
     mapLocation,
-    setMapLocation
+    setMapLocation,
+    deactivateProject
   } = props
 
   const [loading, setLoading] = useState(false)
@@ -98,17 +99,54 @@ function ProjectEditionForm(props) {
   return (
     <>
       {loading && <LoadingModal isOpen={loading} />}
-      <Flex sx={{ alignItems: 'center' }}>
-        <BiArrowBack
-          color={theme.colors.secondary}
-          style={{ marginRight: 2 }}
-        />
-        <Text
-          onClick={goBack}
-          sx={{ fontFamily: 'body', color: 'secondary', cursor: 'pointer' }}
-        >
-          My Projects
-        </Text>
+      <Flex sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }}>
+        <Flex>
+          <BiArrowBack
+            color={theme.colors.secondary}
+            style={{ marginRight: 2 }}
+          />
+          <Text
+            onClick={goBack}
+            sx={{ fontFamily: 'body', color: 'secondary', cursor: 'pointer' }}
+          >
+            My Projects
+          </Text>
+        </Flex>
+
+        <form onSubmit={handleSubmit(deactivateProject)}>
+          <input
+            type='hidden'
+            name='projectId'
+            ref={register}
+            value={project.id}
+          />
+          <Button
+            aria-label='Next'
+            sx={{
+              my: '20px',
+              width: '240px',
+              height: '52px',
+              borderRadius: '48px',
+              cursor: 'pointer'
+            }}
+            type='submit'
+          >
+            {' '}
+            <Text
+              sx={{
+                fontFamily: 'body',
+                fontWeight: 'bold',
+                fontSize: 2,
+                letterSpacing: '4%',
+                textTransform: 'uppercase',
+                textAlign: 'center',
+                color: 'white'
+              }}
+            >
+              Deactivate project
+            </Text>
+          </Button>
+        </form>
       </Flex>
       <form onSubmit={handleSubmit(updateProject)}>
         <>
@@ -309,6 +347,8 @@ function ProjectEdition(props) {
   const [showCancelModal, setCancelModal] = useState(false)
   const [mapLocation, setMapLocation] = useState(null)
 
+  const { wallet } = useWallet()
+
   const { data: fetchedProject, loadingProject } = useQuery(
     FETCH_PROJECT_BY_SLUG,
     {
@@ -316,7 +356,6 @@ function ProjectEdition(props) {
     }
   )
   useEffect(() => {
-    wallet = getWallet('torus')
     web3 = wallet.web3
   }, [])
 
@@ -363,6 +402,7 @@ function ProjectEdition(props) {
       let ethAddress = data.editWalletAddress
       if (project?.walletAddress !== data.editWalletAddress) {
         // CHECK IF STRING IS ENS AND VALID
+        console.log({ wallet })
         const ens = await wallet?.web3.eth.ens.getOwner(ethAddress)
         if (ens !== '0x0000000000000000000000000000000000000000') {
           ethAddress = ens
@@ -434,6 +474,7 @@ function ProjectEdition(props) {
         client={client}
         mapLocation={mapLocation}
         setMapLocation={setMapLocation}
+        deactivateProject={deactivateProject}
       />
       <ConfirmationModal
         showModal={showModal}

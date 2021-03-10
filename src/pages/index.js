@@ -10,7 +10,13 @@ import UpdatesSection from '../components/home/UpdatesSection'
 import HomeTopProjects from '../components/home/HomeTopProjects'
 import { PopupContext } from '../contextProvider/popupProvider'
 
-const IndexContent = ({ hideInfo, content, location }) => {
+const IndexContent = ({
+  hideInfo,
+  content,
+  location,
+  topProjects: projects,
+  allProject
+}) => {
   const popup = React.useContext(PopupContext)
   const [popupShown, setPopupShown] = React.useState(false)
 
@@ -25,7 +31,10 @@ const IndexContent = ({ hideInfo, content, location }) => {
   return (
     <>
       <Hero content={content} />
-      <HomeTopProjects />
+      <HomeTopProjects
+        projects={projects}
+        totalCount={allProject?.totalCount}
+      />
       {!hideInfo === true ? <InfoSection content={content} /> : null}
       <UpdatesSection content={content} />
     </>
@@ -33,14 +42,15 @@ const IndexContent = ({ hideInfo, content, location }) => {
 }
 
 const IndexPage = props => {
+  console.log(props)
   const { data, location } = props
-  const { markdownRemark } = data
+  const { markdownRemark, topProjects, allProject } = data
   const { frontmatter, html } = markdownRemark
   const content = frontmatter
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION
     : false
-
+  console.log({ data })
   return (
     <Layout isHomePage='true'>
       <Seo title='Home' />
@@ -49,6 +59,8 @@ const IndexPage = props => {
         content={content}
         html={html}
         location={location}
+        topProjects={topProjects?.projects}
+        allProject={allProject}
       />
     </Layout>
   )
@@ -56,7 +68,7 @@ const IndexPage = props => {
 
 export const pageQuery = graphql`
   query($site: String!) {
-    markdownRemark(frontmatter: { slug: { eq: $site } }) {
+    markdownRemark: markdownRemark(frontmatter: { slug: { eq: $site } }) {
       html
       frontmatter {
         slug
@@ -82,6 +94,55 @@ export const pageQuery = graphql`
         userType2Title
         userType2Cta
       }
+    }
+    topProjects: giveth {
+      projects(take: 3) {
+        id
+        title
+        balance
+        image
+        slug
+        creationDate
+        admin
+        description
+        walletAddress
+        impactLocation
+        categories {
+          name
+        }
+        reactions {
+          reaction
+          id
+          projectUpdateId
+          userId
+        }
+      }
+    }
+    allProject {
+      edges {
+        node {
+          id
+          title
+          balance
+          image
+          slug
+          creationDate
+          admin
+          description
+          walletAddress
+          impactLocation
+          categories {
+            name
+          }
+          reactions {
+            reaction
+            id
+            projectUpdateId
+            userId
+          }
+        }
+      }
+      totalCount
     }
   }
 `

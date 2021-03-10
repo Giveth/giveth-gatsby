@@ -145,16 +145,29 @@ const Footer = () => {
             <FooterLink to='/about'>About Us</FooterLink>
             <FooterLink to='/faq'>FAQ</FooterLink>
             <FooterLink to='/partnerships'>Partnerships</FooterLink>
-            <FooterExternalLink href='https://wiki.giveth.io'>
+            <FooterExternalLink
+              href='https://docs.giveth.io'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Docs <FiExternalLink size='18px' />
+            </FooterExternalLink>
+            <FooterExternalLink
+              href='https://wiki.giveth.io'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               Wiki <FiExternalLink size='18px' />
             </FooterExternalLink>
-            <FooterExternalLink href='https://medium.com/giveth'>
+            <FooterExternalLink
+              href='https://medium.com/giveth'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               Blog <FiExternalLink size='18px' />
             </FooterExternalLink>
             <FooterLink to='/contact'>Contact</FooterLink>
-            <FooterLink to='/tos' target='_blank' rel='noopener noreferrer'>
-              Terms of Use
-            </FooterLink>
+            <FooterLink to='/tos'>Terms of Use</FooterLink>
           </LinkBox>
           <LinkBox>
             <FooterExternalLink
