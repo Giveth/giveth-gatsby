@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
@@ -142,7 +142,8 @@ const ProjectCard = props => {
   const initUserHearted =
     project?.reactions?.filter(o => o.userId === strUserId).length > 0
   const [hearted, setHearted] = useState(initUserHearted)
-  const [heartedCount, setHeartedCount] = useState(project?.reactions?.length)
+  const [heartedByUser, setHeartedByUser] = useState(null)
+  const [heartedCount, setHeartedCount] = useState(null)
 
   const reactToProject = async () => {
     try {
@@ -166,6 +167,13 @@ const ProjectCard = props => {
     }
   }
 
+  useEffect(() => {
+    const checkUser = () => {
+      setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
+    }
+    checkUser()
+  }, [project])
+
   const image = props.image || project?.image
 
   return (
@@ -185,9 +193,9 @@ const ProjectCard = props => {
           key={props.listingId || project?.title + '_div'}
           src={image}
           onClick={() =>
-            (window.location.href = `/project/${props?.slug ||
-              project?.slug ||
-              ''}`)
+            (window.location.href = `/project/${
+              props?.slug || project?.slug || ''
+            }`)
           }
           style={{
             width: '100%',
@@ -241,12 +249,16 @@ const ProjectCard = props => {
               <BsHeartFill
                 style={{ cursor: 'pointer' }}
                 size='18px'
-                color={hearted ? theme.colors.red : theme.colors.muted}
+                color={
+                  hearted || heartedByUser
+                    ? theme.colors.red
+                    : theme.colors.muted
+                }
                 onClick={() => reactToProject()}
               />
-              {heartedCount && heartedCount > 0 && (
+              {project?.reactions?.length && project?.reactions?.length > 0 && (
                 <Text sx={{ variant: 'text.default', ml: 2 }}>
-                  {heartedCount}
+                  {heartedCount || project?.reactions?.length}
                 </Text>
               )}
             </Flex>

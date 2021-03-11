@@ -26,6 +26,7 @@ import styled from '@emotion/styled'
 
 import theme from '../../../gatsby-plugin-theme-ui'
 
+import Jdenticon from 'react-jdenticon'
 import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
@@ -106,10 +107,9 @@ const TimelineCard = props => {
   const [user, setUser] = useState(null)
   const { content, reactions, number } = props
   const client = useApolloClient()
-  console.log({ props })
   const react = async () => {
     try {
-      const reaction = await client?.mutate({
+      await client?.mutate({
         mutation: TOGGLE_UPDATE_REACTION,
         variables: {
           reaction: 'heart',
@@ -117,27 +117,24 @@ const TimelineCard = props => {
         },
         refetchQueries: [
           {
-            query: props.refreshQuery,
+            query: props?.refreshQuery,
             variables: {
-              projectId: parseInt(props?.project?.id),
+              projectId: parseFloat(props?.project?.id),
               take: 100,
               skip: 0
             }
           }
         ]
       })
-      console.log({ props, reaction })
-
       return Toast({ content: 'You liked it!', type: 'success' })
     } catch (error) {
       console.log({ error })
     }
   }
-
+  const likedByUser = reactions?.find(r => r?.userId === user?.id)
   useEffect(() => {
     const setup = async () => {
-      if (props?.specialContent) return
-      console.log('LLLL', { props })
+      if (props?.specialContent || !props?.content) return
       try {
         const userInfo = await client?.query({
           query: GET_USER,
@@ -145,7 +142,6 @@ const TimelineCard = props => {
             userId: parseInt(props?.content?.userId)
           }
         })
-        console.log({ userInfo })
         setUser(userInfo?.data?.user)
       } catch (error) {
         console.log({ error })
@@ -279,12 +275,11 @@ const TimelineCard = props => {
           {user && (
             <Creator>
               <CreatorName>
-                <Avatar
-                  src={
-                    user?.avatar ||
-                    'https://www.filepicker.io/api/file/4AYOKBTnS8yxt5OUPS5M'
-                  }
-                />
+                {user?.avatar ? (
+                  <Avatar src={user?.avatar} />
+                ) : (
+                  <Jdenticon size='24' value={user?.walletAddress} />
+                )}
                 <Text
                   sx={{
                     variant: 'text.paragraph',
@@ -308,10 +303,9 @@ const TimelineCard = props => {
               src={iconHeart}
               alt=''
               style={{
-                '-webkit-filter':
-                  reactions?.length > 0
-                    ? 'invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2)'
-                    : null
+                '-webkit-filter': likedByUser
+                  ? 'invert(40%) grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(400%) contrast(2)'
+                  : null
               }}
             />
           </IconButton>

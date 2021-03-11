@@ -14,12 +14,13 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     ProjectContext
   )
 
-  const { data } = useQuery(GET_PROJECT_UPDATES, {
+  const { data, error } = useQuery(GET_PROJECT_UPDATES, {
     variables: {
-      projectId: parseInt(project?.id),
+      projectId: parseFloat(project?.id),
       take: 100,
       skip: 0
-    }
+    },
+    fetchPolicy: 'network-only'
   })
 
   useEffect(() => {
@@ -35,17 +36,26 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     try {
       if (!title || !content)
         return Toast({ content: 'Fields should not be empty', type: 'error' })
-      console.log('Remove the refetch')
       const { data } = await addUpdateMutation({
         variables: {
           projectId: parseFloat(project?.id),
           title,
           content
-        }
+        },
+        refetchQueries: [
+          {
+            query: GET_PROJECT_UPDATES,
+            variables: {
+              projectId: parseFloat(project?.id),
+              take: 100,
+              skip: 0
+            }
+          }
+        ]
       })
+      console.log({ data })
     } catch (error) {
       console.error('addUpdate')
-
       console.log({ error })
       alert(JSON.stringify(error?.message))
     }
