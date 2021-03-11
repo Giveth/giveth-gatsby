@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
@@ -137,13 +137,12 @@ const ProjectCard = props => {
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
-  let reactionCount = project?.reactions?.length
   const strUserId = user?.id?.toString()
   const initUserHearted =
     project?.reactions?.filter(o => o.userId === strUserId).length > 0
   const [hearted, setHearted] = useState(initUserHearted)
-  const [heartedCount, setHeartedCount] = useState(project?.reactions?.length)
-
+  const [heartedByUser, setHeartedByUser] = useState(null)
+  const [heartedCount, setHeartedCount] = useState(null)
   const reactToProject = async () => {
     try {
       const reaction = await client?.mutate({
@@ -157,14 +156,23 @@ const ProjectCard = props => {
       const { data } = reaction
       const { toggleProjectReaction } = data
       const { reaction: hearted, reactionCount } = toggleProjectReaction
-
+      console.log({ hearted, reactionCount })
       setHeartedCount(reactionCount)
+      setHeartedByUser(hearted)
       setHearted(hearted)
     } catch (error) {
       usePopup?.triggerPopup('WelcomeLoggedOut')
       console.log({ error })
     }
   }
+
+  useEffect(() => {
+    const checkUser = () => {
+      setHeartedCount(project?.reactions?.length)
+      setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
+    }
+    checkUser()
+  }, [project])
 
   const image = props.image || project?.image
 
@@ -241,10 +249,10 @@ const ProjectCard = props => {
               <BsHeartFill
                 style={{ cursor: 'pointer' }}
                 size='18px'
-                color={hearted ? theme.colors.red : theme.colors.muted}
+                color={heartedByUser ? theme.colors.red : theme.colors.muted}
                 onClick={() => reactToProject()}
               />
-              {heartedCount && heartedCount > 0 && (
+              {heartedCount && (
                 <Text sx={{ variant: 'text.default', ml: 2 }}>
                   {heartedCount}
                 </Text>

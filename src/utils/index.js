@@ -1,8 +1,9 @@
 import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
+import ERC20List from './erc20TokenList'
 import Web3 from 'web3'
 
-export function titleCase (str) {
+export function titleCase(str) {
   if (!str) return null
   return str
     ?.toLowerCase()
@@ -13,7 +14,7 @@ export function titleCase (str) {
     .join(' ')
 }
 
-export function base64ToBlob (base64) {
+export function base64ToBlob(base64) {
   const binaryString = window.atob(base64)
   const len = binaryString.length
   const bytes = new Uint8Array(len)
@@ -41,7 +42,7 @@ export const getImageFile = async (base64Data, projectName) => {
   return imageFile
 }
 
-export async function getEtherscanTxs (
+export async function getEtherscanTxs(
   address,
   apolloClient = false,
   isDonor = false
@@ -99,16 +100,18 @@ export async function getEtherscanTxs (
   }
 }
 
-export function ensRegex (ens) {
+export function ensRegex(ens) {
   return /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/.test(
     ens
   )
 }
 
-export function getEtherscanPrefix () {
+export function getEtherscanPrefix() {
   return typeof process.env.ETHEREUM_NETWORK !== 'undefined'
     ? process.env.ETHEREUM_NETWORK === 'mainnet'
       ? ''
       : process.env.ETHEREUM_NETWORK + '.'
     : ''
 }
+
+export const getERC20List = ERC20List

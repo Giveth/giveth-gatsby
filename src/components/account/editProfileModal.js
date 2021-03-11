@@ -159,23 +159,43 @@ function EditProfileModal(props) {
             name='url'
             defaultValue={user?.url}
           />
-          <Button
-            type='button'
-            aria-label='edit profile'
-            variant='small'
-            sx={{
-              mt: 4,
-              mx: 'auto',
-              py: 2,
-              color: 'background',
-              width: '50%',
-              fontWeight: 'bold'
-            }}
-            type='submit'
-            // onClick={() => alert('This is still a mockup, hold on!')}
+          <Flex
+            sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
           >
-            SAVE
-          </Button>
+            <Button
+              type='button'
+              aria-label='edit profile'
+              variant='small'
+              sx={{
+                mt: 4,
+                mx: 'auto',
+                py: 2,
+                color: 'background',
+                width: '50%',
+                fontWeight: 'bold'
+              }}
+              type='submit'
+              // onClick={() => alert('This is still a mockup, hold on!')}
+            >
+              SAVE
+            </Button>
+            <Button
+              type='button'
+              aria-label='Cancel'
+              onClick={props.onRequestClose}
+              sx={{
+                mt: 4,
+                fontSize: '3',
+                width: '50%',
+                fontFamily: 'body',
+                color: 'secondary',
+                background: 'unset',
+                cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </Button>
+          </Flex>
           <IoMdClose
             onClick={props.onRequestClose}
             style={{

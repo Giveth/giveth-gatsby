@@ -271,7 +271,6 @@ const DonationsTable = ({ donations }) => {
               .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
               .map((i, key) => {
                 if (!i) return null
-                console.log('donation', { i })
                 return (
                   <tr key={key}>
                     <td
@@ -304,11 +303,11 @@ const DonationsTable = ({ donations }) => {
                           ml: 2
                         }}
                       >
-                        {i?.user?.firstName && i?.user?.lastName
-                          ? i?.user?.firstName + ' ' + i?.user?.lastName
-                          : i?.user?.name ||
-                            i?.user?.walletAddress ||
-                            i?.fromWalletAddress}
+                        {i?.user?.name
+                          ? i.user.name
+                          : i?.user?.firstName && i?.user?.lastName
+                          ? `${i.user.firstName} ${i.user.lastName}`
+                          : i?.user?.walletAddress || i?.fromWalletAddress}
                       </Text>
                     </DonorBox>
                     <td
@@ -332,10 +331,7 @@ const DonationsTable = ({ donations }) => {
                           ? `${
                               i?.amount ? `${i?.amount} ETH` : ''
                             } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount?.toLocaleString('en-US', {
-                              style: 'currency',
-                              currency: 'USD'
-                            })}
+                          : i?.amount}
                       </Text>
                     </td>
                   </tr>

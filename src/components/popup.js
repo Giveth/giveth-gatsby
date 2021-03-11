@@ -5,7 +5,9 @@ import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import decoratorClouds from '../images/decorator-clouds.svg'
+import exclamationIcon from '../images/exclamation.png'
 import signupBg from '../images/arcs.png'
+import noFundsBg from '../images/no_funds.png'
 import IncompleteProfileImg from '../images/incomplete_profile.png'
 import {
   FacebookShareButton,
@@ -160,6 +162,77 @@ function IncompleteProfilePopup({ close }) {
   )
 }
 
+function InsufficientFundsPopup({ close }) {
+  return (
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        width: '645px',
+        height: '520px'
+      }}
+    >
+      <Text
+        sx={{
+          variant: 'text.default',
+          cursor: 'pointer',
+          position: 'absolute',
+          right: '5%',
+          top: '5%'
+        }}
+        onClick={close}
+      >
+        Close
+      </Text>
+      <Box
+        sx={{
+          position: 'absolute',
+          textAlign: 'center',
+          top: '5%',
+          py: 4,
+          my: 4,
+          ml: 4,
+          mb: 6
+        }}
+      >
+        <img
+          src={exclamationIcon}
+          alt='exclamation'
+          style={{
+            width: '110px'
+          }}
+        />
+        <Text sx={{ variant: 'headings.h4', color: 'secondary', py: 2 }}>
+          Insufficient Funds
+        </Text>
+        <Text sx={{ variant: 'text.default', color: 'secondary' }}>
+          Please add funds to your wallet or switch to a different wallet.
+        </Text>
+        <Button
+          mt={4}
+          sx={{
+            width: '290px',
+            variant: 'buttons.default',
+            backgroundColor: 'secondary'
+          }}
+          onClick={close}
+        >
+          Ok
+        </Button>
+      </Box>
+      <img
+        src={noFundsBg}
+        style={{
+          width: '50%',
+          position: 'absolute',
+          right: -10,
+          bottom: -10
+        }}
+        alt='signup-bg'
+      />
+    </Flex>
+  )
+}
+
 function SharePopup() {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
@@ -210,6 +283,8 @@ function Popup() {
         return <WelcomeLoggedOutPopup close={clearPopup} />
       case 'IncompleteProfile':
         return <IncompleteProfilePopup close={clearPopup} />
+      case 'InsufficientFunds':
+        return <InsufficientFundsPopup close={clearPopup} />
       case 'share':
         return (
           <SharePopup

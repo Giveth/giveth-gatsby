@@ -30,7 +30,6 @@ export default class User {
   
   constructor(walletType, initUser) {
     this.walletType = walletType
-    console.log('User constructor')
     this.walletAddresses = []
 
     if(initUser) {
@@ -40,12 +39,9 @@ export default class User {
 
   parseInitUser(initUser) {
     if(this.walletType === 'torus') {
-      console.log(`parseInitUser initUser : ${JSON.stringify(initUser, null, 2)}`)
-      this.parseTorusUser(initUser, true) 
+      this.parseTorusUser(initUser) 
     } else {
-      console.log(`JJJ initUser : ${JSON.stringify(initUser, null, 2)}`)
       this.walletType = initUser.walletType
-      console.log(`this.walletAddresses ---> : ${this.walletAddresses}`)
       this.walletAddresses = initUser.walletAddresses
       this.id = initUser.id
       this.token = initUser.token
@@ -79,13 +75,10 @@ export default class User {
   }
 
   addWalletAddress(address, activeWallet) {
-    console.log(`updateUser: Adding address ---> : ${address}`)
-    console.log(`updateUser: Adding activeWallet ---> : ${activeWallet}`)
     this.walletAddresses.push(address)
   
     if(activeWallet) {
       this.activeWalletIndex = this.walletAddresses.indexOf(address)
-      console.log(`updateUser: this.activeWalletIndex ---> : ${this.activeWalletIndex}`)
     }
     
     

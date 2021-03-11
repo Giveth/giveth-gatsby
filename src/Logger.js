@@ -6,11 +6,8 @@ if (typeof window === 'object') {
 
   Sentry.init({
     dsn: `https://${sentryId}.ingest.sentry.io/5606310`,
-
-    // We recommend adjusting this value in production, or using tracesSampler
-    // for finer control
-    //Ok thanks
-    tracesSampleRate: 1.0
+    tracesSampleRate: 1.0, // james: look at dropping this,
+    release: 'giveth-dapp@' + process.env.npm_package_version
   })
 }
 

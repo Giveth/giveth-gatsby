@@ -1,5 +1,31 @@
 import gql from 'graphql-tag'
 
+const FETCH_ALL_PROJECTS = gql`
+  query FetchAllProjects($limit: Int, $skip: Int, $orderBy: OrderBy) {
+    projects(take: $limit, skip: $skip, orderBy: $orderBy) {
+      id
+      title
+      balance
+      image
+      slug
+      creationDate
+      admin
+      description
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+      reactions {
+        reaction
+        id
+        projectUpdateId
+        userId
+      }
+    }
+  }
+`
+
 const FETCH_PROJECTS = gql`
   query FetchProjects($limit: Int, $skip: Int, $orderBy: OrderBy) {
     topProjects(take: $limit, skip: $skip, orderBy: $orderBy) {
@@ -94,6 +120,7 @@ const FETCH_PROJECT_BY_SLUG = gql`
       }
       donations {
         transactionId
+        transactionNetworkId
         toWalletAddress
         fromWalletAddress
         anonymous
@@ -347,8 +374,14 @@ const EDIT_PROJECT = gql`
   }
 `
 
+const DEACTIVATE_PROJECT = gql`
+  mutation deactivateProject($projectId: Float!) {
+    deactivateProject(projectId: $projectId)
+  }
+`
 export {
   FETCH_PROJECTS,
+  FETCH_ALL_PROJECTS,
   FETCH_USER_PROJECTS,
   FETCH_PROJECT,
   FETCH_PROJECT_BY_SLUG,
@@ -365,5 +398,6 @@ export {
   GET_PROJECT_REACTIONS,
   GET_PROJECT_BY_ADDRESS,
   REGISTER_PROJECT_DONATION,
-  EDIT_PROJECT
+  EDIT_PROJECT,
+  DEACTIVATE_PROJECT
 }

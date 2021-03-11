@@ -269,10 +269,7 @@ const DonationsTable = props => {
                           ? `${
                               i?.amount ? `${i?.amount} ETH` : ''
                             } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
-                          : i?.amount?.toLocaleString('en-US', {
-                              style: 'currency',
-                              currency: 'USD'
-                            })}
+                          : i?.amount}
                       </Text>
                     </td>
                   </tr>
