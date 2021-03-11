@@ -137,14 +137,12 @@ const ProjectCard = props => {
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
-  let reactionCount = project?.reactions?.length
   const strUserId = user?.id?.toString()
   const initUserHearted =
     project?.reactions?.filter(o => o.userId === strUserId).length > 0
   const [hearted, setHearted] = useState(initUserHearted)
   const [heartedByUser, setHeartedByUser] = useState(null)
   const [heartedCount, setHeartedCount] = useState(null)
-
   const reactToProject = async () => {
     try {
       const reaction = await client?.mutate({
@@ -158,8 +156,9 @@ const ProjectCard = props => {
       const { data } = reaction
       const { toggleProjectReaction } = data
       const { reaction: hearted, reactionCount } = toggleProjectReaction
-
+      console.log({ hearted, reactionCount })
       setHeartedCount(reactionCount)
+      setHeartedByUser(hearted)
       setHearted(hearted)
     } catch (error) {
       usePopup?.triggerPopup('WelcomeLoggedOut')
@@ -169,6 +168,7 @@ const ProjectCard = props => {
 
   useEffect(() => {
     const checkUser = () => {
+      setHeartedCount(project?.reactions?.length)
       setHeartedByUser(project?.reactions?.find(r => r?.userId === user?.id))
     }
     checkUser()
@@ -249,16 +249,12 @@ const ProjectCard = props => {
               <BsHeartFill
                 style={{ cursor: 'pointer' }}
                 size='18px'
-                color={
-                  hearted || heartedByUser
-                    ? theme.colors.red
-                    : theme.colors.muted
-                }
+                color={heartedByUser ? theme.colors.red : theme.colors.muted}
                 onClick={() => reactToProject()}
               />
-              {project?.reactions?.length && project?.reactions?.length > 0 && (
+              {heartedCount && (
                 <Text sx={{ variant: 'text.default', ml: 2 }}>
-                  {heartedCount || project?.reactions?.length}
+                  {heartedCount}
                 </Text>
               )}
             </Flex>
