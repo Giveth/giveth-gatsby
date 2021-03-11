@@ -71,7 +71,7 @@ const AccountPage = props => {
       <AccountTop />
       <Flex
         sx={{
-          mx: '5%',
+          ml: '5%',
           fontFamily: 'heading',
           flexDirection: ['column', 'row', 'row']
         }}

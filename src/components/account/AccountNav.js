@@ -33,7 +33,7 @@ const AccountNav = props => {
     logout()
   }
   return (
-    <Box sx={{ width: ['100%', '30%', '30%'] }}>
+    <Box sx={{ pr: '8%' }}>
       <Text
         sx={{
           fontFamily: 'heading',
@@ -46,7 +46,7 @@ const AccountNav = props => {
       >
         My Account
       </Text>
-      <Box>
+      <Box sx={{ maxWidth: '80%' }}>
         {options.map((i, index) => {
           return (
             <a
@@ -79,14 +79,19 @@ const AccountNav = props => {
           )
         })}
       </Box>
-      <Box sx={{ mt: ['35px', '70px', '70px'] }}>
+      <Box sx={{ mt: ['35px', '70px', '70px'], maxWidth: '60%' }}>
         <Link
           href={wallet?.supportLink}
           target='_blank'
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}
         >
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>
+          <Text
+            sx={{
+              mb: '8px',
+              variant: 'links.grey'
+            }}
+          >
             My Wallet <FiExternalLink size='18px' />
           </Text>
         </Link>
@@ -96,7 +101,14 @@ const AccountNav = props => {
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}
         >
-          <Text sx={{ mb: '8px', variant: 'links.grey' }}>Report A Bug</Text>
+          <Text
+            sx={{
+              mb: '8px',
+              variant: 'links.grey'
+            }}
+          >
+            Report A Bug
+          </Text>
         </Link>
         <Link
           href='https://discord.gg/JYNBDuFUpG'

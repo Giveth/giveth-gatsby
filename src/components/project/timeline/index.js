@@ -54,7 +54,6 @@ const Timeline = ({
 }) => {
   const newUpdateOption = true
   const projectCreationDate = dayjs(project?.creationDate)
-  console.log({ refreshQuery })
   return (
     <VerticalTimeline>
       {newUpdateOption && isOwner && (

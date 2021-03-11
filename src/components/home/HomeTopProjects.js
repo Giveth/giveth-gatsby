@@ -2,7 +2,7 @@
 
 import { jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
-import { FETCH_PROJECTS } from '../../apollo/gql/projects'
+import { FETCH_ALL_PROJECTS } from '../../apollo/gql/projects'
 import { navigate } from 'gatsby'
 import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
 import { useState, useEffect } from 'react'
@@ -17,18 +17,23 @@ const HomeTopProjects = ({ projects = [], totalCount = null }) => {
   }
 
   useEffect(() => {
-    const checkProjects = async () => {
-      if (projects) return null
-      const { data } = await client.query({
-        query: FETCH_PROJECTS,
-        variables: { limit: 15, orderBy },
-        fetchPolicy: 'network-only'
-      })
-      const { topProjects } = data || {}
-      setShowProjects(topProjects)
+    const checkProjectsAfterSSR = async () => {
+      try {
+        // This updates the projects after showing the SSR
+        const { data } = await client.query({
+          query: FETCH_ALL_PROJECTS,
+          variables: { limit: 3, orderBy },
+          fetchPolicy: 'network-only'
+        })
+        const { projects } = data || {}
+        setShowProjects(Array.from(projects))
+      } catch (error) {
+        console.log({ error })
+      }
     }
-    checkProjects()
+    checkProjectsAfterSSR()
   }, [])
+
   return (
     <ProjectsList
       projects={showProjects}
