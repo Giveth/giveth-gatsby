@@ -12,7 +12,7 @@ import placeHolder from '../../../images/placeholder.png'
 import { toBase64 } from '../../../utils'
 
 const Selection = styled(Button)`
-  background: unset;
+  background: transparent;
   cursor: pointer;
   width: 80px;
   height: 80px;
