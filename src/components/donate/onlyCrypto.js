@@ -524,7 +524,7 @@ const OnlyCrypto = props => {
                     setTokenSymbol(i?.label || tokenSymbol)
                     setIsComponentVisible(false)
                   }}
-                  placeholder='search a token'
+                  placeholder='search for a token'
                 />
               </Flex>
             )}
