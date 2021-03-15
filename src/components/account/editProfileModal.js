@@ -36,15 +36,17 @@ const customStyles = {
   }
 }
 
-function EditProfileModal(props) {
+function EditProfileModal (props) {
   const { user } = props
   const wallet = useWallet()
   const { register, handleSubmit, watch, errors } = useForm()
   const [updateUser] = useMutation(UPDATE_USER)
   const InputBox = props => {
-    const { title, placeholderText, defaultValue, name } = props
+    const { title, placeholderText, defaultValue, name, required } = props
+    const isRequired = typeof required === 'undefined' ? false : required
     return (
       <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
+        {errors.errorMessage?.message}
         <Text
           variant='text.overlineSmall'
           sx={{ mb: 2, color: 'secondary', textTransform: 'uppercase' }}
@@ -53,7 +55,9 @@ function EditProfileModal(props) {
         </Text>
         <Input
           name={name}
-          ref={register}
+          ref={register({
+            required: isRequired
+          })}
           sx={{
             width: '100%',
             fontFamily: 'body',
@@ -75,7 +79,7 @@ function EditProfileModal(props) {
 
   const onSubmit = async data => {
     try {
-      const { firstName, lastName, location, url } = data
+      const { firstName, lastName, location, email, url } = data
       if (!firstName && !lastName && !location && !url)
         return Toast({
           content: 'Please fill at least one field',
@@ -85,6 +89,7 @@ function EditProfileModal(props) {
         firstName: firstName || wallet?.user?.firstName || '',
         lastName: lastName || wallet?.user?.lastName || '',
         location: location || wallet?.user?.location || '',
+        email: email || wallet?.user?.email || '',
         url: url || wallet?.user?.url || ''
       }
       const { data: response, error } = await updateUser({
@@ -146,6 +151,13 @@ function EditProfileModal(props) {
             placeholderText='Last Name'
             name='lastName'
             defaultValue={user?.lastName}
+          />
+          <InputBox
+            title='Email'
+            placeholderText='Enter your email address'
+            name='email'
+            defaultValue={user?.email}
+            required={true}
           />
           <InputBox
             title='Location'
