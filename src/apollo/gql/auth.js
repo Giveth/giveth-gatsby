@@ -92,6 +92,7 @@ const UPDATE_USER = gql`
     $url: String!
     $name: String
     $location: String!
+    $email: String!
     $lastName: String!
     $firstName: String!
   ) {
@@ -99,6 +100,7 @@ const UPDATE_USER = gql`
       url: $url
       name: $name
       location: $location
+      email: $email
       firstName: $firstName
       lastName: $lastName
     )
