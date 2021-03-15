@@ -236,7 +236,6 @@ const DonationsTable = ({ donations }) => {
     //         address: '0xDED8DAE93e585977BC09e1Fd857a97D997b71fCD'
     //       }
     //     })
-    //     console.log('BO', { data })
     //   } catch (error) {
     //     console.log({ error })
     //   }

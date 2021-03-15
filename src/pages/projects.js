@@ -40,7 +40,7 @@ const Projects = ({ data }) => {
 
   const { giveth } = data
   const { projects } = giveth
-  const totalCount = projects.length
+  const totalCount = showProjects?.length
   const showingProjects = showProjects?.slice(0, limit)
 
   const AllProjects = () => (

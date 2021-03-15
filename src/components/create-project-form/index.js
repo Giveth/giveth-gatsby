@@ -227,7 +227,7 @@ const CreateProjectForm = props => {
     }
     if (!isLoggedIn) {
       navigate('/', { state: { welcome: true, flashMessage } })
-    } else if (!user?.name) {
+    } else if (!user?.name || !user?.email || user.email === '') {
       usePopup?.triggerPopup('IncompleteProfile')
       setIncompleteProfile(true)
     } else {

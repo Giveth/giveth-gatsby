@@ -11,6 +11,7 @@ const HomeTopProjects = ({ projects = [], totalCount = null }) => {
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
+  const [totalProjects, setTotalProjects] = useState(totalCount)
   const orderBy = {
     field: orderByField,
     direction: OrderByDirection.DESC
@@ -22,11 +23,12 @@ const HomeTopProjects = ({ projects = [], totalCount = null }) => {
         // This updates the projects after showing the SSR
         const { data } = await client.query({
           query: FETCH_ALL_PROJECTS,
-          variables: { limit: 3, orderBy },
+          variables: { orderBy },
           fetchPolicy: 'network-only'
         })
         const { projects } = data || {}
-        setShowProjects(Array.from(projects))
+        setTotalProjects(projects?.length)
+        setShowProjects(Array.from(projects)?.slice(0, 3))
       } catch (error) {
         console.log({ error })
       }
@@ -37,7 +39,7 @@ const HomeTopProjects = ({ projects = [], totalCount = null }) => {
   return (
     <ProjectsList
       projects={showProjects}
-      totalCount={totalCount}
+      totalCount={totalProjects}
       loadMore={() => navigate('/projects')}
       hasMore
       selectOrderByField={setOrderByField}
