@@ -17,9 +17,9 @@ import { BsHeartFill } from 'react-icons/bs'
 import { Link } from 'gatsby'
 import { useQuery, useApolloClient } from '@apollo/client'
 import {
-  GET_STRIPE_PROJECT_DONATIONS,
   TOGGLE_PROJECT_REACTION,
-  GET_PROJECT_UPDATES
+  GET_PROJECT_UPDATES,
+  GET_PROJECT_REACTIONS
 } from '../../apollo/gql/projects'
 import { PROJECT_DONATIONS } from '../../apollo/gql/donations'
 import { GET_USER } from '../../apollo/gql/auth'
@@ -42,6 +42,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [currentTab, setCurrentTab] = useState('description')
   const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
+  const [totalReactions, setTotalReactions] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
   const usePopup = React.useContext(PopupContext)
   const isSSR = typeof window === 'undefined'
@@ -52,14 +53,12 @@ export const ProjectDonatorView = ({ pageContext }) => {
   )
 
   const project = pageContext?.project
-  const reactions = project?.reactions
-  const initUserHearted =
-    reactions?.filter(o => o.userId === user?.id?.toString()).length > 0
-
-  const [hearted, setHearted] = useState(initUserHearted)
-  const [heartedCount, setHeartedCount] = useState(reactions?.length)
+  const reactions = totalReactions || project?.reactions
+  const [hearted, setHearted] = useState(false)
+  const [heartedCount, setHeartedCount] = useState(null)
 
   const donations = currentProjectView?.donations?.filter(el => el != null)
+
   const reactToProject = async () => {
     try {
       const reaction = await client?.mutate({
@@ -73,7 +72,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
       const { data } = reaction
       const { toggleProjectReaction } = data
       const { reaction: hearted, reactionCount } = toggleProjectReaction
-
+      console.log({ hearted })
       setHeartedCount(reactionCount)
       setHearted(hearted)
     } catch (error) {
@@ -113,6 +112,18 @@ export const ProjectDonatorView = ({ pageContext }) => {
             skip: 0
           }
         })
+        // Get Reactions
+        const reactionsFetch = await client?.query({
+          query: GET_PROJECT_REACTIONS,
+          variables: {
+            projectId: parseInt(project?.id)
+          }
+        })
+        const reactions = reactionsFetch?.data?.getProjectReactions
+        setTotalReactions(reactions)
+        setHeartedCount(reactions?.length)
+        setHearted(reactions?.find(o => o.userId === user?.id))
+
         // Get project admin Info
         const admin = /^\d+$/.test(project?.admin)
           ? await client?.query({
@@ -352,9 +363,12 @@ export const ProjectDonatorView = ({ pageContext }) => {
               >
                 Updates
                 {currentProjectView?.updates ? (
-                  <Badge variant='blueDot' sx={{ ml: [-2, 2] }}>
-                    <Text sx={{ color: 'white', mt: '-2px' }}>
-                      {currentProjectView?.updates.length}{' '}
+                  <Badge
+                    variant='blueDot'
+                    sx={{ ml: [-2, 2], textAlign: 'center' }}
+                  >
+                    <Text sx={{ color: 'white', mt: '-2px', fontSize: '15px' }}>
+                      {currentProjectView?.updates?.length}{' '}
                     </Text>
                   </Badge>
                 ) : (

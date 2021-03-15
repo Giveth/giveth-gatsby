@@ -18,6 +18,7 @@ const IndexContent = ({
   allProject
 }) => {
   const popup = React.useContext(PopupContext)
+  // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
   const [popupShown, setPopupShown] = React.useState(false)
 
   React.useEffect(() => {
@@ -42,7 +43,6 @@ const IndexContent = ({
 }
 
 const IndexPage = props => {
-  console.log(props)
   const { data, location } = props
   const { markdownRemark, topProjects, allProject } = data
   const { frontmatter, html } = markdownRemark

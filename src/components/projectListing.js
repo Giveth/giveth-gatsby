@@ -136,7 +136,6 @@ const ProjectListing = props => {
         <ProjectCard
           key={props.listingId + '_card'}
           onClick={() => {
-            console.log(props)
             if (props.wholeClickable)
               return navigate(`/project/${props?.project?.slug}`)
             if (hoverStyle) return

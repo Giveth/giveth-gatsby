@@ -39,10 +39,12 @@ const customStyles = {
 function EditProfileModal(props) {
   const { user } = props
   const wallet = useWallet()
-  const { register, handleSubmit, watch, errors } = useForm()
+  const { register, handleSubmit, watch, errors } = useForm({
+    defaultValues: user
+  })
   const [updateUser] = useMutation(UPDATE_USER)
   const InputBox = props => {
-    const { title, placeholderText, defaultValue, name } = props
+    const { title, placeholderText, defaultValue, name, refExtras } = props
     return (
       <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
         <Text
@@ -53,7 +55,7 @@ function EditProfileModal(props) {
         </Text>
         <Input
           name={name}
-          ref={register}
+          ref={register(refExtras)}
           sx={{
             width: '100%',
             fontFamily: 'body',
@@ -66,16 +68,19 @@ function EditProfileModal(props) {
           type='text'
           placeholder={placeholderText}
           maxLength={100}
-          defaultValue={defaultValue}
+          // defaultValue={defaultValue}
           // onChange={e => setCharacterLength(e.target.value.length)}
         />
+        {errors && errors[name] && (
+          <Text sx={{ mt: 1, color: 'red' }}>{errors[name].message}</Text>
+        )}
       </Box>
     )
   }
 
   const onSubmit = async data => {
     try {
-      const { firstName, lastName, location, url } = data
+      const { firstName, lastName, location, email, url } = data
       if (!firstName && !lastName && !location && !url)
         return Toast({
           content: 'Please fill at least one field',
@@ -85,12 +90,12 @@ function EditProfileModal(props) {
         firstName: firstName || wallet?.user?.firstName || '',
         lastName: lastName || wallet?.user?.lastName || '',
         location: location || wallet?.user?.location || '',
+        email: email || wallet?.user?.email || '',
         url: url || wallet?.user?.url || ''
       }
       const { data: response, error } = await updateUser({
         variables: newProfile
       })
-      console.log('new year', { data, response })
       if (response?.updateUser === true) {
         props.onRequestClose()
         wallet?.updateUser && wallet.updateUserInfoOnly()
@@ -104,7 +109,10 @@ function EditProfileModal(props) {
       }
     } catch (error) {
       console.log({ error })
-      return Toast({ content: JSON.stringify(error), type: 'error' })
+      return Toast({
+        content: error?.message || JSON.stringify(error),
+        type: 'error'
+      })
     }
   }
 
@@ -146,6 +154,19 @@ function EditProfileModal(props) {
             placeholderText='Last Name'
             name='lastName'
             defaultValue={user?.lastName}
+          />
+          <InputBox
+            title='Email'
+            placeholderText='Email address'
+            name='email'
+            defaultValue={user?.email}
+            refExtras={{
+              // required: 'Required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Invalid email address'
+              }
+            }}
           />
           <InputBox
             title='Location'
