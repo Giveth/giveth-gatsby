@@ -115,6 +115,7 @@ function ProjectEditionForm(props) {
 
         <form
           onSubmit={handleSubmit((data, e) =>
+            // TODO: USE toggleProjectActivation to activate it when needed
             deactivateProject(data, () =>
               Toast({ content: 'Project Deactivated', type: 'success' })
             )
