@@ -80,6 +80,32 @@ const FETCH_USER_PROJECTS = gql`
   }
 `
 
+const FETCH_MY_PROJECTS = gql`
+  query FetchMyProjects {
+    myProjects {
+      id
+      title
+      balance
+      description
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+      status {
+        id
+        symbol
+        name
+        description
+      }
+    }
+  }
+`
+
 const FETCH_PROJECT = gql`
   query Project($id: ID!) {
     project(id: $id) {
@@ -412,5 +438,6 @@ export {
   REGISTER_PROJECT_DONATION,
   EDIT_PROJECT,
   ACTIVATE_PROJECT,
-  DEACTIVATE_PROJECT
+  DEACTIVATE_PROJECT,
+  FETCH_MY_PROJECTS
 }

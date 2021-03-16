@@ -20,7 +20,7 @@ import {
   GET_PROJECT_BY_ADDRESS,
   FETCH_PROJECT_BY_SLUG
 } from '../../../apollo/gql/projects'
-import { deactivateProject } from '../../../services/project'
+import { toggleProjectActivation } from '../../../services/project'
 import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
@@ -46,12 +46,12 @@ function ProjectEditionForm(props) {
     project,
     client,
     mapLocation,
-    setMapLocation,
-    deactivateProject
+    setMapLocation
   } = props
 
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
+  const [isActive, setIsActive] = useState(project?.status?.id === '5')
 
   const { register, handleSubmit, errors } = useForm() // initialize the hook
 
@@ -114,12 +114,14 @@ function ProjectEditionForm(props) {
         </Flex>
 
         <form
-          onSubmit={handleSubmit((data, e) =>
-            // TODO: USE toggleProjectActivation to activate it when needed
-            deactivateProject(data, () =>
-              Toast({ content: 'Project Deactivated', type: 'success' })
+          onSubmit={handleSubmit((data, e) => {
+            const res = toggleProjectActivation(data, isActive, msg =>
+              Toast({ content: msg, type: 'success' })
             )
-          )}
+            if (res) {
+              setIsActive(!isActive)
+            }
+          })}
         >
           <input
             type='hidden'
@@ -150,7 +152,7 @@ function ProjectEditionForm(props) {
                 color: 'white'
               }}
             >
-              Deactivate project
+              {`${isActive ? 'Deactivate' : 'Activate'}`} project
             </Text>
           </Button>
         </form>
@@ -481,7 +483,6 @@ function ProjectEdition(props) {
         client={client}
         mapLocation={mapLocation}
         setMapLocation={setMapLocation}
-        deactivateProject={deactivateProject}
       />
       <ConfirmationModal
         showModal={showModal}

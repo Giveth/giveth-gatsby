@@ -9,7 +9,7 @@ import { useWallet } from '../../contextProvider/WalletProvider'
 import { BsArrowLeft } from 'react-icons/bs'
 import LoadingModal from '../../components/loadingModal'
 import { USERS_DONATIONS } from '../../apollo/gql/donations'
-import { FETCH_USER_PROJECTS } from '../../apollo/gql/projects'
+import { FETCH_MY_PROJECTS } from '../../apollo/gql/projects'
 import AccountTop from '../../components/account/AccountTop'
 import AccountNav from '../../components/account/AccountNav'
 import AccountBody from '../../components/account/AccountBody'
@@ -29,21 +29,20 @@ const UserSpan = styled.span`
 const AccountPage = props => {
   const { user, isLoggedIn } = useWallet()
   const fromWalletAddress = user.getWalletAddress()
-
   const userWallets = user.walletAddresses
   const { data: donations, loading: dataLoading } = useQuery(USERS_DONATIONS, {
     fetchPolicy: 'network-only'
   })
   const userDonations = donations?.donationsByDonor
 
-  const { data: userProjects, loading: projectsLoading } = useQuery(
-    FETCH_USER_PROJECTS,
+  const { data: userProjects, loading: projectsLoading, error } = useQuery(
+    FETCH_MY_PROJECTS,
     {
-      variables: { admin: parseFloat(user?.id || -1) },
       fetchPolicy: 'network-only'
     }
   )
-  const projectsList = userProjects?.projects
+  console.log({ userProjects, error })
+  const projectsList = userProjects?.myProjects
 
   const [query, setQuery] = useQueryParams({
     view: StringParam,

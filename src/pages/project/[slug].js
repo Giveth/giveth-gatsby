@@ -7,6 +7,25 @@ import { FETCH_PROJECT_BY_SLUG } from '../../apollo/gql/projects'
 import { ProjectDonatorView } from '../../components/project'
 import Layout from '../../components/layout'
 import Seo from '../../components/seo'
+import { useWallet } from '../../contextProvider/WalletProvider'
+
+const ShowComponents = ({ projectStatus, slugProject }) => {
+  const { user } = useWallet()
+  const isAdmin = slugProject?.admin === user?.id
+  return (
+    <>
+      {projectStatus && projectStatus !== '5' && !isAdmin ? (
+        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Text variant='headings.h4' sx={{ color: 'secondary' }}>
+            Project Not available
+          </Text>
+        </Flex>
+      ) : slugProject ? (
+        <ProjectDonatorView pageContext={{ project: slugProject }} />
+      ) : null}
+    </>
+  )
+}
 
 const Project = props => {
   const id = props.params.slug
@@ -53,15 +72,9 @@ const Project = props => {
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Spinner variant='spinner.medium' />
         </Flex>
-      ) : projectStatus !== '5' ? (
-        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
-          <Text variant='headings.h4' sx={{ color: 'secondary' }}>
-            Project Not available
-          </Text>
-        </Flex>
-      ) : slugProject ? (
-        <ProjectDonatorView pageContext={{ project: slugProject }} />
-      ) : null}
+      ) : (
+        <ShowComponents slugProject={slugProject} />
+      )}
     </Layout>
   )
 }
