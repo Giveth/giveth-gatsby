@@ -41,7 +41,6 @@ const AccountPage = props => {
       fetchPolicy: 'network-only'
     }
   )
-  console.log({ userProjects, error })
   const projectsList = userProjects?.myProjects
 
   const [query, setQuery] = useQueryParams({

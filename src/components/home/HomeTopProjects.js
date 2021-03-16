@@ -11,10 +11,10 @@ const HomeTopProjects = ({ projects = [] }) => {
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
-  const orderBy = {
-    field: orderByField,
-    direction: OrderByDirection.DESC
-  }
+  // const orderBy = {
+  //   field: orderByField,
+  //   direction: OrderByDirection.DESC
+  // }
 
   useEffect(() => {
     const checkProjectsAfterSSR = async () => {
@@ -22,7 +22,7 @@ const HomeTopProjects = ({ projects = [] }) => {
         // This updates the projects after showing the SSR
         const { data } = await client.query({
           query: FETCH_ALL_PROJECTS,
-          variables: { limit: 3, orderBy },
+          variables: { limit: 3 },
           fetchPolicy: 'network-only'
         })
         const { projects } = data || {}
