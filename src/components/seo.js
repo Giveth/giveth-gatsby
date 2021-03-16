@@ -10,6 +10,8 @@ import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
 
+const DEFAULT_SEO_IMAGE = 'https://i.imgur.com/uPFEgJu.png '
+
 function Seo({ description, lang, meta, title, image }) {
   const { site } = useStaticQuery(
     graphql`
@@ -24,11 +26,17 @@ function Seo({ description, lang, meta, title, image }) {
       }
     `
   )
-
   const metaDescription = description || site.siteMetadata.description
-  const urlRegex = /([a-z]+\:\/+)([^\/\s]*)([a-z0-9\-@\^=%&;\/~\+]*)[\?]?([^ \#]*)#?([^ \#]*)/gi
-  const metaImage = urlRegex.image ? image : 'https://giveth.io/givethio.png'
-
+  const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
+  let metaImage = image
+  if (base64Regex.test(image?.split(',')[1])) {
+    // it's base64, convert
+    metaImage = `decoder.php?data=${image?.split(',')[1]}`
+  } else if (/^\d+$/.test(metaImage) || !image) {
+    // it's a number or nothing
+    metaImage = DEFAULT_SEO_IMAGE
+  }
+  console.log({ metaImage })
   return (
     <Helmet
       htmlAttributes={{
