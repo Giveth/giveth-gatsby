@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import React from 'react'
-import { Grid, Spinner, Text, jsx } from 'theme-ui'
+import { Grid, Flex, Spinner, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import Seo from '../components/seo'
 import { useQuery } from '@apollo/client'
@@ -40,6 +40,12 @@ const Donate = props => {
           <Text sx={{ color: 'background' }}>Error</Text>
         ) : loading ? (
           <Spinner variant='spinner.medium' />
+        ) : data?.projectBySlug?.status?.id !== '5' ? (
+          <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+            <Text variant='headings.h4' sx={{ color: 'background' }}>
+              Project Not available
+            </Text>
+          </Flex>
         ) : data?.projectBySlug ? (
           <DonationIndex {...props} project={data.projectBySlug} />
         ) : (

@@ -114,6 +114,12 @@ const FETCH_PROJECT_BY_SLUG = gql`
       categories {
         name
       }
+      status {
+        id
+        symbol
+        name
+        description
+      }
       reactions {
         reaction
         userId

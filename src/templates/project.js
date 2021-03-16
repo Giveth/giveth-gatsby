@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
+import { Flex, Text, jsx } from 'theme-ui'
 import Seo from '../components/seo'
 import Layout from '../components/layout'
 import { ProjectDonatorView } from '../components/project'
@@ -15,7 +15,15 @@ const Project = ({ pageContext }) => {
         }
         image={pageContext?.project?.image}
       />
-      <ProjectDonatorView pageContext={{ project: pageContext?.project }} />
+      {pageContext?.project?.status?.id !== '5' ? (
+        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Text variant='headings.h4' sx={{ color: 'secondary' }}>
+            Project Not available
+          </Text>
+        </Flex>
+      ) : (
+        <ProjectDonatorView pageContext={{ project: pageContext?.project }} />
+      )}
     </Layout>
   )
 }

@@ -113,7 +113,13 @@ function ProjectEditionForm(props) {
           </Text>
         </Flex>
 
-        <form onSubmit={handleSubmit(deactivateProject)}>
+        <form
+          onSubmit={handleSubmit((data, e) =>
+            deactivateProject(data, () =>
+              Toast({ content: 'Project Deactivated', type: 'success' })
+            )
+          )}
+        >
           <input
             type='hidden'
             name='projectId'
