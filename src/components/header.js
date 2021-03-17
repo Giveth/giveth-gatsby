@@ -189,7 +189,6 @@ const Header = ({ siteTitle, isHomePage }) => {
   }, [])
 
   const goCreate = async () => {
-    console.log('CHECK HERE', { user })
     if (!isLoggedIn) return triggerPopup('WelcomeLoggedOut')
     if (!user?.name || !user?.email || user.email === '') {
       return triggerPopup('IncompleteProfile')

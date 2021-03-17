@@ -87,6 +87,12 @@ exports.createPages = async ({ graphql, actions }) => {
           walletAddress
           impactLocation
           balance
+          status {
+            id
+            symbol
+            name
+            description
+          }
           categories {
             name
           }
@@ -199,6 +205,12 @@ exports.sourceNodes = async ({
             walletAddress
             impactLocation
             balance
+            status {
+              id
+              symbol
+              name
+              description
+            }
             categories {
               name
             }

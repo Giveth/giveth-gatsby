@@ -1,10 +1,32 @@
 /** @jsx jsx */
-import { jsx } from 'theme-ui'
+import React from 'react'
+import { Flex, Text, jsx } from 'theme-ui'
 import Seo from '../components/seo'
 import Layout from '../components/layout'
 import { ProjectDonatorView } from '../components/project'
+import { useWallet } from '../contextProvider/WalletProvider'
+
+const ShowComponents = ({ pageContext }) => {
+  const { user } = useWallet()
+  const statusId = pageContext?.project?.status?.id
+  const isAdmin = statusId === user?.id
+  return (
+    <>
+      {statusId && statusId !== '5' && !isAdmin ? (
+        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Text variant='headings.h4' sx={{ color: 'secondary' }}>
+            Project Not Available
+          </Text>
+        </Flex>
+      ) : (
+        <ProjectDonatorView pageContext={{ project: pageContext?.project }} />
+      )}
+    </>
+  )
+}
 
 const Project = ({ pageContext }) => {
+  // console.log({ pageContext })
   return (
     <Layout>
       <Seo
@@ -15,7 +37,7 @@ const Project = ({ pageContext }) => {
         }
         image={pageContext?.project?.image}
       />
-      <ProjectDonatorView pageContext={{ project: pageContext?.project }} />
+      <ShowComponents pageContext={pageContext} />
     </Layout>
   )
 }

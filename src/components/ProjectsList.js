@@ -117,12 +117,14 @@ const ProjectsList = props => {
           >
             Projects{' '}
           </span>
-          <span
-            sx={{
-              variant: 'headings.h5',
-              color: 'bodyLight'
-            }}
-          >{`(${totalCount})`}</span>
+          {totalCount && (
+            <span
+              sx={{
+                variant: 'headings.h5',
+                color: 'bodyLight'
+              }}
+            >{`(${totalCount})`}</span>
+          )}
         </Text>
         <CreateLink to='/create'>Create a project</CreateLink>
       </Flex>
