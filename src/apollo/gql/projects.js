@@ -400,8 +400,8 @@ const REGISTER_PROJECT_DONATION = gql`
 `
 
 const EDIT_PROJECT = gql`
-  mutation editProject($newProjectData: ProjectInput!, $projectId: Float!) {
-    editProject(newProjectData: $newProjectData, projectId: $projectId) {
+  mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
+    editProject(projectId: $projectId, newProjectData: $newProjectData) {
       id
       title
       description

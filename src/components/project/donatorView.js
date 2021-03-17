@@ -102,7 +102,11 @@ export const ProjectDonatorView = ({ pageContext }) => {
           variables: { id: project?.id },
           fetchPolicy: 'network-only'
         })
-        if (projectReFetched?.project?.status?.id !== '5') {
+        console.log({ projectReFetched })
+        if (
+          projectReFetched?.project?.length > 0 &&
+          projectReFetched.project[0].status?.id !== '5'
+        ) {
           setIsCancelled(true)
           return
         }

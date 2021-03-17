@@ -19,15 +19,15 @@ const ShowComponents = props => {
 
   return (
     <Content style={{ justifyItems: 'center' }}>
-      {projectStatus && projectStatus?.id !== '5' ? (
+      {/* {projectStatus && projectStatus?.id !== '5' ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Text variant='headings.h4' sx={{ color: 'background' }}>
             Project Not Available
           </Text>
         </Flex>
-      ) : (
-        <DonationView {...props} project={pageContext?.project} />
-      )}
+      ) : ( */}
+      <DonationView {...props} project={pageContext?.project} />
+      {/* )} */}
     </Content>
   )
 }
