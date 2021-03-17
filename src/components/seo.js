@@ -29,15 +29,15 @@ function Seo({ description, lang, meta, title, image }) {
   const metaDescription = description || site.siteMetadata.description
   const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
   let metaImage = image
-  // if (base64Regex.test(image?.split(',')[1])) {
-  //   // it's base64, convert
-  //   metaImage = `decoder.php?data=${image}`
-  // } else
-  if (/^\d+$/.test(metaImage) || !image) {
+  if (base64Regex.test(image?.split(',')[1])) {
+    // it's base64, convert >>> this doesnt work
+    // metaImage = `decoder.php?data=${image}`
+    metaImage = DEFAULT_SEO_IMAGE
+  } else if (/^\d+$/.test(metaImage) || !image) {
     // it's a number or nothing
     metaImage = DEFAULT_SEO_IMAGE
   }
-  console.log({ metaImage })
+  // console.log({ metaImage })
   return (
     <Helmet
       htmlAttributes={{
