@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import { Helmet } from 'react-helmet'
 import { useStaticQuery, graphql } from 'gatsby'
 
-const DEFAULT_SEO_IMAGE = 'https://i.imgur.com/uPFEgJu.png '
+const DEFAULT_SEO_IMAGE = 'https://i.imgur.com/uPFEgJu.png'
 
 function Seo({ description, lang, meta, title, image }) {
   const { site } = useStaticQuery(
@@ -31,7 +31,7 @@ function Seo({ description, lang, meta, title, image }) {
   let metaImage = image
   if (base64Regex.test(image?.split(',')[1])) {
     // it's base64, convert
-    metaImage = `decoder.php?data=${image?.split(',')[1]}`
+    metaImage = `decoder.php?data=${image}`
   } else if (/^\d+$/.test(metaImage) || !image) {
     // it's a number or nothing
     metaImage = DEFAULT_SEO_IMAGE
