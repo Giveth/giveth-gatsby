@@ -42,7 +42,6 @@ const AccountPage = props => {
     }
   )
   const projectsList = userProjects?.myProjects
-
   const [query, setQuery] = useQueryParams({
     view: StringParam,
     data: StringParam

@@ -26,6 +26,7 @@ const ShowComponents = ({ pageContext }) => {
 }
 
 const Project = ({ pageContext }) => {
+  // console.log({ pageContext })
   return (
     <Layout>
       <Seo
