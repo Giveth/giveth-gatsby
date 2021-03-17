@@ -13,6 +13,12 @@ const FETCH_ALL_PROJECTS = gql`
       description
       walletAddress
       impactLocation
+      status {
+        id
+        symbol
+        name
+        description
+      }
       categories {
         name
       }
@@ -118,6 +124,12 @@ const FETCH_PROJECT = gql`
       creationDate
       walletAddress
       impactLocation
+      status {
+        id
+        symbol
+        name
+        description
+      }
       categories {
         name
       }

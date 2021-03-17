@@ -17,7 +17,7 @@ const ShowComponents = ({ projectStatus, slugProject }) => {
       {projectStatus && projectStatus !== '5' && !isAdmin ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Text variant='headings.h4' sx={{ color: 'secondary' }}>
-            Project Not available
+            Project Not Available
           </Text>
         </Flex>
       ) : slugProject ? (

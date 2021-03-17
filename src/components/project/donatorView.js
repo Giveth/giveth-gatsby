@@ -6,6 +6,7 @@ import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 
 import testImg from '../../images/giveth-test-image.png'
+import CancelledModal from './cancelledModal'
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../images/svg/create/projectImageGallery3.svg'
@@ -19,6 +20,7 @@ import { useQuery, useApolloClient } from '@apollo/client'
 import {
   TOGGLE_PROJECT_REACTION,
   GET_PROJECT_UPDATES,
+  FETCH_PROJECT,
   GET_PROJECT_REACTIONS
 } from '../../apollo/gql/projects'
 import { PROJECT_DONATIONS } from '../../apollo/gql/donations'
@@ -44,6 +46,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
   const [totalGivers, setTotalGivers] = useState(null)
   const [totalReactions, setTotalReactions] = useState(null)
   const [isOwner, setIsOwner] = useState(false)
+  const [isCancelled, setIsCancelled] = useState(null)
   const usePopup = React.useContext(PopupContext)
   const isSSR = typeof window === 'undefined'
   const client = useApolloClient()
@@ -92,6 +95,18 @@ export const ProjectDonatorView = ({ pageContext }) => {
         //   client,
         //   true
         // )
+
+        // GET PROJECT -- mainly to check status client side
+        const { data: projectReFetched } = await client.query({
+          query: FETCH_PROJECT,
+          variables: { id: project?.id },
+          fetchPolicy: 'network-only'
+        })
+        if (projectReFetched?.project?.status?.id !== '5') {
+          setIsCancelled(true)
+          return
+        }
+
         const { data: donationsToProject } = await client.query({
           query: PROJECT_DONATIONS,
           variables: { toWalletAddresses: [project.walletAddress] },
@@ -191,6 +206,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
 
   return (
     <>
+      <CancelledModal isOpen={isCancelled} />
       <Flex>
         {setImage(project?.image) || (
           <Image

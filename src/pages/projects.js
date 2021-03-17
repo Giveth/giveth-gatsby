@@ -30,7 +30,7 @@ const Projects = ({ data }) => {
           fetchPolicy: 'network-only'
         })
         const { projects } = data || {}
-        setShowProjects(Array.from(projects))
+        setShowProjects(Array.from(projects).filter(i => i?.status?.id === '5'))
       } catch (error) {
         console.log({ error })
       }
