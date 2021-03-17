@@ -33,7 +33,6 @@ const Project = props => {
   const [loading, setLoading] = useState(true)
   const [slugProject, setSlugProject] = useState(null)
   const [projectStatus, setProjectStatus] = useState(null)
-
   useEffect(() => {
     const getProject = async () => {
       const slug = id
@@ -73,7 +72,10 @@ const Project = props => {
           <Spinner variant='spinner.medium' />
         </Flex>
       ) : (
-        <ShowComponents slugProject={slugProject} />
+        <ShowComponents
+          slugProject={slugProject}
+          projectStatus={projectStatus}
+        />
       )}
     </Layout>
   )

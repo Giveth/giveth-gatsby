@@ -51,12 +51,13 @@ function ProjectEditionForm(props) {
 
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
-  const [isActive, setIsActive] = useState(project?.status?.id === '5')
+  const [isActive, setIsActive] = useState(null)
 
   const { register, handleSubmit, errors } = useForm() // initialize the hook
 
   useEffect(() => {
     setCategories(project?.categories)
+    setIsActive(project?.status?.id === '5')
   }, [project])
 
   const connectBankAccount = async () => {
@@ -95,7 +96,7 @@ function ProjectEditionForm(props) {
       </Label>
     )
   }
-
+  console.log({ project, isActive })
   return (
     <>
       {loading && <LoadingModal isOpen={loading} />}
@@ -129,32 +130,34 @@ function ProjectEditionForm(props) {
             ref={register}
             value={project.id}
           />
-          <Button
-            aria-label='Next'
-            sx={{
-              my: '20px',
-              width: '240px',
-              height: '52px',
-              borderRadius: '48px',
-              cursor: 'pointer'
-            }}
-            type='submit'
-          >
-            {' '}
-            <Text
+          {project?.status && (
+            <Button
+              aria-label='Next'
               sx={{
-                fontFamily: 'body',
-                fontWeight: 'bold',
-                fontSize: 2,
-                letterSpacing: '4%',
-                textTransform: 'uppercase',
-                textAlign: 'center',
-                color: 'white'
+                my: '20px',
+                width: '240px',
+                height: '52px',
+                borderRadius: '48px',
+                cursor: 'pointer'
               }}
+              type='submit'
             >
-              {`${isActive ? 'Deactivate' : 'Activate'}`} project
-            </Text>
-          </Button>
+              {' '}
+              <Text
+                sx={{
+                  fontFamily: 'body',
+                  fontWeight: 'bold',
+                  fontSize: 2,
+                  letterSpacing: '4%',
+                  textTransform: 'uppercase',
+                  textAlign: 'center',
+                  color: 'white'
+                }}
+              >
+                {`${isActive ? 'Deactivate' : 'Activate'}`} project
+              </Text>
+            </Button>
+          )}
         </form>
       </Flex>
       <form onSubmit={handleSubmit(updateProject)}>
