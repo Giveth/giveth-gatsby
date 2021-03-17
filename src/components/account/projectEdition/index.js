@@ -20,7 +20,7 @@ import {
   GET_PROJECT_BY_ADDRESS,
   FETCH_PROJECT_BY_SLUG
 } from '../../../apollo/gql/projects'
-import { deactivateProject } from '../../../services/project'
+import { toggleProjectActivation } from '../../../services/project'
 import LoadingModal from '../../loadingModal'
 import ConfirmationModal from './confirmationModal'
 import { getImageFile } from '../../../utils/index'
@@ -46,17 +46,18 @@ function ProjectEditionForm(props) {
     project,
     client,
     mapLocation,
-    setMapLocation,
-    deactivateProject
+    setMapLocation
   } = props
 
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
+  const [isActive, setIsActive] = useState(null)
 
   const { register, handleSubmit, errors } = useForm() // initialize the hook
 
   useEffect(() => {
     setCategories(project?.categories)
+    setIsActive(project?.status?.id === '5')
   }, [project])
 
   const connectBankAccount = async () => {
@@ -95,7 +96,7 @@ function ProjectEditionForm(props) {
       </Label>
     )
   }
-
+  console.log({ project, isActive })
   return (
     <>
       {loading && <LoadingModal isOpen={loading} />}
@@ -113,39 +114,50 @@ function ProjectEditionForm(props) {
           </Text>
         </Flex>
 
-        <form onSubmit={handleSubmit(deactivateProject)}>
+        <form
+          onSubmit={handleSubmit((data, e) => {
+            const res = toggleProjectActivation(data, isActive, msg =>
+              Toast({ content: msg, type: 'success' })
+            )
+            if (res) {
+              setIsActive(!isActive)
+            }
+          })}
+        >
           <input
             type='hidden'
             name='projectId'
             ref={register}
             value={project.id}
           />
-          <Button
-            aria-label='Next'
-            sx={{
-              my: '20px',
-              width: '240px',
-              height: '52px',
-              borderRadius: '48px',
-              cursor: 'pointer'
-            }}
-            type='submit'
-          >
-            {' '}
-            <Text
+          {project?.status && (
+            <Button
+              aria-label='Next'
               sx={{
-                fontFamily: 'body',
-                fontWeight: 'bold',
-                fontSize: 2,
-                letterSpacing: '4%',
-                textTransform: 'uppercase',
-                textAlign: 'center',
-                color: 'white'
+                my: '20px',
+                width: '240px',
+                height: '52px',
+                borderRadius: '48px',
+                cursor: 'pointer'
               }}
+              type='submit'
             >
-              Deactivate project
-            </Text>
-          </Button>
+              {' '}
+              <Text
+                sx={{
+                  fontFamily: 'body',
+                  fontWeight: 'bold',
+                  fontSize: 2,
+                  letterSpacing: '4%',
+                  textTransform: 'uppercase',
+                  textAlign: 'center',
+                  color: 'white'
+                }}
+              >
+                {`${isActive ? 'Deactivate' : 'Activate'}`} project
+              </Text>
+            </Button>
+          )}
         </form>
       </Flex>
       <form onSubmit={handleSubmit(updateProject)}>
@@ -474,7 +486,6 @@ function ProjectEdition(props) {
         client={client}
         mapLocation={mapLocation}
         setMapLocation={setMapLocation}
-        deactivateProject={deactivateProject}
       />
       <ConfirmationModal
         showModal={showModal}

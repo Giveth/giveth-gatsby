@@ -68,7 +68,7 @@ export function notify(hash) {
   emitter.on('txFailed', console.log)
 
   emitter.on('all', event => {
-    console.log('ALLLLLLL', event)
+    console.log('ALL', event)
   })
 }
 

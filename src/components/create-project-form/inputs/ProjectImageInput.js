@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Label, Grid, Image, Text, Flex, Button } from 'theme-ui'
+import { Label, Grid, Box, Image, Text, Flex, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
+import theme from '../../../gatsby-plugin-theme-ui'
 import styled from '@emotion/styled'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
@@ -11,8 +12,7 @@ import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery
 import placeHolder from '../../../images/placeholder.png'
 import { toBase64 } from '../../../utils'
 
-const Selection = styled(Button)`
-  background: transparent;
+const Selection = styled(Box)`
   cursor: pointer;
   width: 80px;
   height: 80px;
@@ -20,6 +20,7 @@ const Selection = styled(Button)`
   margin: 4% 2% 0 0;
   border: 2px solid #dfdae8;
   border-radius: 8px;
+  background-color: ${theme.colors.background};
 `
 
 export const ProjectImageInput = ({
@@ -50,6 +51,7 @@ export const ProjectImageInput = ({
           width: '100%',
           height: '100%',
           backgroundSize: 'cover',
+          backgroundColor: 'transparent',
           backgroundImage: `url('/assets/create/projectImageGallery${type.toString()}.svg')`
         }}
       />

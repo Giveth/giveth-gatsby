@@ -190,7 +190,9 @@ const Header = ({ siteTitle, isHomePage }) => {
 
   const goCreate = async () => {
     if (!isLoggedIn) return triggerPopup('WelcomeLoggedOut')
-    if (!user?.name) return triggerPopup('IncompleteProfile')
+    if (!user?.name || !user?.email || user.email === '') {
+      return triggerPopup('IncompleteProfile')
+    }
     navigate('/create')
   }
 

@@ -26,7 +26,7 @@ const Projects = ({ data }) => {
         // This updates the projects after showing the SSR
         const { data } = await client.query({
           query: FETCH_ALL_PROJECTS,
-          variables: { orderBy },
+          // variables: { orderBy },
           fetchPolicy: 'network-only'
         })
         const { projects } = data || {}
@@ -40,7 +40,7 @@ const Projects = ({ data }) => {
 
   const { giveth } = data
   const { projects } = giveth
-  const totalCount = projects.length
+  const totalCount = showProjects?.length
   const showingProjects = showProjects?.slice(0, limit)
 
   const AllProjects = () => (
