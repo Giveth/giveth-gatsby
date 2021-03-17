@@ -215,9 +215,6 @@ exports.sourceNodes = async ({
                 lastName
                 avatar
               }
-              project {
-                title
-              }
               createdAt
               currency
             }
