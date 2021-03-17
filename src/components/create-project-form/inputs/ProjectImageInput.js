@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Label, Grid, Image, Text, Flex, Button } from 'theme-ui'
+import { Label, Grid, Box, Image, Text, Flex, Button } from 'theme-ui'
 import { animated } from 'react-spring'
 import { useDropzone } from 'react-dropzone'
 import theme from '../../../gatsby-plugin-theme-ui'
@@ -12,7 +12,7 @@ import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery
 import placeHolder from '../../../images/placeholder.png'
 import { toBase64 } from '../../../utils'
 
-const Selection = styled(Button)`
+const Selection = styled(Box)`
   cursor: pointer;
   width: 80px;
   height: 80px;
