@@ -388,19 +388,27 @@ function ProjectEdition(props) {
 
   useEffect(() => {
     if (project && updateProjectOnServer) {
-      const projectId = fetchedProject.projectBySlug.id
-
+      const projectId = fetchedProject?.projectBySlug?.id
       const editProjectMutation = async () => {
         setLoading(true)
-        const edit = await client.mutate({
-          mutation: EDIT_PROJECT,
-          variables: {
-            newProjectData: project,
-            projectId: parseFloat(projectId)
-          }
-        })
-        setUpdateProjectOnServer(false)
-        setShowModal(true)
+        try {
+          const edit = await client.mutate({
+            mutation: EDIT_PROJECT,
+            variables: {
+              newProjectData: project,
+              projectId: parseFloat(projectId)
+            }
+          })
+          setUpdateProjectOnServer(false)
+          setShowModal(true)
+        } catch (error) {
+          setLoading(false)
+          Toast({
+            content: error?.message || JSON.stringify(error),
+            type: 'error'
+          })
+          console.log({ error })
+        }
       }
       editProjectMutation()
     } else {

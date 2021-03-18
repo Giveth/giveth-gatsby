@@ -22,11 +22,15 @@ const HomeTopProjects = ({ projects = [] }) => {
         // This updates the projects after showing the SSR
         const { data } = await client.query({
           query: FETCH_ALL_PROJECTS,
-          variables: { limit: 3 },
+          // variables: { limit: 3 },
           fetchPolicy: 'network-only'
         })
         const { projects } = data || {}
-        setShowProjects(Array.from(projects)?.slice(0, 3))
+        setShowProjects(
+          Array.from(projects)
+            .filter(i => i?.status?.id === '5')
+            ?.slice(0, 3)
+        )
       } catch (error) {
         console.log({ error })
       }

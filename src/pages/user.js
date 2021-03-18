@@ -38,7 +38,6 @@ const User = props => {
           variables: { admin: parseFloat(data?.userByAddress?.id || -1) },
           fetchPolicy: 'network-only'
         })
-        console.log({ projects })
         setProjects(projects?.projects)
 
         // GET DONATIONS

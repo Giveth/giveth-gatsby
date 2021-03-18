@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import Seo from '../components/seo'
 import Layout from '../components/layout'
 import DonationView from '../components/donate'
-import { useWallet } from '../contextProvider/WalletProvider'
 
 const Content = styled(Grid)`
   display: flex;
@@ -16,21 +15,19 @@ const Content = styled(Grid)`
 
 const ShowComponents = props => {
   const { pageContext } = props
-  const { user } = useWallet()
-  const isAdmin = pageContext?.project?.admin === user?.id
   const projectStatus = pageContext?.project?.status
 
   return (
     <Content style={{ justifyItems: 'center' }}>
-      {projectStatus && projectStatus?.id !== '5' && !isAdmin ? (
+      {/* {projectStatus && projectStatus?.id !== '5' ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Text variant='headings.h4' sx={{ color: 'background' }}>
-            Project Not available
+            Project Not Available
           </Text>
         </Flex>
-      ) : (
-        <DonationView {...props} project={pageContext?.project} />
-      )}
+      ) : ( */}
+      <DonationView {...props} project={pageContext?.project} />
+      {/* )} */}
     </Content>
   )
 }

@@ -13,6 +13,12 @@ const FETCH_ALL_PROJECTS = gql`
       description
       walletAddress
       impactLocation
+      status {
+        id
+        symbol
+        name
+        description
+      }
       categories {
         name
       }
@@ -118,6 +124,12 @@ const FETCH_PROJECT = gql`
       creationDate
       walletAddress
       impactLocation
+      status {
+        id
+        symbol
+        name
+        description
+      }
       categories {
         name
       }
@@ -388,8 +400,8 @@ const REGISTER_PROJECT_DONATION = gql`
 `
 
 const EDIT_PROJECT = gql`
-  mutation editProject($newProjectData: ProjectInput!, $projectId: Float!) {
-    editProject(newProjectData: $newProjectData, projectId: $projectId) {
+  mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
+    editProject(projectId: $projectId, newProjectData: $newProjectData) {
       id
       title
       description

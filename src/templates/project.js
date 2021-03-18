@@ -12,21 +12,20 @@ const ShowComponents = ({ pageContext }) => {
   const isAdmin = statusId === user?.id
   return (
     <>
-      {statusId && statusId !== '5' && !isAdmin ? (
+      {/* {statusId && statusId !== '5' && !isAdmin ? (
         <Flex sx={{ justifyContent: 'center', pt: 5 }}>
           <Text variant='headings.h4' sx={{ color: 'secondary' }}>
             Project Not Available
           </Text>
         </Flex>
-      ) : (
-        <ProjectDonatorView pageContext={{ project: pageContext?.project }} />
-      )}
+      ) : ( */}
+      <ProjectDonatorView pageContext={{ project: pageContext?.project }} />
+      {/* )} */}
     </>
   )
 }
 
 const Project = ({ pageContext }) => {
-  // console.log({ pageContext })
   return (
     <Layout>
       <Seo
