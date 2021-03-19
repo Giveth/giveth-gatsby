@@ -1,4 +1,4 @@
-describe('Test projects page', () => {
+describe('Test donate button', () => {
   it('Should redirect to projects page', () => {
     cy.visit('/')
     cy.get('button')
@@ -8,8 +8,8 @@ describe('Test projects page', () => {
   })
 
   it('Should open popup', () => {
-    cy.visit('/projects')
-    cy.contains(/create a project/i).click()
+    cy.contains(/create a project/i).should('exist')
+    cy.contains(/create a project/i).click({ force: true })
     cy.contains(/welcome to giveth/i)
   })
 })
