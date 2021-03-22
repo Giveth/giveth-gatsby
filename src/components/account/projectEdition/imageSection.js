@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Flex, Grid, Button, Image, Text } from 'theme-ui'
+import { Flex, Grid, Box, Image, Text } from 'theme-ui'
 import { useDropzone } from 'react-dropzone'
 import { toBase64 } from '../../../utils'
 import styled from '@emotion/styled'
+import theme from '../../../gatsby-plugin-theme-ui'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery2.svg'
@@ -10,8 +11,7 @@ import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
 import placeHolder from '../../../images/placeholder.png'
 
-const Selection = styled(Button)`
-  background: unset;
+const Selection = styled(Box)`
   cursor: pointer;
   width: 80px;
   height: 80px;
@@ -19,6 +19,7 @@ const Selection = styled(Button)`
   margin: 4% 2% 0 0;
   border: 2px solid #dfdae8;
   border-radius: 8px;
+  background-color: ${theme.colors.background};
 `
 
 function ImageSection({ image, register }) {
@@ -130,19 +131,21 @@ function ImageSection({ image, register }) {
           </Text>
         </Flex>
       </Grid>
-      {[1, 2, 3, 4].map((i, index) => {
-        return (
-          <Selection
-            key={index}
-            type='button'
-            onClick={() => {
-              setDisplayImage(i?.toString())
-            }}
-          >
-            {ProjectImage(i)}
-          </Selection>
-        )
-      })}
+      <Flex sx={{ flexDirection: 'row' }}>
+        {[1, 2, 3, 4].map((i, index) => {
+          return (
+            <Selection
+              key={index}
+              type='button'
+              onClick={() => {
+                setDisplayImage(i?.toString())
+              }}
+            >
+              {ProjectImage(i)}
+            </Selection>
+          )
+        })}
+      </Flex>
     </>
   )
 }

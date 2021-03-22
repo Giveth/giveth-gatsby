@@ -13,6 +13,12 @@ const FETCH_ALL_PROJECTS = gql`
       description
       walletAddress
       impactLocation
+      status {
+        id
+        symbol
+        name
+        description
+      }
       categories {
         name
       }
@@ -80,6 +86,32 @@ const FETCH_USER_PROJECTS = gql`
   }
 `
 
+const FETCH_MY_PROJECTS = gql`
+  query FetchMyProjects {
+    myProjects {
+      id
+      title
+      balance
+      description
+      image
+      slug
+      creationDate
+      admin
+      walletAddress
+      impactLocation
+      categories {
+        name
+      }
+      status {
+        id
+        symbol
+        name
+        description
+      }
+    }
+  }
+`
+
 const FETCH_PROJECT = gql`
   query Project($id: ID!) {
     project(id: $id) {
@@ -92,6 +124,12 @@ const FETCH_PROJECT = gql`
       creationDate
       walletAddress
       impactLocation
+      status {
+        id
+        symbol
+        name
+        description
+      }
       categories {
         name
       }
@@ -113,6 +151,12 @@ const FETCH_PROJECT_BY_SLUG = gql`
       impactLocation
       categories {
         name
+      }
+      status {
+        id
+        symbol
+        name
+        description
       }
       reactions {
         reaction
@@ -356,8 +400,8 @@ const REGISTER_PROJECT_DONATION = gql`
 `
 
 const EDIT_PROJECT = gql`
-  mutation editProject($newProjectData: ProjectInput!, $projectId: Float!) {
-    editProject(newProjectData: $newProjectData, projectId: $projectId) {
+  mutation editProject($projectId: Float!, $newProjectData: ProjectInput!) {
+    editProject(projectId: $projectId, newProjectData: $newProjectData) {
       id
       title
       description
@@ -377,6 +421,12 @@ const EDIT_PROJECT = gql`
 const DEACTIVATE_PROJECT = gql`
   mutation deactivateProject($projectId: Float!) {
     deactivateProject(projectId: $projectId)
+  }
+`
+
+const ACTIVATE_PROJECT = gql`
+  mutation activateProject($projectId: Float!) {
+    activateProject(projectId: $projectId)
   }
 `
 export {
@@ -399,5 +449,7 @@ export {
   GET_PROJECT_BY_ADDRESS,
   REGISTER_PROJECT_DONATION,
   EDIT_PROJECT,
-  DEACTIVATE_PROJECT
+  ACTIVATE_PROJECT,
+  DEACTIVATE_PROJECT,
+  FETCH_MY_PROJECTS
 }

@@ -22,31 +22,35 @@ export const ProjectAdminInput = ({
       >
         What's the name of the organization or administrator of the project?
       </Label>
-      <Input
-        sx={{
-          width: '50%',
-          mt: '40px',
-          fontFamily: 'body'
-        }}
-        type='text'
-        id='projectAdmin'
-        name='projectAdmin'
-        ref={register}
-        defaultValue={currentValue}
-        maxLength={55}
-        placeholder='Project Admin'
-        onChange={e => setCharacterLength(e.target.value.length)}
-      />
-      <Text
-        sx={{
-          float: 'right',
-          width: '40%',
-          fontFamily: 'body',
-          color: 'muted'
-        }}
-      >
-        {characterLength}/55
-      </Text>
+      <div style={{ position: 'relative' }}>
+        <Input
+          sx={{
+            width: '50%',
+            mt: '40px',
+            fontFamily: 'body'
+          }}
+          type='text'
+          id='projectAdmin'
+          name='projectAdmin'
+          ref={register}
+          defaultValue={currentValue}
+          maxLength={55}
+          placeholder='Project Admin'
+          onChange={e => setCharacterLength(e.target.value.length)}
+        />
+        <Text
+          sx={{
+            position: 'absolute',
+            transform: 'translate(0, 50%)',
+            bottom: '50%',
+            left: 'calc(50% - 60px)',
+            fontFamily: 'body',
+            color: 'muted'
+          }}
+        >
+          {characterLength}/55
+        </Text>
+      </div>
       <Flex
         sx={{
           alignItems: 'flex-end',

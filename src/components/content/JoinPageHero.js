@@ -57,10 +57,14 @@ const Hero = () => {
           Community of Makers, Building the Future of Giving
         </Text>
         <Text pt={4} sx={{ variant: 'text.default' }}>
-          We are first and foremost a Community, and we need you, because we
-          believe you are a Maker. We are an open-source decentralized and
-          community-led project, so join us today, become a part of our
-          ever-growing comunity.
+          Giveth is first and foremost a community. We are people working to
+          build and give well the future we made together. Our project is
+          open-source, decentralized, altruistic, and community-led. As you've
+          made it this far, you are probably a Giver and a Maker too.
+          <br />
+          <br />
+          Join one of our platforms below and introduce yourself, so we can
+          welcome you!
         </Text>
       </HeroText>
       {isMobile ? null : <HeroImage src={heroImage} alt='' />}

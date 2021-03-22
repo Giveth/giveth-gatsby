@@ -1,11 +1,14 @@
 /** @jsx jsx */
 import React from 'react'
-import { Box, Text, jsx } from 'theme-ui'
+import { Flex, Box, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
 import OnlyFiat from './onlyFiat'
 import Success from './success'
 import ProjectListing from '../projectListing'
+
+import { useApolloClient } from '@apollo/client'
+import { FETCH_PROJECT } from '../../apollo/gql/projects'
 
 import {
   FacebookShareButton,
@@ -100,9 +103,27 @@ const DonateIndex = props => {
   const [paymentType, setPaymentType] = React.useState(CRYPTO)
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
+  const [isCancelled, setIsCancelled] = React.useState(null)
+  const client = useApolloClient()
 
   React.useEffect(() => {
+    const checkProject = async () => {
+      // GET PROJECT -- mainly to check status client side
+      const { data: projectReFetched } = await client.query({
+        query: FETCH_PROJECT,
+        variables: { id: project?.id },
+        fetchPolicy: 'network-only'
+      })
+      console.log({ projectReFetched })
+      if (
+        projectReFetched?.project?.length > 0 &&
+        projectReFetched.project[0].status?.id !== '5'
+      ) {
+        setIsCancelled(true)
+      }
+    }
     // Check type
+    checkProject()
     const search = getUrlParams(props?.location?.search)
     setIsAfterPayment(search?.success === 'true')
     if (search?.sessionId) setPaymentSessionId(search?.sessionId)
@@ -166,12 +187,12 @@ const DonateIndex = props => {
         <Options>
           <OptionType
             title={CRYPTO}
-            subtitle='Zero Fee'
+            subtitle='Zero Fees'
             style={RIGHT_BOX_STYLE}
           />
           <OptionType
             title={CREDIT}
-            subtitle={`Bank's Fee`}
+            subtitle={`Bank Fees`}
             style={LEFT_BOX_STYLE}
           />
         </Options>
@@ -218,6 +239,16 @@ const DonateIndex = props => {
           </FacebookShareButton>
         </SocialIcons>
       </Share>
+    )
+  }
+
+  if (isCancelled) {
+    return (
+      <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+        <Text variant='headings.h4' sx={{ color: 'background' }}>
+          Project Not Available
+        </Text>
+      </Flex>
     )
   }
 

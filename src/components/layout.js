@@ -123,6 +123,7 @@ const CookiesBanner = () => {
         </Text>
       </Flex>
       <Text
+        id='cookies'
         onClick={() => {
           window.localStorage.setItem('cookiesAccepted', true)
           setCookiesAccepted(true)

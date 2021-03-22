@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Grid, jsx } from 'theme-ui'
+import { Flex, Text, Grid, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import Seo from '../components/seo'
 import Layout from '../components/layout'
@@ -13,6 +13,25 @@ const Content = styled(Grid)`
   }
 `
 
+const ShowComponents = props => {
+  const { pageContext } = props
+  const projectStatus = pageContext?.project?.status
+
+  return (
+    <Content style={{ justifyItems: 'center' }}>
+      {/* {projectStatus && projectStatus?.id !== '5' ? (
+        <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+          <Text variant='headings.h4' sx={{ color: 'background' }}>
+            Project Not Available
+          </Text>
+        </Flex>
+      ) : ( */}
+      <DonationView {...props} project={pageContext?.project} />
+      {/* )} */}
+    </Content>
+  )
+}
+
 const Donate = props => {
   const { pageContext } = props
   return (
@@ -25,9 +44,7 @@ const Donate = props => {
         }
         image={pageContext?.project?.image}
       />
-      <Content style={{ justifyItems: 'center' }}>
-        <DonationView {...props} project={pageContext?.project} />
-      </Content>
+      <ShowComponents pageContext={pageContext} {...props} />
     </Layout>
   )
 }

@@ -5,7 +5,6 @@ import { getEtherscanPrefix } from '../../utils'
 export const ProfileHeader = props => {
   const { user, donations, projects } = props
   const etherscanPrefix = getEtherscanPrefix()
-  console.log({ user })
   const TitleBox = ({ title, content }) => {
     return (
       <Box

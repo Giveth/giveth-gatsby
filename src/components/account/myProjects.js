@@ -83,7 +83,10 @@ const MyProjects = props => {
             />
           )
         })}
-        <SpecialCard to='/create' sx={{ cursor: 'pointer' }}>
+        <SpecialCard
+          to='/create'
+          sx={{ cursor: 'pointer', textDecoration: 'none' }}
+        >
           {' '}
           <DarkClouds
             style={{ position: 'absolute', top: '41px', right: '34px' }}

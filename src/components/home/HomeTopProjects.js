@@ -7,15 +7,14 @@ import { navigate } from 'gatsby'
 import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
 import { useState, useEffect } from 'react'
 
-const HomeTopProjects = ({ projects = [], totalCount = null }) => {
+const HomeTopProjects = ({ projects = [] }) => {
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
-  const [totalProjects, setTotalProjects] = useState(totalCount)
-  const orderBy = {
-    field: orderByField,
-    direction: OrderByDirection.DESC
-  }
+  // const orderBy = {
+  //   field: orderByField,
+  //   direction: OrderByDirection.DESC
+  // }
 
   useEffect(() => {
     const checkProjectsAfterSSR = async () => {
@@ -23,12 +22,15 @@ const HomeTopProjects = ({ projects = [], totalCount = null }) => {
         // This updates the projects after showing the SSR
         const { data } = await client.query({
           query: FETCH_ALL_PROJECTS,
-          variables: { orderBy },
+          // variables: { limit: 3 },
           fetchPolicy: 'network-only'
         })
         const { projects } = data || {}
-        setTotalProjects(projects?.length)
-        setShowProjects(Array.from(projects)?.slice(0, 3))
+        setShowProjects(
+          Array.from(projects)
+            .filter(i => i?.status?.id === '5')
+            ?.slice(0, 3)
+        )
       } catch (error) {
         console.log({ error })
       }
@@ -39,7 +41,7 @@ const HomeTopProjects = ({ projects = [], totalCount = null }) => {
   return (
     <ProjectsList
       projects={showProjects}
-      totalCount={totalProjects}
+      totalCount={null}
       loadMore={() => navigate('/projects')}
       hasMore
       selectOrderByField={setOrderByField}

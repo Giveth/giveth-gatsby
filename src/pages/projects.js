@@ -26,11 +26,11 @@ const Projects = ({ data }) => {
         // This updates the projects after showing the SSR
         const { data } = await client.query({
           query: FETCH_ALL_PROJECTS,
-          variables: { orderBy },
+          // variables: { orderBy },
           fetchPolicy: 'network-only'
         })
         const { projects } = data || {}
-        setShowProjects(Array.from(projects))
+        setShowProjects(Array.from(projects).filter(i => i?.status?.id === '5'))
       } catch (error) {
         console.log({ error })
       }
