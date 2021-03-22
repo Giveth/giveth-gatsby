@@ -21,24 +21,35 @@ export const ProjectNameInput = ({
       >
         What's the name of your project?
       </Label>
-      <Input
-        sx={{
-          width: '70%',
-          mt: '40px',
-          fontFamily: 'body'
-        }}
-        type='text'
-        id='projectName'
-        name='projectName'
-        ref={register({ required: true })}
-        defaultValue={currentValue}
-        placeholder='Project Name'
-        maxLength={55}
-        onChange={e => setCharacterLength(e.target.value.length)}
-      />
-      <Text sx={{ float: 'right', fontFamily: 'body', color: 'muted' }}>
-        {characterLength}/55
-      </Text>
+      <div style={{ position: 'relative' }}>
+        <Input
+          sx={{
+            width: '70%',
+            mt: '40px',
+            fontFamily: 'body'
+          }}
+          type='text'
+          id='projectName'
+          name='projectName'
+          ref={register({ required: true })}
+          defaultValue={currentValue}
+          placeholder='Project Name'
+          maxLength={55}
+          onChange={e => setCharacterLength(e.target.value.length)}
+        />
+        <Text
+          sx={{
+            position: 'absolute',
+            transform: 'translate(0, 50%)',
+            bottom: '50%',
+            left: 'calc(70% - 60px)',
+            fontFamily: 'body',
+            color: 'muted'
+          }}
+        >
+          {characterLength}/55
+        </Text>
+      </div>
       <Button
         aria-label='Next'
         sx={{
