@@ -45,7 +45,6 @@ function WalletProvider(props) {
   const [loading, setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
   const client = useApolloClient()
-
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
     if (provider && walletProvider !== 'torus') {
@@ -74,7 +73,7 @@ function WalletProvider(props) {
 
     // EVENTS ONLY --------------
 
-    if (EVENT_SETUP_DONE) return
+    if (EVENT_SETUP_DONE || wallet.isTorus) return
     const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
     wallet?.provider?.on('accountsChanged', accounts => {
       if (accounts[0] && accounts[0] !== account) {
