@@ -50,10 +50,10 @@ const GithubIssue = props => {
         }}
       >
         <Text variant='headings.h5' mb={1} color='secondary'>
-          Soft Launch Mode
+          MVP Live Now!
         </Text>
         <Text variant='text.default' color='secondary' mb={2}>
-          Share your feedback or report an issue
+          How can we be better? <br /> Report an issue or request a new feature
         </Text>
         <Button
           type='button'

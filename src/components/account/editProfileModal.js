@@ -36,47 +36,51 @@ const customStyles = {
   }
 }
 
+const InputBox = props => {
+  const { title, placeholderText, name, register, errors, refExtras } = props
+  return (
+    <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
+      <Text
+        variant='text.overlineSmall'
+        sx={{ mb: 2, color: 'secondary', textTransform: 'uppercase' }}
+      >
+        {title}
+      </Text>
+      <Input
+        name={name}
+        ref={register(refExtras)}
+        sx={{
+          width: '100%',
+          fontFamily: 'body',
+          py: 2,
+          '::placeholder': {
+            color: 'bodyLight',
+            textTransform: 'capitalize'
+          }
+        }}
+        type='text'
+        placeholder={placeholderText}
+        maxLength={100}
+        // defaultValue={defaultValue}
+        // onChange={e => setCharacterLength(e.target.value.length)}
+      />
+      {errors && errors[name] && (
+        <Text sx={{ mt: 1, color: 'red' }}>{errors[name].message}</Text>
+      )}
+    </Box>
+  )
+}
+
 function EditProfileModal(props) {
-  const { user } = props
+  const [user, setUser] = React.useState(props?.user)
   const wallet = useWallet()
-  const { register, handleSubmit, watch, errors } = useForm({
-    defaultValues: user
+  const { register, handleSubmit, reset, errors } = useForm({
+    // defaultValues: user
+    defaultValues: React.useMemo(() => {
+      return user
+    }, [user])
   })
   const [updateUser] = useMutation(UPDATE_USER)
-  const InputBox = props => {
-    const { title, placeholderText, defaultValue, name, refExtras } = props
-    return (
-      <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
-        <Text
-          variant='text.overlineSmall'
-          sx={{ mb: 2, color: 'secondary', textTransform: 'uppercase' }}
-        >
-          {title}
-        </Text>
-        <Input
-          name={name}
-          ref={register(refExtras)}
-          sx={{
-            width: '100%',
-            fontFamily: 'body',
-            py: 2,
-            '::placeholder': {
-              color: 'bodyLight',
-              textTransform: 'capitalize'
-            }
-          }}
-          type='text'
-          placeholder={placeholderText}
-          maxLength={100}
-          // defaultValue={defaultValue}
-          // onChange={e => setCharacterLength(e.target.value.length)}
-        />
-        {errors && errors[name] && (
-          <Text sx={{ mt: 1, color: 'red' }}>{errors[name].message}</Text>
-        )}
-      </Box>
-    )
-  }
 
   const onSubmit = async data => {
     try {
@@ -87,11 +91,11 @@ function EditProfileModal(props) {
           type: 'error'
         })
       const newProfile = {
-        firstName: firstName || wallet?.user?.firstName || '',
-        lastName: lastName || wallet?.user?.lastName || '',
-        location: location || wallet?.user?.location || '',
-        email: email || wallet?.user?.email || '',
-        url: url || wallet?.user?.url || ''
+        firstName: firstName || '',
+        lastName: lastName || '',
+        location: location || '',
+        email: email || '',
+        url: url || ''
       }
       const { data: response, error } = await updateUser({
         variables: newProfile
@@ -99,6 +103,7 @@ function EditProfileModal(props) {
       if (response?.updateUser === true) {
         props.onRequestClose()
         wallet?.updateUser && wallet.updateUserInfoOnly()
+        reset(data)
         return Toast({
           content: 'Profile updated successfully',
           type: 'success'
@@ -147,19 +152,22 @@ function EditProfileModal(props) {
             title='First Name'
             name='firstName'
             placeholderText='First Name'
-            defaultValue={user?.firstName}
+            register={register}
+            errors={errors}
           />
           <InputBox
             title='Last Name'
             placeholderText='Last Name'
             name='lastName'
-            defaultValue={user?.lastName}
+            register={register}
+            errors={errors}
           />
           <InputBox
             title='Email'
             placeholderText='Email address'
             name='email'
-            defaultValue={user?.email}
+            register={register}
+            errors={errors}
             refExtras={{
               // required: 'Required',
               pattern: {
@@ -172,13 +180,15 @@ function EditProfileModal(props) {
             title='Location'
             placeholderText='Location'
             name='location'
-            defaultValue={user?.location}
+            register={register}
+            errors={errors}
           />
           <InputBox
             title='Website or URL'
             placeholderText='website'
             name='url'
-            defaultValue={user?.url}
+            register={register}
+            errors={errors}
           />
           <Flex
             sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}
