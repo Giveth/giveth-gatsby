@@ -126,7 +126,8 @@ const TimelineCard = props => {
           }
         ]
       })
-      return Toast({ content: 'You liked it!', type: 'success' })
+      // return Toast({ content: 'You liked it!', type: 'success' })
+      return true
     } catch (error) {
       console.log({ error })
     }
