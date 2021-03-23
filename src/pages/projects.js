@@ -19,7 +19,6 @@ const Projects = ({ data }) => {
     field: orderByField,
     direction: OrderByDirection.DESC
   }
-
   useEffect(() => {
     const checkProjectsAfterSSR = async () => {
       try {
@@ -41,7 +40,9 @@ const Projects = ({ data }) => {
   const { giveth } = data
   const { projects } = giveth
   const totalCount = showProjects?.length
-  const showingProjects = showProjects?.slice(0, limit)
+  const showingProjects = showProjects
+    ?.slice(0, limit)
+    .sort((a, b) => b?.qualityScore > a?.qualityScore)
 
   const AllProjects = () => (
     <React.Fragment>
