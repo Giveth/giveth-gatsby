@@ -13,6 +13,7 @@ const FETCH_ALL_PROJECTS = gql`
       description
       walletAddress
       impactLocation
+      qualityScore
       status {
         id
         symbol
@@ -46,6 +47,7 @@ const FETCH_PROJECTS = gql`
         description
         walletAddress
         impactLocation
+        qualityScore
         categories {
           name
         }
@@ -99,6 +101,7 @@ const FETCH_MY_PROJECTS = gql`
       admin
       walletAddress
       impactLocation
+      qualityScore
       categories {
         name
       }

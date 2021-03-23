@@ -29,6 +29,7 @@ const HomeTopProjects = ({ projects = [] }) => {
         setShowProjects(
           Array.from(projects)
             .filter(i => i?.status?.id === '5')
+            .sort((a, b) => b?.qualityScore > a?.qualityScore)
             ?.slice(0, 3)
         )
       } catch (error) {
