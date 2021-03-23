@@ -9,7 +9,7 @@ import React from 'react'
 import './global.css'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
-import { ThemeProvider, Box, Button, Flex, Image, Text } from 'theme-ui'
+import { ThemeProvider, Box, Button, Link, Flex, Image, Text } from 'theme-ui'
 import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 import InfoIcon from '../images/info_outline.png'
@@ -119,7 +119,19 @@ const CookiesBanner = () => {
         <Image src={InfoIcon} sx={{ mb: [2, 0, 0] }} />
         <Text sx={{ color: 'blue', ml: 2, mb: [2, 0, 0] }}>
           This site uses cookies to provide you with an awesome user experience.
-          By using it, you accept our <a>cookies policy</a>.
+          By using it, you accept our{' '}
+          <Link
+            sx={{
+              color: 'blue',
+              textDecoration: 'none',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+            href='https://giveth.io/tos'
+          >
+            cookies policy
+          </Link>
+          .
         </Text>
       </Flex>
       <Text

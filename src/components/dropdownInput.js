@@ -2,21 +2,22 @@ import React from 'react'
 import styled from '@emotion/styled'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
 import theme from '../gatsby-plugin-theme-ui'
-import { Box, Flex, Text } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
+import useComponentVisible from '../utils/useComponentVisible'
 
 const IconDrop = styled(DropIcon)`
   position: absolute;
   right: 1rem;
-  top: 1.563rem;
+  top: 0.563rem;
 `
 
-const Dropdown = styled(Box)`
+const Dropdown = styled(Flex)`
+  flex-direction: row;
   position: relative;
   display: inline-block;
 `
 
 const DropdownContent = styled.div`
-  display: none;
   position: absolute;
   z-index: 1;
   width: 100%;
@@ -40,14 +41,24 @@ const DropItem = styled.div`
 `
 
 const DropdownInput = ({ current, setCurrent, options }) => {
-  const ListRef = React.useRef(null)
+  const {
+    ref,
+    isComponentVisible,
+    setIsComponentVisible
+  } = useComponentVisible(false)
+
   return (
     <Dropdown
       variant='forms.search'
-      style={{ width: '100%', cursor: 'pointer' }}
+      style={{
+        width: '100%',
+        cursor: 'pointer',
+        alignItems: 'center'
+      }}
       sx={{ pr: 4 }}
-      onMouseEnter={() => (ListRef.current.style.display = 'block')}
-      onMouseLeave={() => (ListRef.current.style.display = 'none')}
+      ref={ref}
+      onClick={() => setIsComponentVisible(!isComponentVisible)}
+      onMouseEnter={() => setIsComponentVisible(true)}
     >
       <IconDrop />
       <Text
@@ -59,31 +70,35 @@ const DropdownInput = ({ current, setCurrent, options }) => {
       >
         {options[current]}
       </Text>
-      <DropdownContent ref={ListRef} id='dropdownContent'>
-        <DropList>
-          {options?.map((i, index) => {
-            return (
-              <DropItem
-                key={index}
-                onClick={() => {
-                  setCurrent && setCurrent(index)
-                  ListRef.current.style.display = 'none'
-                }}
-              >
-                <Text
-                  sx={{
-                    variant: 'text.medium',
-                    fontWeight: 'bold',
-                    color: 'secondary'
+      {isComponentVisible && (
+        <DropdownContent id='dropdownContent'>
+          <DropList
+            onMouseLeave={() => setIsComponentVisible(!isComponentVisible)}
+          >
+            {options?.map((i, index) => {
+              return (
+                <DropItem
+                  key={index}
+                  onClick={() => {
+                    setCurrent && setCurrent(index)
+                    setIsComponentVisible(!isComponentVisible)
                   }}
                 >
-                  {i}
-                </Text>
-              </DropItem>
-            )
-          })}
-        </DropList>
-      </DropdownContent>
+                  <Text
+                    sx={{
+                      variant: 'text.medium',
+                      fontWeight: 'bold',
+                      color: 'secondary'
+                    }}
+                  >
+                    {i}
+                  </Text>
+                </DropItem>
+              )
+            })}
+          </DropList>
+        </DropdownContent>
+      )}
     </Dropdown>
   )
 }
