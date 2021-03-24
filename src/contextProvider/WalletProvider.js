@@ -91,6 +91,7 @@ function WalletProvider(props) {
           content: `Ethereum network changed please use ${network} or xDAI network`,
           type: 'warn'
         })
+      } else {
         refreshPage()
       }
     })
