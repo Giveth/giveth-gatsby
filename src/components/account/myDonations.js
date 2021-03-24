@@ -291,7 +291,7 @@ const MyDonations = props => {
                           ml: 2
                         }}
                       >
-                        {i?.project?.title || i?.donor}
+                        {titleCase(i?.project?.title) || i?.donor}
                       </Text>
                     </DonorBox>
                     <td
