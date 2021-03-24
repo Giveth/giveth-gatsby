@@ -12,7 +12,8 @@
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "removeComments": false
+    "removeComments": false,
+    "types": ["cypress", "@testing-library/cypress"]
   },
   "include": ["./src/**/*"]
 }

@@ -237,10 +237,6 @@ const ProjectsList = props => {
               {projects
                 ? projects
                     ?.slice()
-                    .sort(
-                      (a, b) =>
-                        new Date(a.creationDate) - new Date(b.creationDate)
-                    )
                     .map((project, index) => (
                       <ProjectCard
                         shadowed

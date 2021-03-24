@@ -187,12 +187,12 @@ const DonateIndex = props => {
         <Options>
           <OptionType
             title={CRYPTO}
-            subtitle='Zero Fee'
+            subtitle='Zero Fees'
             style={RIGHT_BOX_STYLE}
           />
           <OptionType
             title={CREDIT}
-            subtitle={`Bank's Fee`}
+            subtitle={`Bank Fees`}
             style={LEFT_BOX_STYLE}
           />
         </Options>
