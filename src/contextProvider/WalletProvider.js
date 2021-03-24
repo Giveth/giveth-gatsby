@@ -305,7 +305,7 @@ function WalletProvider(props) {
     if (currentNetworkId?.toString() === networkId || byPassXDAI) {
       return true
     } else {
-      throw new Error(`Wrong network, please change to ${network}`)
+      throw new Error(`Wrong network, please change to ${network} or xDAI`)
     }
   }
 
