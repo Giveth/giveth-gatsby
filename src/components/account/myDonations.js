@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import React, { useEffect } from 'react'
+import styled from '@emotion/styled'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
-import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
 import { Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
@@ -291,7 +291,7 @@ const MyDonations = props => {
                           ml: 2
                         }}
                       >
-                        {titleCase(i?.project?.title) || i?.donor}
+                        {i?.project?.title || i?.donor}
                       </Text>
                     </DonorBox>
                     <td

@@ -325,8 +325,10 @@ const OnlyCrypto = props => {
         {
           onTransactionHash: async transactionHash => {
             const instantReceipt = await transaction.getTxFromHash(
-              transactionHash
+              transactionHash,
+              isXDAI // isXDAI
             )
+            console.log({ fromAddress, instantReceipt })
             //Save initial txn details to db
             const {
               donationId,
@@ -347,25 +349,30 @@ const OnlyCrypto = props => {
               saveDonationErrors
             })
             // onTransactionHash callback for event emitter
-            transaction.confirmEtherTransaction(transactionHash, res => {
-              if (!res) return
-              toast.dismiss()
-              if (res?.tooSlow) {
-                // Tx is being too slow
+            transaction.confirmEtherTransaction(
+              transactionHash,
+              res => {
+                if (!res) return
                 toast.dismiss()
-                setTxHash(transactionHash)
-                setInProgress(true)
-              } else if (res?.status) {
-                // Tx was successful
-                props.setHashSent({ transactionHash, tokenSymbol, subtotal })
-              } else {
-                // EVM reverted the transaction, it failed
-                Toast({
-                  content: 'Transaction failed',
-                  type: 'error'
-                })
-              }
-            })
+                if (res?.tooSlow) {
+                  // Tx is being too slow
+                  toast.dismiss()
+                  setTxHash(transactionHash)
+                  setInProgress(true)
+                } else if (res?.status) {
+                  // Tx was successful
+                  props.setHashSent({ transactionHash, tokenSymbol, subtotal })
+                } else {
+                  // EVM reverted the transaction, it failed
+                  Toast({
+                    content: 'Transaction failed',
+                    type: 'error'
+                  })
+                }
+              },
+              0,
+              isXDAI
+            )
             await saveDonationTransaction(transactionHash, donationId)
           },
           onReceiptGenerated: receipt => {

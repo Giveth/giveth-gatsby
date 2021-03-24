@@ -12,6 +12,20 @@ const mainnetTokens = {
   tokens: [
     {
       chainId: 1,
+      address: '0xd56dac73a4d6766464b38ec6d91eb45ce7457c44',
+      symbol: 'PAN',
+      name: 'Panvala',
+      decimals: 18
+    },
+    {
+      chainId: 1,
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      symbol: 'DAI',
+      name: 'Dai',
+      decimals: 18
+    },
+    {
+      chainId: 1,
       address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
       symbol: 'USDT',
       name: 'Tether',
@@ -155,13 +169,6 @@ const mainnetTokens = {
       address: '0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c',
       symbol: 'ENJ',
       name: 'Enjin Coin',
-      decimals: 18
-    },
-    {
-      chainId: 1,
-      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-      symbol: 'DAI',
-      name: 'Dai',
       decimals: 18
     },
     {
@@ -530,6 +537,13 @@ const xDaiTokens = {
   timestamp: null,
   keywords: ['custom', 'erc20'],
   tokens: [
+    {
+      chainId: 100,
+      address: '0x981fb9ba94078a2275a8fc906898ea107b9462a8',
+      symbol: 'PAN',
+      name: 'Panvala',
+      decimals: 18
+    },
     {
       chainId: 100,
       address: '0x71850b7E9Ee3f13Ab46d67167341E4bDc905Eef9',

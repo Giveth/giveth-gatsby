@@ -80,7 +80,6 @@ const AccountPage = props => {
           projectsList={projectsList}
         />
         <AccountBody
-          projectsList={projectsList}
           setQuery={setQuery}
           query={query}
           isSSR={isSSR}
