@@ -99,10 +99,10 @@ const CookiesBanner = () => {
     }
   }, [])
   if (softLaunchSeen === 'false') {
-    Toast({
-      content: `We're in Softlaunch mode`,
-      type: 'info'
-    })
+    // Toast({
+    //   content: `We're in Softlaunch mode`,
+    //   type: 'info'
+    // })
   }
   if (cookiesAccepted || cookiesAccepted === 'none') return null
   // TODO: We may build this reusable for possible future banners on the app
