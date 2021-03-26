@@ -217,7 +217,7 @@ const OnlyCrypto = props => {
 
   const eth2usd = eth => {
     if (!tokenPrice) return ''
-    return `$ ${(eth * tokenPrice).toFixed(2)}`
+    return `$${(eth * tokenPrice).toFixed(2)}`
   }
 
   const SummaryRow = ({ title, amount, style }) => {
@@ -227,7 +227,7 @@ const OnlyCrypto = props => {
           sx={{
             variant: 'text.medium',
             textAlign: 'left',
-            width: ['50%', '70%'],
+            width: ['50%', '50%'],
             color: 'background'
           }}
         >
@@ -329,7 +329,7 @@ const OnlyCrypto = props => {
             const instantReceipt = await transaction.getTxFromHash(
               transactionHash
             )
-            //Save initial txn details to db
+            // Save initial txn details to db
             const {
               donationId,
               savedDonation,
@@ -594,10 +594,10 @@ const OnlyCrypto = props => {
           {amountTyped && (
             <Summary>
               <SummaryRow
-                title={`Support ${project?.title}`}
+                title='Donation amount'
                 amount={[
                   `${eth2usd(donation)}`,
-                  `${selectedToken?.symbol} ${parseFloat(donation)}`
+                  `${parseFloat(donation)} ${selectedToken?.symbol}`
                 ]}
               />
               {donateToGiveth && (
@@ -613,10 +613,15 @@ const OnlyCrypto = props => {
               )}
               {gasPrice && (
                 <SummaryRow
-                  title='Network Fee'
+                  title='Network fee'
                   amount={[
-                    'Gas Price',
-                    `GWEI ${parseFloat(gasPrice).toFixed(2)}`
+                    `${eth2usd(gasETHPrice)} • ${parseFloat(
+                      gasETHPrice
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6
+                    })} ETH`,
+                    `${parseFloat(gasPrice)} GWEI`
                   ]}
                 />
               )}
