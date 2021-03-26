@@ -23,15 +23,17 @@ const networkId = process.env.GATSBY_NETWORK_ID
 let EVENT_SETUP_DONE = false
 let wallet = {}
 
-function useWallet() {
+function useWallet () {
+  console.log('WalletContext', WalletContext)
   const context = React.useContext(WalletContext)
+  console.log('context', context)
   if (!context) {
-    throw new Error(`userWallet must be used within a WalletProvider`)
+    throw new Error('userWallet must be used within a WalletProvider')
   }
   return context
 }
 
-function WalletProvider(props) {
+function WalletProvider (props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
@@ -47,61 +49,69 @@ function WalletProvider(props) {
   const client = useApolloClient()
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
-    if (provider && walletProvider !== 'torus') {
-      setEthEnabled(provider)
-      wallet = getWallet('metamask')
+    console.log('lolo:', provider)
+    console.log('lolo:', walletProvider)
+    if (walletProvider) {
+      if (provider && walletProvider !== 'torus') {
+        setEthEnabled(provider)
+        wallet = getWallet('metamask')
+      } else {
+        wallet = getWallet('torus')
+      }
+      console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
+
+      await wallet.init(process.env.ENVIRONMENT, network)
+      const networkName = await wallet?.web3.eth.net.getNetworkType()
+      const currentChainId = await wallet?.web3.eth.net.getId()
+
+      // Checks if Torus needs to re-login
+      if (wallet?.isTorus && !wallet?.isLoggedIn()) {
+        await logout(true)
+      }
+      updateBalance(
+        localStorageUser?.walletAddresses?.length > 0 &&
+          localStorageUser.walletAddresses[0]
+      )
+      setCurrentNetwork(networkName)
+      setCurrentChainId(currentChainId)
+      setReady(true)
+
+      // EVENTS ONLY --------------
+
+      if (EVENT_SETUP_DONE || wallet.isTorus) return
+      const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
+      wallet?.provider?.on('accountsChanged', accounts => {
+        if (accounts[0] && accounts[0] !== account) {
+          Toast({ content: 'Account changed', type: 'warn' })
+        }
+      })
+      wallet?.provider?.on('chainChanged', async chainId => {
+        // needs to be fetched again as chainId is being returned like 0x
+        const chainID = await wallet?.web3.eth.net.getId()
+        setCurrentChainId(chainID)
+        console.log({ chainID, networkId })
+        if (networkId !== chainID?.toString() && chainID !== 100) {
+          // 100 is xDAI
+          Toast({
+            content: `Ethereum network changed please use ${network}`,
+            type: 'warn'
+          })
+          refreshPage()
+        }
+      })
+      EVENT_SETUP_DONE = true
     } else {
-      wallet = getWallet('torus')
+      wallet = getWallet('test')
+      setReady(true)
     }
-    console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
-
-    await wallet.init('production', network)
-    const networkName = await wallet?.web3.eth.net.getNetworkType()
-    const currentChainId = await wallet?.web3.eth.net.getId()
-
-    // Checks if Torus needs to re-login
-    if (wallet?.isTorus && !wallet?.isLoggedIn()) {
-      await logout(true)
-    }
-    updateBalance(
-      localStorageUser?.walletAddresses?.length > 0 &&
-        localStorageUser.walletAddresses[0]
-    )
-    setCurrentNetwork(networkName)
-    setCurrentChainId(currentChainId)
-    setReady(true)
-
-    // EVENTS ONLY --------------
-
-    if (EVENT_SETUP_DONE || wallet.isTorus) return
-    const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
-    wallet?.provider?.on('accountsChanged', accounts => {
-      if (accounts[0] && accounts[0] !== account) {
-        Toast({ content: 'Account changed', type: 'warn' })
-      }
-    })
-    wallet?.provider?.on('chainChanged', async chainId => {
-      // needs to be fetched again as chainId is being returned like 0x
-      const chainID = await wallet?.web3.eth.net.getId()
-      setCurrentChainId(chainID)
-      console.log({ chainID, networkId })
-      if (networkId !== chainID?.toString() && chainID !== 100) {
-        // 100 is xDAI
-        Toast({
-          content: `Ethereum network changed please use ${network}`,
-          type: 'warn'
-        })
-        refreshPage()
-      }
-    })
-    EVENT_SETUP_DONE = true
   }
 
   useEffect(() => {
+    console.log('local', localStorageUser)
     initWallet(localStorageUser?.walletType)
   }, [])
 
-  async function logout(walletLoggedOut) {
+  async function logout (walletLoggedOut) {
     !walletLoggedOut && wallet?.logout()
     setLoading(true)
     Auth.handleLogout()
@@ -109,7 +119,7 @@ function WalletProvider(props) {
     setLoading(false)
   }
 
-  async function signMessage(message, publicAddress) {
+  async function signMessage (message, publicAddress) {
     try {
       await checkNetwork()
       let signedMessage = null
@@ -168,7 +178,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function updateUserInfoOnly() {
+  async function updateUserInfoOnly () {
     if (!user) return null
     const { data } = await client.query({
       query: GET_USER_BY_ADDRESS,
@@ -184,13 +194,13 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
-  async function updateBalance(publicAddress) {
+  async function updateBalance (publicAddress) {
     if (!publicAddress) return null
     const balance = await wallet.web3.eth.getBalance(publicAddress)
     setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
   }
 
-  async function updateUser(accounts) {
+  async function updateUser (accounts) {
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
@@ -227,12 +237,12 @@ function WalletProvider(props) {
     setUser(user)
   }
 
-  async function validateToken() {
+  async function validateToken () {
     const isValid = await validateAuthToken(Auth.getUserToken())
     return isValid
   }
 
-  async function login({ walletProvider }) {
+  async function login ({ walletProvider }) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
@@ -275,7 +285,7 @@ function WalletProvider(props) {
     }
   }
 
-  function isWalletAddressValid(address) {
+  function isWalletAddressValid (address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -283,11 +293,11 @@ function WalletProvider(props) {
     }
   }
 
-  function isAddressENS(address) {
+  function isAddressENS (address) {
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function checkNetwork() {
+  async function checkNetwork () {
     if (!wallet) throw new Error('No Eth Provider')
     const byPassXDAI = currentChainId === 100
     const currentNetworkId = await wallet?.web3.eth.getChainId()
@@ -298,7 +308,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendEthersTransaction(toAddress, amount, provider) {
+  async function sendEthersTransaction (toAddress, amount, provider) {
     const transaction = {
       to: toAddress,
       value: ethers.utils.parseEther(amount.toString())
@@ -310,7 +320,7 @@ function WalletProvider(props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
-  async function sendTransaction(
+  async function sendTransaction (
     params,
     txCallbacks,
     contractAddress,
@@ -385,7 +395,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function getAddressFromENS(address) {
+  async function getAddressFromENS (address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {

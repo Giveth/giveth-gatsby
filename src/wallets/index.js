@@ -36,7 +36,7 @@ const metamask = {
     return true
   },
   logout: async () => {
-    //No need to logout of Torus it happens automatically when the user closes the window
+    // No need to logout of Torus it happens automatically when the user closes the window
     // wallet.torus.logout()
   },
   isLoggedIn: () => {
@@ -44,6 +44,29 @@ const metamask = {
   },
   isTorus: false,
   type: 'metamask'
+}
+const test = {
+  supportLink: 'https://etherscan.io/address/',
+  setweb3: function (provider) {
+    console.log('testprovider', provider)
+    const web3Inst = new Web3(provider)
+    test.web3 = web3Inst
+    test.isInitialized = true
+    test.provider = provider
+  },
+  init: async (buildEnv, network) => {
+    const provider = await detectEthereumProvider()
+    test.setweb3(provider)
+  },
+  enable: async () => true,
+  login: async () => true,
+  logout: async () => {
+    // No need to logout of Torus it happens automatically when the user closes the window
+    // wallet.torus.logout()
+  },
+  isLoggedIn: async () => true,
+  isTorus: false,
+  type: ''
 }
 export const wallets = {
   metamask,
@@ -84,7 +107,7 @@ export const wallets = {
           }
         }
       })
-      //await torus.login()
+      // await torus.login()
       wallets.torus.torus = torus
       wallets.torus.setweb3(torus.provider)
       wallets.torus.provider = torus.provider
@@ -111,7 +134,8 @@ export const wallets = {
     isLoggedIn: () => {
       return wallets.torus.torus.isLoggedIn
     }
-  }
+  },
+  test
 }
 
 export function getWallet (wallet) {
