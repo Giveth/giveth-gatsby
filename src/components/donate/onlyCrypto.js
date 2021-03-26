@@ -62,6 +62,7 @@ const OpenAmount = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
 `
 
 const InputComponent = styled.input`
@@ -70,6 +71,7 @@ const InputComponent = styled.input`
   border-radius: 12px;
   padding: 1rem 0.4rem 1rem 5rem;
   outline: none;
+  width: 100%;
 `
 
 const CheckboxLabel = styled(Label)`
@@ -531,7 +533,6 @@ const OnlyCrypto = props => {
             <InputComponent
               sx={{
                 variant: 'text.large',
-                width: ['100%', '60%', '60%'],
                 color: 'secondary',
                 '::placeholder': {
                   color: 'anotherGrey'
