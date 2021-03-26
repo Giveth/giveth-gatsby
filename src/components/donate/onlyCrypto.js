@@ -644,17 +644,19 @@ const OnlyCrypto = props => {
           sx={{
             flexDirection: 'row',
             alignItems: 'center',
-            textAlign: 'center'
+            textAlign: 'center',
+            width: '100%'
           }}
         >
-          <Flex sx={{ flexDirection: 'column' }}>
+          <Flex sx={{ flexDirection: 'column', width: '100%' }}>
             <Button
               onClick={() => confirmDonation(isLoggedIn && ready)}
               sx={{
                 variant: 'buttons.default',
                 padding: '1.063rem 7.375rem',
                 mt: 2,
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                width: '100%'
               }}
             >
               Donate

@@ -130,15 +130,15 @@ const DonateIndex = props => {
   }, [])
 
   // TODO: Implement this on a utils file
-  function getUrlParams(search) {
-    let hashes = search.slice(search.indexOf('?') + 1).split('&')
+  function getUrlParams (search) {
+    const hashes = search.slice(search.indexOf('?') + 1).split('&')
     return hashes.reduce((params, hash) => {
-      let [key, val] = hash.split('=')
+      const [key, val] = hash.split('=')
       return Object.assign(params, { [key]: decodeURIComponent(val) })
     }, {})
   }
 
-  function PaymentOptions() {
+  function PaymentOptions () {
     const isSSR = typeof window === 'undefined'
 
     const ShowPaymentOption = () => {
@@ -192,7 +192,7 @@ const DonateIndex = props => {
           />
           <OptionType
             title={CREDIT}
-            subtitle={`Bank Fees`}
+            subtitle='Bank Fees'
             style={LEFT_BOX_STYLE}
           />
         </Options>
