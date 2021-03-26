@@ -24,9 +24,7 @@ let EVENT_SETUP_DONE = false
 let wallet = {}
 
 function useWallet () {
-  console.log('WalletContext', WalletContext)
   const context = React.useContext(WalletContext)
-  console.log('context', context)
   if (!context) {
     throw new Error('userWallet must be used within a WalletProvider')
   }
@@ -49,8 +47,6 @@ function WalletProvider (props) {
   const client = useApolloClient()
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
-    console.log('lolo:', provider)
-    console.log('lolo:', walletProvider)
     if (walletProvider) {
       if (provider && walletProvider !== 'torus') {
         setEthEnabled(provider)
@@ -107,7 +103,6 @@ function WalletProvider (props) {
   }
 
   useEffect(() => {
-    console.log('local', localStorageUser)
     initWallet(localStorageUser?.walletType)
   }, [])
 

@@ -1,18 +1,11 @@
 export const isBrowser = () => typeof window !== 'undefined'
 
-export const getUser = () => {
-  console.log('browser:', isBrowser())
-  console.log(
-    'truc:',
-    JSON.parse(window.localStorage.getItem(getLocalStorageUserLabel()))
-  )
-  return isBrowser() && window.localStorage.getItem(getLocalStorageUserLabel())
+export const getUser = () =>
+  isBrowser() && window.localStorage.getItem(getLocalStorageUserLabel())
     ? JSON.parse(window.localStorage.getItem(getLocalStorageUserLabel()))
     : {}
-}
 
 export function setUser (user) {
-  console.log('setuser?')
   return window.localStorage.setItem(
     getLocalStorageUserLabel(),
     JSON.stringify(user)
@@ -30,7 +23,6 @@ export const checkIfLoggedIn = () => {
 }
 
 export const logout = (callback = () => {}) => {
-  console.log('logout?')
   if (isBrowser()) {
     window.localStorage.removeItem(getLocalStorageUserLabel())
     window.localStorage.removeItem(getLocalStorageTokenLabel())

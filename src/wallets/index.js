@@ -48,7 +48,6 @@ const metamask = {
 const test = {
   supportLink: 'https://etherscan.io/address/',
   setweb3: function (provider) {
-    console.log('testprovider', provider)
     const web3Inst = new Web3(provider)
     test.web3 = web3Inst
     test.isInitialized = true
