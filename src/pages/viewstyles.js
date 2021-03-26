@@ -13,6 +13,7 @@ import iconVerticalLine from '../images/icon-vertical-line.svg'
 import iconSearch from '../images/icon-search.svg'
 import iconShare from '../images/icon-share.svg'
 import iconHeart from '../images/icon-heart.svg'
+import iconStreamlineGas from '../images/icon-streamline-gas.svg'
 import imgPeopleAnnounce from '../images/people-announce.svg'
 import imgPeopleHeader from '../images/people-header.svg'
 import imgPeoplePuzzle from '../images/people-puzzle.svg'
@@ -124,7 +125,9 @@ const ViewStyles = () => {
               <Container>
                 <Text sx={{ variant: 'text.quote' }}>Quote</Text>
                 <Text sx={{ variant: 'text.overline' }}>Overline</Text>
-                <Text sx={{ variant: 'text.overlineSmall' }}>Overline small</Text>
+                <Text sx={{ variant: 'text.overlineSmall' }}>
+                  Overline small
+                </Text>
                 <Text sx={{ variant: 'text.caption' }}>Caption</Text>
                 <Text sx={{ variant: 'text.microbold' }}>Microbold</Text>
               </Container>
@@ -183,6 +186,9 @@ const ViewStyles = () => {
                 <br />
                 <IconButton>
                   <img src={iconSearch} alt='' />
+                </IconButton>
+                <IconButton>
+                  <img src={iconStreamlineGas} alt='' />
                 </IconButton>
               </Container>
             </StyleGuide>

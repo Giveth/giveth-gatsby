@@ -18,6 +18,7 @@ import useComponentVisible from '../../utils/useComponentVisible'
 import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
+import iconStreamlineGas from '../../images/icon-streamline-gas.svg'
 import { ethers } from 'ethers'
 import theme from '../../gatsby-plugin-theme-ui'
 import getSigner from '../../services/ethersSigner'
@@ -94,6 +95,20 @@ const SmRow = styled(Flex)`
   flex-direction: row;
   justify-content: space-between;
   margin: 0.75rem 0;
+  align-items: center;
+`
+
+const SaveGasMessage = styled(Flex)`
+  background: #3e50a7;
+  border-radius: 4px;
+  height: 40px;
+  align-items: center;
+  padding: 0.5rem 1rem;
+`
+
+const Separator = styled.div`
+  margin: 1rem 0rem;
+  border-bottom: 1px solid ${theme.colors.bodyDark};
 `
 
 const OnlyCrypto = props => {
@@ -164,7 +179,6 @@ const OnlyCrypto = props => {
       )
       setNotify(initNotify())
     }
-    // console.log(ethers.utils.parseEther('1.0'))
     init()
   }, [tokenSymbol, currentChainId])
 
@@ -225,7 +239,7 @@ const OnlyCrypto = props => {
       <SmRow style={style}>
         <Text
           sx={{
-            variant: 'text.medium',
+            variant: 'text.default',
             textAlign: 'left',
             width: ['50%', '50%'],
             color: 'background'
@@ -234,7 +248,7 @@ const OnlyCrypto = props => {
           {title}
         </Text>
         {amount?.length === 2 ? (
-          <Flex sx={{ alignItems: 'center' }}>
+          <Flex sx={{ alignItems: 'baseline' }}>
             <Text
               sx={{
                 variant: 'text.small',
@@ -246,7 +260,7 @@ const OnlyCrypto = props => {
             </Text>
             <Text
               sx={{
-                variant: 'text.medium',
+                variant: 'text.overline',
                 color: 'background',
                 textAlign: 'end'
               }}
@@ -625,9 +639,30 @@ const OnlyCrypto = props => {
                   ]}
                 />
               )}
+              {!isXDAI && (
+                <SaveGasMessage>
+                  <img
+                    src={iconStreamlineGas}
+                    style={{ marginRight: '12px' }}
+                    height='18px'
+                    width='18px'
+                    alt=''
+                  />
+                  <Text
+                    sx={{
+                      variant: 'text.medium',
+                      textAlign: 'left',
+                      color: 'background'
+                    }}
+                  >
+                    Save on gas fees, switch to xDAI network.
+                  </Text>
+                </SaveGasMessage>
+              )}
+              <Separator />
               <Text
                 sx={{
-                  variant: 'text.medium',
+                  variant: 'text.large',
                   color: 'background',
                   textAlign: 'right'
                 }}
