@@ -298,6 +298,8 @@ const OnlyCrypto = props => {
         // Is not logged in, should try donation through onBoard
         const ready = await readyToTransact()
         if (!ready) return
+      } else {
+        userWallet?.enable()
       }
       Toast({
         content: 'Donation in progress...',
