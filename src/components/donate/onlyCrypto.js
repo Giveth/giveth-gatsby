@@ -19,10 +19,11 @@ import { initOnboard, initNotify } from '../../services/onBoard'
 import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
 import iconStreamlineGas from '../../images/icon-streamline-gas.svg'
+import iconQuestionMark from '../../images/icon-question-mark.svg'
 import { ethers } from 'ethers'
 import theme from '../../gatsby-plugin-theme-ui'
 import getSigner from '../../services/ethersSigner'
-// import Tooltip from '../../components/tooltip'
+import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
 import { toast } from 'react-toastify'
 import InProgressModal from './inProgressModal'
@@ -99,11 +100,14 @@ const SmRow = styled(Flex)`
 `
 
 const SaveGasMessage = styled(Flex)`
+  flex: 1;
+  flex-direction: row;
   background: #3e50a7;
   border-radius: 4px;
   height: 40px;
   align-items: center;
   padding: 0.5rem 1rem;
+  word-wrap: break-word;
 `
 
 const Separator = styled.div`
@@ -234,7 +238,7 @@ const OnlyCrypto = props => {
     return `$${(eth * tokenPrice).toFixed(2)}`
   }
 
-  const SummaryRow = ({ title, amount, style }) => {
+  const SummaryRow = ({ title, amount, logo, style }) => {
     return (
       <SmRow style={style}>
         <Text
@@ -242,10 +246,25 @@ const OnlyCrypto = props => {
             variant: 'text.default',
             textAlign: 'left',
             width: ['50%', '50%'],
-            color: 'background'
+            color: 'background',
+            position: 'relative',
+            display: 'flex'
           }}
         >
           {title}
+          {logo && (
+            <Tooltip
+              placement='top'
+              isArrow
+              content='The fee required to successfully conduct a transaction on the Ethereum blockchain.'
+              contentStyle={{
+                backgroundColor: '#AF9BD3'
+              }}
+              textStyle={{
+                color: 'white'
+              }}
+            />
+          )}
         </Text>
         {amount?.length === 2 ? (
           <Flex sx={{ alignItems: 'baseline' }}>
@@ -628,6 +647,7 @@ const OnlyCrypto = props => {
               {gasPrice && (
                 <SummaryRow
                   title='Network fee'
+                  logo={iconQuestionMark}
                   amount={[
                     `${eth2usd(gasETHPrice)} • ${parseFloat(
                       gasETHPrice
