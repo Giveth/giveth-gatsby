@@ -29,16 +29,16 @@ const MailchimpSignup = () => {
   }
 
   return (
-    <Grid
-      as='form'
-      columns={[2, '1fr auto']}
-      onSubmit={handleSubmit}
-      sx={{ maxWidth: '780px' }}
-      pt='30px'
-      pb='100px'
-    >
-      {!subscribed && (
-        <>
+    <>
+      {!subscribed && !isMobile && (
+        <Grid
+          as='form'
+          columns={[2, '1fr auto']}
+          onSubmit={handleSubmit}
+          sx={{ maxWidth: '780px' }}
+          pt='30px'
+          pb='100px'
+        >
           <Input
             type='text'
             value={email}
@@ -51,9 +51,25 @@ const MailchimpSignup = () => {
           >
             Subscribe
           </Button>
-        </>
+        </Grid>
       )}
-      {subscribed && (
+      {!subscribed && isMobile && (
+        <Grid as='form' rows={[2]} onSubmit={handleSubmit} pt='30px' pb='100px'>
+          <Input
+            type='text'
+            value={email}
+            placeholder='Your email address'
+            onChange={handleChange}
+          />
+          <Button
+            sx={{ variant: 'buttons.default', minWidth: '180px' }}
+            type='submit'
+          >
+            Subscribe
+          </Button>
+        </Grid>
+      )}
+      {subscribed && !isMobile && (
         <Grid
           columns={[2, '60% auto']}
           sx={{
@@ -83,10 +99,44 @@ const MailchimpSignup = () => {
               You will receive updates straight to your inbox.
             </Text>
           </div>
-          <SubscribedAnimation />
+          <SubscribedAnimation size={isMobile ? 350 : 600} />
         </Grid>
       )}
-    </Grid>
+      {subscribed && isMobile && (
+        <Grid
+          rows={[2, 'auto auto']}
+          sx={{
+            maxWidth: '780px',
+            alignItems: 'center',
+            color: 'secondaryDark'
+          }}
+          pt='30px'
+          pb='100px'
+        >
+          <div sx={{ gridRow: 2 }}>
+            <Text
+              sx={{
+                variant: 'headings.h5',
+                color: 'secondaryDark',
+                textAlign: 'center'
+              }}
+            >
+              Thank you for subscribing!
+            </Text>
+            <Text
+              sx={{
+                variant: 'headings.h6',
+                fontWeight: 'fontWeights.body',
+                color: 'secondaryDark'
+              }}
+            >
+              You will receive updates straight to your inbox.
+            </Text>
+          </div>
+          <SubscribedAnimation size={isMobile ? 350 : 600} />
+        </Grid>
+      )}
+    </>
   )
 }
 
