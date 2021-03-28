@@ -181,8 +181,12 @@ const DonationsTable = ({ donations }) => {
       return setCurrentDonations(donations)
     }
     const some = donations?.filter(donation => {
-      return (
+      const val =
+        donation?.user?.name ||
+        donation?.user?.firstName ||
         donation?.fromWalletAddress
+      return (
+        val
           ?.toString()
           .toLowerCase()
           .indexOf(search.toString().toLowerCase()) === 0
@@ -358,7 +362,12 @@ const DonationsTable = ({ donations }) => {
 
   return (
     <>
-      <FilterBox sx={{ pt: 4, flexDirection: ['column-reverse', null, 'row'] }}>
+      <FilterBox
+        sx={{
+          pt: 4,
+          flexDirection: ['column-reverse', 'column-reverse', 'row']
+        }}
+      >
         <FilterInput sx={{ width: ['100%', null, '30%'], mt: [4, 0, 0] }}>
           <DropdownInput
             options={options}
@@ -366,7 +375,7 @@ const DonationsTable = ({ donations }) => {
             setCurrent={i => setFilter(i)}
           />
         </FilterInput>
-        <SearchInput sx={{ width: ['100%', null, '65%'] }}>
+        <SearchInput sx={{ width: ['100%', null, '65%'], mb: [10, 10, 0] }}>
           <Input
             defaultValue=''
             placeholder='Search Donations'

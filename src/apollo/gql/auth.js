@@ -14,6 +14,7 @@ const DO_LOGIN = gql`
     $avatar: String
     $name: String
     $hostname: String!
+    $isXDAI: Boolean
   ) {
     loginWallet(
       walletAddress: $walletAddress
@@ -22,6 +23,7 @@ const DO_LOGIN = gql`
       avatar: $avatar
       name: $name
       hostname: $hostname
+      isXDAI: $isXDAI
     ) {
       token
       user {

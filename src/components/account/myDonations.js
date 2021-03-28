@@ -1,15 +1,13 @@
 /** @jsx jsx */
 import React, { useEffect } from 'react'
+import styled from '@emotion/styled'
 import { ProjectContext } from '../../contextProvider/projectProvider'
-import { ethers } from 'ethers'
 import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
-import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
-import { Avatar, Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
+import { Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { useQuery } from '@apollo/client'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
@@ -162,7 +160,7 @@ const FilterBox = styled(Flex)`
 
 const MyDonations = props => {
   const options = ['All Donations', 'Fiat', 'Crypto']
-  const { user } = useWallet()
+  // const { user } = useWallet()
   const [currentDonations, setCurrentDonations] = React.useState([])
   const [filter, setFilter] = React.useState(0)
   const [loading, setLoading] = React.useState(true)
@@ -173,7 +171,7 @@ const MyDonations = props => {
 
   const etherscanPrefix = getEtherscanPrefix()
 
-  React.useEffect(() => {
+  useEffect(() => {
     const setup = async () => {
       window.scrollTo(0, 0)
       if (props?.donations) {
@@ -196,7 +194,7 @@ const MyDonations = props => {
         donation?.project.title
           ?.toString()
           ?.toLowerCase()
-          .indexOf(search.toString().toLowerCase()) === 0
+          .indexOf(search?.toString().toLowerCase()) === 0
       )
     })
     setCurrentDonations(some)
@@ -268,7 +266,7 @@ const MyDonations = props => {
           <tbody>
             {currentItems
               ?.slice()
-              .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+              .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
               .map((i, key) => {
                 return (
                   <tr key={key}>

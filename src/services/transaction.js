@@ -72,9 +72,13 @@ export function notify(hash) {
   })
 }
 
-export async function getHashInfo(txHash) {
+export async function getHashInfo(txHash, isXDAI) {
   try {
-    const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+    const web3 = new Web3(
+      isXDAI
+        ? process.env.GATSBY_XDAI_NODE_HTTP_URL
+        : process.env.GATSBY_ETHEREUM_NODE
+    )
     const txInfo = await web3.eth.getTransaction(txHash)
     console.log({ txInfo })
     return txInfo
@@ -84,18 +88,33 @@ export async function getHashInfo(txHash) {
   }
 }
 
-export async function getTxFromHash(transactionHash) {
-  const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
-  const tx = await web3.eth.getTransaction(transactionHash)
-  return tx
+export async function getTxFromHash(transactionHash, isXDAI) {
+  try {
+    const web3 = new Web3(
+      isXDAI
+        ? process.env.GATSBY_XDAI_NODE_HTTP_URL
+        : process.env.GATSBY_ETHEREUM_NODE
+    )
+    console.log({ web3 })
+    const tx = await web3.eth.getTransaction(transactionHash)
+    return tx
+  } catch (error) {
+    console.log({ error })
+    return false
+  }
 }
 
 export async function confirmEtherTransaction(
   transactionHash,
   callbackFunction,
-  count = 0
+  count = 0,
+  isXDAI
 ) {
-  const web3 = new Web3(process.env.GATSBY_ETHEREUM_NODE)
+  const web3 = new Web3(
+    isXDAI
+      ? process.env.GATSBY_XDAI_NODE_HTTP_URL
+      : process.env.GATSBY_ETHEREUM_NODE
+  )
   const MAX_INTENTS = 20 // one every second
   web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
     if (err) {
@@ -112,7 +131,12 @@ export async function confirmEtherTransaction(
     } else {
       // Try again in 1 second
       setTimeout(function () {
-        confirmEtherTransaction(transactionHash, callbackFunction, ++count)
+        confirmEtherTransaction(
+          transactionHash,
+          callbackFunction,
+          ++count,
+          isXDAI
+        )
       }, 1000)
     }
   })

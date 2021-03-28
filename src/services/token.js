@@ -9,7 +9,7 @@ import Logger from '../Logger'
  * @param {} user
  * @param {*} signedMessage
  */
-export async function validateAuthToken (token) {
+export async function validateAuthToken(token) {
   try {
     const { data } = await client.mutate({
       mutation: VALIDATE_TOKEN,
@@ -26,7 +26,7 @@ export async function validateAuthToken (token) {
   }
 }
 
-export async function getToken (user, signedMessage) {
+export async function getToken(user, signedMessage, isXDAI) {
   if (signedMessage) {
     try {
       const { data } = await client.mutate({
@@ -37,7 +37,8 @@ export async function getToken (user, signedMessage) {
           email: user?.email,
           avatar: user?.avatar,
           name: user?.name,
-          hostname: window.location.hostname
+          hostname: window.location.hostname,
+          isXDAI: isXDAI
         }
       })
 

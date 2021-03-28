@@ -1,5 +1,6 @@
 import React from 'react'
-import { Avatar, Text, Box, Link, Flex } from 'theme-ui'
+import Avatar from '../avatar'
+import { Text, Box, Link, Flex } from 'theme-ui'
 import { getEtherscanPrefix } from '../../utils'
 
 export const ProfileHeader = props => {
@@ -50,7 +51,11 @@ export const ProfileHeader = props => {
           alignItems: ['left', null, null]
         }}
       >
-        <Avatar src={user?.avatar} sx={{ width: 100, height: 100 }} />
+        <Avatar
+          img={user?.profileImage || user?.avatar}
+          size={100}
+          address={user?.walletAddress}
+        />
         <Box sx={{ ml: [0, '27px', '27px'] }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Link
