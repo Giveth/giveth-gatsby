@@ -11,6 +11,7 @@ const HomeTopProjects = ({ projects = [] }) => {
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
+  const [limit, setLimit] = useState(12)
   // const orderBy = {
   //   field: orderByField,
   //   direction: OrderByDirection.DESC
@@ -45,7 +46,10 @@ const HomeTopProjects = ({ projects = [] }) => {
       totalCount={null}
       loadMore={() => navigate('/projects')}
       hasMore
-      selectOrderByField={setOrderByField}
+      selectOrderByField={orderByField => {
+        setLimit(2)
+        setOrderByField(orderByField)
+      }}
     />
   )
 }
