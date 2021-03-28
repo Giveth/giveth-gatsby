@@ -49,10 +49,15 @@ const GithubIssue = props => {
           flexDirection: 'column'
         }}
       >
-        <Text variant='headings.h5' mb={1} color='secondary'>
-          MVP Live Now!
+        <Text variant='headings.h6' mb={1} color='secondary'>
+          Tell us what you think
         </Text>
-        <Text variant='text.default' color='secondary' mb={2}>
+        <Text
+          variant='text.default'
+          color='secondary'
+          mb={2}
+          sx={{ fontSize: '14px' }}
+        >
           How can we be better? <br /> Report an issue or request a new feature
         </Text>
         <Button

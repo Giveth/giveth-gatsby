@@ -265,7 +265,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                       letterSpacing: '0.32px'
                     }}
                   >
-                    THE FUTURE OF GIVING
+                    GIVETH
                   </Text>
                 ) : (
                   ''

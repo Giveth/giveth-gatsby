@@ -95,6 +95,21 @@ const InfoSection = ({ content }) => {
         sx={{ justifyItems: 'center', textAlign: 'center' }}
       >
         <Box sx={{ maxWidth: '320px' }}>
+          <DecoratorDecentralized />
+          <Text
+            sx={{
+              variant: 'headings.h4',
+              color: 'background',
+              py: '1.5rem'
+            }}
+          >
+            {content.feature2}
+          </Text>
+          <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
+            {content.feature2Text}
+          </Text>
+        </Box>
+        <Box sx={{ maxWidth: '320px' }}>
           <DecoratorAltruistic />
           <Text
             sx={{
@@ -112,21 +127,6 @@ const InfoSection = ({ content }) => {
             }}
           >
             {content.feature1Text}
-          </Text>
-        </Box>
-        <Box sx={{ maxWidth: '320px' }}>
-          <DecoratorDecentralized />
-          <Text
-            sx={{
-              variant: 'headings.h4',
-              color: 'background',
-              py: '1.5rem'
-            }}
-          >
-            {content.feature2}
-          </Text>
-          <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            {content.feature2Text}
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
@@ -189,7 +189,7 @@ const InfoSection = ({ content }) => {
             {content.userType1Title}
           </Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
-            Create a Project and get donations in crypto.{' '}
+            Create a project and get donations in crypto.{' '}
             <Link to='/create' className='intextlink'>
               Create your project
             </Link>{' '}

@@ -10,7 +10,6 @@ export const PublicProfileView = props => {
 
   const Tab = ({ name }) => {
     const tab = query?.tab?.toLowerCase() || 'projects'
-    console.log({ tab })
     return (
       <Button
         variant='nofill'
