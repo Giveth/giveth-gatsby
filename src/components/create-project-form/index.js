@@ -162,8 +162,7 @@ const CreateProjectForm = props => {
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
         let projectWalletAddress
-        console.log(`didEnterWalletAddress ---> : ${didEnterWalletAddress}`)
-        console.log(`projectWalletAddress ---> : ${projectWalletAddress}`)
+
         if (didEnterWalletAddress) {
           projectWalletAddress = await getProjectWallet(
             data?.projectWalletAddress
@@ -172,11 +171,14 @@ const CreateProjectForm = props => {
           projectWalletAddress = user.addresses[0]
         }
 
-        if (isSmartContract(projectWalletAddress))
+        const isContract = await isSmartContract(projectWalletAddress)
+        if (isContract) {
+          projectWalletAddress = ''
           return Toast({
             content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
             type: 'error'
           })
+        }
 
         if (await projectWalletAlreadyUsed(projectWalletAddress))
           return Toast({
