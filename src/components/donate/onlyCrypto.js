@@ -23,6 +23,7 @@ import iconQuestionMark from '../../images/icon-question-mark.svg'
 import { ethers } from 'ethers'
 import theme from '../../gatsby-plugin-theme-ui'
 import getSigner from '../../services/ethersSigner'
+import tokenAbi from 'human-standard-token-abi'
 import Tooltip from '../../components/tooltip'
 import Toast from '../../components/toast'
 import { toast } from 'react-toastify'
@@ -122,6 +123,7 @@ const OnlyCrypto = props => {
   const [mainToken, setMainToken] = useState(null)
   const [selectedToken, setSelectedToken] = useState(null)
   const [tokenSymbol, setTokenSymbol] = useState(null)
+  const [selectedTokenBalance, setSelectedTokenBalance] = useState(0)
   const [notify, setNotify] = useState(null)
   const { project } = props
   const [tokenPrice, setTokenPrice] = useState(1)
@@ -226,6 +228,36 @@ const OnlyCrypto = props => {
       ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
     })
   }, [currentChainId])
+
+  useEffect(() => {
+    const setBalance = async () => {
+      const signer = getSigner(userWallet)
+      const account = ((await userWallet?.web3?.eth.getAccounts()) || [''])[0]
+      if (account) {
+        let balance
+        if (selectedToken?.address) {
+          const instance = new ethers.Contract(
+            selectedToken?.address,
+            tokenAbi,
+            signer
+          )
+          const decimals = ethers.BigNumber.from(
+            (await instance.decimals()) || 0
+          )
+          balance = ethers.utils.formatUnits(
+            (await instance.balanceOf(account)) || 0,
+            decimals
+          )
+        } else {
+          balance = ethers.utils.formatEther(
+            (await userWallet?.web3?.eth.getBalance(account)) || 0
+          )
+        }
+        setSelectedTokenBalance(balance)
+      }
+    }
+    setBalance()
+  }, [userWallet, selectedToken, selectedTokenBalance])
 
   const donation = parseFloat(amountTyped)
   const givethFee =
@@ -517,9 +549,9 @@ const OnlyCrypto = props => {
       </Modal>
       <AmountSection>
         <AmountContainer sx={{ width: ['100%', '100%'] }}>
-          <Text sx={{ variant: 'text.large', mb: 3, color: 'background' }}>
+          {/* <Text sx={{ variant: 'text.large', mb: 3, color: 'background' }}>
             Enter your {tokenSymbol} amount
-          </Text>
+          </Text> */}
           {isMainnet && (
             <Text sx={{ variant: 'text.large', color: 'anotherGrey', mb: 4 }}>
               {tokenPrice &&
@@ -527,6 +559,21 @@ const OnlyCrypto = props => {
                 `1 ${tokenSymbol} ≈ USD $${tokenPrice}`}
             </Text>
           )}
+          <Text
+            sx={{
+              variant: 'text.small',
+              float: 'right',
+              color: 'anotherGrey',
+              mb: 1
+            }}
+          >
+            Available:{' '}
+            {parseFloat(selectedTokenBalance).toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 6
+            })}{' '}
+            {tokenSymbol}
+          </Text>
           <OpenAmount>
             <Flex
               onClick={() => setIsComponentVisible(!isComponentVisible)}
