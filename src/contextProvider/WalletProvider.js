@@ -74,29 +74,30 @@ function WalletProvider (props) {
 
       // EVENTS ONLY --------------
 
-    if (EVENT_SETUP_DONE || wallet.isTorus) return
-    const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
-    wallet?.provider?.on('accountsChanged', accounts => {
-      if (accounts[0] && accounts[0] !== account) {
-        Toast({ content: 'Account changed', type: 'warn' })
-      }
-    })
-    wallet?.provider?.on('chainChanged', async chainId => {
-      // needs to be fetched again as chainId is being returned like 0x
-      const chainID = await wallet?.web3.eth.net.getId()
-      setCurrentChainId(chainID)
-      console.log({ chainID, networkId })
-      if (networkId !== chainID?.toString() && chainID !== 100) {
-        // 100 is xDAI
-        Toast({
-          content: `Ethereum network changed please use ${network} or xDAI network`,
-          type: 'warn'
-        })
-      } else {
-        refreshPage()
-      }
-    })
-    EVENT_SETUP_DONE = true
+      if (EVENT_SETUP_DONE || wallet.isTorus) return
+      const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
+      wallet?.provider?.on('accountsChanged', accounts => {
+        if (accounts[0] && accounts[0] !== account) {
+          Toast({ content: 'Account changed', type: 'warn' })
+        }
+      })
+      wallet?.provider?.on('chainChanged', async chainId => {
+        // needs to be fetched again as chainId is being returned like 0x
+        const chainID = await wallet?.web3.eth.net.getId()
+        setCurrentChainId(chainID)
+        console.log({ chainID, networkId })
+        if (networkId !== chainID?.toString() && chainID !== 100) {
+          // 100 is xDAI
+          Toast({
+            content: `Ethereum network changed please use ${network} or xDAI network`,
+            type: 'warn'
+          })
+        } else {
+          refreshPage()
+        }
+      })
+      EVENT_SETUP_DONE = true
+    }
   }
 
   useEffect(() => {
@@ -111,7 +112,7 @@ function WalletProvider (props) {
     setLoading(false)
   }
 
-  async function signMessage(message, publicAddress, loginFromXDAI) {
+  async function signMessage (message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
       console.log({ loginFromXDAI })
