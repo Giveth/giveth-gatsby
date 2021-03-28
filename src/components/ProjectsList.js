@@ -115,7 +115,6 @@ const SelectMenu = props => {
 const orderBySelectOptions = {}
 orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
-const projectSearch = process.env.PROJECT_SEARCH
 
 const ProjectsList = props => {
   const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
@@ -236,35 +235,34 @@ const ProjectsList = props => {
             padding: '0 1.0875rem 1.45rem'
           }}
         >
-          {projectSearch === 'true' ? (
+          <Flex
+            sx={{
+              width: '100%',
+              flexDirection: ['column-reverse', null, 'row'],
+              mt: 2
+            }}
+          >
             <Flex
               sx={{
                 width: '100%',
-                flexDirection: ['column-reverse', null, 'row'],
-                mt: 2
+                flexDirection: ['row', null, 'row'],
+                justifyContent: ['space-around', null, null]
               }}
             >
               <Flex
                 sx={{
-                  width: '100%',
-                  flexDirection: ['row', null, 'row'],
-                  justifyContent: ['space-around', null, null]
+                  width: ['30%'],
+                  alignItems: 'center',
+                  mt: [4, 0, 0]
                 }}
               >
-                <Flex
-                  sx={{
-                    width: ['30%'],
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    options={categories}
-                    current={0}
-                    setCurrent={i => setCategory(i)}
-                  />
-                </Flex>
-                {/* <Flex
+                <DropdownInput
+                  options={categories}
+                  current={0}
+                  setCurrent={i => setCategory(i)}
+                />
+              </Flex>
+              {/* <Flex
                   sx={{
                     width: ['30%'],
                     alignItems: 'center',
@@ -277,49 +275,49 @@ const ProjectsList = props => {
                     // setCurrent={i => setFilter(i)}
                   />
                 </Flex> */}
-                <Flex
-                  sx={{
-                    width: ['30%'],
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    options={sortBys}
-                    current={0}
-                    setCurrent={i => setSortBy(i)}
-                  />
-                </Flex>
-                {/* <SelectMenu
+              <Flex
+                sx={{
+                  width: ['30%'],
+                  alignItems: 'center',
+                  mt: [4, 0, 0]
+                }}
+              >
+                <DropdownInput
+                  options={sortBys}
+                  current={0}
+                  setCurrent={i => setSortBy(i)}
+                />
+              </Flex>
+              {/* <SelectMenu
                   caption='sort by'
                   options={orderBySelectOptions}
                   onChange={selectOrderByField}
                 /> */}
-              </Flex>
-              <Flex
-                sx={{
-                  flexGrow: 3,
-                  alignItems: 'center',
-                  display: 'flex',
-                  width: ['100%', '100%', '50%'],
-                  padding: '0 3% 0 0',
-                  mt: [4, 0, 0],
-                  mb: [0, 4, 0]
-                }}
-              >
-                <Input
-                  placeholder='Search Projects'
-                  variant='forms.search'
-                  style={{
-                    width: '100%',
-                    margin: 'auto'
-                  }}
-                  onChange={searchProjects}
-                />
-                <IconSearch />
-              </Flex>
             </Flex>
-          ) : null}
+            <Flex
+              sx={{
+                flexGrow: 3,
+                alignItems: 'center',
+                display: 'flex',
+                width: ['100%', '100%', '50%'],
+                padding: '0 3% 0 0',
+                mt: [4, 0, 0],
+                mb: [0, 4, 0]
+              }}
+            >
+              <Input
+                placeholder='Search Projects'
+                variant='forms.search'
+                style={{
+                  width: '100%',
+                  margin: 'auto'
+                }}
+                onChange={searchProjects}
+              />
+              <IconSearch />
+            </Flex>
+          </Flex>
+
           <div
             style={{
               width: '100%',
