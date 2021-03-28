@@ -3,11 +3,11 @@ describe('Test soft launch warnings on first page', () => {
     cy.visit('/')
   })
 
-  it('Should open and close toast soft launch', () => {
-    cy.contains(/We're in Softlaunch mode/i).should('exist')
-    cy.contains(/We're in Softlaunch mode/i).click()
-    cy.contains(/We're in Softlaunch mode/i).should('not.exist')
-  })
+  // it('Should open and close toast soft launch', () => {
+  //   cy.contains(/We're in Softlaunch mode/i).should('exist')
+  //   cy.contains(/We're in Softlaunch mode/i).click()
+  //   cy.contains(/We're in Softlaunch mode/i).should('not.exist')
+  // })
 
   it('Should open github soft launch', () => {
     cy.contains(/give feedback/i).should('exist')
