@@ -13,7 +13,11 @@ import {
 import { navigate } from 'gatsby'
 import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
-import { projectWalletAlreadyUsed, getProjectWallet } from './utils'
+import {
+  projectWalletAlreadyUsed,
+  getProjectWallet,
+  isSmartContract
+} from './utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import { useForm } from 'react-hook-form'
@@ -51,7 +55,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken() {
+    async function doValidateToken () {
       const isValid = await validateToken()
       console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -158,6 +162,8 @@ const CreateProjectForm = props => {
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
         let projectWalletAddress
+        console.log(`didEnterWalletAddress ---> : ${didEnterWalletAddress}`)
+        console.log(`projectWalletAddress ---> : ${projectWalletAddress}`)
         if (didEnterWalletAddress) {
           projectWalletAddress = await getProjectWallet(
             data?.projectWalletAddress
@@ -165,6 +171,13 @@ const CreateProjectForm = props => {
         } else {
           projectWalletAddress = user.addresses[0]
         }
+
+        if (isSmartContract(projectWalletAddress))
+          return Toast({
+            content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
+            type: 'error'
+          })
+
         if (await projectWalletAlreadyUsed(projectWalletAddress))
           return Toast({
             content: `Eth address ${projectWalletAddress} ${
@@ -351,14 +364,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep(currentStep) {
+function isCategoryStep (currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep(currentStep, steps) {
+function isFinalConfirmationStep (currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep(currentStep, steps) {
+function isLastStep (currentStep, steps) {
   return currentStep === steps.length - 1
 }
