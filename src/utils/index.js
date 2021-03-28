@@ -4,6 +4,8 @@ import ERC20List from './erc20TokenList'
 import Web3 from 'web3'
 
 export function titleCase(str) {
+  //hot fix
+  return str
   if (!str) return null
   return str
     ?.toLowerCase()

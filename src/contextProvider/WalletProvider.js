@@ -74,32 +74,29 @@ function WalletProvider (props) {
 
       // EVENTS ONLY --------------
 
-      if (EVENT_SETUP_DONE || wallet.isTorus) return
-      const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
-      wallet?.provider?.on('accountsChanged', accounts => {
-        if (accounts[0] && accounts[0] !== account) {
-          Toast({ content: 'Account changed', type: 'warn' })
-        }
-      })
-      wallet?.provider?.on('chainChanged', async chainId => {
-        // needs to be fetched again as chainId is being returned like 0x
-        const chainID = await wallet?.web3.eth.net.getId()
-        setCurrentChainId(chainID)
-        console.log({ chainID, networkId })
-        if (networkId !== chainID?.toString() && chainID !== 100) {
-          // 100 is xDAI
-          Toast({
-            content: `Ethereum network changed please use ${network}`,
-            type: 'warn'
-          })
-          refreshPage()
-        }
-      })
-      EVENT_SETUP_DONE = true
-    } else {
-      wallet = getWallet('test')
-      setReady(true)
-    }
+    if (EVENT_SETUP_DONE || wallet.isTorus) return
+    const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
+    wallet?.provider?.on('accountsChanged', accounts => {
+      if (accounts[0] && accounts[0] !== account) {
+        Toast({ content: 'Account changed', type: 'warn' })
+      }
+    })
+    wallet?.provider?.on('chainChanged', async chainId => {
+      // needs to be fetched again as chainId is being returned like 0x
+      const chainID = await wallet?.web3.eth.net.getId()
+      setCurrentChainId(chainID)
+      console.log({ chainID, networkId })
+      if (networkId !== chainID?.toString() && chainID !== 100) {
+        // 100 is xDAI
+        Toast({
+          content: `Ethereum network changed please use ${network} or xDAI network`,
+          type: 'warn'
+        })
+      } else {
+        refreshPage()
+      }
+    })
+    EVENT_SETUP_DONE = true
   }
 
   useEffect(() => {
@@ -114,9 +111,10 @@ function WalletProvider (props) {
     setLoading(false)
   }
 
-  async function signMessage (message, publicAddress) {
+  async function signMessage(message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
+      console.log({ loginFromXDAI })
       let signedMessage = null
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
@@ -144,7 +142,9 @@ function WalletProvider (props) {
         },
         domain: {
           name: 'Giveth Login',
-          chainId: parseInt(process.env.GATSBY_NETWORK_ID),
+          chainId: loginFromXDAI
+            ? 100
+            : parseInt(process.env.GATSBY_NETWORK_ID),
           version: '1'
         },
         message: {
@@ -214,14 +214,21 @@ function WalletProvider (props) {
       user.addWalletAddress(publicAddress, true)
     }
 
+    const loginFromXDAI = !wallet?.isTorus && currentChainId === 100
+
     const signedMessage = await signMessage(
       process.env.GATSBY_OUR_SECRET,
-      publicAddress
+      publicAddress,
+      loginFromXDAI
     )
 
     if (!signedMessage) return
 
-    const { userIDFromDB, token, dbUser } = await getToken(user, signedMessage)
+    const { userIDFromDB, token, dbUser } = await getToken(
+      user,
+      signedMessage,
+      loginFromXDAI
+    )
     user.parseDbUser(dbUser)
 
     user.setUserId(userIDFromDB)
@@ -299,7 +306,7 @@ function WalletProvider (props) {
     if (currentNetworkId?.toString() === networkId || byPassXDAI) {
       return true
     } else {
-      throw new Error(`Wrong network, please change to ${network}`)
+      throw new Error(`Wrong network, please change to ${network} or xDAI`)
     }
   }
 

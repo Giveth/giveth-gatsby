@@ -1,6 +1,6 @@
 /** @jsx jsx */
-import { Box, Button, Grid, Flex, jsx, Text, Input } from 'theme-ui'
-import React from 'react'
+import { Box, Button, Grid, Flex, jsx, Text, Input, Select } from 'theme-ui'
+import React, { useState } from 'react'
 import ProjectCard from './projectCard'
 import NoImage from '../images/no-image-available.jpg'
 import SearchIcon from '../images/svg/general/search-icon.svg'
@@ -9,6 +9,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import DropdownInput from '../components/dropdownInput'
 import theme from '../gatsby-plugin-theme-ui'
+import * as JsSearch from 'js-search'
+import DropIcon from '../images/svg/general/dropdown-arrow.svg'
 
 const ProjectSection = styled(Box)``
 
@@ -37,61 +39,158 @@ const CreateLink = styled(Link)`
 const IconSearch = styled(SearchIcon)`
   margin-left: -2.5rem;
 `
-
-// const SelectMenu = props => {
-//   const { caption, options = {}, onChange = () => {}, defaultValue } = props
-//   return (
-//     <div
-//       style={{
-//         flexGrow: 1,
-//         margin: '10px'
-//       }}
-//     >
-//       <Text
-//         pl={3}
-//         sx={{
-//           variant: 'text.default',
-//           color: 'secondary',
-//           fontSize: 3,
-//           fontWeight: 'medium',
-//           textDecoration: 'none',
-//           textTransform: 'uppercase'
-//         }}
-//       >
-//         {caption}
-//       </Text>
-//       <Select
-//         pl={3}
-//         sx={{
-//           variant: 'text.default',
-//           color: 'secondary',
-//           fontSize: 3,
-//           fontWeight: 'medium',
-//           textDecoration: 'none',
-//           width: '100%'
-//         }}
-//         defaultValue={defaultValue}
-//         onChange={e => onChange(e.target.value)}
-//         mb={3}
-//         name='cars'
-//         id='cars'
-//       >
-//         {Object.entries(options).map(([key, value]) => (
-//           <option key={key} value={key}>
-//             {value}
-//           </option>
-//         ))}
-//       </Select>
-//     </div>
-//   )
-// }
+const DropItem = styled.div`
+  padding: 1rem 0 1rem 1rem;
+  :hover {
+    background-color: ${theme.colors.lightestBlue};
+  }
+`
+const IconDrop = styled(DropIcon)`
+  position: absolute;
+  right: 1rem;
+  top: 0.563rem;
+`
+const SelectMenu = props => {
+  const { caption, options = {}, onChange = () => {}, defaultValue } = props
+  return (
+    <div
+      style={{
+        flexGrow: 1,
+        margin: '10px'
+      }}
+    >
+      <Text
+        pl={3}
+        sx={{
+          variant: 'text.default',
+          color: 'secondary',
+          fontSize: 3,
+          fontWeight: 'medium',
+          textDecoration: 'none',
+          textTransform: 'uppercase'
+        }}
+      >
+        {caption}
+      </Text>
+      <IconDrop />
+      <Text
+        sx={{
+          variant: 'text.medium',
+          fontWeight: 'bold',
+          color: 'secondary'
+        }}
+      ></Text>
+      <Select
+        pl={3}
+        sx={{
+          variant: 'text.default',
+          color: 'secondary',
+          fontSize: 3,
+          fontWeight: 'medium',
+          textDecoration: 'none',
+          width: '100%'
+        }}
+        defaultValue={defaultValue}
+        onChange={e => onChange(e.target.value)}
+        mb={3}
+        name='sortBy'
+        id='sortBy'
+      >
+        {Object.entries(options).map(([key, value]) => (
+          <option
+            sx={{
+              variant: 'text.medium',
+              fontWeight: 'bold',
+              color: 'secondary'
+            }}
+          >
+            {value}
+          </option>
+        ))}
+      </Select>
+    </div>
+  )
+}
 
 const orderBySelectOptions = {}
 orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
-const projectSearch = process.env.PROJECT_SEARCH
+
 const ProjectsList = props => {
-  const { projects, totalCount, loadMore, hasMore } = props
+  const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
+  // console.log(`projects : ${JSON.stringify(projects, null, 2)}`)
+
+  console.log(`projects.length ---> : ${projects.length}`)
+  const [search, setSearch] = useState()
+  const [isLoading, setIsLoading] = useState(false)
+  const [searchQuery, setSearchQuery] = useState()
+  const [searchResults, setSearchResults] = useState(projects)
+  const [category, setCategory] = useState(0)
+  const [sortBy, setSortBy] = useState(0)
+  const categories = ['All', 'Community', 'Food', 'Non-profit']
+  const locations = ['All', 'World Wide']
+  const sortBys = ['Quality score', 'Amount raised', 'hearts']
+  //console.log(`--> searchResults : ${JSON.stringify(searchResults, null, 2)}`)
+  console.log(`category : ${JSON.stringify(category, null, 2)}`)
+
+  React.useEffect(() => {
+    rebuildIndex()
+  }, [])
+
+  function searchProjects (e) {
+    console.log(`searching projects`)
+    const queryResult = search.search(e.target.value)
+    setSearchQuery(e.target.value)
+    setSearchResults(queryResult)
+  }
+  // handleSubmit = e => {
+  //   e.preventDefault()
+  // }
+  function rebuildIndex () {
+    const dataToSearch = new JsSearch.Search('id')
+    /**
+     *  defines a indexing strategy for the data
+     * more about it in here https://github.com/bvaughn/js-search#configuring-the-index-strategy
+     */
+    dataToSearch.indexStrategy = new JsSearch.PrefixIndexStrategy()
+    /**
+     * defines the sanitizer for the search
+     * to prevent some of the words from being excluded
+     *
+     */
+    dataToSearch.sanitizer = new JsSearch.LowerCaseSanitizer()
+    /**
+     * defines the search index
+     * read more in here https://github.com/bvaughn/js-search#configuring-the-search-index
+     */
+    //dataToSearch.searchIndex = new JsSearch.TfIdfSearchIndex('title')
+    dataToSearch.addIndex('title') // sets the index attribute for the data
+    dataToSearch.addIndex('description') // sets the index attribute for the data
+    dataToSearch.addIndex('impactLocation') // sets the index attribute for the data
+    dataToSearch.addDocuments(projects) // adds the data to be searched
+    setSearch(dataToSearch)
+    setIsLoading(false)
+  }
+
+  function filterCategory (searchedResults) {
+    const categoryName = categories[category].toLowerCase()
+    console.log(`categoryName ---> : ${categoryName}`)
+    return searchedResults.filter(
+      o => o.categories.filter(c => c.name === categoryName).length > 0
+    )
+  }
+
+  const searchedResults = searchQuery === '' ? projects : searchResults
+  const projectsFiltered =
+    category === 0 ? searchedResults : filterCategory(searchedResults)
+
+  // const projectsFilteredSorted = projectsFiltered.sort(() => {
+  //   qualityScore
+  //   reactions
+  //   creationDate
+  // })
+  //console.log(`projectsFiltered : ${JSON.stringify(projectsFiltered, null, 2)}`)
+
   return (
     <>
       <Flex
@@ -136,89 +235,89 @@ const ProjectsList = props => {
             padding: '0 1.0875rem 1.45rem'
           }}
         >
-          {projectSearch === 'true' ? (
+          <Flex
+            sx={{
+              width: '100%',
+              flexDirection: ['column-reverse', null, 'row'],
+              mt: 2
+            }}
+          >
             <Flex
               sx={{
                 width: '100%',
-                flexDirection: ['column-reverse', null, 'row'],
-                mt: 2
+                flexDirection: ['row', null, 'row'],
+                justifyContent: ['space-around', null, null]
               }}
             >
               <Flex
                 sx={{
-                  width: '100%',
-                  flexDirection: ['row', null, 'row'],
-                  justifyContent: ['space-around', null, null]
+                  width: ['30%'],
+                  alignItems: 'center',
+                  mt: [4, 0, 0]
                 }}
               >
-                <Flex
-                  sx={{
-                    width: ['30%'],
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    options={['COVID-19']}
-                    current={0}
-                    // setCurrent={i => setFilter(i)}
-                  />
-                </Flex>
-                <Flex
-                  sx={{
-                    width: ['30%'],
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    options={['World Wide']}
-                    current={0}
-                    // setCurrent={i => setFilter(i)}
-                  />
-                </Flex>
-                <Flex
-                  sx={{
-                    width: ['30%'],
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    options={['Amount Raised']}
-                    current={0}
-                    // setCurrent={i => setFilter(i)}
-                  />
-                </Flex>
-                {/* <SelectMenu
-            caption='sort by'
-            options={orderBySelectOptions}
-            onChange={selectOrderByField}
-          /> */}
+                <DropdownInput
+                  options={categories}
+                  current={0}
+                  setCurrent={i => setCategory(i)}
+                />
               </Flex>
+              {/* <Flex
+                  sx={{
+                    width: ['30%'],
+                    alignItems: 'center',
+                    mt: [4, 0, 0]
+                  }}
+                >
+                  <DropdownInput
+                    options={locations}
+                    current={0}
+                    // setCurrent={i => setFilter(i)}
+                  />
+                </Flex> */}
               <Flex
                 sx={{
-                  flexGrow: 3,
+                  width: ['30%'],
                   alignItems: 'center',
-                  display: 'flex',
-                  width: ['100%', '100%', '50%'],
-                  padding: '0 3% 0 0',
-                  mt: [4, 0, 0],
-                  mb: [0, 4, 0]
+                  mt: [4, 0, 0]
                 }}
               >
-                <Input
-                  placeholder='Search Projects'
-                  variant='forms.search'
-                  style={{
-                    width: '100%',
-                    margin: 'auto'
-                  }}
+                <DropdownInput
+                  options={sortBys}
+                  current={0}
+                  setCurrent={i => setSortBy(i)}
                 />
-                <IconSearch />
               </Flex>
+              {/* <SelectMenu
+                  caption='sort by'
+                  options={orderBySelectOptions}
+                  onChange={selectOrderByField}
+                /> */}
             </Flex>
-          ) : null}
+            <Flex
+              sx={{
+                flexGrow: 3,
+                alignItems: 'center',
+                display: 'flex',
+                width: ['100%', '100%', '50%'],
+                padding: '0 3% 0 0',
+                mt: [4, 0, 0],
+                mb: [0, 4, 0]
+              }}
+            >
+              <Input
+                placeholder='Search Projects'
+                variant='forms.search'
+                style={{
+                  width: '100%',
+                  margin: 'auto'
+                }}
+                onChange={searchProjects}
+              />
+              <IconSearch />
+            </Flex>
+          </Flex>
+
           <div
             style={{
               width: '100%',
@@ -234,8 +333,8 @@ const ProjectsList = props => {
                 justifyItems: 'center'
               }}
             >
-              {projects
-                ? projects
+              {projectsFiltered
+                ? projectsFiltered
                     ?.slice()
                     .map((project, index) => (
                       <ProjectCard
@@ -279,7 +378,7 @@ ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
   totalCount: PropTypes.number.isRequired,
   loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired
-  // selectOrderByField: PropTypes.func.isRequired
+  hasMore: PropTypes.bool.isRequired,
+  selectOrderByField: PropTypes.func.isRequired
 }
 export default ProjectsList
