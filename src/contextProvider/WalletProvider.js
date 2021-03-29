@@ -47,57 +47,55 @@ function WalletProvider (props) {
   const client = useApolloClient()
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
-    if (walletProvider) {
-      if (provider && walletProvider !== 'torus') {
-        setEthEnabled(provider)
-        wallet = getWallet('metamask')
-      } else {
-        wallet = getWallet('torus')
-      }
-      console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
-
-      await wallet.init(process.env.ENVIRONMENT, network)
-      const networkName = await wallet?.web3.eth.net.getNetworkType()
-      const currentChainId = await wallet?.web3.eth.net.getId()
-
-      // Checks if Torus needs to re-login
-      if (wallet?.isTorus && !wallet?.isLoggedIn()) {
-        await logout(true)
-      }
-      updateBalance(
-        localStorageUser?.walletAddresses?.length > 0 &&
-          localStorageUser.walletAddresses[0]
-      )
-      setCurrentNetwork(networkName)
-      setCurrentChainId(currentChainId)
-      setReady(true)
-
-      // EVENTS ONLY --------------
-
-      if (EVENT_SETUP_DONE || wallet.isTorus) return
-      const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
-      wallet?.provider?.on('accountsChanged', accounts => {
-        if (accounts[0] && accounts[0] !== account) {
-          Toast({ content: 'Account changed', type: 'warn' })
-        }
-      })
-      wallet?.provider?.on('chainChanged', async chainId => {
-        // needs to be fetched again as chainId is being returned like 0x
-        const chainID = await wallet?.web3.eth.net.getId()
-        setCurrentChainId(chainID)
-        console.log({ chainID, networkId })
-        if (networkId !== chainID?.toString() && chainID !== 100) {
-          // 100 is xDAI
-          Toast({
-            content: `Ethereum network changed please use ${network} or xDAI network`,
-            type: 'warn'
-          })
-        } else {
-          refreshPage()
-        }
-      })
-      EVENT_SETUP_DONE = true
+    if (provider && walletProvider !== 'torus') {
+      setEthEnabled(provider)
+      wallet = getWallet('metamask')
+    } else {
+      wallet = getWallet('torus')
     }
+    console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
+
+    await wallet.init(process.env.ENVIRONMENT, network)
+    const networkName = await wallet?.web3.eth.net.getNetworkType()
+    const currentChainId = await wallet?.web3.eth.net.getId()
+
+    // Checks if Torus needs to re-login
+    if (wallet?.isTorus && !wallet?.isLoggedIn()) {
+      await logout(true)
+    }
+    updateBalance(
+      localStorageUser?.walletAddresses?.length > 0 &&
+        localStorageUser.walletAddresses[0]
+    )
+    setCurrentNetwork(networkName)
+    setCurrentChainId(currentChainId)
+    setReady(true)
+
+    // EVENTS ONLY --------------
+
+    if (EVENT_SETUP_DONE || wallet.isTorus) return
+    const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
+    wallet?.provider?.on('accountsChanged', accounts => {
+      if (accounts[0] && accounts[0] !== account) {
+        Toast({ content: 'Account changed', type: 'warn' })
+      }
+    })
+    wallet?.provider?.on('chainChanged', async chainId => {
+      // needs to be fetched again as chainId is being returned like 0x
+      const chainID = await wallet?.web3.eth.net.getId()
+      setCurrentChainId(chainID)
+      console.log({ chainID, networkId })
+      if (networkId !== chainID?.toString() && chainID !== 100) {
+        // 100 is xDAI
+        Toast({
+          content: `Ethereum network changed please use ${network} or xDAI network`,
+          type: 'warn'
+        })
+      } else {
+        refreshPage()
+      }
+    })
+    EVENT_SETUP_DONE = true
   }
 
   useEffect(() => {
