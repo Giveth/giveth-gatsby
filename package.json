@@ -105,7 +105,10 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "cy:open": "npx cypress open",
+    "cy:e2e": "npx cypress run --spec cypress/integration/e2e/**/*.spec.js",
+    "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js"
   },
   "repository": {
     "type": "git",
