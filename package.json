@@ -89,8 +89,8 @@
     "@testing-library/cypress": "^7.0.4",
     "cypress": "^6.8.0",
     "cypress-localstorage-commands": "^1.4.1",
-    "ganache-cli": "^6.12.2",
     "husky": "^4.3.8",
+    "netlify-plugin-cypress": "^2.2.0",
     "standard": "^16.0.3"
   },
   "keywords": [
