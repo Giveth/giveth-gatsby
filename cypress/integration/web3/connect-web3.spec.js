@@ -5,7 +5,7 @@ describe('Project creation', () => {
     projectName: 'Super Project Name Test',
     projectAdmin: 'Super Admin Test',
     projectDescription: 'Super description for Test',
-    projectLocation: 'Earth'
+    projectLocation: 'Paris'
   }
 
   before(() => {
@@ -72,7 +72,6 @@ describe('Project creation', () => {
     it('fills the image of the project', () => {
       cy.wait(2000)
       cy.get('div[type="button"]').each(($el, index) => {
-        console.log('button', $el)
         cy.wrap($el).click()
         cy.wait(1000)
         cy.get('#projectImage').should('have.a.value', index + 1)
@@ -90,7 +89,7 @@ describe('Project creation', () => {
       cy.get('.Toastify__toast-container')
         .should('exist')
         .click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('.Toastify__toast-container').should('not.exist')
     })
 
@@ -104,8 +103,95 @@ describe('Project creation', () => {
       cy.get('.Toastify__toast-container')
         .should('exist')
         .click()
-      cy.wait(2000)
+      cy.wait(3000)
       cy.get('.Toastify__toast-container').should('not.exist')
+    })
+
+    it('goes back and checks that the right image is set', () => {
+      cy.wait(2000)
+      cy.get('button[aria-label="Back"]')
+        .contains(/back/i)
+        .click()
+      cy.get('div[type="button"]')
+        .get('#projectImage')
+        .should('have.a.value', 4)
+    })
+
+    it('goes back and checks that the right location is set', () => {
+      cy.wait(2000)
+      cy.get('button[aria-label="Back"]')
+        .contains(/back/i)
+        .click()
+      cy.wait(2000)
+      cy.get('div')
+        .contains(/global/i)
+        .should('exist')
+    })
+
+    it('changes the location, submits it and goes back', () => {
+      cy.wait(2000)
+      cy.get('input[type="checkbox"]').click({ force: true })
+      cy.wait(2000)
+      cy.get('#projectImpactLocation').then(elem => {
+        elem.val(projectData.projectLocation)
+      })
+      cy.get('#projectImpactLocation').should(
+        'have.value',
+        projectData.projectLocation
+      )
+      cy.get('button')
+        .contains(/next/i)
+        .click()
+      cy.wait(2000)
+      cy.get('button[aria-label="Back"]')
+        .contains(/back/i)
+        .click()
+    })
+
+    it('goes back and checks that the right label is set', () => {
+      cy.wait(2000)
+      cy.get('button[aria-label="Back"]')
+        .contains(/back/i)
+        .click()
+      cy.wait(2000)
+      cy.get('input[id="community"]').should('be.checked')
+    })
+
+    it('goes back and checks that the description is set', () => {
+      cy.wait(2000)
+      cy.get('button[aria-label="Back"]')
+        .contains(/back/i)
+        .click()
+      cy.wait(2000)
+      cy.findByText(projectData.projectDescription).should('exist')
+    })
+
+    it('goes back and checks that the admin is set', () => {
+      cy.wait(2000)
+      cy.get('button[aria-label="Back"]')
+        .contains(/back/i)
+        .click()
+      cy.wait(2000)
+      cy.get('#projectAdmin').should('have.value', projectData.projectAdmin)
+    })
+
+    it('goes back and checks that the name of the project is set', () => {
+      cy.wait(2000)
+      cy.get('button[aria-label="Back"]')
+        .contains(/back/i)
+        .click()
+      cy.wait(2000)
+      cy.get('#projectName').should('have.value', projectData.projectName)
+    })
+
+    it('clicks next until the end', () => {
+      for (let i = 0; i < 6; i++) {
+        cy.wait(1000)
+        cy.get('button')
+          .contains(/next/i)
+          .click()
+        cy.wait(1000)
+      }
     })
 
     const web3 = new Web3(
@@ -113,7 +199,7 @@ describe('Project creation', () => {
     )
     const address = web3.eth.accounts.create()?.address
 
-    it('fills an newly created not used address for the project and passes', () => {
+    it('fills a newly created not used address for the project and passes', () => {
       cy.get('#projectWalletAddress').type(address)
       cy.get('button')
         .contains(/next/i)
@@ -125,8 +211,8 @@ describe('Project creation', () => {
       cy.findByText(projectData.projectName).should('exist')
       cy.findByText(projectData.projectAdmin).should('exist')
       cy.findByText(projectData.projectDescription).should('exist')
+      cy.findByText(projectData.projectLocation).should('exist')
       cy.findByText(address).should('exist')
-      cy.findByText('Global').should('exist')
     })
   })
 })
