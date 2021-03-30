@@ -386,7 +386,7 @@ function WalletProvider (props) {
           .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
       }
 
-      console.log(`stTxn ---> : `, { txn })
+      console.log('stTxn ---> : ', { txn })
       return txn
     } catch (error) {
       console.log('Error sending transaction: ', { error })
