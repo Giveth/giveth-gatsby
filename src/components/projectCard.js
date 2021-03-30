@@ -193,9 +193,9 @@ const ProjectCard = props => {
           key={props.listingId || project?.title + '_div'}
           src={image}
           onClick={() =>
-            (window.location.href = `/project/${
-              props?.slug || project?.slug || ''
-            }`)
+            (window.location.href = `/project/${props?.slug ||
+              project?.slug ||
+              ''}`)
           }
           style={{
             width: '100%',

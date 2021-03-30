@@ -117,28 +117,30 @@ orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
-  const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
-  // console.log(`projects : ${JSON.stringify(projects, null, 2)}`)
+  const {
+    projects,
+    categories,
+    totalCount,
+    loadMore,
+    hasMore,
+    selectOrderByField
+  } = props
+  //console.log(`categories : ${JSON.stringify(categories, null, 2)}`)
 
-  console.log(`projects.length ---> : ${projects.length}`)
   const [search, setSearch] = useState()
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState()
   const [searchResults, setSearchResults] = useState(projects)
   const [category, setCategory] = useState(0)
   const [sortBy, setSortBy] = useState(0)
-  const categories = ['All', 'Community', 'Food', 'Non-profit']
-  const locations = ['All', 'World Wide']
-  const sortBys = ['Quality score', 'Amount raised', 'hearts']
-  //console.log(`--> searchResults : ${JSON.stringify(searchResults, null, 2)}`)
-  console.log(`category : ${JSON.stringify(category, null, 2)}`)
+  const categoryList = ['All'].concat(categories.map(o => o.name))
+  const sortBys = ['Quality score', 'Amount raised', 'Hearts']
 
   React.useEffect(() => {
     rebuildIndex()
   }, [])
 
   function searchProjects (e) {
-    console.log(`searching projects`)
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -173,8 +175,8 @@ const ProjectsList = props => {
   }
 
   function filterCategory (searchedResults) {
-    const categoryName = categories[category].toLowerCase()
-    console.log(`categoryName ---> : ${categoryName}`)
+    const categoryName = categoryList[category].toLowerCase()
+
     return searchedResults.filter(
       o => o.categories.filter(c => c.name === categoryName).length > 0
     )
@@ -184,12 +186,26 @@ const ProjectsList = props => {
   const projectsFiltered =
     category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  // const projectsFilteredSorted = projectsFiltered.sort(() => {
-  //   qualityScore
-  //   reactions
-  //   creationDate
-  // })
-  //console.log(`projectsFiltered : ${JSON.stringify(projectsFiltered, null, 2)}`)
+  function sum (items, prop) {
+    return items.reduce(function (a, b) {
+      return a + b[prop]
+    }, 0)
+  }
+
+  //['Quality score', 'Amount raised', 'Hearts']
+  const sortFunctions = [
+    function qualityScore (a, b) {
+      return b.qualityScore - a.qualityScore
+    },
+    function amountRaised (a, b) {
+      return b.totalDonations - a.totalDonations
+    },
+    function hearts (a, b) {
+      return b.totalHearts - a.totalHearts
+    }
+  ]
+
+  const projectsFilteredSorted = projectsFiltered.sort(sortFunctions[sortBy])
 
   return (
     <>
@@ -257,7 +273,7 @@ const ProjectsList = props => {
                 }}
               >
                 <DropdownInput
-                  options={categories}
+                  options={categoryList}
                   current={0}
                   setCurrent={i => setCategory(i)}
                 />
@@ -333,8 +349,8 @@ const ProjectsList = props => {
                 justifyItems: 'center'
               }}
             >
-              {projectsFiltered
-                ? projectsFiltered
+              {projectsFilteredSorted
+                ? projectsFilteredSorted
                     ?.slice()
                     .map((project, index) => (
                       <ProjectCard

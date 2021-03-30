@@ -29,6 +29,8 @@ const FETCH_ALL_PROJECTS = gql`
         projectUpdateId
         userId
       }
+      totalDonations
+      totalHearts
     }
   }
 `
