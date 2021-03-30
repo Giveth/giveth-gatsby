@@ -103,4 +103,4 @@ Command to run tests:
 
 The setup for web3 testing is the following.
 - Create a `cypress.env.json` as the `cypress.env.example.json`
-- Paste your local Giveth Token that you can find in your `localStorage` by going to your Giveth's DApp (inspect -> console -> Type localStorage in the console). Take the following variable: `giveth_user_local_token`
+- Paste your local Giveth Token that you can find in your `localStorage` by going to your Giveth's DApp (inspect -> console -> Type `localStorage` in the console). Take the following variable: `giveth_user_local_token`

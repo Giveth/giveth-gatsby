@@ -132,6 +132,7 @@ describe('Project creation', () => {
       cy.wait(2000)
       cy.get('input[type="checkbox"]').click({ force: true })
       cy.wait(2000)
+      // Only way to update an input hidden with cypress
       cy.get('#projectImpactLocation').then(elem => {
         elem.val(projectData.projectLocation)
       })
