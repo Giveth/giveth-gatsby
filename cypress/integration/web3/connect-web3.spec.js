@@ -1,34 +1,27 @@
 import Web3 from 'web3'
 
-describe('Test connect wallet', () => {
-  beforeEach(() => {
+describe('Project creation', () => {
+  const projectData = {
+    projectName: 'Super Project Name Test',
+    projectAdmin: 'Super Admin Test',
+    projectDescription: 'Super description for Test',
+    projectLocation: 'Earth'
+  }
+
+  before(() => {
     cy.restoreLocalStorage()
     cy.visit('/')
     cy.setWeb3Provider()
   })
 
-  // check we can always go back
-  // check we cannot next if to input filled
-  // check that if we go back input is well filled
-  // Why is it possible to not enter a description...
-
-  context('Form submission', () => {
-    const projectData = {
-      projectName: 'Super Project Name Test',
-      projectAdmin: 'Super Admin Test',
-      projectDescription: 'Super description for Test',
-      projectLocation: 'Earth'
-    }
-    it('creates a project', () => {
+  describe('Creates a project', () => {
+    it('clicks on create a project button', () => {
       cy.get('button')
         .contains(/create a project/i)
         .click()
-      // add autoFocus ?
-      // id = projectName
-      // cy.server & cy.route
-      // Use fixtures to store predefined data
+    })
 
-      // Project Name
+    it('fills the name of the project', () => {
       cy.wait(2000)
       cy.get('#projectName')
         .type(projectData.projectName)
@@ -36,8 +29,9 @@ describe('Test connect wallet', () => {
       cy.get('button')
         .contains(/next/i)
         .click()
+    })
 
-      // Project Admin
+    it('fills the name of the admin', () => {
       cy.wait(2000)
       cy.get('#projectAdmin')
         .type(projectData.projectAdmin)
@@ -45,8 +39,9 @@ describe('Test connect wallet', () => {
       cy.get('button')
         .contains(/next/i)
         .click()
+    })
 
-      // Project Description
+    it('fills the description of the project', () => {
       cy.wait(2000)
       cy.get('#projectDescription')
         .type(projectData.projectDescription)
@@ -54,8 +49,9 @@ describe('Test connect wallet', () => {
       cy.get('button')
         .contains(/next/i)
         .click()
+    })
 
-      // Project Description
+    it('fills the label of the project', () => {
       cy.wait(2000)
       cy.get('label')
         .contains(/community/i)
@@ -63,15 +59,17 @@ describe('Test connect wallet', () => {
       cy.get('button')
         .contains(/next/i)
         .click()
+    })
 
-      // Project Location
+    it('fills the location of the project', () => {
       cy.wait(2000)
       cy.get('input[type="checkbox"]').click({ force: true })
       cy.get('button')
         .contains(/next/i)
         .click()
+    })
 
-      // Project Image
+    it('fills the image of the project', () => {
       cy.wait(2000)
       cy.get('div[type="button"]').each(($el, index) => {
         console.log('button', $el)
@@ -82,8 +80,9 @@ describe('Test connect wallet', () => {
       cy.get('button')
         .contains(/next/i)
         .click()
+    })
 
-      // projectWalletAddress
+    it('fills an empty address for the project and does not pass', () => {
       cy.wait(2000)
       cy.get('button')
         .contains(/next/i)
@@ -93,8 +92,9 @@ describe('Test connect wallet', () => {
         .click()
       cy.wait(2000)
       cy.get('.Toastify__toast-container').should('not.exist')
+    })
 
-      // Address already used
+    it('fills an address already used for the project and does not pass', () => {
       cy.get('#projectWalletAddress').type(
         '0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73'
       )
@@ -106,20 +106,26 @@ describe('Test connect wallet', () => {
         .click()
       cy.wait(2000)
       cy.get('.Toastify__toast-container').should('not.exist')
+    })
 
-      const web3 = new Web3(
-        new Web3.providers.HttpProvider('http://localhost:8545')
-      )
-      const account = web3.eth.accounts.create()
-      cy.get('#projectWalletAddress').type(account?.address)
+    const web3 = new Web3(
+      new Web3.providers.HttpProvider('http://localhost:8545')
+    )
+    const address = web3.eth.accounts.create()?.address
+
+    it('fills an newly created not used address for the project and passes', () => {
+      cy.get('#projectWalletAddress').type(address)
       cy.get('button')
         .contains(/next/i)
         .click()
+    })
 
+    it('checks that the right values are shown', () => {
       cy.wait(2000)
       cy.findByText(projectData.projectName).should('exist')
       cy.findByText(projectData.projectAdmin).should('exist')
       cy.findByText(projectData.projectDescription).should('exist')
+      cy.findByText(address).should('exist')
       cy.findByText('Global').should('exist')
     })
   })
