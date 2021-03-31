@@ -206,7 +206,6 @@ const ProjectsList = props => {
   ]
 
   const projectsFilteredSorted = projectsFiltered.sort(sortFunctions[sortBy])
-
   return (
     <>
       <Flex
@@ -246,6 +245,7 @@ const ProjectsList = props => {
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
           style={{
+            alignItems: 'center',
             margin: '0 auto',
             maxWidth: '1440px',
             padding: '0 1.0875rem 1.45rem'
@@ -254,27 +254,31 @@ const ProjectsList = props => {
           <Flex
             sx={{
               width: '100%',
-              flexDirection: ['column-reverse', null, 'row'],
-              mt: 2
+              flexDirection: ['column-reverse', 'row', 'row'],
+              mt: 2,
+              alignItems: 'flex-end'
             }}
           >
             <Flex
               sx={{
-                width: '100%',
+                // width: '100%',
+                flex: 0.6,
                 flexDirection: ['row', null, 'row'],
                 justifyContent: ['space-around', null, null]
               }}
             >
               <Flex
                 sx={{
-                  width: ['30%'],
+                  // width: ['30%'],
+                  flex: 0.4,
                   alignItems: 'center',
                   mt: [4, 0, 0]
                 }}
               >
                 <DropdownInput
+                  upperLabel='CATEGORY'
                   options={categoryList}
-                  current={0}
+                  current={category}
                   setCurrent={i => setCategory(i)}
                 />
               </Flex>
@@ -293,14 +297,16 @@ const ProjectsList = props => {
                 </Flex> */}
               <Flex
                 sx={{
-                  width: ['30%'],
+                  // width: ['30%'],
+                  flex: 0.4,
                   alignItems: 'center',
                   mt: [4, 0, 0]
                 }}
               >
                 <DropdownInput
+                  upperLabel='SORT BY'
                   options={sortBys}
-                  current={0}
+                  current={sortBy}
                   setCurrent={i => setSortBy(i)}
                 />
               </Flex>
@@ -312,13 +318,11 @@ const ProjectsList = props => {
             </Flex>
             <Flex
               sx={{
-                flexGrow: 3,
                 alignItems: 'center',
-                display: 'flex',
-                width: ['100%', '100%', '50%'],
+                flex: 0.4,
+                // width: ['100%', '100%', '50%'],
                 padding: '0 3% 0 0',
-                mt: [4, 0, 0],
-                mb: [0, 4, 0]
+                mt: [4, 0, 0]
               }}
             >
               <Input
@@ -392,6 +396,7 @@ const ProjectsList = props => {
 
 ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
   totalCount: PropTypes.number.isRequired,
   loadMore: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,

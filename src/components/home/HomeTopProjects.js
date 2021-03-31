@@ -7,7 +7,8 @@ import { navigate } from 'gatsby'
 import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
 import { useState, useEffect } from 'react'
 
-const HomeTopProjects = ({ projects = [] }) => {
+const HomeTopProjects = props => {
+  const { projects = [], categories } = props
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
@@ -43,6 +44,7 @@ const HomeTopProjects = ({ projects = [] }) => {
   return (
     <ProjectsList
       projects={showProjects}
+      categories={categories}
       totalCount={null}
       loadMore={() => navigate('/projects')}
       hasMore

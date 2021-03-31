@@ -3,6 +3,7 @@ import { Flex, Text, Button, Image } from 'theme-ui'
 import { IoMdClose } from 'react-icons/io'
 import iconStreamlineGas from '../images/icon-streamline-gas.svg'
 import iconBgGas from '../images/background-gas.png'
+import xDAIcon from '../images/xDAI_ETH_icon.png'
 import theme from '../gatsby-plugin-theme-ui/index'
 
 const XDAIPopupClosed = props => {
@@ -14,7 +15,6 @@ const XDAIPopupClosed = props => {
     const issueAlreadyClosed =
       typeof window !== 'undefined' &&
       window.localStorage.getItem('xDAIPopupClosed')
-    console.log({ issueAlreadyClosed })
     if (!issueAlreadyClosed) {
       setShowIssuePopup(true)
     }
@@ -50,7 +50,27 @@ const XDAIPopupClosed = props => {
           justifyContent: 'space-between'
         }}
       >
-        <Text color='background' sx={{ display: ['none', 'block', 'block'] }}>
+        <Image
+          src={xDAIcon}
+          sx={{
+            display: ['none', 'block', 'block'],
+            position: 'absolute',
+            objectFit: 'contain',
+            zIndex: 0,
+            marginLeft: '-28px'
+          }}
+          height='50px'
+          width='100px'
+          alt='xDaiIcon'
+        />
+        <Text
+          color='background'
+          sx={{
+            display: ['none', 'block', 'block'],
+            zIndex: 2,
+            marginLeft: '72px'
+          }}
+        >
           Giveth supports donations in most popular Cryptocurrencies.
         </Text>
         <Flex sx={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -97,7 +117,6 @@ const XDAIPopupClosed = props => {
           <Text
             variant='text.default'
             color='background'
-            pl={2}
             sx={{ fontSize: '14px', fontWeight: 700 }}
           >
             OK, GOT IT!

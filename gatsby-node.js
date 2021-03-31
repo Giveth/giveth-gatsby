@@ -88,6 +88,8 @@ exports.createPages = async ({ graphql, actions }) => {
           impactLocation
           balance
           qualityScore
+          totalDonations
+          totalHearts
           status {
             id
             symbol
@@ -204,6 +206,8 @@ exports.sourceNodes = async ({
             impactLocation
             balance
             qualityScore
+            totalDonations
+            totalHearts
             status {
               id
               symbol
