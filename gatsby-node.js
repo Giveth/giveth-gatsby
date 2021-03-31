@@ -110,9 +110,6 @@ exports.createPages = async ({ graphql, actions }) => {
               lastName
               avatar
             }
-            project {
-              title
-            }
             createdAt
             currency
           }
