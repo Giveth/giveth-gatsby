@@ -141,7 +141,7 @@ const ProjectsList = props => {
     rebuildIndex()
   }, [])
 
-  function searchProjects (e) {
+  function searchProjects(e) {
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -149,7 +149,7 @@ const ProjectsList = props => {
   // handleSubmit = e => {
   //   e.preventDefault()
   // }
-  function rebuildIndex () {
+  function rebuildIndex() {
     const dataToSearch = new JsSearch.Search('id')
     /**
      *  defines a indexing strategy for the data
@@ -175,7 +175,7 @@ const ProjectsList = props => {
     setIsLoading(false)
   }
 
-  function filterCategory (searchedResults) {
+  function filterCategory(searchedResults) {
     const categoryName = categoryList[category].toLowerCase()
 
     return searchedResults.filter(
@@ -187,7 +187,7 @@ const ProjectsList = props => {
   const projectsFiltered =
     category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  function sum (items, prop) {
+  function sum(items, prop) {
     return items.reduce(function (a, b) {
       return a + b[prop]
     }, 0)
@@ -195,13 +195,13 @@ const ProjectsList = props => {
 
   //['Quality score', 'Amount raised', 'Hearts']
   const sortFunctions = [
-    function qualityScore (a, b) {
+    function qualityScore(a, b) {
       return b.qualityScore - a.qualityScore
     },
-    function amountRaised (a, b) {
+    function amountRaised(a, b) {
       return b.totalDonations - a.totalDonations
     },
-    function hearts (a, b) {
+    function hearts(a, b) {
       return b.totalHearts - a.totalHearts
     }
   ]
