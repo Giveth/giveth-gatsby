@@ -40,15 +40,15 @@ const Projects = ({ data }) => {
   const { giveth } = data
   const { projects } = giveth
   const totalCount = showProjects?.length
-  const showingProjects = showProjects?.slice(0, limit)
-  //.sort((a, b) => b?.qualityScore > a?.qualityScore)
+  const showingProjects = showProjects
+    ?.slice(0, limit)
+    .sort((a, b) => b?.qualityScore > a?.qualityScore)
 
   const AllProjects = () => (
     <React.Fragment>
       <Seo title='Projects' />
       <ProjectsList
         projects={showingProjects}
-        categories={data?.giveth?.categories}
         totalCount={totalCount}
         loadMore={() => {
           setLimit(limit + 3)
@@ -94,9 +94,6 @@ export const query = graphql`
           projectUpdateId
           userId
         }
-      }
-      categories {
-        name
       }
     }
     allProject {
