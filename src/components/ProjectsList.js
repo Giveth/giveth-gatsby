@@ -125,7 +125,6 @@ const ProjectsList = props => {
     hasMore,
     selectOrderByField
   } = props
-  //console.log(`categories : ${JSON.stringify(categories, null, 2)}`)
 
   const [search, setSearch] = useState()
   const [isLoading, setIsLoading] = useState(false)
@@ -133,7 +132,9 @@ const ProjectsList = props => {
   const [searchResults, setSearchResults] = useState(projects)
   const [category, setCategory] = useState(0)
   const [sortBy, setSortBy] = useState(0)
-  const categoryList = ['All'].concat(categories.map(o => o.name))
+  const categoryList = Array.isArray(categories)
+    ? ['All'].concat(categories.map(o => o.name))
+    : ['All']
   const sortBys = ['Quality score', 'Amount raised', 'Hearts']
 
   React.useEffect(() => {
