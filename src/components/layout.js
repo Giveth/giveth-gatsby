@@ -22,6 +22,7 @@ import { PopupProvider } from '../contextProvider/popupProvider'
 
 import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
+import XDAIPopup from './xDAIPopup'
 import Footer from './footer'
 import Toast from './toast'
 import Popup from './popup'
@@ -99,10 +100,10 @@ const CookiesBanner = () => {
     }
   }, [])
   if (softLaunchSeen === 'false') {
-    Toast({
-      content: `We're in Softlaunch mode`,
-      type: 'info'
-    })
+    // Toast({
+    //   content: `We're in Softlaunch mode`,
+    //   type: 'info'
+    // })
   }
   if (cookiesAccepted || cookiesAccepted === 'none') return null
   // TODO: We may build this reusable for possible future banners on the app
@@ -256,6 +257,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
             <Provider template={AlertTemplate} {...AlertOptions}>
               <PopupProvider>
                 <GithubIssue fixed={true} />
+                <XDAIPopup />
                 <Template />
                 <Popup />
               </PopupProvider>

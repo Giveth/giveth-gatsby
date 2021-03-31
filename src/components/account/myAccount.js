@@ -128,7 +128,7 @@ const MyAccount = ({ info }) => {
           </Text>
         </Box>
       </Flex>
-      <Box
+      {/* <Box
         sx={{
           width: ['100%', '65%', '65%'],
           height: '100px',
@@ -164,7 +164,7 @@ const MyAccount = ({ info }) => {
             {balance ? `${balance} ETH` : null}
           </Text>
         </Flex>
-      </Box>
+      </Box> */}
     </>
   )
 }

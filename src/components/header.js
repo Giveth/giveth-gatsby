@@ -172,7 +172,7 @@ const Header = ({ siteTitle, isHomePage }) => {
   const [navHidden, setHideNavbar] = useState(false)
   const pathname = location?.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll() {
+    function handleScroll () {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -183,7 +183,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup() {
+    return function cleanup () {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -283,6 +283,12 @@ const Header = ({ siteTitle, isHomePage }) => {
               }}
             >
               Home
+            </NavLink>
+            <NavLink
+              to='/join'
+              sx={{ color: pathname === 'join' ? 'primary' : 'secondary' }}
+            >
+              Community
             </NavLink>
             {/* <NavLink to='/causes'>Causes</NavLink> */}
             <NavLink

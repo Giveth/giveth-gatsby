@@ -109,6 +109,9 @@ export const query = graphql`
           description
           walletAddress
           impactLocation
+          qualityScore
+          totalDonations
+          totalHearts
           categories {
             name
           }

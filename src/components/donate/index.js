@@ -114,7 +114,6 @@ const DonateIndex = props => {
         variables: { id: project?.id },
         fetchPolicy: 'network-only'
       })
-      console.log({ projectReFetched })
       if (
         projectReFetched?.project?.length > 0 &&
         projectReFetched.project[0].status?.id !== '5'
@@ -131,9 +130,9 @@ const DonateIndex = props => {
 
   // TODO: Implement this on a utils file
   function getUrlParams(search) {
-    let hashes = search.slice(search.indexOf('?') + 1).split('&')
+    const hashes = search.slice(search.indexOf('?') + 1).split('&')
     return hashes.reduce((params, hash) => {
-      let [key, val] = hash.split('=')
+      const [key, val] = hash.split('=')
       return Object.assign(params, { [key]: decodeURIComponent(val) })
     }, {})
   }
@@ -192,7 +191,7 @@ const DonateIndex = props => {
           />
           <OptionType
             title={CREDIT}
-            subtitle={`Bank Fees`}
+            subtitle='Bank Fees'
             style={LEFT_BOX_STYLE}
           />
         </Options>
