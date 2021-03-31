@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { getEtherscanPrefix, titleCase } from '../../utils'
+import { navigate } from 'gatsby'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import theme from '../../gatsby-plugin-theme-ui'
@@ -233,6 +234,18 @@ const MyDonations = props => {
       navigator.clipboard.writeText(hash)
     }
 
+    const handleCopyTransaction = (event, i) => {
+      event.stopPropagation()
+      copy(i?.transactionId)
+    }
+
+    const handleClicktransaction = (event, i) => {
+      event.stopPropagation()
+      window.open(
+        `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+      )
+    }
+
     return (
       <>
         <Table>
@@ -263,7 +276,11 @@ const MyDonations = props => {
               .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
               .map((i, key) => {
                 return (
-                  <tr key={key}>
+                  <tr
+                    key={key}
+                    onClick={() => navigate(`/project/${i?.project?.slug}`)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     <td
                       data-label='Account'
                       sx={{ variant: 'text.small', color: 'secondary' }}
@@ -340,16 +357,12 @@ const MyDonations = props => {
                       <FiCopy
                         size='18px'
                         sx={{ cursor: 'pointer', mr: 2 }}
-                        onClick={() => copy(i?.transactionId)}
+                        onClick={event => handleCopyTransaction(event, i)}
                       />{' '}
                       <FiExternalLink
                         size='18px'
                         sx={{ cursor: 'pointer' }}
-                        onClick={() =>
-                          window.open(
-                            `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
-                          )
-                        }
+                        onClick={event => handleClicktransaction(event, i)}
                       />
                     </td>
                   </tr>
