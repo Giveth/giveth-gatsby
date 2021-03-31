@@ -137,12 +137,6 @@ const PagesStyle = styled.div`
   }
 `
 
-const DonorBox = styled.td`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-
 const IconSearch = styled(SearchIcon)`
   margin-left: -2.5rem;
 `
@@ -280,20 +274,19 @@ const MyDonations = props => {
                           : 'null'}
                       </Text>
                     </td>
-                    <DonorBox
+                    <td
                       data-label='Project'
                       sx={{ variant: 'text.small', color: 'secondary' }}
                     >
                       <Text
                         sx={{
                           variant: 'text.medium',
-                          color: 'primary',
-                          ml: 2
+                          color: 'primary'
                         }}
                       >
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
-                    </DonorBox>
+                    </td>
                     <td
                       data-label='Currency'
                       sx={{ variant: 'text.small', color: 'secondary' }}
