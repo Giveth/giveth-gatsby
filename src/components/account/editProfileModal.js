@@ -74,6 +74,7 @@ const InputBox = props => {
 function EditProfileModal(props) {
   const [user, setUser] = React.useState(props?.user)
   const wallet = useWallet()
+
   const { register, handleSubmit, reset, errors } = useForm({
     // defaultValues: user
     defaultValues: React.useMemo(() => {
@@ -144,8 +145,12 @@ function EditProfileModal(props) {
               address={user.getWalletAddress()}
             />
             <Box sx={{ ml: '27px' }}>
-              <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
-              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
+              <Text sx={{ color: 'secondary', fontSize: 7 }}>
+                {wallet?.user?.name}
+              </Text>
+              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>
+                {wallet?.user?.email}
+              </Text>
             </Box>
           </Flex>
           <InputBox
