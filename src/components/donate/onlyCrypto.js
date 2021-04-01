@@ -222,7 +222,8 @@ const OnlyCrypto = props => {
     ])
     // GET GAS
     userWallet?.web3?.eth.getGasPrice().then(wei => {
-      const gwei = userWallet.web3.utils.fromWei(wei, 'gwei')
+      const gwei =
+        currentChainId === 100 ? 1 : userWallet.web3.utils.fromWei(wei, 'gwei')
       const ethFromGwei = userWallet.web3.utils.fromWei(wei, 'ether')
       gwei && setGasPrice(Number(gwei))
       ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
