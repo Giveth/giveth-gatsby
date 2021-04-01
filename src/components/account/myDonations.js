@@ -36,9 +36,7 @@ const Table = styled.table`
     border-bottom: 1px solid #eaebee;
     padding: 0.35em;
   }
-  thead th:first-child,
-  thead th:nth-child(3),
-  thead th:nth-child(4) {
+  thead th {
     border-left: none;
     width: 10em;
     min-width: 10em;
@@ -234,15 +232,6 @@ const MyDonations = props => {
       navigator.clipboard.writeText(hash)
     }
 
-    const handleCopyTransaction = (event, i) => {
-      event.stopPropagation()
-      copy(i?.transactionId)
-    }
-
-    const handleClicktransaction = (event, i) => {
-      event.stopPropagation()
-    }
-
     return (
       <>
         <Table>
@@ -312,7 +301,6 @@ const MyDonations = props => {
                       <Text
                         sx={{
                           variant: 'text.small',
-                          whiteSpace: 'pre-wrap',
                           color: 'secondary'
                         }}
                       >
@@ -326,43 +314,41 @@ const MyDonations = props => {
                     <td
                       data-label='Transaction'
                       sx={{ variant: 'text.small', color: 'secondary' }}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row'
-                      }}
                     >
                       <div
                         style={{
-                          width: '120px',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          marginRight: 6
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'baseline'
                         }}
                       >
                         <Text
                           sx={{
                             variant: 'text.small',
-                            color: 'secondary'
+                            color: 'secondary',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            width: '120px'
                           }}
                         >
                           {i?.transactionId}
                         </Text>
+                        <FiCopy
+                          size='18px'
+                          sx={{ cursor: 'pointer', mr: 2 }}
+                          onClick={() => copy(i?.transactionId)}
+                        />{' '}
+                        <FiExternalLink
+                          size='18px'
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() =>
+                            window.open(
+                              `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+                            )
+                          }
+                        />
                       </div>
-                      <FiCopy
-                        size='18px'
-                        sx={{ cursor: 'pointer', mr: 2 }}
-                        onClick={() => copy(i?.transactionId)}
-                      />{' '}
-                      <FiExternalLink
-                        size='18px'
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() =>
-                          window.open(
-                            `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
-                          )
-                        }
-                      />
                     </td>
                   </tr>
                 )
