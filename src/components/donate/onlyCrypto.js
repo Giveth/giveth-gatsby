@@ -201,8 +201,6 @@ const OnlyCrypto = props => {
       name: null
     }
     setMainToken(mainToken)
-    setSelectedToken(currentMainToken)
-    setTokenSymbol(mainToken)
 
     const tokenList = getERC20List(currentChainId)
     const formattedTokenList = tokenList?.tokens
@@ -213,16 +211,19 @@ const OnlyCrypto = props => {
           }
         })
       : []
+    setSelectedToken(formattedTokenList[0]?.value)
+    setTokenSymbol(formattedTokenList[0]?.label)
     setErc20List([
+      ...formattedTokenList,
       {
         value: currentMainToken,
         label: mainToken
-      },
-      ...formattedTokenList
+      }
     ])
     // GET GAS
     userWallet?.web3?.eth.getGasPrice().then(wei => {
-      const gwei = userWallet.web3.utils.fromWei(wei, 'gwei')
+      const gwei =
+        currentChainId === 100 ? 1 : userWallet.web3.utils.fromWei(wei, 'gwei')
       const ethFromGwei = userWallet.web3.utils.fromWei(wei, 'ether')
       gwei && setGasPrice(Number(gwei))
       ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
@@ -347,6 +348,12 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
+      //Check amount
+      console.log({ selectedTokenBalance, subtotal })
+      if (selectedTokenBalance < subtotal) {
+        return triggerPopup('InsufficientFunds')
+      }
+
       let fromOwnProvider = isFromOwnProvider
       // Until we accept every other network we will offer xDAI if detected only through metamask
       if (isXDAI) {
@@ -396,7 +403,7 @@ const OnlyCrypto = props => {
               isXDAI // isXDAI
             )
             console.log({ fromAddress, instantReceipt })
-            //Save initial txn details to db
+            // Save initial txn details to db
             const {
               donationId,
               savedDonation,

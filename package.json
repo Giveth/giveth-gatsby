@@ -25,6 +25,7 @@
     "bnc-notify": "^1.5.1",
     "bnc-onboard": "^1.18.0",
     "buffer": "^5.7.1",
+    "cryptocurrency-icons": "^0.17.1",
     "dayjs": "^1.10.3",
     "eslint": "^7.18.0",
     "eslint-plugin-react": "^7.22.0",

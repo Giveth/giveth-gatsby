@@ -1,11 +1,13 @@
 import React from 'react'
-import { Box, Button, Flex, Text } from 'theme-ui'
+import { Box, Image, Button, Flex, Text } from 'theme-ui'
 import Modal from './modal'
 import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import exclamationIcon from '../images/exclamation.png'
+import ExclamationIcon from '../images/decorator-exclamation.png'
+import WorriedWoman from '../images/worried_woman.png'
 import signupBg from '../images/arcs.png'
 import noFundsBg from '../images/no_funds.png'
 import IncompleteProfileImg from '../images/incomplete_profile.png'
@@ -19,6 +21,68 @@ import {
 } from 'react-share'
 import metamaskLogo from '../images/logos/metamask.svg'
 import torusLogo from '../images/logos/torus.svg'
+
+function ChangeNetworkPopup({ close }) {
+  return (
+    <Flex
+      sx={{
+        flexDirection: 'column',
+        textAlign: 'center',
+        alignItems: 'center',
+        py: 5,
+        px: 4
+      }}
+    >
+      <Text
+        sx={{
+          variant: 'text.default',
+          cursor: 'pointer',
+          position: 'absolute',
+          right: '5%',
+          top: '5%'
+        }}
+        onClick={close}
+      >
+        Close
+      </Text>
+      <Image src={ExclamationIcon} sx={{ alignSelf: 'center' }} />
+      <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+        <Text color='secondary' variant='headings.h4' sx={{ mx: 4, pt: 4 }}>
+          Please change the Network
+        </Text>
+        <Text
+          color='secondary'
+          variant='text.default'
+          sx={{ mx: 4, width: '50%' }}
+        >
+          Please select the Ethereum Mainnet or xDAI network in your wallet and
+          try again
+        </Text>
+      </Flex>
+      <Button
+        mt={4}
+        sx={{
+          width: '290px',
+          variant: 'buttons.default',
+          backgroundColor: 'secondary'
+        }}
+        onClick={() => {
+          try {
+            close()
+          } catch (error) {
+            console.log({ error })
+          }
+        }}
+      >
+        Ok, try again
+      </Button>
+      <Image
+        src={WorriedWoman}
+        sx={{ position: 'absolute', left: -4, bottom: 0 }}
+      />
+    </Flex>
+  )
+}
 
 function WelcomeLoggedOutPopup({ close }) {
   const { isLoggedIn, login } = useWallet()
@@ -285,6 +349,8 @@ function Popup() {
         return <IncompleteProfilePopup close={clearPopup} />
       case 'InsufficientFunds':
         return <InsufficientFundsPopup close={clearPopup} />
+      case 'WrongNetwork':
+        return <ChangeNetworkPopup close={clearPopup} />
       case 'share':
         return (
           <SharePopup
