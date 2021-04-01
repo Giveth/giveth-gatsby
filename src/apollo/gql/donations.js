@@ -103,6 +103,7 @@ const USERS_DONATIONS = gql`
       }
       project {
         title
+        slug
       }
       createdAt
       currency

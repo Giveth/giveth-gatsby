@@ -1,8 +1,6 @@
 /** @jsx jsx */
-import React from 'react'
 import { jsx, Text, Box } from 'theme-ui'
 import { Link } from 'gatsby'
-import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
@@ -28,7 +26,7 @@ const options = [
 ]
 const AccountNav = props => {
   const { setQuery, query, projectsList, userDonations } = props
-  const { logout, wallet } = useWallet()
+  const { logout, wallet, user } = useWallet()
   const handleLogout = () => {
     logout()
   }
@@ -41,7 +39,6 @@ const AccountNav = props => {
           fontSize: 8,
           mt: '40px',
           mb: '68px'
-          // variant: 'links.secondary',
         }}
       >
         My Account
@@ -81,7 +78,7 @@ const AccountNav = props => {
       </Box>
       <Box sx={{ mt: ['35px', '70px', '70px'], maxWidth: '60%' }}>
         <Link
-          href={wallet?.supportLink}
+          href={`${wallet?.supportLink}/${user.getWalletAddress()}`}
           target='_blank'
           rel='noopener noreferrer'
           sx={{ textDecoration: 'none' }}
