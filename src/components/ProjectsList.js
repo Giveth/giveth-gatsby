@@ -256,8 +256,7 @@ const ProjectsList = props => {
             sx={{
               width: '100%',
               flexDirection: ['column-reverse', 'row', 'row'],
-              mt: 2,
-              alignItems: 'flex-end'
+              mt: 2
             }}
           >
             <Flex
@@ -321,9 +320,10 @@ const ProjectsList = props => {
               sx={{
                 alignItems: 'center',
                 flex: 0.4,
-                // width: ['100%', '100%', '50%'],
+                width: '100%',
                 padding: '0 3% 0 0',
-                mt: [4, 0, 0]
+                mt: [4, 0, 0],
+                alignSelf: 'flex-end'
               }}
             >
               <Input

@@ -19,6 +19,7 @@ const Projects = ({ data }) => {
     field: orderByField,
     direction: OrderByDirection.DESC
   }
+  const categories = data?.giveth?.categories
   useEffect(() => {
     const checkProjectsAfterSSR = async () => {
       try {
@@ -49,6 +50,7 @@ const Projects = ({ data }) => {
       <Seo title='Projects' />
       <ProjectsList
         projects={showingProjects}
+        categories={categories}
         totalCount={totalCount}
         loadMore={() => {
           setLimit(limit + 3)
@@ -94,6 +96,9 @@ export const query = graphql`
           projectUpdateId
           userId
         }
+      }
+      categories {
+        name
       }
     }
     allProject {

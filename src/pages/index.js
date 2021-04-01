@@ -109,6 +109,9 @@ export const pageQuery = graphql`
         description
         walletAddress
         impactLocation
+        qualityScore
+        totalDonations
+        totalHearts
         categories {
           name
         }
@@ -136,6 +139,9 @@ export const pageQuery = graphql`
           description
           walletAddress
           impactLocation
+          qualityScore
+          totalDonations
+          totalHearts
           categories {
             name
           }
