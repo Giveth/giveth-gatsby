@@ -27,8 +27,8 @@ const XDAIPopupClosed = props => {
     alignItems: 'center',
     justifyContent: 'space-between',
     boxShadow: '0px 28px 52px rgba(44, 13, 83, 0.2)',
-    py: 2,
-    px: 4
+    px: 4,
+    pt: 2
   }
   if (fixed) {
     style = {
@@ -47,14 +47,14 @@ const XDAIPopupClosed = props => {
         sx={{
           flexDirection: ['column', 'row', 'row'],
           flex: '0.7',
-          justifyContent: 'space-between'
+          justifyContent: 'space-between',
+          alignItems: 'center'
         }}
       >
         <Image
           src={xDAIcon}
           sx={{
             display: ['none', 'block', 'block'],
-            position: 'absolute',
             objectFit: 'contain',
             zIndex: 0,
             marginLeft: '-28px'
@@ -68,7 +68,7 @@ const XDAIPopupClosed = props => {
           sx={{
             display: ['none', 'block', 'block'],
             zIndex: 2,
-            marginLeft: '72px'
+            marginLeft: '4px'
           }}
         >
           Giveth supports donations in most popular Cryptocurrencies.

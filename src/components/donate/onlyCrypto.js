@@ -347,6 +347,12 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
+      //Check amount
+      console.log({ selectedTokenBalance, subtotal })
+      if (selectedTokenBalance < subtotal) {
+        return triggerPopup('InsufficientFunds')
+      }
+
       let fromOwnProvider = isFromOwnProvider
       // Until we accept every other network we will offer xDAI if detected only through metamask
       if (isXDAI) {
