@@ -1,8 +1,6 @@
 /** @jsx jsx */
-import React from 'react'
 import { jsx, Text, Box } from 'theme-ui'
 import { Link } from 'gatsby'
-import styled from '@emotion/styled'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
@@ -41,7 +39,6 @@ const AccountNav = props => {
           fontSize: 8,
           mt: '40px',
           mb: '68px'
-          // variant: 'links.secondary',
         }}
       >
         My Account
