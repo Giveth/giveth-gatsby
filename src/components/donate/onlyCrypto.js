@@ -201,8 +201,6 @@ const OnlyCrypto = props => {
       name: null
     }
     setMainToken(mainToken)
-    setSelectedToken(currentMainToken)
-    setTokenSymbol(mainToken)
 
     const tokenList = getERC20List(currentChainId)
     const formattedTokenList = tokenList?.tokens
@@ -213,12 +211,14 @@ const OnlyCrypto = props => {
           }
         })
       : []
+    setSelectedToken(formattedTokenList[0]?.value)
+    setTokenSymbol(formattedTokenList[0]?.label)
     setErc20List([
+      ...formattedTokenList,
       {
         value: currentMainToken,
         label: mainToken
-      },
-      ...formattedTokenList
+      }
     ])
     // GET GAS
     userWallet?.web3?.eth.getGasPrice().then(wei => {
@@ -396,7 +396,7 @@ const OnlyCrypto = props => {
               isXDAI // isXDAI
             )
             console.log({ fromAddress, instantReceipt })
-            //Save initial txn details to db
+            // Save initial txn details to db
             const {
               donationId,
               savedDonation,
