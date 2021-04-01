@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
-import { navigate } from 'gatsby'
+import { navigate, Link } from 'gatsby'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import theme from '../gatsby-plugin-theme-ui/index'
@@ -40,6 +40,7 @@ const AltCardContent = styled.span`
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 12px;
   padding: 0.5rem 1.5rem 1rem 1.5rem;
+  text-align: center;
 `
 
 const Badge = styled.span`
@@ -308,15 +309,14 @@ const ProjectCard = props => {
               {/* <Text sx={{ variant: 'text.default' }}>GIVERS: 24</Text>
               <Text sx={{ variant: 'text.default' }}>DONATIONS: 65</Text> */}
             </Givers>
-            <Button
-              sx={{ variant: 'buttons.default', mt: 2 }}
-              onClick={() => {
-                !props.disabled &&
-                  (window.location.href = `/project/${props?.slug || ''}`)
-              }}
+            <Link
+              onClick={() => !props.disabled}
+              to={`/project/${props?.slug || ''}`}
             >
-              Learn More
-            </Button>
+              <Button sx={{ variant: 'buttons.default', mt: 2 }}>
+                Learn More
+              </Button>
+            </Link>
             <Text
               sx={{
                 variant: 'links.default',
