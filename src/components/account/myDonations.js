@@ -241,9 +241,6 @@ const MyDonations = props => {
 
     const handleClicktransaction = (event, i) => {
       event.stopPropagation()
-      window.open(
-        `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
-      )
     }
 
     return (
@@ -276,11 +273,7 @@ const MyDonations = props => {
               .sort((a, b) => new Date(b?.createdAt) - new Date(a?.createdAt))
               .map((i, key) => {
                 return (
-                  <tr
-                    key={key}
-                    onClick={() => navigate(`/project/${i?.project?.slug}`)}
-                    style={{ cursor: 'pointer' }}
-                  >
+                  <tr key={key}>
                     <td
                       data-label='Account'
                       sx={{ variant: 'text.small', color: 'secondary' }}
@@ -298,8 +291,10 @@ const MyDonations = props => {
                       <Text
                         sx={{
                           variant: 'text.medium',
-                          color: 'primary'
+                          color: 'primary',
+                          cursor: 'pointer'
                         }}
+                        onClick={() => navigate(`/project/${i?.project?.slug}`)}
                       >
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
@@ -357,12 +352,16 @@ const MyDonations = props => {
                       <FiCopy
                         size='18px'
                         sx={{ cursor: 'pointer', mr: 2 }}
-                        onClick={event => handleCopyTransaction(event, i)}
+                        onClick={() => copy(i?.transactionId)}
                       />{' '}
                       <FiExternalLink
                         size='18px'
                         sx={{ cursor: 'pointer' }}
-                        onClick={event => handleClicktransaction(event, i)}
+                        onClick={() =>
+                          window.open(
+                            `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+                          )
+                        }
                       />
                     </td>
                   </tr>
