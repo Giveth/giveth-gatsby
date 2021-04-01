@@ -53,7 +53,7 @@ const AccountPage = props => {
       <>
         <AccountTop />
         <Flex sx={{ height: '80vh' }} />
-        <LoadingModal isOpen={true} />
+        <LoadingModal isOpen />
       </>
     )
   }
@@ -65,7 +65,7 @@ const AccountPage = props => {
 
   return (
     <>
-      <AccountTop />
+      <AccountTop query={query} />
       <Flex
         sx={{
           ml: '5%',
