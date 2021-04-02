@@ -710,13 +710,11 @@ const OnlyCrypto = props => {
                   title='Network fee'
                   logo={iconQuestionMark}
                   amount={[
-                    `${eth2usd(gasETHPrice)} • ${parseFloat(
-                      gasETHPrice
-                    ).toLocaleString('en-US', {
+                    `${eth2usd(gasETHPrice)} • ${parseFloat(gasPrice)} GWEI`,
+                    `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
-                    })} ETH`,
-                    `${parseFloat(gasPrice)} GWEI`
+                    })} ETH`
                   ]}
                 />
               )}
