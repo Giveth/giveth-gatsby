@@ -350,7 +350,7 @@ const OnlyCrypto = props => {
     try {
       //Check amount
       console.log({ selectedTokenBalance, subtotal })
-      if (selectedTokenBalance < subtotal) {
+      if (isFromOwnProvider && selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
       }
 
