@@ -72,7 +72,7 @@ const InputComponent = styled.input`
   background: white;
   border: none;
   border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 5rem;
+  padding: 1rem 0.4rem 1rem 6rem;
   outline: none;
   width: 100%;
 `
@@ -145,7 +145,7 @@ const OnlyCrypto = props => {
   const {
     isLoggedIn,
     currentChainId,
-    currentNetwork,
+    checkNetwork,
     sendTransaction,
     user,
     ready,
@@ -348,6 +348,9 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
+      // Checks Net
+      await checkNetwork()
+
       //Check amount
       console.log({ selectedTokenBalance, subtotal })
       if (isFromOwnProvider && selectedTokenBalance < subtotal) {
@@ -595,7 +598,7 @@ const OnlyCrypto = props => {
                 alignItems: 'center',
                 position: 'absolute',
                 cursor: 'pointer',
-                ml: 3
+                mx: 3
               }}
             >
               <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>

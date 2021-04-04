@@ -15,6 +15,8 @@ const DropdownContent = styled.div`
   position: absolute;
   z-index: 1;
   width: 100%;
+  max-height: 200px;
+  overflow: scroll;
   background: ${theme.colors.background};
   border: 1px solid #f5f5f5;
   box-sizing: border-box;

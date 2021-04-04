@@ -43,9 +43,9 @@ const SelectWithAutocomplete = ({
       )
       if (found) {
         import(
-          `../../node_modules/cryptocurrency-icons/svg/color/${
+          `../../node_modules/cryptocurrency-icons/32/color/${
             value?.symbol?.toLowerCase() || 'eth'
-          }.svg`
+          }.png`
         ).then(importedImg => {
           img = importedImg?.default
           setIcon(img)
@@ -53,7 +53,11 @@ const SelectWithAutocomplete = ({
       }
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <img src={icon} alt={value?.symbol} height='100%' />
+          <img
+            src={icon}
+            alt={value?.symbol}
+            style={{ width: '32px', height: '32px' }}
+          />
           <Text
             variant='text.default'
             color='secondary'

@@ -135,7 +135,7 @@ const ProjectsList = props => {
   const categoryList = Array.isArray(categories)
     ? ['All'].concat(categories.map(o => o.name))
     : ['All']
-  const sortBys = ['Quality score', 'Amount raised', 'Hearts']
+  const sortBys = ['Default', 'Amount raised', 'Hearts']
 
   React.useEffect(() => {
     rebuildIndex()
