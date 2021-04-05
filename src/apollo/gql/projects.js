@@ -29,6 +29,9 @@ const FETCH_ALL_PROJECTS = gql`
         projectUpdateId
         userId
       }
+      qualityScore
+      totalDonations
+      totalHearts
     }
   }
 `
@@ -47,7 +50,6 @@ const FETCH_PROJECTS = gql`
         description
         walletAddress
         impactLocation
-        qualityScore
         categories {
           name
         }
@@ -57,6 +59,9 @@ const FETCH_PROJECTS = gql`
           projectUpdateId
           userId
         }
+        qualityScore
+        totalDonations
+        totalHearts
       }
       totalCount
     }
@@ -84,6 +89,9 @@ const FETCH_USER_PROJECTS = gql`
       categories {
         name
       }
+      qualityScore
+      totalDonations
+      totalHearts
     }
   }
 `
@@ -102,6 +110,8 @@ const FETCH_MY_PROJECTS = gql`
       walletAddress
       impactLocation
       qualityScore
+      totalDonations
+      totalHearts
       categories {
         name
       }
@@ -127,6 +137,9 @@ const FETCH_PROJECT = gql`
       creationDate
       walletAddress
       impactLocation
+      qualityScore
+      totalDonations
+      totalHearts
       status {
         id
         symbol
@@ -152,6 +165,9 @@ const FETCH_PROJECT_BY_SLUG = gql`
       admin
       walletAddress
       impactLocation
+      qualityScore
+      totalDonations
+      totalHearts
       categories {
         name
       }

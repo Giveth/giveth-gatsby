@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { getEtherscanPrefix, titleCase } from '../../utils'
+import { navigate } from 'gatsby'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import theme from '../../gatsby-plugin-theme-ui'
@@ -35,9 +36,7 @@ const Table = styled.table`
     border-bottom: 1px solid #eaebee;
     padding: 0.35em;
   }
-  thead th:first-child,
-  thead th:nth-child(3),
-  thead th:nth-child(4) {
+  thead th {
     border-left: none;
     width: 10em;
     min-width: 10em;
@@ -135,12 +134,6 @@ const PagesStyle = styled.div`
       color: white;
     }
   }
-`
-
-const DonorBox = styled.td`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 `
 
 const IconSearch = styled(SearchIcon)`
@@ -280,7 +273,7 @@ const MyDonations = props => {
                           : 'null'}
                       </Text>
                     </td>
-                    <DonorBox
+                    <td
                       data-label='Project'
                       sx={{ variant: 'text.small', color: 'secondary' }}
                     >
@@ -288,12 +281,13 @@ const MyDonations = props => {
                         sx={{
                           variant: 'text.medium',
                           color: 'primary',
-                          ml: 2
+                          cursor: 'pointer'
                         }}
+                        onClick={() => navigate(`/project/${i?.project?.slug}`)}
                       >
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
-                    </DonorBox>
+                    </td>
                     <td
                       data-label='Currency'
                       sx={{ variant: 'text.small', color: 'secondary' }}
@@ -307,7 +301,6 @@ const MyDonations = props => {
                       <Text
                         sx={{
                           variant: 'text.small',
-                          whiteSpace: 'pre-wrap',
                           color: 'secondary'
                         }}
                       >
@@ -321,43 +314,41 @@ const MyDonations = props => {
                     <td
                       data-label='Transaction'
                       sx={{ variant: 'text.small', color: 'secondary' }}
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row'
-                      }}
                     >
                       <div
                         style={{
-                          width: '120px',
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          marginRight: 6
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'baseline'
                         }}
                       >
                         <Text
                           sx={{
                             variant: 'text.small',
-                            color: 'secondary'
+                            color: 'secondary',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            width: '120px'
                           }}
                         >
                           {i?.transactionId}
                         </Text>
+                        <FiCopy
+                          size='18px'
+                          sx={{ cursor: 'pointer', mr: 2 }}
+                          onClick={() => copy(i?.transactionId)}
+                        />{' '}
+                        <FiExternalLink
+                          size='18px'
+                          sx={{ cursor: 'pointer' }}
+                          onClick={() =>
+                            window.open(
+                              `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+                            )
+                          }
+                        />
                       </div>
-                      <FiCopy
-                        size='18px'
-                        sx={{ cursor: 'pointer', mr: 2 }}
-                        onClick={() => copy(i?.transactionId)}
-                      />{' '}
-                      <FiExternalLink
-                        size='18px'
-                        sx={{ cursor: 'pointer' }}
-                        onClick={() =>
-                          window.open(
-                            `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
-                          )
-                        }
-                      />
                     </td>
                   </tr>
                 )

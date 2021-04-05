@@ -102,7 +102,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
           variables: { id: project?.id },
           fetchPolicy: 'network-only'
         })
-        console.log({ projectReFetched })
         if (
           projectReFetched?.project?.length > 0 &&
           projectReFetched.project[0].status?.id !== '5'

@@ -199,7 +199,13 @@ const UserDetails = () => {
               }}
               className='balance'
             >
-              Balance: {balance ? `${balance} ETH` : ''}
+              Balance:{' '}
+              {balance
+                ? `${parseFloat(balance)?.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 6
+                  })} ${currentChainId === 100 ? 'xDAI' : 'ETH'}`
+                : ''}
             </MenuTitle>
           ) : null}
           <MenuTitle

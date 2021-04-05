@@ -15,6 +15,7 @@ const IndexContent = ({
   content,
   location,
   topProjects: projects,
+  categories,
   allProject
 }) => {
   const popup = React.useContext(PopupContext)
@@ -34,6 +35,7 @@ const IndexContent = ({
       <Hero content={content} />
       <HomeTopProjects
         projects={projects}
+        categories={categories}
         totalCount={allProject?.totalCount}
       />
       {!hideInfo === true ? <InfoSection content={content} /> : null}
@@ -50,7 +52,6 @@ const IndexPage = props => {
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION
     : false
-  console.log({ data })
   return (
     <Layout isHomePage='true'>
       <Seo title='Home' />
@@ -60,6 +61,7 @@ const IndexPage = props => {
         html={html}
         location={location}
         topProjects={topProjects?.projects}
+        categories={topProjects?.categories}
         allProject={allProject}
       />
     </Layout>
@@ -107,6 +109,9 @@ export const pageQuery = graphql`
         description
         walletAddress
         impactLocation
+        qualityScore
+        totalDonations
+        totalHearts
         categories {
           name
         }
@@ -116,6 +121,9 @@ export const pageQuery = graphql`
           projectUpdateId
           userId
         }
+      }
+      categories {
+        name
       }
     }
     allProject {
@@ -131,6 +139,9 @@ export const pageQuery = graphql`
           description
           walletAddress
           impactLocation
+          qualityScore
+          totalDonations
+          totalHearts
           categories {
             name
           }

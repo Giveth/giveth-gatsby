@@ -1,5 +1,5 @@
 import detectEthereumProvider from '@metamask/detect-provider'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import { ethers } from 'ethers'
@@ -7,6 +7,7 @@ import Web3 from 'web3'
 
 import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
+import { PopupContext } from '../contextProvider/popupProvider'
 import LoadingModal from '../components/loadingModal'
 import getSigner from '../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
@@ -44,7 +45,9 @@ function WalletProvider(props) {
   const [currentChainId, setCurrentChainId] = useState(null)
   const [loading, setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
+  const usePopup = useContext(PopupContext)
   const client = useApolloClient()
+
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
     if (provider && walletProvider !== 'torus') {
@@ -305,6 +308,7 @@ function WalletProvider(props) {
     if (currentNetworkId?.toString() === networkId || byPassXDAI) {
       return true
     } else {
+      usePopup?.triggerPopup('WrongNetwork')
       throw new Error(`Wrong network, please change to ${network} or xDAI`)
     }
   }
@@ -386,7 +390,7 @@ function WalletProvider(props) {
           .on('error', error => txCallbacks?.onError(error)) // If a out of gas error, the second parameter is the receipt.
       }
 
-      console.log(`stTxn ---> : `, { txn })
+      console.log('stTxn ---> : ', { txn })
       return txn
     } catch (error) {
       console.log('Error sending transaction: ', { error })

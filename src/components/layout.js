@@ -22,6 +22,7 @@ import { PopupProvider } from '../contextProvider/popupProvider'
 
 import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
+import XDAIPopup from './xDAIPopup'
 import Footer from './footer'
 import Toast from './toast'
 import Popup from './popup'
@@ -250,20 +251,21 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
         `}
         </script>
       </Helmet>
-      <WalletProvider>
-        <GlobalProvider>
-          <ThemeProvider theme={theme}>
-            <Provider template={AlertTemplate} {...AlertOptions}>
-              <PopupProvider>
+      <PopupProvider>
+        <WalletProvider>
+          <GlobalProvider>
+            <ThemeProvider theme={theme}>
+              <Provider template={AlertTemplate} {...AlertOptions}>
                 <GithubIssue fixed={true} />
+                <XDAIPopup />
                 <Template />
                 <Popup />
-              </PopupProvider>
-            </Provider>
-          </ThemeProvider>
-        </GlobalProvider>
-        <StyledToastContainer />
-      </WalletProvider>
+              </Provider>
+            </ThemeProvider>
+          </GlobalProvider>
+          <StyledToastContainer />
+        </WalletProvider>
+      </PopupProvider>
     </>
   )
 }

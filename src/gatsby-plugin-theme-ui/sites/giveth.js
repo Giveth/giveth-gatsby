@@ -221,7 +221,9 @@ export default {
       }
     },
     search: {
+      fontFamily: 'Red Hat Text, sans serif',
       background: 'white',
+      color: 'secondary',
       borderColor: 'transparent',
       boxShadow: '0px 4px 20px rgba(212, 218, 238, 0.4)',
       borderRadius: '12px',

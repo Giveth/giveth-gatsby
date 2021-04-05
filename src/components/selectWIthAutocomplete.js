@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Select from 'react-select'
+import { Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
+
+import iconManifest from '../../node_modules/cryptocurrency-icons/manifest.json'
+import ETHIcon from '../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
 const SelectWithAutocomplete = ({
   content,
@@ -19,7 +23,7 @@ const SelectWithAutocomplete = ({
 
   const CustomOption = props => {
     const { children, value, innerProps, isDisabled } = props
-
+    const [icon, setIcon] = useState(ETHIcon)
     const StyledOption = styled.div`
       &:hover {
         div {
@@ -33,8 +37,33 @@ const SelectWithAutocomplete = ({
     let toShow = children
     // Special render for tokens, showing extra info
     if (isTokenList) {
+      let img = ''
+      const found = iconManifest?.find(
+        i => i?.symbol === value?.symbol?.toUpperCase()
+      )
+      if (found) {
+        import(
+          `../../node_modules/cryptocurrency-icons/32/color/${
+            value?.symbol?.toLowerCase() || 'eth'
+          }.png`
+        ).then(importedImg => {
+          img = importedImg?.default
+          setIcon(img)
+        })
+      }
       toShow = (
-        <div>{`${value?.symbol} ${value?.name ? `- ${value.name}` : ''}`}</div>
+        <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <img
+            src={icon}
+            alt={value?.symbol}
+            style={{ width: '32px', height: '32px' }}
+          />
+          <Text
+            variant='text.default'
+            color='secondary'
+            sx={{ pl: 2 }}
+          >{`${value?.symbol}`}</Text>
+        </Flex>
       )
     }
     return (
