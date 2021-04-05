@@ -8,7 +8,7 @@ import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
 import { useState, useEffect } from 'react'
 
 const HomeTopProjects = props => {
-  const { projects = [], categories } = props
+  const { projects = [], categories, fromHomePage } = props
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
   const [orderByField, setOrderByField] = useState(OrderByField.Balance)
@@ -43,6 +43,7 @@ const HomeTopProjects = props => {
 
   return (
     <ProjectsList
+      fromHomePage={fromHomePage}
       projects={showProjects}
       categories={categories}
       totalCount={null}

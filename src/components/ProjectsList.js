@@ -123,6 +123,7 @@ const ProjectsList = props => {
     totalCount,
     loadMore,
     hasMore,
+    fromHomePage,
     selectOrderByField
   } = props
 
@@ -207,6 +208,7 @@ const ProjectsList = props => {
   ]
 
   const projectsFilteredSorted = projectsFiltered.sort(sortFunctions[sortBy])
+
   return (
     <>
       <Flex
@@ -252,6 +254,88 @@ const ProjectsList = props => {
             padding: '0 1.0875rem 1.45rem'
           }}
         >
+          {!fromHomePage ? (
+            <Flex>
+              <Flex
+                sx={{
+                  // width: '100%',
+                  flex: 0.6,
+                  flexDirection: ['row', null, 'row'],
+                  justifyContent: ['space-around', null, null]
+                }}
+              >
+                <Flex
+                  sx={{
+                    // width: ['30%'],
+                    flex: 0.4,
+                    alignItems: 'center',
+                    mt: [4, 0, 0]
+                  }}
+                >
+                  <DropdownInput
+                    upperLabel='CATEGORY'
+                    options={categoryList}
+                    current={category}
+                    setCurrent={i => setCategory(i)}
+                  />
+                </Flex>
+                {/* <Flex
+            sx={{
+              width: ['30%'],
+              alignItems: 'center',
+              mt: [4, 0, 0]
+            }}
+          >
+            <DropdownInput
+              options={locations}
+              current={0}
+              // setCurrent={i => setFilter(i)}
+            />
+          </Flex> */}
+                <Flex
+                  sx={{
+                    // width: ['30%'],
+                    flex: 0.4,
+                    alignItems: 'center',
+                    mt: [4, 0, 0]
+                  }}
+                >
+                  <DropdownInput
+                    upperLabel='SORT BY'
+                    options={sortBys}
+                    current={sortBy}
+                    setCurrent={i => setSortBy(i)}
+                  />
+                </Flex>
+                {/* <SelectMenu
+            caption='sort by'
+            options={orderBySelectOptions}
+            onChange={selectOrderByField}
+          /> */}
+              </Flex>
+              <Flex
+                sx={{
+                  alignItems: 'center',
+                  flex: 0.4,
+                  width: '100%',
+                  padding: '0 3% 0 0',
+                  mt: [4, 0, 0],
+                  alignSelf: 'flex-end'
+                }}
+              >
+                <Input
+                  placeholder='Search Projects'
+                  variant='forms.search'
+                  style={{
+                    width: '100%',
+                    margin: 'auto'
+                  }}
+                  onChange={searchProjects}
+                />
+                <IconSearch />
+              </Flex>
+            </Flex>
+          ) : null}
           <Flex
             sx={{
               width: '100%',
@@ -259,121 +343,42 @@ const ProjectsList = props => {
               mt: 2
             }}
           >
-            <Flex
-              sx={{
-                // width: '100%',
-                flex: 0.6,
-                flexDirection: ['row', null, 'row'],
-                justifyContent: ['space-around', null, null]
-              }}
-            >
-              <Flex
-                sx={{
-                  // width: ['30%'],
-                  flex: 0.4,
-                  alignItems: 'center',
-                  mt: [4, 0, 0]
-                }}
-              >
-                <DropdownInput
-                  upperLabel='CATEGORY'
-                  options={categoryList}
-                  current={category}
-                  setCurrent={i => setCategory(i)}
-                />
-              </Flex>
-              {/* <Flex
-                  sx={{
-                    width: ['30%'],
-                    alignItems: 'center',
-                    mt: [4, 0, 0]
-                  }}
-                >
-                  <DropdownInput
-                    options={locations}
-                    current={0}
-                    // setCurrent={i => setFilter(i)}
-                  />
-                </Flex> */}
-              <Flex
-                sx={{
-                  // width: ['30%'],
-                  flex: 0.4,
-                  alignItems: 'center',
-                  mt: [4, 0, 0]
-                }}
-              >
-                <DropdownInput
-                  upperLabel='SORT BY'
-                  options={sortBys}
-                  current={sortBy}
-                  setCurrent={i => setSortBy(i)}
-                />
-              </Flex>
-              {/* <SelectMenu
-                  caption='sort by'
-                  options={orderBySelectOptions}
-                  onChange={selectOrderByField}
-                /> */}
-            </Flex>
-            <Flex
-              sx={{
-                alignItems: 'center',
-                flex: 0.4,
-                width: '100%',
-                padding: '0 3% 0 0',
-                mt: [4, 0, 0],
-                alignSelf: 'flex-end'
-              }}
-            >
-              <Input
-                placeholder='Search Projects'
-                variant='forms.search'
-                style={{
-                  width: '100%',
-                  margin: 'auto'
-                }}
-                onChange={searchProjects}
-              />
-              <IconSearch />
-            </Flex>
-          </Flex>
-
-          <div
-            style={{
-              width: '100%',
-              margin: 0
-            }}
-          >
-            <Grid
-              p={4}
-              columns={[1, 2, 3]}
+            <div
               style={{
-                margin: 0,
-                columnGap: '2.375em',
-                justifyItems: 'center'
+                width: '100%',
+                margin: 0
               }}
             >
-              {projectsFilteredSorted
-                ? projectsFilteredSorted
-                    ?.slice()
-                    .map((project, index) => (
-                      <ProjectCard
-                        shadowed
-                        id={project.id}
-                        listingId={project.title + '-' + index}
-                        key={project.title + '-' + index}
-                        name={project.title}
-                        slug={project.slug}
-                        donateAddress={project.donateAddress}
-                        image={project.image || NoImage}
-                        raised={project.balance}
-                        project={project}
-                      />
-                    ))
-                : null}
-            </Grid>
-          </div>
+              <Grid
+                p={4}
+                columns={[1, 2, 3]}
+                style={{
+                  margin: 0,
+                  columnGap: '2.375em',
+                  justifyItems: 'center'
+                }}
+              >
+                {projectsFilteredSorted
+                  ? projectsFilteredSorted
+                      ?.slice()
+                      .map((project, index) => (
+                        <ProjectCard
+                          shadowed
+                          id={project.id}
+                          listingId={project.title + '-' + index}
+                          key={project.title + '-' + index}
+                          name={project.title}
+                          slug={project.slug}
+                          donateAddress={project.donateAddress}
+                          image={project.image || NoImage}
+                          raised={project.balance}
+                          project={project}
+                        />
+                      ))
+                  : null}
+              </Grid>
+            </div>
+          </Flex>
           {hasMore && (
             <div sx={{ justifySelf: 'center', textAlign: 'center' }}>
               <Button

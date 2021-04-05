@@ -34,6 +34,7 @@ const IndexContent = ({
     <>
       <Hero content={content} />
       <HomeTopProjects
+        fromHomePage
         projects={projects}
         categories={categories}
         totalCount={allProject?.totalCount}
