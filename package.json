@@ -72,6 +72,7 @@
     "react-helmet": "^6.0.0",
     "react-hook-form": "^6.15.4",
     "react-icons": "^3.11.0",
+    "react-infinite-scroll-component": "^6.0.0",
     "react-jdenticon": "0.0.8",
     "react-js-pagination": "^3.0.3",
     "react-lottie": "^1.2.3",
