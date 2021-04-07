@@ -22,7 +22,6 @@ import { logout } from '../services/auth'
 
 const IndexPage = props => {
   const { data, location } = props
-  console.log({ props })
   // const [isLoggedIn] = useState(checkIfLoggedIn())
   // const [isLoggedIn] = useState(true)
   const [projectAdded, setProjectAdded] = useState(false)

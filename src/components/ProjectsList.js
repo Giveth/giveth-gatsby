@@ -1,5 +1,15 @@
 /** @jsx jsx */
-import { Box, Button, Grid, Flex, jsx, Text, Input, Select } from 'theme-ui'
+import {
+  Box,
+  Button,
+  Grid,
+  Flex,
+  Spinner,
+  jsx,
+  Text,
+  Input,
+  Select
+} from 'theme-ui'
 import React, { useState } from 'react'
 import ProjectCard from './projectCard'
 import NoImage from '../images/no-image-available.jpg'
@@ -9,6 +19,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import DropdownInput from '../components/dropdownInput'
 import theme from '../gatsby-plugin-theme-ui'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import * as JsSearch from 'js-search'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
 
@@ -121,13 +132,13 @@ const ProjectsList = props => {
     projects,
     categories,
     totalCount,
-    loadMore,
-    hasMore,
+    maxLimit,
     fromHomePage,
     selectOrderByField
   } = props
 
   const [search, setSearch] = useState()
+  const [limit, setLimit] = useState(maxLimit)
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState()
   const [searchResults, setSearchResults] = useState(projects)
@@ -193,7 +204,6 @@ const ProjectsList = props => {
       return a + b[prop]
     }, 0)
   }
-
   //['Quality score', 'Amount raised', 'Hearts']
   const sortFunctions = [
     function qualityScore(a, b) {
@@ -207,7 +217,14 @@ const ProjectsList = props => {
     }
   ]
 
-  const projectsFilteredSorted = projectsFiltered.sort(sortFunctions[sortBy])
+  const projectsFilteredSorted = projectsFiltered
+    ?.slice(0, limit)
+    .sort(sortFunctions[sortBy])
+
+  const loadMore = () => {
+    setLimit(limit + 3)
+  }
+  const hasMore = limit < projectsFiltered.length
 
   return (
     <>
@@ -349,51 +366,107 @@ const ProjectsList = props => {
                 margin: 0
               }}
             >
-              <Grid
-                p={4}
-                columns={[1, 2, 3]}
-                style={{
-                  margin: 0,
-                  columnGap: '2.375em',
-                  justifyItems: 'center'
-                }}
+              <InfiniteScroll
+                dataLength={projectsFilteredSorted?.length} //This is important field to render the next data
+                next={loadMore}
+                hasMore={hasMore}
+                loader={
+                  !fromHomePage && (
+                    <Flex sx={{ justifyContent: 'center', py: 2, mb: 2 }}>
+                      <Spinner variant='spinner.medium' />
+                    </Flex>
+                  )
+                }
+                endMessage={
+                  <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+                    {!fromHomePage ? (
+                      projectsFilteredSorted?.length > 0 ? (
+                        <>
+                          <Text
+                            variant='headings.h5'
+                            color='secondary'
+                            sx={{ textAlign: 'center' }}
+                          >
+                            Woah you reached the end!
+                          </Text>
+                          <Button
+                            type='button'
+                            onClick={() => window?.scrollTo(0, 0)}
+                            sx={{
+                              variant: 'buttons.default',
+                              backgroundColor: 'secondary',
+                              my: 4
+                            }}
+                          >
+                            Go to the top!
+                          </Button>
+                        </>
+                      ) : (
+                        <Text
+                          variant='headings.h5'
+                          color='secondary'
+                          sx={{ textAlign: 'center', mb: 4 }}
+                        >
+                          Nothing here
+                        </Text>
+                      )
+                    ) : null}
+                  </Flex>
+                }
               >
-                {projectsFilteredSorted
-                  ? projectsFilteredSorted
-                      ?.slice()
-                      .map((project, index) => (
-                        <ProjectCard
-                          shadowed
-                          id={project.id}
-                          listingId={project.title + '-' + index}
-                          key={project.title + '-' + index}
-                          name={project.title}
-                          slug={project.slug}
-                          donateAddress={project.donateAddress}
-                          image={project.image || NoImage}
-                          raised={project.balance}
-                          project={project}
-                        />
-                      ))
-                  : null}
-              </Grid>
+                <Grid
+                  p={4}
+                  columns={[1, 2, 3]}
+                  style={{
+                    margin: 0,
+                    columnGap: '2.375em',
+                    justifyItems: 'center'
+                  }}
+                >
+                  {projectsFilteredSorted
+                    ? projectsFilteredSorted
+                        ?.slice()
+                        .map((project, index) => (
+                          <ProjectCard
+                            shadowed
+                            id={project.id}
+                            listingId={project.title + '-' + index}
+                            key={project.title + '-' + index}
+                            name={project.title}
+                            slug={project.slug}
+                            donateAddress={project.donateAddress}
+                            image={project.image || NoImage}
+                            raised={project.balance}
+                            project={project}
+                          />
+                        ))
+                    : null}
+                </Grid>
+              </InfiniteScroll>
+              {fromHomePage && (
+                <Flex style={{ justifyContent: 'center' }}>
+                  <Link
+                    to='/projects'
+                    sx={{
+                      textAlign: 'center'
+                    }}
+                  >
+                    <Button
+                      sx={{
+                        variant: 'buttons.nofillGray',
+                        color: 'bodyLight',
+                        fontSize: 14,
+                        mb: '3rem'
+                      }}
+                      onClick={() => loadMore()}
+                    >
+                      Show more Projects
+                    </Button>
+                  </Link>
+                </Flex>
+              )}
             </div>
           </Flex>
-          {hasMore && (
-            <div sx={{ justifySelf: 'center', textAlign: 'center' }}>
-              <Button
-                sx={{
-                  variant: 'buttons.nofillGray',
-                  color: 'bodyLight',
-                  fontSize: 14,
-                  mb: '3rem'
-                }}
-                onClick={() => loadMore()}
-              >
-                Show more Projects
-              </Button>
-            </div>
-          )}
         </div>
       </ProjectSection>
     </>
@@ -404,8 +477,6 @@ ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
   categories: PropTypes.array.isRequired,
   totalCount: PropTypes.number.isRequired,
-  loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired,
   selectOrderByField: PropTypes.func.isRequired
 }
 export default ProjectsList

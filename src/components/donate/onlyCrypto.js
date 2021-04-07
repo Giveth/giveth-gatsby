@@ -530,7 +530,7 @@ const OnlyCrypto = props => {
           </Text>
           <QRCode value={project?.walletAddress} size={250} />
           <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
-            Please send ETH or ERC20 tokens using this address
+            {`Please send ${mainToken} or ERC20 tokens using this address`}
           </Text>
           <Flex
             sx={{
@@ -719,7 +719,7 @@ const OnlyCrypto = props => {
                     `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
-                    })} ETH`
+                    })} ${mainToken}`
                   ]}
                 />
               )}

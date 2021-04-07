@@ -68,7 +68,7 @@ export const ProjectEthAddressInput = ({
           {/* {characterLength}/42 */}
         </Text>
       </Flex>
-      {walletUsed !== true && !address && (
+      {walletUsed && (
         <Text
           sx={{
             fontSize: '3',

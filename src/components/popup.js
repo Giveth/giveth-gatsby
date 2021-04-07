@@ -4,6 +4,7 @@ import Modal from './modal'
 import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
+import CopyToClipboard from '../components/copyToClipboard'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import exclamationIcon from '../images/exclamation.png'
 import ExclamationIcon from '../images/decorator-exclamation.png'
@@ -334,6 +335,12 @@ function SharePopup() {
           <FacebookIcon size={40} round />
         </FacebookShareButton>
       </Flex>
+      <br />
+      <CopyToClipboard size='18px' text={url}>
+        <Text sx={{ variant: 'text.medium', color: 'bodyLight' }}>
+          click to copy url
+        </Text>
+      </CopyToClipboard>
     </Flex>
   )
 }

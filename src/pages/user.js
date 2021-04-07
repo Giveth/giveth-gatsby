@@ -11,7 +11,6 @@ import { WALLET_DONATIONS } from '../apollo/gql/donations'
 import Web3 from 'web3'
 
 const User = props => {
-  console.log({ props })
   const { address } = props
   const client = useApolloClient()
 

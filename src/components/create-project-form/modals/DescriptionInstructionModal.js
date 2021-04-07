@@ -64,7 +64,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
     <Text
       sx={{ mt: '20px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}
     >
-      See how others have done it -{' '}
+      See how others have done it:{' '}
       <a target='_blank' href='/projects' css={{ textDecoration: 'none' }}>
         <Text sx={{ color: 'primary' }}>Browse examples.</Text>
       </a>

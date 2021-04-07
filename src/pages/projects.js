@@ -42,8 +42,6 @@ const Projects = ({ data }) => {
   const { projects } = giveth
   const totalCount = showProjects?.length
   const showingProjects = showProjects
-    ?.slice(0, limit)
-    .sort((a, b) => b?.qualityScore > a?.qualityScore)
 
   const AllProjects = () => (
     <React.Fragment>
@@ -52,10 +50,7 @@ const Projects = ({ data }) => {
         projects={showingProjects}
         categories={categories}
         totalCount={totalCount}
-        loadMore={() => {
-          setLimit(limit + 3)
-        }}
-        hasMore={limit < projects.length}
+        maxLimit={limit}
         selectOrderByField={orderByField => {
           setLimit(2)
           setOrderByField(orderByField)
