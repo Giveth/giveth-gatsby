@@ -204,7 +204,6 @@ const ProjectsList = props => {
       return a + b[prop]
     }, 0)
   }
-
   //['Quality score', 'Amount raised', 'Hearts']
   const sortFunctions = [
     function qualityScore(a, b) {
@@ -444,6 +443,28 @@ const ProjectsList = props => {
                     : null}
                 </Grid>
               </InfiniteScroll>
+              {fromHomePage && (
+                <Flex style={{ justifyContent: 'center' }}>
+                  <Link
+                    to='/projects'
+                    sx={{
+                      textAlign: 'center'
+                    }}
+                  >
+                    <Button
+                      sx={{
+                        variant: 'buttons.nofillGray',
+                        color: 'bodyLight',
+                        fontSize: 14,
+                        mb: '3rem'
+                      }}
+                      onClick={() => loadMore()}
+                    >
+                      Show more Projects
+                    </Button>
+                  </Link>
+                </Flex>
+              )}
             </div>
           </Flex>
         </div>

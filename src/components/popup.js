@@ -4,6 +4,7 @@ import Modal from './modal'
 import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
+import CopyToClipboard from '../components/copyToClipboard'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import exclamationIcon from '../images/exclamation.png'
 import ExclamationIcon from '../images/decorator-exclamation.png'
@@ -22,7 +23,7 @@ import {
 import metamaskLogo from '../images/logos/metamask.svg'
 import torusLogo from '../images/logos/torus.svg'
 
-function ChangeNetworkPopup ({ close }) {
+function ChangeNetworkPopup({ close }) {
   return (
     <Flex
       sx={{
@@ -84,7 +85,7 @@ function ChangeNetworkPopup ({ close }) {
   )
 }
 
-function WelcomeLoggedOutPopup ({ close }) {
+function WelcomeLoggedOutPopup({ close }) {
   const { isLoggedIn, login } = useWallet()
 
   if (isLoggedIn) {
@@ -162,7 +163,7 @@ function WelcomeLoggedOutPopup ({ close }) {
   )
 }
 
-function IncompleteProfilePopup ({ close }) {
+function IncompleteProfilePopup({ close }) {
   return (
     <Flex
       sx={{
@@ -226,7 +227,7 @@ function IncompleteProfilePopup ({ close }) {
   )
 }
 
-function InsufficientFundsPopup ({ close }) {
+function InsufficientFundsPopup({ close }) {
   return (
     <Flex
       sx={{
@@ -297,7 +298,7 @@ function InsufficientFundsPopup ({ close }) {
   )
 }
 
-function SharePopup () {
+function SharePopup() {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
@@ -335,17 +336,16 @@ function SharePopup () {
         </FacebookShareButton>
       </Flex>
       <br />
-      <Text
-        onClick={() => navigator.clipboard.writeText(url)}
-        sx={{ variant: 'text.small', color: 'secondary' }}
-      >
-        click to copy url
-      </Text>
+      <CopyToClipboard size='18px' text={url}>
+        <Text sx={{ variant: 'text.medium', color: 'bodyLight' }}>
+          click to copy url
+        </Text>
+      </CopyToClipboard>
     </Flex>
   )
 }
 
-function Popup () {
+function Popup() {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
   const setView = () => {
