@@ -1,11 +1,12 @@
 import '@testing-library/cypress/add-commands'
 import 'cypress-localstorage-commands'
+import 'cypress-wait-until'
 import Web3 from 'web3'
 
 Cypress.Commands.add('setWeb3Provider', () => {
   cy.window().then(window => {
     window.ethereum = new Web3(
-      new Web3.providers.HttpProvider('http://localhost:8545')
+      new Web3.providers.WebsocketProvider('ws://localhost:8545')
     )
     window.localStorage.setItem('cookiesAccepted', 'true')
     window.localStorage.setItem('githubIssueClosed', 'true')

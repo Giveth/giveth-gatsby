@@ -5,7 +5,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 // TODO: SET wallet address to this link
 const metamask = {
   isInitialized: false,
-  supportLink: `https://etherscan.io/address/`,
+  supportLink: 'https://etherscan.io/address/',
   setweb3: function (provider) {
     const web3Inst = new Web3(provider)
     metamask.web3 = web3Inst
