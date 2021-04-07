@@ -22,7 +22,7 @@ import {
 import metamaskLogo from '../images/logos/metamask.svg'
 import torusLogo from '../images/logos/torus.svg'
 
-function ChangeNetworkPopup({ close }) {
+function ChangeNetworkPopup ({ close }) {
   return (
     <Flex
       sx={{
@@ -84,7 +84,7 @@ function ChangeNetworkPopup({ close }) {
   )
 }
 
-function WelcomeLoggedOutPopup({ close }) {
+function WelcomeLoggedOutPopup ({ close }) {
   const { isLoggedIn, login } = useWallet()
 
   if (isLoggedIn) {
@@ -162,7 +162,7 @@ function WelcomeLoggedOutPopup({ close }) {
   )
 }
 
-function IncompleteProfilePopup({ close }) {
+function IncompleteProfilePopup ({ close }) {
   return (
     <Flex
       sx={{
@@ -226,7 +226,7 @@ function IncompleteProfilePopup({ close }) {
   )
 }
 
-function InsufficientFundsPopup({ close }) {
+function InsufficientFundsPopup ({ close }) {
   return (
     <Flex
       sx={{
@@ -297,7 +297,7 @@ function InsufficientFundsPopup({ close }) {
   )
 }
 
-function SharePopup() {
+function SharePopup () {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
@@ -334,11 +334,18 @@ function SharePopup() {
           <FacebookIcon size={40} round />
         </FacebookShareButton>
       </Flex>
+      <br />
+      <Text
+        onClick={() => navigator.clipboard.writeText(url)}
+        sx={{ variant: 'text.small', color: 'secondary' }}
+      >
+        click to copy url
+      </Text>
     </Flex>
   )
 }
 
-function Popup() {
+function Popup () {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
   const setView = () => {
