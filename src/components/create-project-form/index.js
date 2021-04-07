@@ -39,12 +39,16 @@ import Toast from '../toast'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
+  const [inputIsLoading, setInputLoading] = useState(false)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
   const { isLoggedIn, user, validateToken, logout } = useWallet()
   const [flashMessage, setFlashMessage] = useState('')
-
-  const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
+  const { register, handleSubmit } = useForm({
+    defaultValues: React.useMemo(() => {
+      return formData
+    }, [formData])
+  })
   const [walletUsed, setWalletUsed] = useState(false)
   const usePopup = React.useContext(PopupContext)
   const client = useApolloClient()
@@ -55,7 +59,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken () {
+    async function doValidateToken() {
       const isValid = await validateToken()
       console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -68,6 +72,7 @@ const CreateProjectForm = props => {
       // navigate('/', { state: { welcome: true } })
     }
   }, [])
+
   const steps = [
     ({ animationStyle }) => (
       <ProjectNameInput
@@ -122,11 +127,16 @@ const CreateProjectForm = props => {
       <ProjectEthAddressInput
         animationStyle={animationStyle}
         currentValue={
-          typeof walletUsed !== 'boolean'
+          formData?.projectWalletAddress
+            ? formData?.projectWalletAddress
+            : typeof walletUsed !== 'boolean'
             ? walletUsed
-            : formData?.projectWalletAddress
+            : null
         }
-        walletUsed={walletUsed}
+        walletUsed={
+          typeof walletUsed !== 'boolean' &&
+          formData?.projectWalletAddress === walletUsed
+        }
         register={register}
         goBack={goBack}
       />
@@ -162,8 +172,8 @@ const CreateProjectForm = props => {
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
         let projectWalletAddress
-
         if (didEnterWalletAddress) {
+          setInputLoading(true)
           projectWalletAddress = await getProjectWallet(
             data?.projectWalletAddress
           )
@@ -180,14 +190,15 @@ const CreateProjectForm = props => {
           })
         }
 
-        if (await projectWalletAlreadyUsed(projectWalletAddress))
+        if (await projectWalletAlreadyUsed(projectWalletAddress)) {
+          setInputLoading(false)
           return Toast({
             content: `Eth address ${projectWalletAddress} ${
               !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
             }is already being used for a project`,
             type: 'error'
           })
-
+        }
         project.projectWalletAddress = projectWalletAddress
       }
 
@@ -198,11 +209,12 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
-
+      setInputLoading(false)
       setFormData(project)
       doNextStep()
     } catch (error) {
       console.log({ error })
+      setInputLoading(false)
       Toast({
         content: error?.message,
         type: 'error'
@@ -248,7 +260,7 @@ const CreateProjectForm = props => {
     } else {
       checkProjectWallet()
     }
-  }, [user, isLoggedIn, client])
+  }, [user, isLoggedIn, client, formData])
 
   useEffect(() => {
     //Checks localstorage to reset form
@@ -331,10 +343,16 @@ const CreateProjectForm = props => {
                     setStep={setCurrentStep}
                   />
                 ) : null}
-                {stepTransitions.map(({ item, props, key }) => {
-                  const Step = steps[item]
-                  return <Step key={key} animationStyle={props} />
-                })}
+                {inputIsLoading ? (
+                  <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+                    <Spinner variant='spinner.medium' />
+                  </Flex>
+                ) : (
+                  stepTransitions.map(({ item, props, key }) => {
+                    const Step = steps[item]
+                    return <Step key={key} animationStyle={props} />
+                  })
+                )}
                 <ConfirmationModal
                   showModal={showCloseModal}
                   setShowModal={setShowCloseModal}
@@ -366,14 +384,14 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isCategoryStep (currentStep) {
+function isCategoryStep(currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep (currentStep, steps) {
+function isFinalConfirmationStep(currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep (currentStep, steps) {
+function isLastStep(currentStep, steps) {
   return currentStep === steps.length - 1
 }
