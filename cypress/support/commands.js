@@ -1,6 +1,5 @@
 import '@testing-library/cypress/add-commands'
 import 'cypress-localstorage-commands'
-import 'cypress-wait-until'
 import Web3 from 'web3'
 
 Cypress.Commands.add('setWeb3Provider', () => {
