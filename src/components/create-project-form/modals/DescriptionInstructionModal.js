@@ -42,7 +42,7 @@ export const DescriptionInstructionModal = ({ showModal, setShowModal }) => (
     <Text
       sx={{ mt: '80px', fontSize: 4, textAlign: 'left', fontFamily: 'body' }}
     >
-      Try to use this structure as a guidance when writing the description:
+      Try to use this structure as a guide when writing the description:
     </Text>
     <ol css={{ alignItems: 'start', paddingLeft: '0.8rem' }}>
       {['who', 'what', 'why', 'where', 'how', 'when'].map(item => {

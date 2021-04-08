@@ -216,10 +216,9 @@ const ProjectsList = props => {
       return b.totalHearts - a.totalHearts
     }
   ]
-
   const projectsFilteredSorted = projectsFiltered
+    ?.sort(sortFunctions[sortBy])
     ?.slice(0, limit)
-    .sort(sortFunctions[sortBy])
 
   const loadMore = () => {
     setLimit(limit + 3)
