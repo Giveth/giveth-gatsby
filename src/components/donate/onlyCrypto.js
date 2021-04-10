@@ -755,9 +755,12 @@ const OnlyCrypto = props => {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
                     })}`
-                  : `${selectedToken?.symbol} ${parseFloat(subtotal).toFixed(
-                      2
-                    )}`}
+                  : `${selectedToken?.symbol} ${parseFloat(
+                      subtotal
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6
+                    })}`}
               </Text>
             </Summary>
           )}
