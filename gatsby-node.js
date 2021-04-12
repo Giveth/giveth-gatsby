@@ -320,6 +320,9 @@ exports.createSchemaCustomization = ({ actions }) => {
       impactLocation: String
       categories: [Category]
       reactions: [Reaction]
+      qualityScore: String
+      totalDonations: String
+      totalHearts: String
     }
     type Category implements Node {
       id: ID!
