@@ -304,6 +304,12 @@ exports.createSchemaCustomization = ({ actions }) => {
     type Projects implements Node {
       projects: [Project]
     }
+    type Status implements Node {
+      id: ID!
+      symbol: String!
+      name: String
+      description: String
+    }
     type Project implements Node {
       id: ID!
       title: String!
@@ -320,9 +326,10 @@ exports.createSchemaCustomization = ({ actions }) => {
       impactLocation: String
       categories: [Category]
       reactions: [Reaction]
-      qualityScore: String
-      totalDonations: String
-      totalHearts: String
+      status: [Status]
+      qualityScore: Float
+      totalDonations: Float
+      totalHearts: Float
     }
     type Category implements Node {
       id: ID!
