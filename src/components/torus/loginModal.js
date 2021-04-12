@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Text, Box } from 'theme-ui'
+import { Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import Modal from 'react-modal'
 
@@ -93,7 +93,7 @@ function LoginModal(props) {
               Welcome to Giveth
             </Text>
             <Text sx={{ variant: 'text.large', color: 'secondary', my: 4 }}>
-              Please Sign in to your account and start using Giveth.
+              Please sign in to your account and start using Giveth.
             </Text>
             <LongBtn onClick={() => props.login('metamask')}>
               <img
@@ -111,7 +111,7 @@ function LoginModal(props) {
               </Text>
             </LongBtn>
             <Text sx={{ variant: 'text.default', color: 'secondary', mt: 4 }}>
-              Or continue with your e-mail or social media
+              You can also continue with your email or social media
             </Text>
             <LongBtn onClick={() => props.login('torus')}>
               <img
