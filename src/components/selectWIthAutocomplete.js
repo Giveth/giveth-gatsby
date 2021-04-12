@@ -3,7 +3,6 @@ import Select from 'react-select'
 import { Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../gatsby-plugin-theme-ui/index'
-
 import iconManifest from '../../node_modules/cryptocurrency-icons/manifest.json'
 import ETHIcon from '../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
@@ -23,7 +22,7 @@ const SelectWithAutocomplete = ({
 
   const CustomOption = props => {
     const { children, value, innerProps, isDisabled } = props
-    const [icon, setIcon] = useState(ETHIcon)
+    const [icon, setIcon] = useState(null)
     const StyledOption = styled.div`
       &:hover {
         div {
@@ -51,11 +50,16 @@ const SelectWithAutocomplete = ({
           setIcon(img)
         })
       }
+
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
           <img
-            src={icon}
+            src={icon || `/assets/tokens/${value?.symbol?.toUpperCase()}.png`}
             alt={value?.symbol}
+            onError={ev => {
+              ev.target.src = ETHIcon
+              ev.target.onerror = null
+            }}
             style={{ width: '32px', height: '32px' }}
           />
           <Text
