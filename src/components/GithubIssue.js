@@ -7,16 +7,33 @@ import theme from '../gatsby-plugin-theme-ui/index'
 
 const GithubIssue = props => {
   const { fixed } = props
-  const [showIssuePopup, setShowIssuePopup] = React.useState(true)
+  const [showIssuePopup, setShowIssuePopup] = React.useState(null)
 
   React.useEffect(() => {
-    // Commenting this as we want to show the popup everywhere even after closed
-    // const issueAlreadyClosed =
-    //   typeof window !== 'undefined' &&
-    //   window.localStorage.getItem('githubIssueClosed')
-    // if (!issueAlreadyClosed) {
-    //   setShowIssuePopup(true)
-    // }
+    const issueAlreadyClosed =
+      typeof window !== 'undefined' &&
+      window.localStorage.getItem('githubIssueClosed')
+    console.log({ issueAlreadyClosed })
+    if (!issueAlreadyClosed) {
+      setShowIssuePopup(true)
+    } else {
+      if (isNaN(parseInt(issueAlreadyClosed))) {
+        // Starts date of closing the popup
+        window.localStorage.setItem(
+          'githubIssueClosed',
+          new Date().getTime().toString()
+        )
+      } else {
+        // check if it's been more than 3 days
+        const now = new Date().getTime().toString()
+        const closedIssue = new Date(parseInt(issueAlreadyClosed))
+        const closedIssuePlus3 = closedIssue.setDate(closedIssue.getDate() + 3)
+        if (now > closedIssuePlus3) {
+          window.localStorage.removeItem('githubIssueClosed')
+          setShowIssuePopup(true)
+        }
+      }
+    }
   })
 
   if (!showIssuePopup) return null
@@ -108,7 +125,10 @@ const GithubIssue = props => {
       <IoMdClose
         onClick={() => {
           typeof window !== 'undefined' &&
-            window.localStorage.setItem('githubIssueClosed', true)
+            window.localStorage.setItem(
+              'githubIssueClosed',
+              new Date().getTime().toString()
+            )
           setShowIssuePopup(false)
         }}
         style={{
