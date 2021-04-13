@@ -271,12 +271,12 @@ const OnlyCrypto = props => {
     return `$${(eth * tokenPrice).toFixed(2)}`
   }
 
-  const SummaryRow = ({ title, amount, logo, style }) => {
+  const SummaryRow = ({ title, amount, logo, style, isLarge }) => {
     return (
       <SmRow style={style}>
         <Text
           sx={{
-            variant: 'text.default',
+            variant: isLarge ? 'text.large' : 'text.default',
             textAlign: 'left',
             width: ['50%', '50%'],
             color: 'background',
@@ -303,7 +303,7 @@ const OnlyCrypto = props => {
           <Flex sx={{ alignItems: 'baseline' }}>
             <Text
               sx={{
-                variant: 'text.small',
+                variant: isLarge ? 'text.large' : 'text.small',
                 color: 'anotherGrey',
                 paddingRight: '5px'
               }}
@@ -312,7 +312,7 @@ const OnlyCrypto = props => {
             </Text>
             <Text
               sx={{
-                variant: 'text.overline',
+                variant: isLarge ? 'text.large' : 'text.overline',
                 color: 'background',
                 textAlign: 'end'
               }}
@@ -324,7 +324,7 @@ const OnlyCrypto = props => {
         ) : (
           <Text
             sx={{
-              variant: 'text.small',
+              variant: isLarge ? 'text.large' : 'text.small',
               textAlign: 'right',
               color: 'anotherGrey'
             }}
@@ -456,7 +456,7 @@ const OnlyCrypto = props => {
               tokenSymbol
             })
           },
-          onError: error => {
+          onError: _error => {
             // the outside catch handles any error here
             // Toast({
             //   content: error?.error?.message || error?.message || error,
@@ -687,13 +687,6 @@ const OnlyCrypto = props => {
           </Label> */}
           {amountTyped && (
             <Summary>
-              <SummaryRow
-                title='Donation amount'
-                amount={[
-                  `${eth2usd(donation)}`,
-                  `${parseFloat(donation)} ${selectedToken?.symbol}`
-                ]}
-              />
               {donateToGiveth && (
                 <SummaryRow
                   title='Support Giveth'
@@ -710,11 +703,13 @@ const OnlyCrypto = props => {
                   title='Network fee'
                   logo={iconQuestionMark}
                   amount={[
-                    `${eth2usd(gasETHPrice)} • ${parseFloat(gasPrice)} GWEI`,
+                    `${eth2usd(gasETHPrice) || '$0.00'} • ${parseFloat(
+                      gasPrice
+                    )} GWEI`,
                     `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
-                    })} ETH`
+                    })} ${mainToken}`
                   ]}
                 />
               )}
@@ -738,8 +733,15 @@ const OnlyCrypto = props => {
                   </Text>
                 </SaveGasMessage>
               )}
-              <Separator />
-              <Text
+              <SummaryRow
+                title='Donation amount'
+                isLarge
+                amount={[
+                  `${eth2usd(donation)}`,
+                  `${parseFloat(donation)} ${selectedToken?.symbol}`
+                ]}
+              />
+              {/* <Text
                 sx={{
                   variant: 'text.large',
                   color: 'background',
@@ -753,10 +755,13 @@ const OnlyCrypto = props => {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
                     })}`
-                  : `${selectedToken?.symbol} ${parseFloat(subtotal).toFixed(
-                      2
-                    )}`}
-              </Text>
+                  : `${selectedToken?.symbol} ${parseFloat(
+                      subtotal
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6
+                    })}`}
+              </Text> */}
             </Summary>
           )}
         </>
