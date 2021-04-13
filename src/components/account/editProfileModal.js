@@ -102,6 +102,7 @@ function EditProfileModal(props) {
       // Check url
       if (url) {
         const valid = await checkIfURLisValid(url)
+        console.log({ valid })
         if (!valid)
           return Toast({
             content: `Your website is not valid or isn't reachable at the moment`,

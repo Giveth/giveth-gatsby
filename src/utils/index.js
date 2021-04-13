@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-fetch'
 import { GET_PROJECT_BY_ADDRESS } from '../apollo/gql/projects'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import ERC20List from './erc20TokenList'
@@ -77,7 +78,7 @@ export async function getEtherscanTxs(
           const extra = apolloClient
             ? await apolloClient?.query({
                 query: isDonor ? GET_USER_BY_ADDRESS : GET_PROJECT_BY_ADDRESS,
-                variables: {
+                constiables: {
                   address: isDonor
                     ? Web3.utils.toChecksumAddress(t?.from)
                     : Web3.utils.toChecksumAddress(t?.to)
@@ -118,25 +119,19 @@ export function getEtherscanPrefix() {
 
 export const getERC20List = ERC20List
 
-export async function checkIfURLisValid(url) {
-  try {
-    return await fetch(`//${url}`)
-      .then(response => {
-        console.log({ response })
-        if (response.ok) {
-          return true
-        } else {
-          console.log('Network response was not ok.')
-          return false
-        }
-      })
-      .catch(function (error) {
-        console.log(
-          'There has been a problem with your fetch operation: ' + error.message
-        )
-        return false
-      })
-  } catch (error) {
-    return false
+export async function checkIfURLisValid(checkUrl) {
+  let url = checkUrl
+  if (!/^(?:f|ht)tps?\:\/\//.test(checkUrl)) {
+    url = 'https://' + url
   }
+  const pattern = new RegExp(
+    '^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$',
+    'i'
+  )
+  return !!pattern.test(url)
 }

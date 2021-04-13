@@ -21,6 +21,7 @@ export default {
     anotherGrey: '#C9D0E8',
     blue: '#3F91E4',
     lightBlue: '#F0F6FC',
+    lightBlue2: '#F2F5FF',
     lightestBlue: '#EDF0FA',
     yellow: 'rgba(253, 239, 167, 1)',
     warnYellow: '#F6AB2F',
