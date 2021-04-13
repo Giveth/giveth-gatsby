@@ -8,6 +8,8 @@ import { PopupContext } from '../../contextProvider/popupProvider'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
+import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+
 import Modal from '../modal'
 import Select from '../selectWIthAutocomplete'
 import QRCode from 'qrcode.react'
@@ -66,6 +68,15 @@ const OpenAmount = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
+  position: relative;
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
 `
 
 const InputComponent = styled.input`
@@ -348,7 +359,7 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
-      //Check amount
+      // Check amount
       console.log({ selectedTokenBalance, subtotal })
       if (selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
@@ -589,25 +600,13 @@ const OnlyCrypto = props => {
             {tokenSymbol}
           </Text>
           <OpenAmount>
-            <Flex
-              onClick={() => setIsComponentVisible(!isComponentVisible)}
-              sx={{
-                alignItems: 'center',
-                position: 'absolute',
-                cursor: 'pointer',
-                ml: 3
-              }}
-            >
-              <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
-              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
-            </Flex>
-
             {isComponentVisible && (
               <Flex
                 sx={{
                   position: 'absolute',
                   backgroundColor: 'background',
-                  marginTop: '100px'
+                  marginTop: '100px',
+                  right: '20px'
                 }}
               >
                 <Select
@@ -646,6 +645,28 @@ const OnlyCrypto = props => {
                 setAmountTyped(e.target.value)
               }}
             />
+            <Flex
+              onClick={() => setIsComponentVisible(!isComponentVisible)}
+              sx={{
+                alignItems: 'center',
+                position: 'absolute',
+                cursor: 'pointer',
+                right: '20px',
+                ml: 3
+              }}
+            >
+              <img
+                src={`/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
+                alt={tokenSymbol}
+                onError={ev => {
+                  ev.target.src = ETHIcon
+                  ev.target.onerror = null
+                }}
+                style={{ width: '32px', height: '32px' }}
+              />
+              <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
+              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
+            </Flex>
           </OpenAmount>
         </AmountContainer>
         <>
