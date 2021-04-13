@@ -72,7 +72,7 @@ const InputComponent = styled.input`
   background: white;
   border: none;
   border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 6rem;
+  padding: 1rem 0.4rem 1rem 5rem;
   outline: none;
   width: 100%;
 `
@@ -145,7 +145,7 @@ const OnlyCrypto = props => {
   const {
     isLoggedIn,
     currentChainId,
-    checkNetwork,
+    currentNetwork,
     sendTransaction,
     user,
     ready,
@@ -348,12 +348,9 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
-      // Checks Net
-      await checkNetwork()
-
       //Check amount
       console.log({ selectedTokenBalance, subtotal })
-      if (isFromOwnProvider && selectedTokenBalance < subtotal) {
+      if (selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
       }
 
@@ -375,8 +372,6 @@ const OnlyCrypto = props => {
         // Is not logged in, should try donation through onBoard
         const ready = await readyToTransact()
         if (!ready) return
-      } else {
-        userWallet?.enable()
       }
       Toast({
         content: 'Donation in progress...',
@@ -530,7 +525,7 @@ const OnlyCrypto = props => {
           </Text>
           <QRCode value={project?.walletAddress} size={250} />
           <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
-            {`Please send ${mainToken} or ERC20 tokens using this address`}
+            Please send ETH or ERC20 tokens using this address
           </Text>
           <Flex
             sx={{
@@ -600,7 +595,7 @@ const OnlyCrypto = props => {
                 alignItems: 'center',
                 position: 'absolute',
                 cursor: 'pointer',
-                mx: 3
+                ml: 3
               }}
             >
               <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
@@ -719,7 +714,7 @@ const OnlyCrypto = props => {
                     `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
-                    })} ${mainToken}`
+                    })} ETH`
                   ]}
                 />
               )}
