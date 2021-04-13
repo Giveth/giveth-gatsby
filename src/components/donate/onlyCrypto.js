@@ -11,7 +11,7 @@ import { SAVE_DONATION } from '../../apollo/gql/donations'
 import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
 import Modal from '../modal'
-import Select from '../selectWIthAutocomplete'
+import Select from '../selectWithAutocomplete'
 import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ensRegex, getERC20List } from '../../utils'
