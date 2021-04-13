@@ -117,3 +117,26 @@ export function getEtherscanPrefix() {
 }
 
 export const getERC20List = ERC20List
+
+export async function checkIfURLisValid(url) {
+  try {
+    return await fetch(`//${url}`)
+      .then(response => {
+        console.log({ response })
+        if (response.ok) {
+          return true
+        } else {
+          console.log('Network response was not ok.')
+          return false
+        }
+      })
+      .catch(function (error) {
+        console.log(
+          'There has been a problem with your fetch operation: ' + error.message
+        )
+        return false
+      })
+  } catch (error) {
+    return false
+  }
+}
