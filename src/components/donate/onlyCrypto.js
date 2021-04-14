@@ -8,6 +8,7 @@ import { PopupContext } from '../../contextProvider/popupProvider'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
+import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
 import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
 import Modal from '../modal'
@@ -83,7 +84,7 @@ const InputComponent = styled.input`
   background: white;
   border: none;
   border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 5rem;
+  padding: 1rem 0.4rem 1rem 1.4rem;
   outline: none;
   width: 100%;
 `
@@ -147,6 +148,7 @@ const OnlyCrypto = props => {
   const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [icon, setIcon] = useState(null)
   const usePopup = React.useContext(PopupContext)
   const {
     ref,
@@ -270,6 +272,22 @@ const OnlyCrypto = props => {
     }
     setBalance()
   }, [userWallet, selectedToken, selectedTokenBalance])
+
+  useEffect(() => {
+    let img = ''
+    const found = iconManifest?.find(
+      i => i?.symbol === tokenSymbol?.toUpperCase()
+    )
+    if (found) {
+      import(
+        `../../../node_modules/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
+          'eth'}.png`
+      ).then(importedImg => {
+        img = importedImg?.default
+        setIcon(img)
+      })
+    }
+  }, [tokenSymbol, icon])
 
   const donation = parseFloat(amountTyped)
   const givethFee =
@@ -656,7 +674,7 @@ const OnlyCrypto = props => {
               }}
             >
               <img
-                src={`/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
+                src={icon || `assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                 alt={tokenSymbol}
                 onError={ev => {
                   ev.target.src = ETHIcon
@@ -664,7 +682,7 @@ const OnlyCrypto = props => {
                 }}
                 style={{ width: '32px', height: '32px' }}
               />
-              <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
+              <Text sx={{ ml: 2, mr: 2 }}>{tokenSymbol}</Text>
               <BsCaretDownFill size='12px' color={theme.colors.secondary} />
             </Flex>
           </OpenAmount>
