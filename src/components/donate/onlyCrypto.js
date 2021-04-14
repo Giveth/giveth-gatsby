@@ -624,11 +624,11 @@ const OnlyCrypto = props => {
                   position: 'absolute',
                   backgroundColor: 'background',
                   marginTop: '100px',
-                  right: '20px'
+                  right: '0'
                 }}
               >
                 <Select
-                  width='200px'
+                  width='250px'
                   content={erc20List}
                   isTokenList
                   menuIsOpen
@@ -682,7 +682,7 @@ const OnlyCrypto = props => {
                 }}
                 style={{ width: '32px', height: '32px' }}
               />
-              <Text sx={{ ml: 2, mr: 2 }}>{tokenSymbol}</Text>
+              <Text sx={{ ml: 2, mr: 3 }}>{tokenSymbol}</Text>
               <BsCaretDownFill size='12px' color={theme.colors.secondary} />
             </Flex>
           </OpenAmount>
