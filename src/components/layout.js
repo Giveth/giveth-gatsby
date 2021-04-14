@@ -19,6 +19,7 @@ import Header from './header'
 import { WalletProvider } from '../contextProvider/WalletProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
+import SupportWidget from '../components/supportWidget'
 
 import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
@@ -256,6 +257,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           <GlobalProvider>
             <ThemeProvider theme={theme}>
               <Provider template={AlertTemplate} {...AlertOptions}>
+                <SupportWidget />
                 <GithubIssue fixed={true} />
                 <XDAIPopup />
                 <Template />
