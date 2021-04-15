@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+// --------------------------------------------------
+// THIS IS A WIP TO CHECKOUT RICH TEXT IMPLEMENTATION
+// --------------------------------------------------
+
+import React, { useEffect, useState } from 'react'
 import { Label, Textarea, Button, Text, Flex } from 'theme-ui'
 import { animated } from 'react-spring'
 import { DescriptionInstructionModal } from '../modals'
+import RichTextInput from '../../richTextInput'
 
 export const ProjectDescriptionInput = ({
   register,
   currentValue,
+  setValue,
   animationStyle,
   goBack
 }) => {
@@ -13,8 +19,13 @@ export const ProjectDescriptionInput = ({
   const [characterLength, setCharacterLength] = useState(
     currentValue ? currentValue.length : 0
   )
+
+  useEffect(() => {
+    register('projectDescription')
+  })
+
   const getLength = e => {
-    setCharacterLength(e.target.value.length)
+    console.log({ e })
   }
   return (
     <animated.section style={{ ...animationStyle, marginTop: '30px' }}>
@@ -51,7 +62,7 @@ export const ProjectDescriptionInput = ({
         </Text>
       </Button>
       <Flex sx={{ width: '175%' }}>
-        <Textarea
+        {/* <Textarea
           sx={{
             width: '800px',
             mt: '40px',
@@ -65,8 +76,28 @@ export const ProjectDescriptionInput = ({
           rows={12}
           maxLength={2000}
           onChange={e => getLength(e)}
+        /> */}
+        <RichTextInput
+          style={{
+            width: '800px',
+            marginTop: '40px',
+            resize: 'none',
+            fontFamily: 'body'
+          }}
+          defaultValue={currentValue}
+          rows={12}
+          onChange={(newValue, delta, source) => {
+            try {
+              // console.log({ setValue, newValue, delta, source })
+              setValue('projectDescription', newValue)
+            } catch (error) {
+              console.log({ error })
+            }
+          }}
+          // onChange={e => getLength(e)}
+          // maxLength={2000}
         />
-        <Text
+        {/* <Text
           sx={{
             marginTop: '40px',
             paddingLeft: '40px',
@@ -75,7 +106,7 @@ export const ProjectDescriptionInput = ({
           }}
         >
           {characterLength}/2000
-        </Text>
+        </Text> */}
       </Flex>
       <Flex
         sx={{

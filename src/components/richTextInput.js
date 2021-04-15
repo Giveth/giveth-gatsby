@@ -50,7 +50,7 @@ function Quill(props) {
       ref={props?.ref}
       id={props?.id}
       name={props?.name}
-      // value={props?.value}
+      value={props?.value}
       defaultValue={props?.defaultValue}
       onChange={props?.onChange}
       style={props?.style}

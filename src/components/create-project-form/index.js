@@ -169,18 +169,19 @@ const CreateProjectForm = props => {
         }
       }
 
-      if (isDescriptionStep(submitCurrentStep)) {
-        // check if file is too large
-        const stringSize =
-          encodeURI(data?.projectDescription).split(/%..|./).length - 1
-        if (stringSize > 32000) {
-          // 32Kb max
-          return Toast({
-            content: `Description too large`,
-            type: 'error'
-          })
-        }
-      }
+      // TODO: CHECK THIS ONLY FOR RICH TEXT : COMING SOON
+      // if (isDescriptionStep(submitCurrentStep)) {
+      //   // check if file is too large
+      //   const stringSize =
+      //     encodeURI(data?.projectDescription).split(/%..|./).length - 1
+      //   if (stringSize > 32000) {
+      //     // 32Kb max maybe?
+      //     return Toast({
+      //       content: `Description too large`,
+      //       type: 'error'
+      //     })
+      //   }
+      // }
 
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
