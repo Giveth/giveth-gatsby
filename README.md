@@ -9,64 +9,89 @@
 </h1>
 
 ## 🚀 Quick start
-Giveth-2 is a reimagined version of the ["Giveth donation application"](https://github.com/Giveth/giveth-dapp). Users leverage the Ethereum blockchain to distribute and track their donations or enable unstoppable funding for their campaign.
+Giveth-2 is a reimagined version of the ["Giveth donation application"](https://github.com/Giveth/giveth-dapp). Users can create projects with a focus on 'for-good' philanthropic causes and receive donations via the Ethereum Blockchain. Donations can be made via ETH or ERC-20 tokens on both Mainnet and xDai Network.
 
 The projects aims to simplify the application's options to enable new users without blockchain experience a frictionless experience.
 
-The project is currently in heavy development and does not offer all functionality that is needed for an MVP state (first release goal).
-
 If you want to contribute, pls say hello to us in chat -  [https://giveth.io/join](https://giveth.io/join)
 
-###### Uses
-- Gatsby
-- Apollo GraphQL
-- Tor.us
-- Theme UI
+ This guide will document the steps to set up and run Giveth.io locally for the purposes of development. The setup process was documented using Ubuntu 20.04 LTS.
 
-## Setup
+**You'll need a couple prerequisites to get started.**
 
-1.  **Clone and install the backend server**
+ - [Redis](https://redis.io/topics/quickstart)
+ - [Postgres](https://www.postgresql.org/download)
+ - Bash CLI
+ - [Gatsby CLI](https://www.gatsbyjs.com/docs/reference/gatsby-cli/)
+ - Configure NodeJS
+      * [For Linux](https://www.gatsbyjs.com/docs/how-to/local-development/gatsby-on-linux/)
+     * [For Windows](https://www.gatsbyjs.com/docs/how-to/local-development/gatsby-on-windows/)
+ - Your Favourite Code Editor (VScode for linting presets)
 
-    In order to develop locally you need to clone the backend server as well. We are using https://github.com/topiahq/impact-graph for this. Please follow the readme of `impact-graph` to install it. For more detailed instructions specific to giveth2 please refer to this [gist](https://gist.github.com/geleeroyale/6283549c469f2fa89fc059f936c59002).
+### Install impact-graph from GitHub
+In order to develop locally you need to clone the backend server as well. We are using https://github.com/topiahq/impact-graph for this.
 
-1.  **Clone and install the frontend (this repo)**
-	First, please star and follow this repository.
-	```bash
-	git clone git@github.com:Giveth/giveth-2.git
-	cd giveth-2
-	npm i
-	```
-    
-1.  **Set up the development environment**
-	
-	```bash
-	cp .env.example .env.development
-	```
-	To get the necessary information for local development, please [ask in giveth-2 developer chat](https://riot.im/app/#/room/!zFyfjCfKHawjZJcueK:matrix.org?via=matrix.org)
-
-1.  **Start developing.**
-	- Make sure that the backend server is running (Step1)
-    - To take advantage of linting presets, please use **VSCODE**:
-		* Select *File -> Open Workspace*
-		* Navigate into the giveth-2 directory
-		* Open the workspace file`giveth2-full-stack.code-workspace`
-		* Install recommended extensions (Prettier and StandardJS plugins)
-
-	- Start up the local development server.
-
-    ```shell
-    gatsby develop
+- via the CLI:
+    ```bash
+    git clone git@github.com:topiahq/impact-graph.git
+    cd impact-graph
+    npm i
+    cp .env.example .env
     ```
 
-1.  **Open the source code and start editing!**
 
-    Your site is now running at `http://localhost:8000`!
+### Create a Database and User in Postgres using psql
+Follow this tutorial on PSQL to setup your username and create the database.
+https://medium.com/coding-blocks/creating-user-database-and-adding-access-on-postgresql-8bfcd2f4a91e)
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql)._
-    
-    Save your changes and the browser will update in real time!
+**TL;DR**
+```bash
+sudo -u postgres psql
+postgres=# create database <databaseName>;
+postgres=# create user <userName> with encrypted password '<passwordHere>';
+postgres=# grant all privileges on database <databaseName> to <userName>;
+```
+### Clone and Install the Frontend
+  Head on over to https://github.com/Giveth/giveth-2 and clone the repo.
+  - via the CLI:
+  ```bash
+  git clone git@github.com:Giveth/giveth-2.git
+  cd giveth-2
+  npm i
+  ```
 
-### Contributor Guide
+### Get the Environment Variables
+ In order to run the local build for Giveth.io you'll need to ask for the environment variables. Head on over to our [Contributors Discord](https://discord.gg/EndTUw9955) say Hi and get in touch with one of the developers.
+
+### Launch the Development Server and Environment
+ Make sure the backend server is running; the `impact-graph` from step 1.
+
+ To take advantage of linting presets, please use **VSCODE**:
+ * Select *File -> Open Workspace*
+ * Navigate into the giveth-2 directory
+ * Open the workspace file `giveth2-full-stack.code-workspace`
+ * Install recommended extensions (Prettier and StandardJS plugins)
+
+ Then fire up the local development server.
+
+ ```bash
+ gatsby develop
+ ```
+
+### Start Editing!
+
+Open up the giveth2 repo on your code editor.
+
+Giveth.io is now running locally at `http://localhost:8000`!
+
+<img alt='Giveth Running Locally' src={useBaseUrl('img/content/givethlocalresized.png')} />
+
+You can also expiremnt with querying your data via GraphQL - you'll find it at this link here - `http://localhost:8000/___graphql`
+Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql).
+
+  Save your changes and the browser will update in real time!
+
+## Contributor Guide
 
 1. Like, star and fork the repo if you want to help with visibility
 1. Have a look at the issue board and choose something to work on
