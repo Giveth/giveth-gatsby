@@ -1,7 +1,6 @@
 import React from 'react'
 import { Text, Button, Flex, Image, Grid, Box } from 'theme-ui'
 import { animated } from 'react-spring'
-import ReactQuill from 'react-quill'
 
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
@@ -148,16 +147,9 @@ const FinalVerificationStep = ({
             wordWrap: 'break-word'
           }}
         >
-          {
-            // formData.projectDescription.length > 200
-            //   ? formData.projectDescription.slice(0, 200) + '...'
-            //   : formData.projectDescription
-          }
-          <ReactQuill
-            value={formData.projectDescription}
-            readOnly={true}
-            theme={'bubble'}
-          />
+          {formData.projectDescription.length > 200
+            ? formData.projectDescription.slice(0, 200) + '...'
+            : formData.projectDescription}
         </Text>
       </>
       <>

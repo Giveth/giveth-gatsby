@@ -88,7 +88,7 @@ const XDAIPopupClosed = props => {
             width='18px'
             alt=''
           />
-          <Text color='background'>Save on gas fees, use xDAI netwok!</Text>
+          <Text color='background'>Save on gas fees, use xDAI network!</Text>
         </Flex>
       </Flex>
 

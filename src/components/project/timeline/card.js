@@ -9,8 +9,7 @@ import {
   IconButton,
   Input,
   Flex,
-  Text,
-  Textarea
+  Text
 } from 'theme-ui'
 import dayjs from 'dayjs'
 import { GET_USER } from '../../../apollo/gql/auth'
