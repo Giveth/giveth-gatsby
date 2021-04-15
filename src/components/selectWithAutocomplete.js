@@ -42,9 +42,8 @@ const SelectWithAutocomplete = ({
       )
       if (found) {
         import(
-          `../../node_modules/cryptocurrency-icons/32/color/${
-            value?.symbol?.toLowerCase() || 'eth'
-          }.png`
+          `../../node_modules/cryptocurrency-icons/32/color/${value?.symbol?.toLowerCase() ||
+            'eth'}.png`
         ).then(importedImg => {
           img = importedImg?.default
           setIcon(img)
@@ -62,11 +61,9 @@ const SelectWithAutocomplete = ({
             }}
             style={{ width: '32px', height: '32px' }}
           />
-          <Text
-            variant='text.default'
-            color='secondary'
-            sx={{ pl: 2 }}
-          >{`${value?.symbol}`}</Text>
+          <Text variant='text.default' color='secondary' sx={{ pl: 2 }}>
+            {`${value?.symbol}`}
+          </Text>
         </Flex>
       )
     }
