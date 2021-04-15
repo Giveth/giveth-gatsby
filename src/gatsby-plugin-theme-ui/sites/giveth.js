@@ -278,6 +278,28 @@ export default {
         backgroundColor: 'secondaryHover'
       }
     },
+    tertiary: {
+      cursor: 'pointer',
+      fontFamily: 'body',
+      py: '0.8rem',
+      px: '1.6rem',
+      fontSize: 3,
+      fontWeight: 'bold',
+      lineHeight: 'button',
+      letterSpacing: 'more',
+      textTransform: ['capitalize', 'uppercase'],
+      borderRadius: '88px',
+      color: 'primary',
+      backgroundColor: 'white',
+      border: ['3px', 'solid', 'primary'],
+      '&:focus': {
+        outline: 'none'
+      },
+      '&:hover': {
+        color: 'white',
+        backgroundColor: 'hover'
+      }
+    },
     disabled: {
       cursor: 'pointer',
       fontFamily: 'body',
