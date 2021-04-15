@@ -246,7 +246,7 @@ function WalletProvider(props) {
     return isValid
   }
 
-  async function login({ walletProvider }) {
+  async function login({ walletProvider, verifier }) {
     try {
       wallet = getWallet(walletProvider)
       setLoading(true)
@@ -277,7 +277,7 @@ function WalletProvider(props) {
       )
 
       if (wallet && !(wallet.isLoggedIn() && isLoggedIn)) {
-        await wallet.login()
+        await wallet.login(verifier)
         console.log('updateUser: awaiting login')
         wallet.web3.eth.getAccounts().then(updateUser)
       }

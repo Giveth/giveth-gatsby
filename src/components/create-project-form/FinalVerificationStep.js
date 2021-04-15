@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, Button, Flex, Image, Grid, Box } from 'theme-ui'
 import { animated } from 'react-spring'
+import ReactQuill from 'react-quill'
 
 import ProjectImageGallery1 from '../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../images/svg/create/projectImageGallery2.svg'
@@ -22,6 +23,7 @@ const FinalVerificationStep = ({
       )
     }
   }
+
   return (
     <animated.section style={{ ...animationStyle, marginTop: '35px' }}>
       <>
@@ -146,9 +148,16 @@ const FinalVerificationStep = ({
             wordWrap: 'break-word'
           }}
         >
-          {formData.projectDescription.length > 200
-            ? formData.projectDescription.slice(0, 200) + '...'
-            : formData.projectDescription}
+          {
+            // formData.projectDescription.length > 200
+            //   ? formData.projectDescription.slice(0, 200) + '...'
+            //   : formData.projectDescription
+          }
+          <ReactQuill
+            value={formData.projectDescription}
+            readOnly={true}
+            theme={'bubble'}
+          />
         </Text>
       </>
       <>
@@ -187,27 +196,29 @@ const FinalVerificationStep = ({
             gap: '5px'
           }}
         >
-          {chosenCategories.map(category => {
-            return (
-              <Text
-                sx={{
-                  color: 'white',
-                  display: 'inline',
-                  fontSize: 1,
-                  fontFamily: 'body',
-                  mt: '9px',
-                  backgroundColor: 'primary',
-                  borderRadius: '18px',
-                  paddingY: 1,
-                  paddingX: 2,
-                  textAlign: 'center'
-                }}
-                key={category}
-              >
-                {`${category}`}
-              </Text>
-            )
-          })}
+          {chosenCategories
+            ?.filter(i => !!i)
+            ?.map(category => {
+              return (
+                <Text
+                  sx={{
+                    color: 'white',
+                    display: 'inline',
+                    fontSize: 1,
+                    fontFamily: 'body',
+                    mt: '9px',
+                    backgroundColor: 'primary',
+                    borderRadius: '18px',
+                    paddingY: 1,
+                    paddingX: 2,
+                    textAlign: 'center'
+                  }}
+                  key={category}
+                >
+                  {`${category}`}
+                </Text>
+              )
+            })}
         </Grid>
       </>
       <>

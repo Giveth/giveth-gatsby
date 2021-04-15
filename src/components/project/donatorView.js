@@ -4,6 +4,7 @@ import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
+// import ReactQuill from 'react-quill'
 
 import testImg from '../../images/giveth_bg.jpg'
 import CancelledModal from './cancelledModal'
@@ -440,6 +441,12 @@ export const ProjectDonatorView = ({ pageContext }) => {
                     color: 'black'
                   }}
                 >
+                  {/* <ReactQuill
+                    style={{ fontFamily: `Red Hat Text, sans serif` }}
+                    value={pageContext?.project?.description}
+                    readOnly={true}
+                    theme={'bubble'}
+                  /> */}
                   {pageContext?.project?.description}
                 </Text>
               </>
@@ -506,8 +513,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Text>Donations: {donations?.length || 0}</Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
-            {project?.categories.length > 0 &&
-              project?.categories.map((category, index) => {
+            {project?.categories?.length > 0 &&
+              project?.categories?.map((category, index) => {
                 return (
                   <Text
                     key={index}
