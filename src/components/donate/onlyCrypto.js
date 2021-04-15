@@ -737,6 +737,14 @@ const OnlyCrypto = props => {
                   ]}
                 />
               )}
+              <SummaryRow
+                title='Donation amount'
+                isLarge
+                amount={[
+                  `${eth2usd(donation)}`,
+                  `${parseFloat(donation)} ${selectedToken?.symbol}`
+                ]}
+              />
               {gasPrice && (
                 <SummaryRow
                   title='Network fee'
@@ -772,14 +780,6 @@ const OnlyCrypto = props => {
                   </Text>
                 </SaveGasMessage>
               )}
-              <SummaryRow
-                title='Donation amount'
-                isLarge
-                amount={[
-                  `${eth2usd(donation)}`,
-                  `${parseFloat(donation)} ${selectedToken?.symbol}`
-                ]}
-              />
               {/* <Text
                 sx={{
                   variant: 'text.large',
