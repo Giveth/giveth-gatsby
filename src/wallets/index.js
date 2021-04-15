@@ -89,7 +89,7 @@ export const wallets = {
       wallets.torus.setweb3(torus.provider)
       wallets.torus.provider = torus.provider
     },
-    login: async () => {
+    login: async verifier => {
       console.log(
         ` typeof wallets.torus.torus : ${JSON.stringify(
           typeof wallets.torus.torus,
@@ -97,8 +97,10 @@ export const wallets = {
           2
         )}`
       )
+      await wallets.torus.torus.login({
+        verifier
+      })
 
-      await wallets.torus.torus.login()
       return wallets.torus.torus
     },
     logout: async () => {

@@ -5,6 +5,7 @@ import Modal from './modal'
 import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
 import { PopupContext } from '../contextProvider/popupProvider'
+import LoginModal from '../components/torus/loginModal'
 import CopyToClipboard from '../components/copyToClipboard'
 import decoratorClouds from '../images/decorator-clouds.svg'
 import exclamationIcon from '../images/exclamation.png'
@@ -103,83 +104,7 @@ function WelcomeLoggedOutPopup({ close }) {
     close()
     return null
   }
-  return (
-    <Flex
-      sx={{
-        flexDirection: 'column',
-        width: '645px',
-        minHeight: '520px'
-      }}
-    >
-      <img
-        src={decoratorClouds}
-        alt='signup-clouds'
-        style={{ position: 'absolute', left: '5%', padding: '2rem 0' }}
-      />
-      <Text
-        sx={{
-          variant: 'text.default',
-          cursor: 'pointer',
-          position: 'absolute',
-          right: '5%',
-          top: '5%'
-        }}
-        onClick={close}
-      >
-        Close
-      </Text>
-      <Flex
-        sx={{
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-          py: 4
-        }}
-      >
-        <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
-          Welcome to Giveth
-        </Text>
-        <Text sx={{ variant: 'text.large', color: 'secondary', my: 4 }}>
-          Please sign in to your account and start using Giveth.
-        </Text>
-        <LongBtn
-          onClick={() => {
-            close()
-            login({ walletProvider: 'metamask' })
-          }}
-        >
-          <img
-            src={metamaskLogo}
-            style={{
-              flex: 0.2,
-              width: '48px',
-              height: '48px'
-            }}
-          />
-          <Text sx={{ flex: 0.8, variant: 'text.default', color: 'secondary' }}>
-            Sign in with Metamask
-          </Text>
-        </LongBtn>
-        <Text sx={{ variant: 'text.default', color: 'secondary', mt: 4 }}>
-          You can also continue with your email or social media
-        </Text>
-        <LongBtn
-          onClick={() => {
-            close()
-            login({ walletProvider: 'torus' })
-          }}
-        >
-          <img
-            src={torusLogo}
-            style={{ flex: 0.2, width: '48px', height: '48px' }}
-          />
-          <Text sx={{ flex: 0.8, variant: 'text.default', color: 'secondary' }}>
-            Sign in with Torus
-          </Text>
-        </LongBtn>
-      </Flex>
-    </Flex>
-  )
+  return <LoginModal isOpen={true} close={close} login={login} />
 }
 
 function IncompleteProfilePopup({ close }) {
