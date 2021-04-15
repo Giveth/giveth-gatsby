@@ -280,8 +280,9 @@ const OnlyCrypto = props => {
     )
     if (found) {
       import(
-        `../../../node_modules/cryptocurrency-icons/32/color/${tokenSymbol?.toLowerCase() ||
-          'eth'}.png`
+        `../../../node_modules/cryptocurrency-icons/32/color/${
+          tokenSymbol?.toLowerCase() || 'eth'
+        }.png`
       ).then(importedImg => {
         img = importedImg?.default
         setIcon(img)
