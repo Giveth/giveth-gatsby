@@ -174,6 +174,7 @@ const MyDonations = props => {
         setCurrentDonations(props?.donations)
         setLoading(false)
       }
+      console.log('lolo', props?.donations)
     }
 
     setup()
@@ -360,7 +361,7 @@ const MyDonations = props => {
                         {i?.currency === 'ETH' && i?.valueUsd
                           ? `${
                               i?.amount ? `${i?.amount} ETH` : ''
-                            } \n ~ USD $ ${i?.valueUsd?.toFixed(2)}`
+                            } \n ~ USD $${i?.valueUsd?.toFixed(2)}`
                           : i?.amount}
                       </Text>
                     </td>
