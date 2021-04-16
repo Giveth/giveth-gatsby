@@ -1,10 +1,8 @@
 import React from 'react'
 import { Flex, Text, Button, Image } from 'theme-ui'
-import { IoMdClose } from 'react-icons/io'
 import iconStreamlineGas from '../images/icon-streamline-gas.svg'
 import iconBgGas from '../images/background-gas.png'
 import xDAIcon from '../images/xDAI_ETH_icon.png'
-import theme from '../gatsby-plugin-theme-ui/index'
 
 const XDAIPopupClosed = props => {
   const { fixed } = props
