@@ -42,7 +42,7 @@ const LongBtn = styled(Flex)`
   margin: 20px 0;
 `
 
-function LoginModal(props) {
+function LoginModal (props) {
   React.useEffect(() => {
     Modal.setAppElement('body')
   })
