@@ -177,7 +177,7 @@ const MyDonations = props => {
     }
 
     setup()
-  }, [currentProjectView])
+  })
 
   const searching = search => {
     const donations = currentDonations
