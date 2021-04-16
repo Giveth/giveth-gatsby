@@ -209,7 +209,11 @@ const MyDonations = props => {
     }
   }
 
-  const filteredDonations = filterDonations(currentDonations)
+  const filteredDonations = [...filterDonations(currentDonations)].sort(
+    (a, b) => {
+      return new Date(b?.createdAt) - new Date(a?.createdAt)
+    }
+  )
 
   const getIcon = async currency => {
     const icon = await import(
