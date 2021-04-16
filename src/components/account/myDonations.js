@@ -14,6 +14,9 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
+import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
+import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+
 dayjs.extend(localizedFormat)
 
 const Table = styled.table`
@@ -212,17 +215,44 @@ const MyDonations = props => {
     const paginationItems = filteredDonations
 
     const [activeItem, setCurrentItem] = React.useState(1)
+    const [currentItems, setCurrenItems] = React.useState([])
 
-    // Data to be rendered using pagination.
-    const itemsPerPage = 6
+    useEffect(() => {
+      const getItems = async () => {
+        // Data to be rendered using pagination.
+        const itemsPerPage = 6
 
-    // Logic for displaying current items
-    const indexOfLastItem = activeItem * itemsPerPage
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage
-    const currentItems = paginationItems?.slice(
-      indexOfFirstItem,
-      indexOfLastItem
-    )
+        // Logic for displaying current items
+        const indexOfLastItem = activeItem * itemsPerPage
+        const indexOfFirstItem = indexOfLastItem - itemsPerPage
+        const tmpItems = paginationItems?.slice(
+          indexOfFirstItem,
+          indexOfLastItem
+        )
+
+        const populateIcons = async item => {
+          const found = iconManifest?.find(
+            i => i?.symbol === item?.currency.toUpperCase()
+          )
+          let icon = null
+          if (found)
+            icon = (
+              await import(
+                `../../../node_modules/cryptocurrency-icons/32/color/${item?.currency.toLowerCase() ||
+                  'eth'}.png`
+              )
+            )?.default
+          return { ...item, icon }
+        }
+
+        const items = await Promise.all(
+          tmpItems.map(item => populateIcons(item))
+        )
+
+        setCurrenItems(items)
+      }
+      getItems()
+    }, [activeItem, currentItems, paginationItems])
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
@@ -292,7 +322,20 @@ const MyDonations = props => {
                       data-label='Currency'
                       sx={{ variant: 'text.small', color: 'secondary' }}
                     >
-                      <Badge variant='green'>{i.currency}</Badge>
+                      {/* <Badge variant='green'>{i.currency}</Badge> */}
+                      <img
+                        src={
+                          i?.icon ||
+                          `/assets/tokens/${i.currency.toUpperCase()}.png`
+                        }
+                        alt={i.currency}
+                        onError={ev => {
+                          console.log('lolololo', i?.icon)
+                          ev.target.src = ETHIcon
+                          ev.target.onerror = null
+                        }}
+                        style={{ width: '32px', height: '32px' }}
+                      />
                     </td>
                     <td
                       data-label='Amount'
