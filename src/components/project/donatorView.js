@@ -501,7 +501,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
             <Text>Donations: {donations?.length || 0}</Text>
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
-            {project?.categories.length > 0 &&
+            {project?.categories?.length > 0 &&
               project?.categories.map((category, index) => {
                 return (
                   <Text
