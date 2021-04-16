@@ -7,7 +7,7 @@ import { navigate } from 'gatsby'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import theme from '../../gatsby-plugin-theme-ui'
-import { Badge, Input, Flex, Spinner, Text, jsx } from 'theme-ui'
+import { Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
@@ -211,9 +211,25 @@ const MyDonations = props => {
 
   const filteredDonations = filterDonations(currentDonations)
 
+  const getIcon = async currency => {
+    const icon = await import(
+      `../../../node_modules/cryptocurrency-icons/32/color/${currency.toLowerCase() ||
+        'eth'}.png`
+    )
+    return icon?.default
+  }
+
+  const populateIcons = async item => {
+    const found = iconManifest?.find(
+      i => i?.symbol === item?.currency.toUpperCase()
+    )
+    let icon = null
+    if (found) icon = await getIcon(item?.currency)
+    return { ...item, icon }
+  }
+
   const TableToShow = () => {
     const paginationItems = filteredDonations
-
     const [activeItem, setCurrentItem] = React.useState(1)
     const [currentItems, setCurrenItems] = React.useState([])
 
@@ -230,21 +246,6 @@ const MyDonations = props => {
           indexOfLastItem
         )
 
-        const populateIcons = async item => {
-          const found = iconManifest?.find(
-            i => i?.symbol === item?.currency.toUpperCase()
-          )
-          let icon = null
-          if (found)
-            icon = (
-              await import(
-                `../../../node_modules/cryptocurrency-icons/32/color/${item?.currency.toLowerCase() ||
-                  'eth'}.png`
-              )
-            )?.default
-          return { ...item, icon }
-        }
-
         const items = await Promise.all(
           tmpItems.map(item => populateIcons(item))
         )
@@ -252,7 +253,7 @@ const MyDonations = props => {
         setCurrenItems(items)
       }
       getItems()
-    }, [activeItem, currentItems, paginationItems])
+    }, [activeItem, paginationItems])
 
     const handlePageChange = pageNumber => {
       setCurrentItem(pageNumber)
@@ -322,7 +323,6 @@ const MyDonations = props => {
                       data-label='Currency'
                       sx={{ variant: 'text.small', color: 'secondary' }}
                     >
-                      {/* <Badge variant='green'>{i.currency}</Badge> */}
                       <img
                         src={
                           i?.icon ||
@@ -330,7 +330,6 @@ const MyDonations = props => {
                         }
                         alt={i.currency}
                         onError={ev => {
-                          console.log('lolololo', i?.icon)
                           ev.target.src = ETHIcon
                           ev.target.onerror = null
                         }}
