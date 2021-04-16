@@ -321,7 +321,10 @@ const MyDonations = props => {
                     </td>
                     <td
                       data-label='Currency'
-                      sx={{ variant: 'text.small', color: 'secondary' }}
+                      sx={{
+                        variant: 'text.small',
+                        color: 'secondary'
+                      }}
                     >
                       <img
                         src={
@@ -333,7 +336,11 @@ const MyDonations = props => {
                           ev.target.src = ETHIcon
                           ev.target.onerror = null
                         }}
-                        style={{ width: '32px', height: '32px' }}
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          marginLeft: '1rem'
+                        }}
                       />
                     </td>
                     <td
