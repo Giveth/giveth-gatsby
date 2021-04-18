@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, Image, Button, Flex, Text } from 'theme-ui'
+import styled from '@emotion/styled'
 import Modal from './modal'
 import { Link } from 'gatsby'
 import { useWallet } from '../contextProvider/WalletProvider'
@@ -9,7 +10,6 @@ import decoratorClouds from '../images/decorator-clouds.svg'
 import exclamationIcon from '../images/exclamation.png'
 import ExclamationIcon from '../images/decorator-exclamation.png'
 import WorriedWoman from '../images/worried_woman.png'
-import signupBg from '../images/arcs.png'
 import noFundsBg from '../images/no_funds.png'
 import IncompleteProfileImg from '../images/incomplete_profile.png'
 import {
@@ -20,8 +20,19 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
-import metamaskLogo from '../images/logos/metamask.svg'
+import metamaskLogo from '../images/logos/metamask-fox.svg'
 import torusLogo from '../images/logos/torus.svg'
+
+const LongBtn = styled(Flex)`
+  flex-direction: row;
+  cursor: pointer;
+  justify-content: space-evenly;
+  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
+  align-items: center;
+  width: 80%;
+  padding: 15px;
+  margin: 20px 0;
+`
 
 function ChangeNetworkPopup({ close }) {
   return (
@@ -97,7 +108,7 @@ function WelcomeLoggedOutPopup({ close }) {
       sx={{
         flexDirection: 'column',
         width: '645px',
-        height: '520px'
+        minHeight: '520px'
       }}
     >
       <img
@@ -117,48 +128,56 @@ function WelcomeLoggedOutPopup({ close }) {
       >
         Close
       </Text>
-      <Box sx={{ textAlign: 'center', py: 4, my: 4, mb: 6 }}>
-        <Text sx={{ variant: 'headings.h4', pt: 5 }}>Welcome to Giveth</Text>
-        <Text sx={{ variant: 'text.default' }}>
-          Please Sign in to your account and start using Giveth.
-        </Text>
-        <img
-          src={metamaskLogo}
-          alt='metamask logo'
-          onClick={() => {
-            try {
-              close()
-              login({ walletProvider: 'metamask' })
-            } catch (error) {
-              console.log({ error })
-            }
-          }}
-          style={{ width: '22%', margin: '4% 2% 0 2%', cursor: 'pointer' }}
-        />
-        <img
-          src={torusLogo}
-          alt='torus logo'
-          onClick={() => {
-            try {
-              close()
-              login({ walletProvider: 'torus' })
-            } catch (error) {
-              console.log({ error })
-            }
-          }}
-          style={{ width: '22%', margin: '4% 2% 0 2%', cursor: 'pointer' }}
-        />
-      </Box>
-      <img
-        src={signupBg}
-        style={{
-          width: '50%',
-          position: 'absolute',
-          right: -10,
-          bottom: -20
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          textAlign: 'center',
+          py: 4
         }}
-        alt='signup-bg'
-      />
+      >
+        <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
+          Welcome to Giveth
+        </Text>
+        <Text sx={{ variant: 'text.large', color: 'secondary', my: 4 }}>
+          Please sign in to your account and start using Giveth.
+        </Text>
+        <LongBtn
+          onClick={() => {
+            close()
+            login({ walletProvider: 'metamask' })
+          }}
+        >
+          <img
+            src={metamaskLogo}
+            style={{
+              flex: 0.2,
+              width: '48px',
+              height: '48px'
+            }}
+          />
+          <Text sx={{ flex: 0.8, variant: 'text.default', color: 'secondary' }}>
+            Sign in with Metamask
+          </Text>
+        </LongBtn>
+        <Text sx={{ variant: 'text.default', color: 'secondary', mt: 4 }}>
+          You can also continue with your email or social media
+        </Text>
+        <LongBtn
+          onClick={() => {
+            close()
+            login({ walletProvider: 'torus' })
+          }}
+        >
+          <img
+            src={torusLogo}
+            style={{ flex: 0.2, width: '48px', height: '48px' }}
+          />
+          <Text sx={{ flex: 0.8, variant: 'text.default', color: 'secondary' }}>
+            Sign in with Torus
+          </Text>
+        </LongBtn>
+      </Flex>
     </Flex>
   )
 }

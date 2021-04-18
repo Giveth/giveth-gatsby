@@ -279,7 +279,7 @@ const DonateIndex = props => {
   }
 
   return (
-    <>
+    <Flex sx={{ flexDirection: 'row' }}>
       <ProjectContainer>
         <ProjectListing
           wholeClickable
@@ -297,7 +297,7 @@ const DonateIndex = props => {
       <Payment>
         <PaymentOptions />
       </Payment>
-    </>
+    </Flex>
   )
 }
 
