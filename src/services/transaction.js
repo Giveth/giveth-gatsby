@@ -2,7 +2,7 @@ import { ethers } from 'ethers'
 import Web3 from 'web3'
 import getSigner from './ethersSigner'
 
-export async function send(
+export async function send (
   toAddress,
   contractAddress, // if none is set, it defaults to ETH
   subtotal,
@@ -47,7 +47,7 @@ export async function send(
   }
 }
 
-export function notify(hash) {
+export function notify (hash) {
   if (process.env.GATSBY_NETWORK === 'ropsten') return
 
   notify.config({ desktopPosition: 'topRight' })
@@ -72,7 +72,7 @@ export function notify(hash) {
   })
 }
 
-export async function getHashInfo(txHash, isXDAI) {
+export async function getHashInfo (txHash, isXDAI) {
   try {
     const web3 = new Web3(
       isXDAI
@@ -88,7 +88,7 @@ export async function getHashInfo(txHash, isXDAI) {
   }
 }
 
-export async function getTxFromHash(transactionHash, isXDAI) {
+export async function getTxFromHash (transactionHash, isXDAI) {
   try {
     const web3 = new Web3(
       isXDAI
@@ -104,7 +104,7 @@ export async function getTxFromHash(transactionHash, isXDAI) {
   }
 }
 
-export async function confirmEtherTransaction(
+export async function confirmEtherTransaction (
   transactionHash,
   callbackFunction,
   count = 0,

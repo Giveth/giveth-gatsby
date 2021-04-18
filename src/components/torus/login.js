@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React from 'react'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import LoginButton from './loginButton'
 import UserDetails from './userDetails'
