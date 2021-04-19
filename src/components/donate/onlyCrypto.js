@@ -378,17 +378,12 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
-      // Check amount
-      console.log({ selectedTokenBalance, subtotal })
-      if (selectedTokenBalance < subtotal) {
-        return triggerPopup('InsufficientFunds')
-      }
-
       let fromOwnProvider = isFromOwnProvider
       // Until we accept every other network we will offer xDAI if detected only through metamask
       if (isXDAI) {
         fromOwnProvider = true
       }
+
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
@@ -403,6 +398,13 @@ const OnlyCrypto = props => {
         const ready = await readyToTransact()
         if (!ready) return
       }
+
+      // Check amount if own provider
+      console.log({ selectedTokenBalance, subtotal })
+      if (isFromOwnProvider && selectedTokenBalance < subtotal) {
+        return triggerPopup('InsufficientFunds')
+      }
+
       Toast({
         content: 'Donation in progress...',
         type: 'dark',
