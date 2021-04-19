@@ -77,10 +77,10 @@ function LoginModal (props) {
             }}
           >
             <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
-              Opening Metamask ...
+              Connecting to Metamask
             </Text>
             <Text sx={{ variant: 'text.large', color: 'secondary', my: 4 }}>
-              Metamask should open in a moment, please confirm your sign in.
+              Please confirm sign in through your MetaMask popup window.
             </Text>
             <img
               src={metamaskLogo}
