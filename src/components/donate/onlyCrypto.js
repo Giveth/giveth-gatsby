@@ -111,11 +111,6 @@ const SaveGasMessage = styled(Flex)`
   word-wrap: break-word;
 `
 
-const Separator = styled.div`
-  margin: 1rem 0rem;
-  border-bottom: 1px solid ${theme.colors.bodyDark};
-`
-
 const OnlyCrypto = props => {
   // ON BOARD
   const [wallet, setWallet] = useState(null)
@@ -210,6 +205,7 @@ const OnlyCrypto = props => {
         .then(data => {
           setMainTokenPrice(data.USD)
         })
+      // On xDAI the API does not work so we set the XDAI value to one dollar
     } else setMainTokenPrice(1)
 
     const tokenList = getERC20List(currentChainId)
