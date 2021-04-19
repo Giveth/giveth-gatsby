@@ -127,6 +127,7 @@ const OnlyCrypto = props => {
   const [notify, setNotify] = useState(null)
   const { project } = props
   const [tokenPrice, setTokenPrice] = useState(1)
+  const [mainTokenPrice, setMainTokenPrice] = useState(1)
   const [gasPrice, setGasPrice] = useState(null)
   const [gasETHPrice, setGasETHPrice] = useState(null)
   const [amountTyped, setAmountTyped] = useState(null)
@@ -201,6 +202,15 @@ const OnlyCrypto = props => {
       name: null
     }
     setMainToken(mainToken)
+    if (mainToken === 'ETH') {
+      fetch(
+        `https://min-api.cryptocompare.com/data/price?fsym=${mainToken}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
+      )
+        .then(response => response.json())
+        .then(data => {
+          setMainTokenPrice(data.USD)
+        })
+    } else setMainTokenPrice(1)
 
     const tokenList = getERC20List(currentChainId)
     const formattedTokenList = tokenList?.tokens
@@ -228,7 +238,7 @@ const OnlyCrypto = props => {
       gwei && setGasPrice(Number(gwei))
       ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
     })
-  }, [currentChainId])
+  }, [currentChainId, mainTokenPrice, mainToken])
 
   useEffect(() => {
     const setBalance = async () => {
@@ -266,9 +276,20 @@ const OnlyCrypto = props => {
 
   const subtotal = donation + (donateToGiveth === true ? givethFee : 0)
 
-  const eth2usd = eth => {
-    if (!tokenPrice) return ''
-    return `$${(eth * tokenPrice).toFixed(2)}`
+  const mainTokenToUSD = amountOfToken => {
+    const USDValue = (amountOfToken * mainTokenPrice).toFixed(2)
+    if (USDValue > 0) {
+      return `$${USDValue}`
+    }
+    return 'less than $0.01'
+  }
+
+  const donationTokenToUSD = amountOfToken => {
+    const USDValue = (amountOfToken * tokenPrice).toFixed(2)
+    if (USDValue > 0) {
+      return `$${USDValue}`
+    }
+    return 'less than $0.01'
   }
 
   const SummaryRow = ({ title, amount, logo, style, isLarge }) => {
@@ -348,7 +369,7 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
-      //Check amount
+      // Check amount
       console.log({ selectedTokenBalance, subtotal })
       if (selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
@@ -703,7 +724,7 @@ const OnlyCrypto = props => {
                   title='Network fee'
                   logo={iconQuestionMark}
                   amount={[
-                    `${eth2usd(gasETHPrice) || '$0.00'} • ${parseFloat(
+                    `${mainTokenToUSD(gasETHPrice)} • ${parseFloat(
                       gasPrice
                     )} GWEI`,
                     `${parseFloat(gasETHPrice).toLocaleString('en-US', {
@@ -737,7 +758,7 @@ const OnlyCrypto = props => {
                 title='Donation amount'
                 isLarge
                 amount={[
-                  `${eth2usd(donation)}`,
+                  `${donationTokenToUSD(donation)}`,
                   `${parseFloat(donation)} ${selectedToken?.symbol}`
                 ]}
               />
