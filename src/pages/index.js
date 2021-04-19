@@ -21,7 +21,6 @@ const IndexContent = ({
   const popup = React.useContext(PopupContext)
   // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
   const [popupShown, setPopupShown] = React.useState(false)
-
   React.useEffect(() => {
     if (location?.state?.welcome && !popupShown) {
       const extra = location?.state?.flashMessage || false

@@ -448,6 +448,16 @@ const ACTIVATE_PROJECT = gql`
     activateProject(projectId: $projectId)
   }
 `
+
+const WALLET_ADDRESS_IS_VALID = gql`
+  query WalletAddressIsValid($address: String!) {
+    walletAddressIsValid(address: $address) {
+      reasons
+      isValid
+    }
+  }
+`
+
 export {
   FETCH_PROJECTS,
   FETCH_ALL_PROJECTS,
@@ -470,5 +480,6 @@ export {
   EDIT_PROJECT,
   ACTIVATE_PROJECT,
   DEACTIVATE_PROJECT,
-  FETCH_MY_PROJECTS
+  FETCH_MY_PROJECTS,
+  WALLET_ADDRESS_IS_VALID
 }

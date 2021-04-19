@@ -73,7 +73,11 @@ export const ProfileHeader = props => {
               {user?.walletAddress}
             </Text>
           </Link>
-          <Link sx={{ textDecoration: 'none' }} href={user?.url}>
+          <Link
+            sx={{ textDecoration: 'none' }}
+            href={`//${user?.url}`}
+            target='_blank'
+          >
             <Text
               sx={{
                 color: 'secondary',

@@ -342,11 +342,13 @@ const MyDonations = props => {
                         <FiExternalLink
                           size='18px'
                           sx={{ cursor: 'pointer' }}
-                          onClick={() =>
+                          onClick={() => {
                             window.open(
-                              `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
+                              i?.transactionNetworkId === 100
+                                ? `https://blockscout.com/xdai/mainnet/tx/${i?.transactionId}`
+                                : `https://${etherscanPrefix}etherscan.io/tx/${i?.transactionId}`
                             )
-                          }
+                          }}
                         />
                       </div>
                     </td>

@@ -72,7 +72,7 @@ const InputComponent = styled.input`
   background: white;
   border: none;
   border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 6rem;
+  padding: 1rem 0.4rem 1rem 5rem;
   outline: none;
   width: 100%;
 `
@@ -145,7 +145,7 @@ const OnlyCrypto = props => {
   const {
     isLoggedIn,
     currentChainId,
-    checkNetwork,
+    currentNetwork,
     sendTransaction,
     user,
     ready,
@@ -271,12 +271,12 @@ const OnlyCrypto = props => {
     return `$${(eth * tokenPrice).toFixed(2)}`
   }
 
-  const SummaryRow = ({ title, amount, logo, style }) => {
+  const SummaryRow = ({ title, amount, logo, style, isLarge }) => {
     return (
       <SmRow style={style}>
         <Text
           sx={{
-            variant: 'text.default',
+            variant: isLarge ? 'text.large' : 'text.default',
             textAlign: 'left',
             width: ['50%', '50%'],
             color: 'background',
@@ -303,7 +303,7 @@ const OnlyCrypto = props => {
           <Flex sx={{ alignItems: 'baseline' }}>
             <Text
               sx={{
-                variant: 'text.small',
+                variant: isLarge ? 'text.large' : 'text.small',
                 color: 'anotherGrey',
                 paddingRight: '5px'
               }}
@@ -312,7 +312,7 @@ const OnlyCrypto = props => {
             </Text>
             <Text
               sx={{
-                variant: 'text.overline',
+                variant: isLarge ? 'text.large' : 'text.overline',
                 color: 'background',
                 textAlign: 'end'
               }}
@@ -324,7 +324,7 @@ const OnlyCrypto = props => {
         ) : (
           <Text
             sx={{
-              variant: 'text.small',
+              variant: isLarge ? 'text.large' : 'text.small',
               textAlign: 'right',
               color: 'anotherGrey'
             }}
@@ -348,12 +348,9 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
-      // Checks Net
-      await checkNetwork()
-
       //Check amount
       console.log({ selectedTokenBalance, subtotal })
-      if (isFromOwnProvider && selectedTokenBalance < subtotal) {
+      if (selectedTokenBalance < subtotal) {
         return triggerPopup('InsufficientFunds')
       }
 
@@ -375,8 +372,6 @@ const OnlyCrypto = props => {
         // Is not logged in, should try donation through onBoard
         const ready = await readyToTransact()
         if (!ready) return
-      } else {
-        userWallet?.enable()
       }
       Toast({
         content: 'Donation in progress...',
@@ -461,7 +456,7 @@ const OnlyCrypto = props => {
               tokenSymbol
             })
           },
-          onError: error => {
+          onError: _error => {
             // the outside catch handles any error here
             // Toast({
             //   content: error?.error?.message || error?.message || error,
@@ -530,7 +525,7 @@ const OnlyCrypto = props => {
           </Text>
           <QRCode value={project?.walletAddress} size={250} />
           <Text sx={{ mt: 4, variant: 'text.default', color: 'secondary' }}>
-            {`Please send ${mainToken} or ERC20 tokens using this address`}
+            Please send ETH or ERC20 tokens using this address
           </Text>
           <Flex
             sx={{
@@ -600,7 +595,7 @@ const OnlyCrypto = props => {
                 alignItems: 'center',
                 position: 'absolute',
                 cursor: 'pointer',
-                mx: 3
+                ml: 3
               }}
             >
               <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
@@ -692,13 +687,6 @@ const OnlyCrypto = props => {
           </Label> */}
           {amountTyped && (
             <Summary>
-              <SummaryRow
-                title='Donation amount'
-                amount={[
-                  `${eth2usd(donation)}`,
-                  `${parseFloat(donation)} ${selectedToken?.symbol}`
-                ]}
-              />
               {donateToGiveth && (
                 <SummaryRow
                   title='Support Giveth'
@@ -715,7 +703,9 @@ const OnlyCrypto = props => {
                   title='Network fee'
                   logo={iconQuestionMark}
                   amount={[
-                    `${eth2usd(gasETHPrice)} • ${parseFloat(gasPrice)} GWEI`,
+                    `${eth2usd(gasETHPrice) || '$0.00'} • ${parseFloat(
+                      gasPrice
+                    )} GWEI`,
                     `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
@@ -743,8 +733,15 @@ const OnlyCrypto = props => {
                   </Text>
                 </SaveGasMessage>
               )}
-              <Separator />
-              <Text
+              <SummaryRow
+                title='Donation amount'
+                isLarge
+                amount={[
+                  `${eth2usd(donation)}`,
+                  `${parseFloat(donation)} ${selectedToken?.symbol}`
+                ]}
+              />
+              {/* <Text
                 sx={{
                   variant: 'text.large',
                   color: 'background',
@@ -758,10 +755,13 @@ const OnlyCrypto = props => {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
                     })}`
-                  : `${selectedToken?.symbol} ${parseFloat(subtotal).toFixed(
-                      2
-                    )}`}
-              </Text>
+                  : `${selectedToken?.symbol} ${parseFloat(
+                      subtotal
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6
+                    })}`}
+              </Text> */}
             </Summary>
           )}
         </>
