@@ -6,13 +6,13 @@ global.Buffer = global.Buffer || require('buffer').Buffer
 
 if (typeof btoa === 'undefined') {
   global.btoa = function (str) {
-    return new Buffer(str).toString('base64')
+    return Buffer.from(str).toString('base64')
   }
 }
 
 if (typeof atob === 'undefined') {
   global.atob = function (b64Encoded) {
-    return new Buffer(b64Encoded, 'base64').toString()
+    return Buffer.from(b64Encoded, 'base64').toString()
   }
 }
 
@@ -71,8 +71,8 @@ module.exports = {
       resolve: 'gatsby-plugin-google-fonts',
       options: {
         fonts: [
-          `red hat display\:400,500,700,900`,
-          `red hat text\:400,500,700,900`
+          'red hat display:400,500,700,900',
+          'red hat text:400,500,700,900'
         ]
       }
     },
@@ -101,11 +101,11 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        name: `content`,
+        name: 'content',
         path: `${__dirname}/src/content`
       }
     },
-    `gatsby-transformer-remark`,
+    'gatsby-transformer-remark',
     'gatsby-plugin-use-query-params',
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
@@ -119,7 +119,7 @@ module.exports = {
       }
     },
     {
-      resolve: `gatsby-plugin-segment-js`,
+      resolve: 'gatsby-plugin-segment-js',
       options: {
         // your segment write key for your production environment
         // when process.env.NODE_ENV === 'production'
