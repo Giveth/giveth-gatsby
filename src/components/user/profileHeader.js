@@ -75,7 +75,11 @@ export const ProfileHeader = props => {
           </Link>
           <Link
             sx={{ textDecoration: 'none' }}
-            href={`//${user?.url}`}
+            href={
+              /^(?:f|ht)tps?\:\/\//.test(user?.url)
+                ? user?.url
+                : `//${user?.url}`
+            }
             target='_blank'
           >
             <Text

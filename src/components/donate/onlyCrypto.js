@@ -8,8 +8,11 @@ import { PopupContext } from '../../contextProvider/popupProvider'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
+import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
+import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+
 import Modal from '../modal'
-import Select from '../selectWIthAutocomplete'
+import Select from '../selectWithAutocomplete'
 import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ensRegex, getERC20List } from '../../utils'
@@ -66,13 +69,22 @@ const OpenAmount = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
+  position: relative;
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
 `
 
 const InputComponent = styled.input`
   background: white;
   border: none;
   border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 5rem;
+  padding: 1rem 0.4rem 1rem 1.4rem;
   outline: none;
   width: 100%;
 `
@@ -136,6 +148,7 @@ const OnlyCrypto = props => {
   const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [icon, setIcon] = useState(null)
   const usePopup = React.useContext(PopupContext)
   const {
     ref,
@@ -260,6 +273,23 @@ const OnlyCrypto = props => {
     setBalance()
   }, [userWallet, selectedToken, selectedTokenBalance])
 
+  useEffect(() => {
+    let img = ''
+    const found = iconManifest?.find(
+      i => i?.symbol === tokenSymbol?.toUpperCase()
+    )
+    if (found) {
+      import(
+        `../../../node_modules/cryptocurrency-icons/32/color/${
+          tokenSymbol?.toLowerCase() || 'eth'
+        }.png`
+      ).then(importedImg => {
+        img = importedImg?.default
+        setIcon(img)
+      })
+    }
+  }, [tokenSymbol, icon])
+
   const donation = parseFloat(amountTyped)
   const givethFee =
     Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
@@ -348,17 +378,12 @@ const OnlyCrypto = props => {
 
   const confirmDonation = async isFromOwnProvider => {
     try {
-      //Check amount
-      console.log({ selectedTokenBalance, subtotal })
-      if (selectedTokenBalance < subtotal) {
-        return triggerPopup('InsufficientFunds')
-      }
-
       let fromOwnProvider = isFromOwnProvider
       // Until we accept every other network we will offer xDAI if detected only through metamask
       if (isXDAI) {
         fromOwnProvider = true
       }
+
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
@@ -373,6 +398,13 @@ const OnlyCrypto = props => {
         const ready = await readyToTransact()
         if (!ready) return
       }
+
+      // Check amount if own provider
+      console.log({ selectedTokenBalance, subtotal })
+      if (isFromOwnProvider && selectedTokenBalance < subtotal) {
+        return triggerPopup('InsufficientFunds')
+      }
+
       Toast({
         content: 'Donation in progress...',
         type: 'dark',
@@ -589,29 +621,17 @@ const OnlyCrypto = props => {
             {tokenSymbol}
           </Text>
           <OpenAmount>
-            <Flex
-              onClick={() => setIsComponentVisible(!isComponentVisible)}
-              sx={{
-                alignItems: 'center',
-                position: 'absolute',
-                cursor: 'pointer',
-                ml: 3
-              }}
-            >
-              <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
-              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
-            </Flex>
-
             {isComponentVisible && (
               <Flex
                 sx={{
                   position: 'absolute',
                   backgroundColor: 'background',
-                  marginTop: '100px'
+                  marginTop: '100px',
+                  right: '0'
                 }}
               >
                 <Select
-                  width='200px'
+                  width='250px'
                   content={erc20List}
                   isTokenList
                   menuIsOpen
@@ -646,6 +666,28 @@ const OnlyCrypto = props => {
                 setAmountTyped(e.target.value)
               }}
             />
+            <Flex
+              onClick={() => setIsComponentVisible(!isComponentVisible)}
+              sx={{
+                alignItems: 'center',
+                position: 'absolute',
+                cursor: 'pointer',
+                right: '20px',
+                ml: 3
+              }}
+            >
+              <img
+                src={icon || `assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
+                alt={tokenSymbol}
+                onError={ev => {
+                  ev.target.src = ETHIcon
+                  ev.target.onerror = null
+                }}
+                style={{ width: '32px', height: '32px' }}
+              />
+              <Text sx={{ ml: 2, mr: 3 }}>{tokenSymbol}</Text>
+              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
+            </Flex>
           </OpenAmount>
         </AmountContainer>
         <>
@@ -698,6 +740,14 @@ const OnlyCrypto = props => {
                   ]}
                 />
               )}
+              <SummaryRow
+                title='Donation amount'
+                isLarge
+                amount={[
+                  `${eth2usd(donation)}`,
+                  `${parseFloat(donation)} ${selectedToken?.symbol}`
+                ]}
+              />
               {gasPrice && (
                 <SummaryRow
                   title='Network fee'
@@ -733,14 +783,6 @@ const OnlyCrypto = props => {
                   </Text>
                 </SaveGasMessage>
               )}
-              <SummaryRow
-                title='Donation amount'
-                isLarge
-                amount={[
-                  `${eth2usd(donation)}`,
-                  `${parseFloat(donation)} ${selectedToken?.symbol}`
-                ]}
-              />
               {/* <Text
                 sx={{
                   variant: 'text.large',

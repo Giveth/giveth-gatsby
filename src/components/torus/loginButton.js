@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { useWallet } from '../../contextProvider/WalletProvider'
-import { Text, jsx } from 'theme-ui'
+import { Text, Button, jsx } from 'theme-ui'
 import { wallets } from '../../wallets'
 import LoginModal from './loginModal'
 import { useState } from 'react'
@@ -17,9 +17,10 @@ const LoginButton = props => {
   const { login, ethEnabled } = useWallet()
   return (
     <div>
-      <Text
-        p='10px'
-        sx={{ variant: 'text.medium', color: 'primary', cursor: 'pointer' }}
+      <Button
+        sx={{
+          variant: 'buttons.tertiary'
+        }}
         onClick={() =>
           ethEnabled
             ? setIsComponentVisible(!isComponentVisible)
@@ -27,7 +28,7 @@ const LoginButton = props => {
         }
       >
         Sign in
-      </Text>
+      </Button>
       {
         // <AccountDetails>
         // Object.keys(wallets).map((walletProvider, index) => {
@@ -54,15 +55,6 @@ const LoginButton = props => {
         <LoginModal
           close={() => setIsComponentVisible(false)}
           isOpen={isComponentVisible}
-          login={walletProvider => {
-            try {
-              console.log({ walletProvider })
-              wallets && login({ walletProvider })
-              setIsComponentVisible(false)
-            } catch (error) {
-              console.log({ error })
-            }
-          }}
         />
       ) : null}
     </div>

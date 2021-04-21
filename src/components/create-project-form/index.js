@@ -43,7 +43,7 @@ const CreateProjectForm = props => {
   const { isLoggedIn, user, validateToken, logout } = useWallet()
   const [flashMessage, setFlashMessage] = useState('')
   const [formData, setFormData] = useState({})
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, setValue } = useForm({
     defaultValues: React.useMemo(() => {
       return formData
     }, [formData])
@@ -60,7 +60,7 @@ const CreateProjectForm = props => {
     doValidateToken()
     async function doValidateToken() {
       const isValid = await validateToken()
-      console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
+      // console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
       setFlashMessage('Your session has expired')
       if (!isValid) {
@@ -92,6 +92,7 @@ const CreateProjectForm = props => {
       <ProjectDescriptionInput
         animationStyle={animationStyle}
         currentValue={formData?.projectDescription}
+        setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
       />
@@ -168,6 +169,20 @@ const CreateProjectForm = props => {
         }
       }
 
+      // TODO: CHECK THIS ONLY FOR RICH TEXT : COMING SOON
+      // if (isDescriptionStep(submitCurrentStep)) {
+      //   // check if file is too large
+      //   const stringSize =
+      //     encodeURI(data?.projectDescription).split(/%..|./).length - 1
+      //   if (stringSize > 32000) {
+      //     // 32Kb max maybe?
+      //     return Toast({
+      //       content: `Description too large`,
+      //       type: 'error'
+      //     })
+      //   }
+      // }
+
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
         let projectWalletAddress
@@ -187,7 +202,6 @@ const CreateProjectForm = props => {
             address: projectWalletAddress
           }
         })
-
         if (!addressValidation?.walletAddressIsValid?.isValid) {
           const reason = addressValidation?.walletAddressIsValid?.reasons[0]
           setInputLoading(false)
@@ -394,6 +408,10 @@ CreateProjectForm.defaultProps = {
 
 /** export the typeform component */
 export default CreateProjectForm
+
+function isDescriptionStep(currentStep) {
+  return currentStep === 2
+}
 
 function isCategoryStep(currentStep) {
   return currentStep === 3

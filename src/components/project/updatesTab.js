@@ -36,6 +36,15 @@ const UpdatesTab = ({ showModal, setShowModal, project, isOwner }) => {
     try {
       if (!title || !content)
         return Toast({ content: 'Fields should not be empty', type: 'error' })
+      // check if file is too large
+      const contentSize = encodeURI(content).split(/%..|./).length - 1
+      if (contentSize > 32000) {
+        // 32Kb max maybe too much?
+        return Toast({
+          content: `Content is too heavy`,
+          type: 'error'
+        })
+      }
       const { data } = await addUpdateMutation({
         variables: {
           projectId: parseFloat(project?.id),
