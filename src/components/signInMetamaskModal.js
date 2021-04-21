@@ -1,11 +1,9 @@
 import React from 'react'
 import { Flex, Text } from 'theme-ui'
-import styled from '@emotion/styled'
 import Modal from 'react-modal'
 
-import decoratorClouds from '../../images/decorator-clouds.svg'
-import metamaskLogo from '../../images/logos/metamask-fox.svg'
-import torusLogo from '../../images/logos/torus.svg'
+import decoratorClouds from '../images/decorator-clouds.svg'
+import metamaskLogo from '../images/logos/metamask-fox.svg'
 
 const customStyles = {
   overlay: {
@@ -31,17 +29,6 @@ const customStyles = {
   }
 }
 
-const LongBtn = styled(Flex)`
-  flex-direction: row;
-  cursor: pointer;
-  justify-content: space-evenly;
-  box-shadow: 0px 5px 12px rgba(107, 117, 167, 0.3);
-  align-items: center;
-  width: 80%;
-  padding: 15px;
-  margin: 20px 0;
-`
-
 function LoginModal (props) {
   React.useEffect(() => {
     Modal.setAppElement('body')
@@ -52,13 +39,13 @@ function LoginModal (props) {
         isOpen={!!props.isOpen}
         onRequestClose={() => props.close()}
         style={customStyles}
-        contentLabel='Login Modal'
+        contentLabel='Sign In Metamask Modal'
       >
         <Flex
           sx={{
             flexDirection: 'column',
             width: '645px',
-            minHeight: '520px'
+            minHeight: '420px'
           }}
         >
           <img
@@ -90,40 +77,20 @@ function LoginModal (props) {
             }}
           >
             <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
-              Welcome to Giveth
+              Connecting to Metamask
             </Text>
             <Text sx={{ variant: 'text.large', color: 'secondary', my: 4 }}>
-              Please sign in to your account and start using Giveth.
+              Please confirm sign in through your MetaMask popup window.
             </Text>
-            <LongBtn onClick={() => props.login('metamask')}>
-              <img
-                src={metamaskLogo}
-                style={{
-                  flex: 0.2,
-                  width: '48px',
-                  height: '48px'
-                }}
-              />
-              <Text
-                sx={{ flex: 0.8, variant: 'text.default', color: 'secondary' }}
-              >
-                Sign in with Metamask
-              </Text>
-            </LongBtn>
-            <Text sx={{ variant: 'text.default', color: 'secondary', mt: 4 }}>
-              You can also continue with your email or social media
-            </Text>
-            <LongBtn onClick={() => props.login('torus')}>
-              <img
-                src={torusLogo}
-                style={{ flex: 0.2, width: '48px', height: '48px' }}
-              />
-              <Text
-                sx={{ flex: 0.8, variant: 'text.default', color: 'secondary' }}
-              >
-                Sign in with Torus
-              </Text>
-            </LongBtn>
+            <img
+              src={metamaskLogo}
+              alt='Metamask logo'
+              style={{
+                flex: 0.2,
+                width: '96px',
+                height: '96px'
+              }}
+            />
           </Flex>
         </Flex>
       </Modal>
