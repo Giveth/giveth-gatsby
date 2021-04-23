@@ -22,6 +22,7 @@ const FinalVerificationStep = ({
       )
     }
   }
+
   return (
     <animated.section style={{ ...animationStyle, marginTop: '35px' }}>
       <>
@@ -187,27 +188,29 @@ const FinalVerificationStep = ({
             gap: '5px'
           }}
         >
-          {chosenCategories.map(category => {
-            return (
-              <Text
-                sx={{
-                  color: 'white',
-                  display: 'inline',
-                  fontSize: 1,
-                  fontFamily: 'body',
-                  mt: '9px',
-                  backgroundColor: 'primary',
-                  borderRadius: '18px',
-                  paddingY: 1,
-                  paddingX: 2,
-                  textAlign: 'center'
-                }}
-                key={category}
-              >
-                {`${category}`}
-              </Text>
-            )
-          })}
+          {chosenCategories
+            ?.filter(i => !!i)
+            ?.map(category => {
+              return (
+                <Text
+                  sx={{
+                    color: 'white',
+                    display: 'inline',
+                    fontSize: 1,
+                    fontFamily: 'body',
+                    mt: '9px',
+                    backgroundColor: 'primary',
+                    borderRadius: '18px',
+                    paddingY: 1,
+                    paddingX: 2,
+                    textAlign: 'center'
+                  }}
+                  key={category}
+                >
+                  {`${category}`}
+                </Text>
+              )
+            })}
         </Grid>
       </>
       <>

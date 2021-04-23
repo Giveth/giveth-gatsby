@@ -11,9 +11,12 @@ import {
   Text
 } from 'theme-ui'
 import { navigate } from 'gatsby'
-import { GET_PROJECT_BY_ADDRESS } from '../../apollo/gql/projects'
+import {
+  GET_PROJECT_BY_ADDRESS,
+  WALLET_ADDRESS_IS_VALID
+} from '../../apollo/gql/projects'
 import { useApolloClient } from '@apollo/client'
-import { projectWalletAlreadyUsed, getProjectWallet } from './utils'
+import { getProjectWallet } from './utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import { useForm } from 'react-hook-form'
@@ -35,12 +38,16 @@ import Toast from '../toast'
 
 const CreateProjectForm = props => {
   const [loading, setLoading] = useState(true)
+  const [inputIsLoading, setInputLoading] = useState(false)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
   const { isLoggedIn, user, validateToken, logout } = useWallet()
   const [flashMessage, setFlashMessage] = useState('')
-
-  const { register, handleSubmit } = useForm()
   const [formData, setFormData] = useState({})
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: React.useMemo(() => {
+      return formData
+    }, [formData])
+  })
   const [walletUsed, setWalletUsed] = useState(false)
   const usePopup = React.useContext(PopupContext)
   const client = useApolloClient()
@@ -53,7 +60,7 @@ const CreateProjectForm = props => {
     doValidateToken()
     async function doValidateToken() {
       const isValid = await validateToken()
-      console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
+      // console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
       setFlashMessage('Your session has expired')
       if (!isValid) {
@@ -64,6 +71,7 @@ const CreateProjectForm = props => {
       // navigate('/', { state: { welcome: true } })
     }
   }, [])
+
   const steps = [
     ({ animationStyle }) => (
       <ProjectNameInput
@@ -84,6 +92,7 @@ const CreateProjectForm = props => {
       <ProjectDescriptionInput
         animationStyle={animationStyle}
         currentValue={formData?.projectDescription}
+        setValue={(ref, val) => setValue(ref, val)}
         register={register}
         goBack={goBack}
       />
@@ -118,11 +127,16 @@ const CreateProjectForm = props => {
       <ProjectEthAddressInput
         animationStyle={animationStyle}
         currentValue={
-          typeof walletUsed !== 'boolean'
+          formData?.projectWalletAddress
+            ? formData?.projectWalletAddress
+            : typeof walletUsed !== 'boolean'
             ? walletUsed
-            : formData?.projectWalletAddress
+            : null
         }
-        walletUsed={walletUsed}
+        walletUsed={
+          typeof walletUsed !== 'boolean' &&
+          formData?.projectWalletAddress === walletUsed
+        }
         register={register}
         goBack={goBack}
       />
@@ -155,24 +169,61 @@ const CreateProjectForm = props => {
         }
       }
 
+      // TODO: CHECK THIS ONLY FOR RICH TEXT : COMING SOON
+      // if (isDescriptionStep(submitCurrentStep)) {
+      //   // check if file is too large
+      //   const stringSize =
+      //     encodeURI(data?.projectDescription).split(/%..|./).length - 1
+      //   if (stringSize > 32000) {
+      //     // 32Kb max maybe?
+      //     return Toast({
+      //       content: `Description too large`,
+      //       type: 'error'
+      //     })
+      //   }
+      // }
+
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
         let projectWalletAddress
         if (didEnterWalletAddress) {
+          setInputLoading(true)
           projectWalletAddress = await getProjectWallet(
             data?.projectWalletAddress
           )
         } else {
           projectWalletAddress = user.addresses[0]
         }
-        if (await projectWalletAlreadyUsed(projectWalletAddress))
-          return Toast({
-            content: `Eth address ${projectWalletAddress} ${
-              !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
-            }is already being used for a project`,
-            type: 'error'
-          })
 
+        // HERE
+        const { data: addressValidation } = await client.query({
+          query: WALLET_ADDRESS_IS_VALID,
+          variables: {
+            address: projectWalletAddress
+          }
+        })
+        if (!addressValidation?.walletAddressIsValid?.isValid) {
+          const reason = addressValidation?.walletAddressIsValid?.reasons[0]
+          setInputLoading(false)
+          if (reason === 'smart-contract') {
+            return Toast({
+              content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
+              type: 'error'
+            })
+          } else if (reason === 'smart-contract') {
+            return Toast({
+              content: `Eth address ${projectWalletAddress} ${
+                !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
+              }is already being used for a project`,
+              type: 'error'
+            })
+          } else {
+            return Toast({
+              content: `Eth address not valid`,
+              type: 'error'
+            })
+          }
+        }
         project.projectWalletAddress = projectWalletAddress
       }
 
@@ -183,11 +234,12 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
-
+      setInputLoading(false)
       setFormData(project)
       doNextStep()
     } catch (error) {
       console.log({ error })
+      setInputLoading(false)
       Toast({
         content: error?.message,
         type: 'error'
@@ -233,7 +285,7 @@ const CreateProjectForm = props => {
     } else {
       checkProjectWallet()
     }
-  }, [user, isLoggedIn, client])
+  }, [user, isLoggedIn, client, formData])
 
   useEffect(() => {
     //Checks localstorage to reset form
@@ -316,10 +368,16 @@ const CreateProjectForm = props => {
                     setStep={setCurrentStep}
                   />
                 ) : null}
-                {stepTransitions.map(({ item, props, key }) => {
-                  const Step = steps[item]
-                  return <Step key={key} animationStyle={props} />
-                })}
+                {inputIsLoading ? (
+                  <Flex sx={{ justifyContent: 'center', pt: 5 }}>
+                    <Spinner variant='spinner.medium' />
+                  </Flex>
+                ) : (
+                  stepTransitions.map(({ item, props, key }) => {
+                    const Step = steps[item]
+                    return <Step key={key} animationStyle={props} />
+                  })
+                )}
                 <ConfirmationModal
                   showModal={showCloseModal}
                   setShowModal={setShowCloseModal}
@@ -350,6 +408,10 @@ CreateProjectForm.defaultProps = {
 
 /** export the typeform component */
 export default CreateProjectForm
+
+function isDescriptionStep(currentStep) {
+  return currentStep === 2
+}
 
 function isCategoryStep(currentStep) {
   return currentStep === 3

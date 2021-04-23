@@ -1,5 +1,15 @@
 /** @jsx jsx */
-import { Box, Button, Grid, Flex, jsx, Text, Input, Select } from 'theme-ui'
+import {
+  Box,
+  Button,
+  Grid,
+  Flex,
+  Spinner,
+  jsx,
+  Text,
+  Input,
+  Select
+} from 'theme-ui'
 import React, { useState } from 'react'
 import ProjectCard from './projectCard'
 import NoImage from '../images/no-image-available.jpg'
@@ -9,6 +19,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'gatsby'
 import DropdownInput from '../components/dropdownInput'
 import theme from '../gatsby-plugin-theme-ui'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import * as JsSearch from 'js-search'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
 
@@ -117,28 +128,32 @@ orderBySelectOptions[OrderByField.Balance] = 'Amount Raised'
 orderBySelectOptions[OrderByField.CreationDate] = 'Recent'
 
 const ProjectsList = props => {
-  const { projects, totalCount, loadMore, hasMore, selectOrderByField } = props
-  // console.log(`projects : ${JSON.stringify(projects, null, 2)}`)
+  const {
+    projects,
+    categories,
+    totalCount,
+    maxLimit,
+    fromHomePage,
+    selectOrderByField
+  } = props
 
-  console.log(`projects.length ---> : ${projects.length}`)
   const [search, setSearch] = useState()
+  const [limit, setLimit] = useState(maxLimit)
   const [isLoading, setIsLoading] = useState(false)
   const [searchQuery, setSearchQuery] = useState()
   const [searchResults, setSearchResults] = useState(projects)
   const [category, setCategory] = useState(0)
   const [sortBy, setSortBy] = useState(0)
-  const categories = ['All', 'Community', 'Food', 'Non-profit']
-  const locations = ['All', 'World Wide']
-  const sortBys = ['Quality score', 'Amount raised', 'hearts']
-  //console.log(`--> searchResults : ${JSON.stringify(searchResults, null, 2)}`)
-  console.log(`category : ${JSON.stringify(category, null, 2)}`)
+  const categoryList = Array.isArray(categories)
+    ? ['All'].concat(categories.map(o => o.name))
+    : ['All']
+  const sortBys = ['Default', 'Amount raised', 'Hearts']
 
   React.useEffect(() => {
     rebuildIndex()
   }, [])
 
-  function searchProjects (e) {
-    console.log(`searching projects`)
+  function searchProjects(e) {
     const queryResult = search.search(e.target.value)
     setSearchQuery(e.target.value)
     setSearchResults(queryResult)
@@ -146,7 +161,7 @@ const ProjectsList = props => {
   // handleSubmit = e => {
   //   e.preventDefault()
   // }
-  function rebuildIndex () {
+  function rebuildIndex() {
     const dataToSearch = new JsSearch.Search('id')
     /**
      *  defines a indexing strategy for the data
@@ -172,9 +187,9 @@ const ProjectsList = props => {
     setIsLoading(false)
   }
 
-  function filterCategory (searchedResults) {
-    const categoryName = categories[category].toLowerCase()
-    console.log(`categoryName ---> : ${categoryName}`)
+  function filterCategory(searchedResults) {
+    const categoryName = categoryList[category].toLowerCase()
+
     return searchedResults.filter(
       o => o.categories.filter(c => c.name === categoryName).length > 0
     )
@@ -184,12 +199,31 @@ const ProjectsList = props => {
   const projectsFiltered =
     category === 0 ? searchedResults : filterCategory(searchedResults)
 
-  // const projectsFilteredSorted = projectsFiltered.sort(() => {
-  //   qualityScore
-  //   reactions
-  //   creationDate
-  // })
-  //console.log(`projectsFiltered : ${JSON.stringify(projectsFiltered, null, 2)}`)
+  function sum(items, prop) {
+    return items.reduce(function (a, b) {
+      return a + b[prop]
+    }, 0)
+  }
+  //['Quality score', 'Amount raised', 'Hearts']
+  const sortFunctions = [
+    function qualityScore(a, b) {
+      return b.qualityScore - a.qualityScore
+    },
+    function amountRaised(a, b) {
+      return b.totalDonations - a.totalDonations
+    },
+    function hearts(a, b) {
+      return b.totalHearts - a.totalHearts
+    }
+  ]
+  const projectsFilteredSorted = projectsFiltered
+    ?.sort(sortFunctions[sortBy])
+    ?.slice(0, limit)
+
+  const loadMore = () => {
+    setLimit(limit + 3)
+  }
+  const hasMore = limit < projectsFiltered.length
 
   return (
     <>
@@ -230,144 +264,208 @@ const ProjectsList = props => {
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
           style={{
+            alignItems: 'center',
             margin: '0 auto',
             maxWidth: '1440px',
             padding: '0 1.0875rem 1.45rem'
           }}
         >
-          <Flex
-            sx={{
-              width: '100%',
-              flexDirection: ['column-reverse', null, 'row'],
-              mt: 2
-            }}
-          >
-            <Flex
-              sx={{
-                width: '100%',
-                flexDirection: ['row', null, 'row'],
-                justifyContent: ['space-around', null, null]
-              }}
-            >
+          {!fromHomePage ? (
+            <Flex>
               <Flex
                 sx={{
-                  width: ['30%'],
-                  alignItems: 'center',
-                  mt: [4, 0, 0]
+                  // width: '100%',
+                  flex: 0.6,
+                  flexDirection: ['row', null, 'row'],
+                  justifyContent: ['space-around', null, null]
                 }}
               >
-                <DropdownInput
-                  options={categories}
-                  current={0}
-                  setCurrent={i => setCategory(i)}
-                />
-              </Flex>
-              {/* <Flex
+                <Flex
                   sx={{
-                    width: ['30%'],
+                    // width: ['30%'],
+                    flex: 0.4,
                     alignItems: 'center',
                     mt: [4, 0, 0]
                   }}
                 >
                   <DropdownInput
-                    options={locations}
-                    current={0}
-                    // setCurrent={i => setFilter(i)}
+                    upperLabel='CATEGORY'
+                    options={categoryList}
+                    current={category}
+                    setCurrent={i => setCategory(i)}
                   />
-                </Flex> */}
-              <Flex
-                sx={{
-                  width: ['30%'],
-                  alignItems: 'center',
-                  mt: [4, 0, 0]
-                }}
-              >
-                <DropdownInput
-                  options={sortBys}
-                  current={0}
-                  setCurrent={i => setSortBy(i)}
-                />
-              </Flex>
-              {/* <SelectMenu
-                  caption='sort by'
-                  options={orderBySelectOptions}
-                  onChange={selectOrderByField}
-                /> */}
-            </Flex>
-            <Flex
-              sx={{
-                flexGrow: 3,
-                alignItems: 'center',
-                display: 'flex',
-                width: ['100%', '100%', '50%'],
-                padding: '0 3% 0 0',
-                mt: [4, 0, 0],
-                mb: [0, 4, 0]
-              }}
-            >
-              <Input
-                placeholder='Search Projects'
-                variant='forms.search'
-                style={{
-                  width: '100%',
-                  margin: 'auto'
-                }}
-                onChange={searchProjects}
-              />
-              <IconSearch />
-            </Flex>
-          </Flex>
-
-          <div
-            style={{
-              width: '100%',
-              margin: 0
+                </Flex>
+                {/* <Flex
+            sx={{
+              width: ['30%'],
+              alignItems: 'center',
+              mt: [4, 0, 0]
             }}
           >
-            <Grid
-              p={4}
-              columns={[1, 2, 3]}
+            <DropdownInput
+              options={locations}
+              current={0}
+              // setCurrent={i => setFilter(i)}
+            />
+          </Flex> */}
+                <Flex
+                  sx={{
+                    // width: ['30%'],
+                    flex: 0.4,
+                    alignItems: 'center',
+                    mt: [4, 0, 0]
+                  }}
+                >
+                  <DropdownInput
+                    upperLabel='SORT BY'
+                    options={sortBys}
+                    current={sortBy}
+                    setCurrent={i => setSortBy(i)}
+                  />
+                </Flex>
+                {/* <SelectMenu
+            caption='sort by'
+            options={orderBySelectOptions}
+            onChange={selectOrderByField}
+          /> */}
+              </Flex>
+              <Flex
+                sx={{
+                  alignItems: 'center',
+                  flex: 0.4,
+                  width: '100%',
+                  padding: '0 3% 0 0',
+                  mt: [4, 0, 0],
+                  alignSelf: 'flex-end'
+                }}
+              >
+                <Input
+                  placeholder='Search Projects'
+                  variant='forms.search'
+                  style={{
+                    width: '100%',
+                    margin: 'auto'
+                  }}
+                  onChange={searchProjects}
+                />
+                <IconSearch />
+              </Flex>
+            </Flex>
+          ) : null}
+          <Flex
+            sx={{
+              width: '100%',
+              flexDirection: ['column-reverse', 'row', 'row'],
+              mt: 2
+            }}
+          >
+            <div
               style={{
-                margin: 0,
-                columnGap: '2.375em',
-                justifyItems: 'center'
+                width: '100%',
+                margin: 0
               }}
             >
-              {projectsFiltered
-                ? projectsFiltered
-                    ?.slice()
-                    .map((project, index) => (
-                      <ProjectCard
-                        shadowed
-                        id={project.id}
-                        listingId={project.title + '-' + index}
-                        key={project.title + '-' + index}
-                        name={project.title}
-                        slug={project.slug}
-                        donateAddress={project.donateAddress}
-                        image={project.image || NoImage}
-                        raised={project.balance}
-                        project={project}
-                      />
-                    ))
-                : null}
-            </Grid>
-          </div>
-          {hasMore && (
-            <div sx={{ justifySelf: 'center', textAlign: 'center' }}>
-              <Button
-                sx={{
-                  variant: 'buttons.nofillGray',
-                  color: 'bodyLight',
-                  fontSize: 14,
-                  mb: '3rem'
-                }}
-                onClick={() => loadMore()}
+              <InfiniteScroll
+                dataLength={projectsFilteredSorted?.length} //This is important field to render the next data
+                next={loadMore}
+                hasMore={hasMore}
+                loader={
+                  !fromHomePage && (
+                    <Flex sx={{ justifyContent: 'center', py: 2, mb: 2 }}>
+                      <Spinner variant='spinner.medium' />
+                    </Flex>
+                  )
+                }
+                endMessage={
+                  <Flex sx={{ flexDirection: 'column', alignItems: 'center' }}>
+                    {!fromHomePage ? (
+                      projectsFilteredSorted?.length > 0 ? (
+                        <>
+                          <Text
+                            variant='headings.h5'
+                            color='secondary'
+                            sx={{ textAlign: 'center' }}
+                          >
+                            Woah you reached the end!
+                          </Text>
+                          <Button
+                            type='button'
+                            onClick={() => window?.scrollTo(0, 0)}
+                            sx={{
+                              variant: 'buttons.default',
+                              backgroundColor: 'secondary',
+                              my: 4
+                            }}
+                          >
+                            Go to the top!
+                          </Button>
+                        </>
+                      ) : (
+                        <Text
+                          variant='headings.h5'
+                          color='secondary'
+                          sx={{ textAlign: 'center', mb: 4 }}
+                        >
+                          Nothing here
+                        </Text>
+                      )
+                    ) : null}
+                  </Flex>
+                }
               >
-                Show more Projects
-              </Button>
+                <Grid
+                  p={4}
+                  columns={[1, 2, 3]}
+                  style={{
+                    margin: 0,
+                    columnGap: '2.375em',
+                    justifyItems: 'center'
+                  }}
+                >
+                  {projectsFilteredSorted
+                    ? projectsFilteredSorted
+                        ?.slice()
+                        .map((project, index) => (
+                          <ProjectCard
+                            shadowed
+                            id={project.id}
+                            listingId={project.title + '-' + index}
+                            key={project.title + '-' + index}
+                            name={project.title}
+                            slug={project.slug}
+                            donateAddress={project.donateAddress}
+                            image={project.image || NoImage}
+                            raised={project.balance}
+                            project={project}
+                          />
+                        ))
+                    : null}
+                </Grid>
+              </InfiniteScroll>
+              {fromHomePage && (
+                <Flex style={{ justifyContent: 'center' }}>
+                  <Link
+                    to='/projects'
+                    sx={{
+                      textAlign: 'center'
+                    }}
+                  >
+                    <Button
+                      sx={{
+                        variant: 'buttons.nofillGray',
+                        color: 'bodyLight',
+                        fontSize: 14,
+                        mb: '3rem'
+                      }}
+                      onClick={() => loadMore()}
+                    >
+                      Show more Projects
+                    </Button>
+                  </Link>
+                </Flex>
+              )}
             </div>
-          )}
+          </Flex>
         </div>
       </ProjectSection>
     </>
@@ -376,9 +474,8 @@ const ProjectsList = props => {
 
 ProjectsList.propTypes = {
   projects: PropTypes.array.isRequired,
+  categories: PropTypes.array.isRequired,
   totalCount: PropTypes.number.isRequired,
-  loadMore: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired,
   selectOrderByField: PropTypes.func.isRequired
 }
 export default ProjectsList

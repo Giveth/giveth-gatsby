@@ -88,6 +88,8 @@ exports.createPages = async ({ graphql, actions }) => {
           impactLocation
           balance
           qualityScore
+          totalDonations
+          totalHearts
           status {
             id
             symbol
@@ -110,9 +112,6 @@ exports.createPages = async ({ graphql, actions }) => {
               lastName
               avatar
             }
-            project {
-              title
-            }
             createdAt
             currency
           }
@@ -123,16 +122,16 @@ exports.createPages = async ({ graphql, actions }) => {
             userId
           }
         }
+        categories {
+          name
+        }
       }
     }
   `)
   const projectPageTemplate = require.resolve('./src/templates/project.js')
   const donatePageTemplate = require.resolve('./src/templates/donate.js')
-  console.log(`projectResults : ${JSON.stringify(projectResults, null, 2)}`)
 
   if (projectResults.data) {
-    console.log('has results')
-
     projectResults.data.giveth.projects.forEach(project => {
       console.log(`creating /project/${project.slug}`)
       createPage({
@@ -207,6 +206,8 @@ exports.sourceNodes = async ({
             impactLocation
             balance
             qualityScore
+            totalDonations
+            totalHearts
             status {
               id
               symbol
@@ -239,11 +240,14 @@ exports.sourceNodes = async ({
               userId
             }
           }
+          categories {
+            name
+          }
         }
       `
     })
 
-    const { projects } = data
+    const { projects, categories } = data
 
     if (projects && projects.length) {
       createNode({
@@ -271,6 +275,19 @@ exports.sourceNodes = async ({
           }
         })
       })
+      categories.forEach(category => {
+        createNode({
+          ...category,
+          id: createNodeId(`Project-${category.id}`),
+          parent: null,
+          children: [],
+          internal: {
+            type: 'Category',
+            content: JSON.stringify(category),
+            contentDigest: createContentDigest(category)
+          }
+        })
+      })
     } else {
       console.error('No projects during build')
     }
@@ -286,6 +303,12 @@ exports.createSchemaCustomization = ({ actions }) => {
   createTypes(`
     type Projects implements Node {
       projects: [Project]
+    }
+    type Status implements Node {
+      id: ID!
+      symbol: String!
+      name: String
+      description: String
     }
     type Project implements Node {
       id: ID!
@@ -303,6 +326,10 @@ exports.createSchemaCustomization = ({ actions }) => {
       impactLocation: String
       categories: [Category]
       reactions: [Reaction]
+      status: [Status]
+      qualityScore: Float
+      totalDonations: Float
+      totalHearts: Float
     }
     type Category implements Node {
       id: ID!

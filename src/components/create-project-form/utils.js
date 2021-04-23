@@ -5,11 +5,17 @@ import {
   isWalletAddressValid,
   isAddressENS
 } from '../../services/wallet'
+import Web3 from 'web3'
+import { ethers } from 'ethers'
+
+const infuraId = process.env.GATSBY_INFURA_ID
+const network = process.env.GATSBY_NETWORK
+const provider = new ethers.providers.InfuraProvider(network, infuraId)
 
 export async function getProjectWallet(projectWalletAddress) {
   if (projectWalletAddress) {
     try {
-      const isENS = isAddressENS(projectWalletAddress)
+      const isENS = await isAddressENS(projectWalletAddress)
       if (!isWalletAddressValid(projectWalletAddress) && !isENS) {
         throw new Error('Wallet address is invalid')
       }
@@ -36,4 +42,10 @@ export async function projectWalletAlreadyUsed(projectWalletAddress) {
     return true
   }
   return false
+}
+
+export async function isSmartContract(projectWalletAddress) {
+  const code = await provider.getCode(projectWalletAddress)
+
+  return code !== '0x'
 }

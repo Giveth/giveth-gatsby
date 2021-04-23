@@ -3,7 +3,6 @@ import { Button, Text, jsx } from 'theme-ui'
 import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui/index'
-import CopyToClipboard from '../copyToClipboard'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
 import { Link } from 'gatsby'
@@ -199,7 +198,13 @@ const UserDetails = () => {
               }}
               className='balance'
             >
-              Balance: {balance ? `${balance} ETH` : ''}
+              Balance:{' '}
+              {balance
+                ? `${parseFloat(balance)?.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 6
+                  })} ${currentChainId === 100 ? 'xDAI' : 'ETH'}`
+                : ''}
             </MenuTitle>
           ) : null}
           <MenuTitle

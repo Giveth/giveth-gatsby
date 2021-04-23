@@ -8,8 +8,11 @@ import { PopupContext } from '../../contextProvider/popupProvider'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
+import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
+import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+
 import Modal from '../modal'
-import Select from '../selectWIthAutocomplete'
+import Select from '../selectWithAutocomplete'
 import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ensRegex, getERC20List } from '../../utils'
@@ -66,13 +69,22 @@ const OpenAmount = styled.div`
   flex-direction: row;
   align-items: center;
   width: 100%;
+  position: relative;
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
 `
 
 const InputComponent = styled.input`
   background: white;
   border: none;
   border-radius: 12px;
-  padding: 1rem 0.4rem 1rem 5rem;
+  padding: 1rem 0.4rem 1rem 1.4rem;
   outline: none;
   width: 100%;
 `
@@ -136,6 +148,7 @@ const OnlyCrypto = props => {
   const [erc20List, setErc20List] = useState([])
   const [anonymous, setAnonymous] = useState(false)
   const [modalIsOpen, setIsOpen] = useState(false)
+  const [icon, setIcon] = useState(null)
   const usePopup = React.useContext(PopupContext)
   const {
     ref,
@@ -201,8 +214,6 @@ const OnlyCrypto = props => {
       name: null
     }
     setMainToken(mainToken)
-    setSelectedToken(currentMainToken)
-    setTokenSymbol(mainToken)
 
     const tokenList = getERC20List(currentChainId)
     const formattedTokenList = tokenList?.tokens
@@ -213,16 +224,19 @@ const OnlyCrypto = props => {
           }
         })
       : []
+    setSelectedToken(formattedTokenList[0]?.value)
+    setTokenSymbol(formattedTokenList[0]?.label)
     setErc20List([
+      ...formattedTokenList,
       {
         value: currentMainToken,
         label: mainToken
-      },
-      ...formattedTokenList
+      }
     ])
     // GET GAS
     userWallet?.web3?.eth.getGasPrice().then(wei => {
-      const gwei = userWallet.web3.utils.fromWei(wei, 'gwei')
+      const gwei =
+        currentChainId === 100 ? 1 : userWallet.web3.utils.fromWei(wei, 'gwei')
       const ethFromGwei = userWallet.web3.utils.fromWei(wei, 'ether')
       gwei && setGasPrice(Number(gwei))
       ethFromGwei && setGasETHPrice(Number(ethFromGwei) * 21000)
@@ -259,6 +273,23 @@ const OnlyCrypto = props => {
     setBalance()
   }, [userWallet, selectedToken, selectedTokenBalance])
 
+  useEffect(() => {
+    let img = ''
+    const found = iconManifest?.find(
+      i => i?.symbol === tokenSymbol?.toUpperCase()
+    )
+    if (found) {
+      import(
+        `../../../node_modules/cryptocurrency-icons/32/color/${
+          tokenSymbol?.toLowerCase() || 'eth'
+        }.png`
+      ).then(importedImg => {
+        img = importedImg?.default
+        setIcon(img)
+      })
+    }
+  }, [tokenSymbol, icon])
+
   const donation = parseFloat(amountTyped)
   const givethFee =
     Math.round((GIVETH_DONATION_AMOUNT * 100.0) / tokenPrice) / 100
@@ -270,12 +301,12 @@ const OnlyCrypto = props => {
     return `$${(eth * tokenPrice).toFixed(2)}`
   }
 
-  const SummaryRow = ({ title, amount, logo, style }) => {
+  const SummaryRow = ({ title, amount, logo, style, isLarge }) => {
     return (
       <SmRow style={style}>
         <Text
           sx={{
-            variant: 'text.default',
+            variant: isLarge ? 'text.large' : 'text.default',
             textAlign: 'left',
             width: ['50%', '50%'],
             color: 'background',
@@ -302,7 +333,7 @@ const OnlyCrypto = props => {
           <Flex sx={{ alignItems: 'baseline' }}>
             <Text
               sx={{
-                variant: 'text.small',
+                variant: isLarge ? 'text.large' : 'text.small',
                 color: 'anotherGrey',
                 paddingRight: '5px'
               }}
@@ -311,7 +342,7 @@ const OnlyCrypto = props => {
             </Text>
             <Text
               sx={{
-                variant: 'text.overline',
+                variant: isLarge ? 'text.large' : 'text.overline',
                 color: 'background',
                 textAlign: 'end'
               }}
@@ -323,7 +354,7 @@ const OnlyCrypto = props => {
         ) : (
           <Text
             sx={{
-              variant: 'text.small',
+              variant: isLarge ? 'text.large' : 'text.small',
               textAlign: 'right',
               color: 'anotherGrey'
             }}
@@ -352,6 +383,7 @@ const OnlyCrypto = props => {
       if (isXDAI) {
         fromOwnProvider = true
       }
+
       if (!project?.walletAddress) {
         return Toast({
           content: 'There is no eth address assigned for this project',
@@ -366,6 +398,13 @@ const OnlyCrypto = props => {
         const ready = await readyToTransact()
         if (!ready) return
       }
+
+      // Check amount if own provider
+      console.log({ selectedTokenBalance, subtotal })
+      if (isFromOwnProvider && selectedTokenBalance < subtotal) {
+        return triggerPopup('InsufficientFunds')
+      }
+
       Toast({
         content: 'Donation in progress...',
         type: 'dark',
@@ -396,7 +435,7 @@ const OnlyCrypto = props => {
               isXDAI // isXDAI
             )
             console.log({ fromAddress, instantReceipt })
-            //Save initial txn details to db
+            // Save initial txn details to db
             const {
               donationId,
               savedDonation,
@@ -449,7 +488,7 @@ const OnlyCrypto = props => {
               tokenSymbol
             })
           },
-          onError: error => {
+          onError: _error => {
             // the outside catch handles any error here
             // Toast({
             //   content: error?.error?.message || error?.message || error,
@@ -582,29 +621,17 @@ const OnlyCrypto = props => {
             {tokenSymbol}
           </Text>
           <OpenAmount>
-            <Flex
-              onClick={() => setIsComponentVisible(!isComponentVisible)}
-              sx={{
-                alignItems: 'center',
-                position: 'absolute',
-                cursor: 'pointer',
-                ml: 3
-              }}
-            >
-              <Text sx={{ mr: 2 }}>{tokenSymbol}</Text>
-              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
-            </Flex>
-
             {isComponentVisible && (
               <Flex
                 sx={{
                   position: 'absolute',
                   backgroundColor: 'background',
-                  marginTop: '100px'
+                  marginTop: '100px',
+                  right: '0'
                 }}
               >
                 <Select
-                  width='200px'
+                  width='250px'
                   content={erc20List}
                   isTokenList
                   menuIsOpen
@@ -639,6 +666,28 @@ const OnlyCrypto = props => {
                 setAmountTyped(e.target.value)
               }}
             />
+            <Flex
+              onClick={() => setIsComponentVisible(!isComponentVisible)}
+              sx={{
+                alignItems: 'center',
+                position: 'absolute',
+                cursor: 'pointer',
+                right: '20px',
+                ml: 3
+              }}
+            >
+              <img
+                src={icon || `assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
+                alt={tokenSymbol}
+                onError={ev => {
+                  ev.target.src = ETHIcon
+                  ev.target.onerror = null
+                }}
+                style={{ width: '32px', height: '32px' }}
+              />
+              <Text sx={{ ml: 2, mr: 3 }}>{tokenSymbol}</Text>
+              <BsCaretDownFill size='12px' color={theme.colors.secondary} />
+            </Flex>
           </OpenAmount>
         </AmountContainer>
         <>
@@ -680,13 +729,6 @@ const OnlyCrypto = props => {
           </Label> */}
           {amountTyped && (
             <Summary>
-              <SummaryRow
-                title='Donation amount'
-                amount={[
-                  `${eth2usd(donation)}`,
-                  `${parseFloat(donation)} ${selectedToken?.symbol}`
-                ]}
-              />
               {donateToGiveth && (
                 <SummaryRow
                   title='Support Giveth'
@@ -698,18 +740,26 @@ const OnlyCrypto = props => {
                   ]}
                 />
               )}
+              <SummaryRow
+                title='Donation amount'
+                isLarge
+                amount={[
+                  `${eth2usd(donation)}`,
+                  `${parseFloat(donation)} ${selectedToken?.symbol}`
+                ]}
+              />
               {gasPrice && (
                 <SummaryRow
                   title='Network fee'
                   logo={iconQuestionMark}
                   amount={[
-                    `${eth2usd(gasETHPrice)} • ${parseFloat(
-                      gasETHPrice
-                    ).toLocaleString('en-US', {
+                    `${eth2usd(gasETHPrice) || '$0.00'} • ${parseFloat(
+                      gasPrice
+                    )} GWEI`,
+                    `${parseFloat(gasETHPrice).toLocaleString('en-US', {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
-                    })} ETH`,
-                    `${parseFloat(gasPrice)} GWEI`
+                    })} ${mainToken}`
                   ]}
                 />
               )}
@@ -733,8 +783,7 @@ const OnlyCrypto = props => {
                   </Text>
                 </SaveGasMessage>
               )}
-              <Separator />
-              <Text
+              {/* <Text
                 sx={{
                   variant: 'text.large',
                   color: 'background',
@@ -748,10 +797,13 @@ const OnlyCrypto = props => {
                       minimumFractionDigits: 2,
                       maximumFractionDigits: 6
                     })}`
-                  : `${selectedToken?.symbol} ${parseFloat(subtotal).toFixed(
-                      2
-                    )}`}
-              </Text>
+                  : `${selectedToken?.symbol} ${parseFloat(
+                      subtotal
+                    ).toLocaleString('en-US', {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 6
+                    })}`}
+              </Text> */}
             </Summary>
           )}
         </>

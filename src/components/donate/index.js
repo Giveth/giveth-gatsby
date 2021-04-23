@@ -18,6 +18,7 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
+import testImg from '../../images/logos/giveth-logo.jpg'
 
 const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
 
@@ -114,7 +115,6 @@ const DonateIndex = props => {
         variables: { id: project?.id },
         fetchPolicy: 'network-only'
       })
-      console.log({ projectReFetched })
       if (
         projectReFetched?.project?.length > 0 &&
         projectReFetched.project[0].status?.id !== '5'
@@ -130,7 +130,7 @@ const DonateIndex = props => {
   }, [])
 
   // TODO: Implement this on a utils file
-  function getUrlParams (search) {
+  function getUrlParams(search) {
     const hashes = search.slice(search.indexOf('?') + 1).split('&')
     return hashes.reduce((params, hash) => {
       const [key, val] = hash.split('=')
@@ -138,7 +138,7 @@ const DonateIndex = props => {
     }, {})
   }
 
-  function PaymentOptions () {
+  function PaymentOptions() {
     const isSSR = typeof window === 'undefined'
 
     const ShowPaymentOption = () => {
@@ -261,10 +261,7 @@ const DonateIndex = props => {
             project={project}
             name={project?.title}
             description={project?.description}
-            image={
-              project?.image ||
-              'https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
-            }
+            image={project?.image || testImg}
             raised={1223}
             category={project?.categories || 'Blockchain 4 Good'}
             listingId='key1'
@@ -282,17 +279,14 @@ const DonateIndex = props => {
   }
 
   return (
-    <>
+    <Flex sx={{ flexDirection: 'row' }}>
       <ProjectContainer>
         <ProjectListing
           wholeClickable
           name={project?.title}
           project={project}
           description={project?.description}
-          image={
-            project?.image ||
-            'https://feathers.beta.giveth.io/uploads/368b8ef30b9326adc4a490c4506189f905cdacef63b999f9b042a853ab12a5bb.png'
-          }
+          image={project?.image || testImg}
           raised={1223}
           categories={project?.categories}
           listingId='key1'
@@ -303,7 +297,7 @@ const DonateIndex = props => {
       <Payment>
         <PaymentOptions />
       </Payment>
-    </>
+    </Flex>
   )
 }
 

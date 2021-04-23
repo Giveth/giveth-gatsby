@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from 'theme-ui'
 import React, { useEffect, useState } from 'react'
+import { graphql } from 'gatsby'
 import Layout from '../components/layout'
 import Seo from '../components/seo'
 import { useApolloClient } from '@apollo/client'
@@ -19,6 +20,7 @@ const Projects = ({ data }) => {
     field: orderByField,
     direction: OrderByDirection.DESC
   }
+  const categories = data?.giveth?.categories
   useEffect(() => {
     const checkProjectsAfterSSR = async () => {
       try {
@@ -41,19 +43,15 @@ const Projects = ({ data }) => {
   const { projects } = giveth
   const totalCount = showProjects?.length
   const showingProjects = showProjects
-    ?.slice(0, limit)
-    .sort((a, b) => b?.qualityScore > a?.qualityScore)
 
   const AllProjects = () => (
     <React.Fragment>
       <Seo title='Projects' />
       <ProjectsList
         projects={showingProjects}
+        categories={categories}
         totalCount={totalCount}
-        loadMore={() => {
-          setLimit(limit + 3)
-        }}
-        hasMore={limit < projects.length}
+        maxLimit={limit}
         selectOrderByField={orderByField => {
           setLimit(2)
           setOrderByField(orderByField)
@@ -95,6 +93,9 @@ export const query = graphql`
           userId
         }
       }
+      categories {
+        name
+      }
     }
     allProject {
       edges {
@@ -109,6 +110,9 @@ export const query = graphql`
           description
           walletAddress
           impactLocation
+          qualityScore
+          totalDonations
+          totalHearts
           categories {
             name
           }

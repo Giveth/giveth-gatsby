@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Button, Input, Text, Flex } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as Auth from '../../services/auth'
+import { checkIfURLisValid } from '../../utils'
 import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
 import { useForm } from 'react-hook-form'
@@ -74,6 +75,7 @@ const InputBox = props => {
 function EditProfileModal(props) {
   const [user, setUser] = React.useState(props?.user)
   const wallet = useWallet()
+
   const { register, handleSubmit, reset, errors } = useForm({
     // defaultValues: user
     defaultValues: React.useMemo(() => {
@@ -96,6 +98,16 @@ function EditProfileModal(props) {
         location: location || '',
         email: email || '',
         url: url || ''
+      }
+      // Check url
+      if (url) {
+        const valid = await checkIfURLisValid(url)
+        console.log({ valid })
+        if (!valid)
+          return Toast({
+            content: `Your website is not valid or isn't reachable at the moment`,
+            type: 'error'
+          })
       }
       const { data: response, error } = await updateUser({
         variables: newProfile
@@ -144,8 +156,12 @@ function EditProfileModal(props) {
               address={user.getWalletAddress()}
             />
             <Box sx={{ ml: '27px' }}>
-              <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
-              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
+              <Text sx={{ color: 'secondary', fontSize: 7 }}>
+                {wallet?.user?.name}
+              </Text>
+              <Text sx={{ color: 'bodyDark', fontSize: 3 }}>
+                {wallet?.user?.email}
+              </Text>
             </Box>
           </Flex>
           <InputBox

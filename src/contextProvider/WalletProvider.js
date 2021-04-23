@@ -1,5 +1,5 @@
 import detectEthereumProvider from '@metamask/detect-provider'
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { keccak256 } from 'ethers/lib/utils'
 import { promisify } from 'util'
 import { ethers } from 'ethers'
@@ -7,7 +7,9 @@ import Web3 from 'web3'
 
 import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
+import { PopupContext } from '../contextProvider/popupProvider'
 import LoadingModal from '../components/loadingModal'
+import SignInMetamaskModal from '../components/signInMetamaskModal'
 import getSigner from '../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
 import { useApolloClient } from '@apollo/client'
@@ -43,8 +45,12 @@ function WalletProvider (props) {
   const [currentNetwork, setCurrentNetwork] = useState(null)
   const [currentChainId, setCurrentChainId] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [signInMetamask, setSignInMetamask] = useState(false)
+  const [isComponentVisible, setIsComponentVisible] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
+  const usePopup = useContext(PopupContext)
   const client = useApolloClient()
+
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
     if (provider && walletProvider !== 'torus') {
@@ -235,6 +241,7 @@ function WalletProvider (props) {
 
     Auth.setUser(user)
     setIsLoggedIn(true)
+    setSignInMetamask(false)
     setUser(user)
   }
 
@@ -246,7 +253,10 @@ function WalletProvider (props) {
   async function login ({ walletProvider }) {
     try {
       wallet = getWallet(walletProvider)
-      setLoading(true)
+      if (walletProvider === 'metamask') {
+        setSignInMetamask(true)
+        setIsComponentVisible(true)
+      } else setLoading(true)
       await initWallet(walletProvider)
       console.log(`torus: login WalletProvider.login`, {
         wallet,
@@ -274,7 +284,7 @@ function WalletProvider (props) {
       )
 
       if (wallet && !(wallet.isLoggedIn() && isLoggedIn)) {
-        await wallet.login()
+        await wallet.login(verifier)
         console.log('updateUser: awaiting login')
         wallet.web3.eth.getAccounts().then(updateUser)
       }
@@ -305,6 +315,7 @@ function WalletProvider (props) {
     if (currentNetworkId?.toString() === networkId || byPassXDAI) {
       return true
     } else {
+      usePopup?.triggerPopup('WrongNetwork')
       throw new Error(`Wrong network, please change to ${network} or xDAI`)
     }
   }
@@ -321,6 +332,7 @@ function WalletProvider (props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
+
   async function sendTransaction (
     params,
     txCallbacks,
@@ -443,11 +455,18 @@ function WalletProvider (props) {
     isLoggedIn,
     user,
     currentNetwork,
-    currentChainId
+    currentChainId,
+    isComponentVisible
   ])
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}
+      {signInMetamask && (
+        <SignInMetamaskModal
+          isOpen={signInMetamask && isComponentVisible}
+          close={() => setIsComponentVisible(false)}
+        />
+      )}
       {props.children}
     </WalletContext.Provider>
   )

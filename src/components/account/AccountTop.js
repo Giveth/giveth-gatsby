@@ -26,6 +26,7 @@ const CreateLink = styled(Link)`
   }
 `
 const AccountTop = props => {
+  const isDonation = (props?.query?.view || '') === 'donations'
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Flex
@@ -60,7 +61,7 @@ const AccountTop = props => {
         <UserSpan>
           {isMobile ? null : (
             <span>
-              <CreateLink to='/create'>
+              <CreateLink to={isDonation ? '/projects' : '/create'}>
                 <Text
                   sx={{
                     color: 'primary',
@@ -69,7 +70,7 @@ const AccountTop = props => {
                     }
                   }}
                 >
-                  Create a project
+                  {isDonation ? 'Donate' : 'Create a project'}
                 </Text>
               </CreateLink>
             </span>

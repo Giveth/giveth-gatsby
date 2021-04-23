@@ -37,7 +37,7 @@ const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEditionForm(props) {
+function ProjectEditionForm (props) {
   const {
     goBack,
     setCancelModal,
@@ -350,7 +350,7 @@ function ProjectEditionForm(props) {
   )
 }
 
-function ProjectEdition(props) {
+function ProjectEdition (props) {
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -400,6 +400,7 @@ function ProjectEdition(props) {
             }
           })
           setUpdateProjectOnServer(false)
+          setLoading(false)
           setShowModal(true)
         } catch (error) {
           setLoading(false)
@@ -416,7 +417,7 @@ function ProjectEdition(props) {
     }
   }, [project])
 
-  async function updateProject(data) {
+  async function updateProject (data) {
     try {
       // Validate eth address
       let ethAddress = data.editWalletAddress
@@ -469,7 +470,7 @@ function ProjectEdition(props) {
         if (data?.editImage.length === 1) {
           projectData.imageStatic = data.editImage
         } else {
-          //download image to send
+          // Download image to send
           const imageFile = await getImageFile(data.editImage, data?.editTitle)
           projectData.imageUpload = imageFile
         }
