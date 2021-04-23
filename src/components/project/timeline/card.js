@@ -9,8 +9,7 @@ import {
   IconButton,
   Input,
   Flex,
-  Text,
-  Textarea
+  Text
 } from 'theme-ui'
 import dayjs from 'dayjs'
 import { GET_USER } from '../../../apollo/gql/auth'
@@ -20,8 +19,8 @@ import {
 } from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/client'
-import { navigate } from 'gatsby'
-import Toast from '../../toast'
+import ReactQuill from 'react-quill'
+import RichTextInput from '../../richTextInput'
 import styled from '@emotion/styled'
 
 import theme from '../../../gatsby-plugin-theme-ui'
@@ -172,7 +171,7 @@ const TimelineCard = props => {
             value={newTitle}
             onChange={e => setNewTitle(e.target.value)}
           />
-          <Textarea
+          {/* <Textarea
             variant='longInput'
             rows={4}
             sx={{
@@ -189,13 +188,41 @@ const TimelineCard = props => {
             placeholder='Write your update...'
             value={newInput}
             onChange={e => setNewInput(e.target.value)}
+          /> */}
+          <RichTextInput
+            style={{
+              width: '100%',
+              height: '400px',
+              fontFamily: 'body',
+              padding: '1.125rem 1rem',
+              borderRadius: '12px',
+              resize: 'none',
+              '&::placeholder': {
+                variant: 'body',
+                color: 'bodyLight'
+              }
+            }}
+            value={newInput}
+            placeholder='Write your update...'
+            onChange={(newValue, delta, source) => {
+              try {
+                setNewInput(newValue)
+              } catch (error) {
+                console.log({ error })
+              }
+            }}
+            // onChange={e => getLength(e)}
+            // maxLength={2000}
           />
           <Flex sx={{ my: 2, mx: 3, justifyContent: 'flex-end' }}>
             <Button
               sx={{
+                cursor: 'pointer',
                 variant: 'buttons.small',
                 background: 'none',
-                color: 'primary'
+                color: 'primary',
+                marginTop: '3rem',
+                zIndex: 5
               }}
               onClick={() => {
                 props.newUpdateOption({ title: newTitle, content: newInput })
@@ -296,7 +323,15 @@ const TimelineCard = props => {
               </Badge>
             </Creator>
           )}
-          <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
+          <ReactQuill
+            style={{ fontFamily: `Red Hat Text, sans serif` }}
+            value={content?.content}
+            readOnly={true}
+            theme={'bubble'}
+          />
+          {
+            // <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
+          }
         </CardContent>
         <CardFooter>
           <IconButton onClick={react} sx={{ cursor: 'pointer' }}>

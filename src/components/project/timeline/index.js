@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from '@emotion/styled'
 import dayjs from 'dayjs'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 import { ProjectContext } from '../../../contextProvider/projectProvider'
 import { Button, Flex, Text } from 'theme-ui'
-import Card from './card'
 import theme from '../../../gatsby-plugin-theme-ui'
+
+const Card = React.lazy(() => import('./card'))
 
 dayjs.extend(localizedFormat)
 
@@ -52,6 +53,7 @@ const Timeline = ({
   isOwner,
   refreshQuery
 }) => {
+  const isSSR = typeof window === 'undefined'
   const newUpdateOption = true
   const projectCreationDate = dayjs(project?.creationDate)
   return (
@@ -78,7 +80,11 @@ const Timeline = ({
               UPDATE
             </Text>
           </LeftInfo>
-          <Card newUpdateOption={addUpdate} />
+          {!isSSR && (
+            <React.Suspense fallback={<div />}>
+              <Card newUpdateOption={addUpdate} />
+            </React.Suspense>
+          )}
         </Container>
       )}
       {content
@@ -100,13 +106,17 @@ const Timeline = ({
                   {date?.format('YYYY') || ''}
                 </Text>
               </LeftInfo>
-              <Card
-                content={i?.projectUpdate}
-                reactions={i?.reactions}
-                number={content.length - index}
-                project={project}
-                refreshQuery={refreshQuery}
-              />
+              {!isSSR && (
+                <React.Suspense fallback={<div />}>
+                  <Card
+                    content={i?.projectUpdate}
+                    reactions={i?.reactions}
+                    number={content.length - index}
+                    project={project}
+                    refreshQuery={refreshQuery}
+                  />
+                </React.Suspense>
+              )}
             </Container>
           )
         })}

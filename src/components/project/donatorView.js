@@ -4,6 +4,7 @@ import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
+// import ReactQuill from 'react-quill'
 
 import testImg from '../../images/giveth_bg.jpg'
 import CancelledModal from './cancelledModal'
@@ -27,6 +28,7 @@ import { PROJECT_DONATIONS } from '../../apollo/gql/donations'
 import { GET_USER } from '../../apollo/gql/auth'
 import styled from '@emotion/styled'
 import theme from '../../gatsby-plugin-theme-ui'
+import FirstGiveBadge from './firstGiveBadge'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))
 const UpdatesTab = React.lazy(() => import('./updatesTab'))
@@ -41,6 +43,7 @@ const FloatingDonateView = styled(Flex)`
 
 export const ProjectDonatorView = ({ pageContext }) => {
   const { user } = useWallet()
+  const [ready, setReady] = useState(false)
   const [currentTab, setCurrentTab] = useState('description')
   const [totalDonations, setTotalDonations] = useState(null)
   const [totalGivers, setTotalGivers] = useState(null)
@@ -163,8 +166,11 @@ export const ProjectDonatorView = ({ pageContext }) => {
           [...new Set(donations?.map(data => data?.fromWalletAddress))].length
         )
         setIsOwner(pageContext?.project?.admin === user.id)
+
+        setReady(true)
       } catch (error) {
         console.log({ error })
+        setReady(true)
       }
     }
 
@@ -435,6 +441,12 @@ export const ProjectDonatorView = ({ pageContext }) => {
                     color: 'black'
                   }}
                 >
+                  {/* <ReactQuill
+                    style={{ fontFamily: `Red Hat Text, sans serif` }}
+                    value={pageContext?.project?.description}
+                    readOnly={true}
+                    theme={'bubble'}
+                  /> */}
                   {pageContext?.project?.description}
                 </Text>
               </>
@@ -590,6 +602,11 @@ export const ProjectDonatorView = ({ pageContext }) => {
               </Text>
             </Flex>
           </Flex>
+          {ready && currentProjectView?.donations?.length === 0 && (
+            <Flex sx={{ mt: 4 }}>
+              <FirstGiveBadge />
+            </Flex>
+          )}
         </FloatingDonateView>
       </Flex>
       {showMap ? (

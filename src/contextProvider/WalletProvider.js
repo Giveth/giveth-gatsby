@@ -9,6 +9,7 @@ import { getToken, validateAuthToken } from '../services/token'
 import { GET_USER_BY_ADDRESS } from '../apollo/gql/auth'
 import { PopupContext } from '../contextProvider/popupProvider'
 import LoadingModal from '../components/loadingModal'
+import SignInMetamaskModal from '../components/signInMetamaskModal'
 import getSigner from '../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
 import { useApolloClient } from '@apollo/client'
@@ -24,7 +25,7 @@ const networkId = process.env.GATSBY_NETWORK_ID
 let EVENT_SETUP_DONE = false
 let wallet = {}
 
-function useWallet() {
+function useWallet () {
   const context = React.useContext(WalletContext)
   if (!context) {
     throw new Error(`userWallet must be used within a WalletProvider`)
@@ -32,7 +33,7 @@ function useWallet() {
   return context
 }
 
-function WalletProvider(props) {
+function WalletProvider (props) {
   const localStorageUser = Auth.getUser()
   const initUser = new User(localStorageUser.walletType, localStorageUser)
 
@@ -44,6 +45,8 @@ function WalletProvider(props) {
   const [currentNetwork, setCurrentNetwork] = useState(null)
   const [currentChainId, setCurrentChainId] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [signInMetamask, setSignInMetamask] = useState(false)
+  const [isComponentVisible, setIsComponentVisible] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
   const usePopup = useContext(PopupContext)
   const client = useApolloClient()
@@ -105,7 +108,7 @@ function WalletProvider(props) {
     initWallet(localStorageUser?.walletType)
   }, [])
 
-  async function logout(walletLoggedOut) {
+  async function logout (walletLoggedOut) {
     !walletLoggedOut && wallet?.logout()
     setLoading(true)
     Auth.handleLogout()
@@ -113,7 +116,7 @@ function WalletProvider(props) {
     setLoading(false)
   }
 
-  async function signMessage(message, publicAddress, loginFromXDAI) {
+  async function signMessage (message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
       console.log({ loginFromXDAI })
@@ -175,7 +178,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function updateUserInfoOnly() {
+  async function updateUserInfoOnly () {
     if (!user) return null
     const { data } = await client.query({
       query: GET_USER_BY_ADDRESS,
@@ -191,13 +194,13 @@ function WalletProvider(props) {
     Auth.setUser(newUser)
   }
 
-  async function updateBalance(publicAddress) {
+  async function updateBalance (publicAddress) {
     if (!publicAddress) return null
     const balance = await wallet.web3.eth.getBalance(publicAddress)
     setBalance(wallet.web3.utils.fromWei(balance, 'ether'))
   }
 
-  async function updateUser(accounts) {
+  async function updateUser (accounts) {
     if (accounts?.length < 0) return
     const publicAddress = wallet.web3.utils.toChecksumAddress(accounts[0])
     setAccount(publicAddress)
@@ -238,18 +241,22 @@ function WalletProvider(props) {
 
     Auth.setUser(user)
     setIsLoggedIn(true)
+    setSignInMetamask(false)
     setUser(user)
   }
 
-  async function validateToken() {
+  async function validateToken () {
     const isValid = await validateAuthToken(Auth.getUserToken())
     return isValid
   }
 
-  async function login({ walletProvider }) {
+  async function login ({ walletProvider }) {
     try {
       wallet = getWallet(walletProvider)
-      setLoading(true)
+      if (walletProvider === 'metamask') {
+        setSignInMetamask(true)
+        setIsComponentVisible(true)
+      } else setLoading(true)
       await initWallet(walletProvider)
       console.log(`torus: login WalletProvider.login`, {
         wallet,
@@ -277,7 +284,7 @@ function WalletProvider(props) {
       )
 
       if (wallet && !(wallet.isLoggedIn() && isLoggedIn)) {
-        await wallet.login()
+        await wallet.login(verifier)
         console.log('updateUser: awaiting login')
         wallet.web3.eth.getAccounts().then(updateUser)
       }
@@ -289,7 +296,7 @@ function WalletProvider(props) {
     }
   }
 
-  function isWalletAddressValid(address) {
+  function isWalletAddressValid (address) {
     if (address.length !== 42 || !Web3.utils.isAddress(address)) {
       return false
     } else {
@@ -297,11 +304,11 @@ function WalletProvider(props) {
     }
   }
 
-  function isAddressENS(address) {
+  function isAddressENS (address) {
     return address.toLowerCase().indexOf('.eth') > -1
   }
 
-  async function checkNetwork() {
+  async function checkNetwork () {
     if (!wallet) throw new Error('No Eth Provider')
     const byPassXDAI = currentChainId === 100
     const currentNetworkId = await wallet?.web3.eth.getChainId()
@@ -313,7 +320,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function sendEthersTransaction(toAddress, amount, provider) {
+  async function sendEthersTransaction (toAddress, amount, provider) {
     const transaction = {
       to: toAddress,
       value: ethers.utils.parseEther(amount.toString())
@@ -325,7 +332,8 @@ function WalletProvider(props) {
     const signerTransaction = await signer.sendTransaction(transaction)
     return signerTransaction
   }
-  async function sendTransaction(
+
+  async function sendTransaction (
     params,
     txCallbacks,
     contractAddress,
@@ -400,7 +408,7 @@ function WalletProvider(props) {
     }
   }
 
-  async function getAddressFromENS(address) {
+  async function getAddressFromENS (address) {
     const ens = await wallet.web3.eth.ens.getOwner(address)
     let zeroXAddress
     if (ens !== '0x0000000000000000000000000000000000000000') {
@@ -447,11 +455,18 @@ function WalletProvider(props) {
     isLoggedIn,
     user,
     currentNetwork,
-    currentChainId
+    currentChainId,
+    isComponentVisible
   ])
   return (
     <WalletContext.Provider value={value} {...props}>
       {loading && <LoadingModal isOpen={loading} />}
+      {signInMetamask && (
+        <SignInMetamaskModal
+          isOpen={signInMetamask && isComponentVisible}
+          close={() => setIsComponentVisible(false)}
+        />
+      )}
       {props.children}
     </WalletContext.Provider>
   )

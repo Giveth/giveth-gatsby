@@ -34,8 +34,9 @@ const LeftConfetti = styled(Confetti)`
 `
 
 const BackButton = styled(NavLink)`
-  display: flex;
-  flex-direction: row;
+  && {
+    display: flex;
+  }
   width: 100%;
   max-width: 7rem;
   position: absolute;
@@ -50,7 +51,7 @@ const DialogContent = styled.div`
   margin: 3.813rem 0 0 0;
 `
 
-export default function Dialog({ children }) {
+export default function Dialog ({ children }) {
   return (
     <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
       <LeftConfetti />

@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Button, Input, Text, Flex } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as Auth from '../../services/auth'
+import { checkIfURLisValid } from '../../utils'
 import { useMutation } from '@apollo/client'
 import { IoMdClose } from 'react-icons/io'
 import { useForm } from 'react-hook-form'
@@ -97,6 +98,16 @@ function EditProfileModal(props) {
         location: location || '',
         email: email || '',
         url: url || ''
+      }
+      // Check url
+      if (url) {
+        const valid = await checkIfURLisValid(url)
+        console.log({ valid })
+        if (!valid)
+          return Toast({
+            content: `Your website is not valid or isn't reachable at the moment`,
+            type: 'error'
+          })
       }
       const { data: response, error } = await updateUser({
         variables: newProfile

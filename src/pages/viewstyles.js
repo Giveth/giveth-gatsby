@@ -143,6 +143,7 @@ const ViewStyles = () => {
                 <Button sx={{ variant: 'buttons.tiny', bg: 'secondary' }}>
                   tiny
                 </Button>
+                <Button sx={{ variant: 'buttons.tertiary' }}>tertiary</Button>
               </Container>
             </StyleGuide>
 
