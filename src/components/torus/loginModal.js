@@ -69,7 +69,10 @@ const TinyBtn = styled(Box)`
   }
 `
 
-function LoginModal (props) {
+function LoginModal(props) {
+  const [modalOpen, setModalOpen] = useState(true)
+  const { login } = useWallet()
+
   React.useEffect(() => {
     Modal.setAppElement('body')
   })
