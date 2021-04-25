@@ -225,9 +225,14 @@ const TimelineCard = props => {
                 zIndex: 5
               }}
               onClick={() => {
-                props.newUpdateOption({ title: newTitle, content: newInput })
-                setNewTitle('')
-                setNewInput('')
+                const res = props.newUpdateOption({
+                  title: newTitle,
+                  content: newInput
+                })
+                if (res !== false) {
+                  setNewTitle('')
+                  setNewInput('')
+                }
               }}
             >
               <Text variant='text.bold'>SUBMIT</Text>

@@ -207,6 +207,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
           defer
         />
+        <script src='/node_modules/quill-video-resize-module/video-resize.min.js' />
         <script type='text/javascript'>
           {`
           let map;

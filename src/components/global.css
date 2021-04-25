@@ -3,6 +3,23 @@
   cursor: pointer !important;  
 }
 
+
+
+/* quill editor styles */
 .ql-editor {
   font-family: 'Red Hat Text', sans-serif;
+}
+.ql-video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+.ql-video-wrapper  iframe, .embed-container object, .embed-container embed{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
