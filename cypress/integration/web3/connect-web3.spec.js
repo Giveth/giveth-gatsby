@@ -16,11 +16,11 @@ describe('Project creation', () => {
 
   describe('Creates a project', () => {
     it('clicks on create a project button', () => {
+      cy.wait(2000)
       cy.get('button')
         .contains(/create a project/i)
         .click()
     })
-
     it('fills the name of the project', () => {
       cy.wait(2000)
       cy.get('#projectName')
@@ -30,7 +30,6 @@ describe('Project creation', () => {
         .contains(/next/i)
         .click()
     })
-
     it('fills the name of the admin', () => {
       cy.wait(2000)
       cy.get('#projectAdmin')
@@ -40,7 +39,6 @@ describe('Project creation', () => {
         .contains(/next/i)
         .click()
     })
-
     it('fills the description of the project', () => {
       cy.wait(2000)
       cy.get('#projectDescription')
@@ -50,7 +48,6 @@ describe('Project creation', () => {
         .contains(/next/i)
         .click()
     })
-
     it('fills the label of the project', () => {
       cy.wait(2000)
       cy.get('label')
@@ -60,7 +57,6 @@ describe('Project creation', () => {
         .contains(/next/i)
         .click()
     })
-
     it('fills the location of the project', () => {
       cy.wait(2000)
       cy.get('input[type="checkbox"]').click({ force: true })
@@ -68,7 +64,6 @@ describe('Project creation', () => {
         .contains(/next/i)
         .click()
     })
-
     it('fills the image of the project', () => {
       cy.wait(2000)
       cy.get('div[type="button"]').each(($el, index) => {
@@ -80,7 +75,6 @@ describe('Project creation', () => {
         .contains(/next/i)
         .click()
     })
-
     it('fills an empty address for the project and does not pass', () => {
       cy.wait(2000)
       cy.get('button')
@@ -92,7 +86,6 @@ describe('Project creation', () => {
       cy.wait(3000)
       cy.get('.Toastify__toast-container').should('not.exist')
     })
-
     it('fills an address already used for the project and does not pass', () => {
       cy.get('#projectWalletAddress').type(
         '0xFE3B557E8Fb62b89F4916B721be55cEb828dBd73'
@@ -106,7 +99,6 @@ describe('Project creation', () => {
       cy.wait(3000)
       cy.get('.Toastify__toast-container').should('not.exist')
     })
-
     it('goes back and checks that the right image is set', () => {
       cy.wait(2000)
       cy.get('button[aria-label="Back"]')
@@ -116,7 +108,6 @@ describe('Project creation', () => {
         .get('#projectImage')
         .should('have.a.value', 4)
     })
-
     it('goes back and checks that the right location is set', () => {
       cy.wait(2000)
       cy.get('button[aria-label="Back"]')
@@ -127,7 +118,6 @@ describe('Project creation', () => {
         .contains(/global/i)
         .should('exist')
     })
-
     it('changes the location, submits it and goes back', () => {
       cy.wait(2000)
       cy.get('input[type="checkbox"]').click({ force: true })
@@ -148,7 +138,6 @@ describe('Project creation', () => {
         .contains(/back/i)
         .click()
     })
-
     it('goes back and checks that the right label is set', () => {
       cy.wait(2000)
       cy.get('button[aria-label="Back"]')
@@ -157,7 +146,6 @@ describe('Project creation', () => {
       cy.wait(2000)
       cy.get('input[id="community"]').should('be.checked')
     })
-
     it('goes back and checks that the description is set', () => {
       cy.wait(2000)
       cy.get('button[aria-label="Back"]')
@@ -166,7 +154,6 @@ describe('Project creation', () => {
       cy.wait(2000)
       cy.findByText(projectData.projectDescription).should('exist')
     })
-
     it('goes back and checks that the admin is set', () => {
       cy.wait(2000)
       cy.get('button[aria-label="Back"]')
@@ -175,7 +162,6 @@ describe('Project creation', () => {
       cy.wait(2000)
       cy.get('#projectAdmin').should('have.value', projectData.projectAdmin)
     })
-
     it('goes back and checks that the name of the project is set', () => {
       cy.wait(2000)
       cy.get('button[aria-label="Back"]')
@@ -184,7 +170,6 @@ describe('Project creation', () => {
       cy.wait(2000)
       cy.get('#projectName').should('have.value', projectData.projectName)
     })
-
     it('clicks next until the end', () => {
       for (let i = 0; i < 6; i++) {
         cy.wait(1000)
@@ -194,20 +179,17 @@ describe('Project creation', () => {
         cy.wait(1000)
       }
     })
-
     const web3 = new Web3(
       new Web3.providers.HttpProvider('http://localhost:8545')
     )
     const address = web3.eth.accounts.create()?.address
-
     it('fills a newly created not used address for the project and passes', () => {
       cy.get('#projectWalletAddress').type(address)
       cy.get('button')
         .contains(/next/i)
         .click()
     })
-
-    it('checks that the right values are shown', () => {
+    xit('checks that the right values are shown', () => {
       cy.wait(2000)
       cy.findByText(projectData.projectName).should('exist')
       cy.findByText(projectData.projectAdmin).should('exist')

@@ -8,7 +8,7 @@ Cypress.Commands.add('setWeb3Provider', () => {
       new Web3.providers.WebsocketProvider('ws://localhost:8545')
     )
     window.ethereum.isTest = true
-    window.ethereum.isLoggedIn = () => true
+
     window.localStorage.setItem('cookiesAccepted', 'true')
     window.localStorage.setItem('githubIssueClosed', 'true')
     window.localStorage.setItem(
@@ -25,7 +25,8 @@ Cypress.Commands.add('setWeb3Provider', () => {
         location: 'earth',
         name: 'Test Giveth',
         url: '',
-        token: Cypress.env('CYPRESS_USER_LOCAL_TOKEN')
+        token: Cypress.env('CYPRESS_USER_LOCAL_TOKEN'),
+        isTest: true
       })
     )
 

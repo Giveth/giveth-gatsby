@@ -74,12 +74,11 @@ function WalletProvider (props) {
     setCurrentChainId(currentChainId)
     setReady(true)
 
+    // TESTS ONLY --------------
+    if (provider.isTest) return
+
     // EVENTS ONLY --------------
 
-    if (provider.isTest) {
-      setIsLoggedIn(true)
-      return
-    }
     if (EVENT_SETUP_DONE || wallet.isTorus) return
     const refreshPage = () => setTimeout(() => window.location.reload(), 1000)
     wallet?.provider?.on('accountsChanged', accounts => {
@@ -112,6 +111,7 @@ function WalletProvider (props) {
   async function logout (walletLoggedOut) {
     !walletLoggedOut && wallet?.logout()
     setLoading(true)
+    console.log('lologout')
     Auth.handleLogout()
     setIsLoggedIn(false)
     setLoading(false)
@@ -255,7 +255,7 @@ function WalletProvider (props) {
       wallet = getWallet(walletProvider)
       setLoading(true)
       await initWallet(walletProvider)
-      console.log(`torus: login WalletProvider.login`, {
+      console.log('torus: login WalletProvider.login', {
         wallet,
         walletProvider
       })
