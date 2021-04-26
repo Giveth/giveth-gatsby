@@ -7,6 +7,8 @@ Cypress.Commands.add('setWeb3Provider', () => {
     window.ethereum = new Web3(
       new Web3.providers.WebsocketProvider('ws://localhost:8545')
     )
+    window.ethereum.isTest = true
+    window.ethereum.isLoggedIn = () => true
     window.localStorage.setItem('cookiesAccepted', 'true')
     window.localStorage.setItem('githubIssueClosed', 'true')
     window.localStorage.setItem(
