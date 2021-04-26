@@ -132,3 +132,5 @@ The setup for web3 testing is the following:
 - Run the following command to instanciate a HTTP Web3 Provider: `ganache-cli -p 8545`
 
 Now you can run tests that require a wallet!
+
+If you face some issues verify the Giveth token step and the ganache cli is launched. Then re-run the `npx cy:open` command.
