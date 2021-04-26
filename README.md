@@ -29,11 +29,11 @@ If you want to contribute, pls say hello to us in chat -  [https://giveth.io/joi
  - Your Favourite Code Editor (VScode for linting presets)
 
 ### Install impact-graph from GitHub
-In order to develop locally you need to clone the backend server as well. We are using https://github.com/topiahq/impact-graph for this.
+In order to develop locally you need to clone the backend server as well. We are using https://github.com/Giveth/impact-graph for this.
 
-- via the CLI:
+- via SSH on the CLI:
     ```bash
-    git clone git@github.com:topiahq/impact-graph.git
+    git clone git@github.com:Giveth/impact-graph.git
     cd impact-graph
     npm i
     cp .env.example .env
@@ -64,8 +64,10 @@ postgres=# grant all privileges on database <databaseName> to <userName>;
  In order to run the local build for Giveth.io you'll need to ask for the environment variables. Head on over to our [Contributors Discord](https://discord.gg/EndTUw9955) say Hi and get in touch with one of the developers.
 
 ### Launch the Development Server and Environment
- Make sure the backend server is running; the `impact-graph` from step 1.
-
+ Start up the `impact-graph` backend server and redis.
+  - Run redis by using the command `redis-server`
+  - From the impact-graph repo start with `npm start`
+  
  To take advantage of linting presets, please use **VSCODE**:
  * Select *File -> Open Workspace*
  * Navigate into the giveth-2 directory
@@ -83,8 +85,6 @@ postgres=# grant all privileges on database <databaseName> to <userName>;
 Open up the giveth2 repo on your code editor.
 
 Giveth.io is now running locally at `http://localhost:8000`!
-
-<img alt='Giveth Running Locally' src={useBaseUrl('img/content/givethlocalresized.png')} />
 
 You can also expiremnt with querying your data via GraphQL - you'll find it at this link here - `http://localhost:8000/___graphql`
 Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql).
