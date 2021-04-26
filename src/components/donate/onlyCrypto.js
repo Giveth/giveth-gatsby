@@ -70,7 +70,6 @@ const OpenAmount = styled.div`
   align-items: center;
   width: 100%;
   position: relative;
-
   input[type='number']::-webkit-inner-spin-button,
   input[type='number']::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -766,7 +765,7 @@ const OnlyCrypto = props => {
                 title='Donation amount'
                 isLarge
                 amount={[
-                  `${eth2usd(donation)}`,
+                  `${donationTokenToUSD(donation)}`,
                   `${parseFloat(donation)} ${selectedToken?.symbol}`
                 ]}
               />
@@ -805,14 +804,6 @@ const OnlyCrypto = props => {
                   </Text>
                 </SaveGasMessage>
               )}
-              <SummaryRow
-                title='Donation amount'
-                isLarge
-                amount={[
-                  `${donationTokenToUSD(donation)}`,
-                  `${parseFloat(donation)} ${selectedToken?.symbol}`
-                ]}
-              />
               {/* <Text
                 sx={{
                   variant: 'text.large',
