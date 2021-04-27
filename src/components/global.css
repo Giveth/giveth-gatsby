@@ -9,6 +9,9 @@
 .ql-editor {
   font-family: 'Red Hat Text', sans-serif;
 }
+.ql-editor img{
+  max-width: 100%;
+}
 .ql-video-wrapper {
   position: relative;
   padding-bottom: 56.25%;

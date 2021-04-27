@@ -68,7 +68,7 @@ const CardFooter = styled.span`
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-  margin: 1rem 0 0.5rem 0;
+  margin: -0.5rem 0 0.5rem 0;
   padding: 0rem 1rem;
 `
 const Top = styled(Flex)`
@@ -224,8 +224,8 @@ const TimelineCard = props => {
                 marginTop: '3rem',
                 zIndex: 5
               }}
-              onClick={() => {
-                const res = props.newUpdateOption({
+              onClick={async () => {
+                const res = await props.newUpdateOption({
                   title: newTitle,
                   content: newInput
                 })
