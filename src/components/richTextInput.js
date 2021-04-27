@@ -5,7 +5,7 @@ import * as Emoji from 'quill-emoji'
 
 import 'react-quill/dist/quill.snow.css'
 import 'quill-emoji/dist/quill-emoji.css'
-import { ImageDrop } from 'quill-image-drop-module'
+import QuillImageDropAndPaste from 'quill-image-drop-and-paste'
 
 window.Quill = Quill
 
@@ -13,7 +13,7 @@ const ImageResize = require('quill-image-resize-module').default
 
 Quill.register('modules/emoji', Emoji)
 Quill.register('modules/ImageResize', ImageResize)
-Quill.register('modules/imageDrop', ImageDrop)
+Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste)
 
 const QuillVideo = Quill.import('formats/video')
 const BlockEmbed = Quill.import('blots/block/embed')
@@ -84,7 +84,7 @@ const modules = {
     // toggle to add extra line breaks when pasting HTML:
     matchVisual: false
   },
-  imageDrop: true,
+  imageDropAndPaste: {},
   ImageResize: {}
 }
 
