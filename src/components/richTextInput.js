@@ -1,12 +1,20 @@
 import React, { useState } from 'react'
 import ReactQuill, { Quill } from 'react-quill'
+
 import * as Emoji from 'quill-emoji'
+
 import 'react-quill/dist/quill.snow.css'
 import 'quill-emoji/dist/quill-emoji.css'
+import { ImageDrop } from 'quill-image-drop-module'
 
-import '../utils/quill/quill-video-resize.css'
+window.Quill = Quill
+
+const ImageResize = require('quill-image-resize-module').default
 
 Quill.register('modules/emoji', Emoji)
+Quill.register('modules/ImageResize', ImageResize)
+Quill.register('modules/imageDrop', ImageDrop)
+
 const QuillVideo = Quill.import('formats/video')
 const BlockEmbed = Quill.import('blots/block/embed')
 
@@ -75,7 +83,9 @@ const modules = {
   clipboard: {
     // toggle to add extra line breaks when pasting HTML:
     matchVisual: false
-  }
+  },
+  imageDrop: true,
+  ImageResize: {}
 }
 
 const formats = [
