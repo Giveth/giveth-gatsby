@@ -19,8 +19,6 @@ import {
 } from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/client'
-import ReactQuill from 'react-quill'
-// import RichTextInput from '../../richTextInput'
 import styled from '@emotion/styled'
 
 import theme from '../../../gatsby-plugin-theme-ui'
@@ -30,6 +28,8 @@ import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHands from '../../../images/decorator-raised-hands.png'
+
+import RichTextViewer from '../../richTextViewer'
 
 const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
@@ -336,12 +336,7 @@ const TimelineCard = props => {
               </Badge>
             </Creator>
           )}
-          <ReactQuill
-            style={{ fontFamily: `Red Hat Text, sans serif` }}
-            value={content?.content}
-            readOnly={true}
-            theme={'bubble'}
-          />
+          <RichTextViewer content={content?.content} />
           {
             // <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
           }
