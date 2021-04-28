@@ -93,6 +93,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-transform-runtime": "^7.13.15",
     "@babel/preset-env": "^7.13.15",
     "@babel/preset-react": "^7.13.13",
     "@testing-library/cypress": "^7.0.4",
