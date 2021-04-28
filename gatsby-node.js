@@ -177,13 +177,13 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
           {
             test: /\@sentry\/gatsby/,
             use: loaders.null()
-          },
-          {
-            test: /\.js$/,
-            exclude: /node_modules(?!\/quill-image-drop-module|quill-image-resize-module)/,
-            loader: 'babel-loader',
-            query: {}
           }
+          // {
+          //   test: /\.js$/,
+          //   exclude: /node_modules(?!\/quill-image-drop-module|quill-image-resize-module)/,
+          //   loader: 'babel-loader',
+          //   query: {}
+          // }
         ]
       },
       plugins: [
