@@ -3,6 +3,7 @@ import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
 import { navigate, Link } from 'gatsby'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
+import RichTextViewer from './richTextViewer'
 import theme from '../gatsby-plugin-theme-ui/index'
 // import Donate from '../components/donateForm'
 import {
@@ -35,6 +36,7 @@ const AltCardContent = styled.span`
   display: flex;
   flex: 1;
   width: 100%;
+  z-index: 2;
   flex-direction: column;
   position: absolute;
   background-color: rgba(255, 255, 255, 0.7);
@@ -194,9 +196,9 @@ const ProjectCard = props => {
           key={props.listingId || project?.title + '_div'}
           src={image}
           onClick={() =>
-            (window.location.href = `/project/${props?.slug ||
-              project?.slug ||
-              ''}`)
+            (window.location.href = `/project/${
+              props?.slug || project?.slug || ''
+            }`)
           }
           style={{
             width: '100%',
@@ -350,9 +352,12 @@ const ProjectCard = props => {
               WebkitBoxOrient: 'vertical'
             }}
           >
+            <RichTextViewer
+              content={project?.description?.replace(/<img .*?>/g, '')}
+            />
             {
               /* Description String */
-              project?.description
+              // project?.description
             }
           </Text>
           <CardFooter>
