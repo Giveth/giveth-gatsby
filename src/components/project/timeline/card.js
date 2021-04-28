@@ -20,7 +20,7 @@ import {
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/client'
 import ReactQuill from 'react-quill'
-import RichTextInput from '../../richTextInput'
+// import RichTextInput from '../../richTextInput'
 import styled from '@emotion/styled'
 
 import theme from '../../../gatsby-plugin-theme-ui'
@@ -30,6 +30,8 @@ import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHands from '../../../images/decorator-raised-hands.png'
+
+const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
 dayjs.extend(localizedFormat)
 
@@ -106,6 +108,8 @@ const TimelineCard = props => {
   const [user, setUser] = useState(null)
   const { content, reactions, number } = props
   const client = useApolloClient()
+  const isSSR = typeof window === 'undefined'
+
   const react = async () => {
     try {
       await client?.mutate({
@@ -189,31 +193,35 @@ const TimelineCard = props => {
             value={newInput}
             onChange={e => setNewInput(e.target.value)}
           /> */}
-          <RichTextInput
-            style={{
-              width: '100%',
-              height: '400px',
-              fontFamily: 'body',
-              padding: '1.125rem 1rem',
-              borderRadius: '12px',
-              resize: 'none',
-              '&::placeholder': {
-                variant: 'body',
-                color: 'bodyLight'
-              }
-            }}
-            value={newInput}
-            placeholder='Write your update...'
-            onChange={(newValue, delta, source) => {
-              try {
-                setNewInput(newValue)
-              } catch (error) {
-                console.log({ error })
-              }
-            }}
-            // onChange={e => getLength(e)}
-            // maxLength={2000}
-          />
+          {!isSSR && (
+            <React.Suspense fallback={<div />}>
+              <RichTextInput
+                style={{
+                  width: '100%',
+                  height: '400px',
+                  fontFamily: 'body',
+                  padding: '1.125rem 1rem',
+                  borderRadius: '12px',
+                  resize: 'none',
+                  '&::placeholder': {
+                    variant: 'body',
+                    color: 'bodyLight'
+                  }
+                }}
+                value={newInput}
+                placeholder='Write your update...'
+                onChange={(newValue, delta, source) => {
+                  try {
+                    setNewInput(newValue)
+                  } catch (error) {
+                    console.log({ error })
+                  }
+                }}
+                // onChange={e => getLength(e)}
+                // maxLength={2000}
+              />
+            </React.Suspense>
+          )}
           <Flex sx={{ my: 2, mx: 3, justifyContent: 'flex-end' }}>
             <Button
               sx={{
