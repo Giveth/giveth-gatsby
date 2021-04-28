@@ -509,7 +509,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
           <Flex sx={{ justifyContent: 'space-evenly', flexWrap: 'wrap' }}>
             {project?.categories?.length > 0 &&
-              project?.categories?.map((category, index) => {
+              project?.categories.map((category, index) => {
                 return (
                   <Text
                     key={index}
