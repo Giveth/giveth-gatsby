@@ -4,7 +4,7 @@ import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-// import ReactQuill from 'react-quill'
+import RichTextViewer from '../richTextViewer'
 
 import testImg from '../../images/giveth_bg.jpg'
 import CancelledModal from './cancelledModal'
@@ -441,13 +441,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                     color: 'black'
                   }}
                 >
-                  {/* <ReactQuill
-                    style={{ fontFamily: `Red Hat Text, sans serif` }}
-                    value={pageContext?.project?.description}
-                    readOnly={true}
-                    theme={'bubble'}
-                  /> */}
-                  {pageContext?.project?.description}
+                  <RichTextViewer content={pageContext?.project?.description} />
+                  {/* {pageContext?.project?.description} */}
                 </Text>
               </>
             ) : currentTab === 'updates' && !isSSR ? (

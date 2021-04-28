@@ -40,11 +40,12 @@ const IndexPage = props => {
       for (const category in values.projectCategory) {
         if (
           values.projectCategory &&
-          values.projectCategory[category].length !== 0
+          values.projectCategory[category]?.length !== 0
         ) {
           projectCategories.push(category)
         }
       }
+      console.log({ projectCategories })
       const getImageFile = async (base64Data, projectName) => {
         const imageFile = fetch(base64Data)
           .then(res => res.blob())

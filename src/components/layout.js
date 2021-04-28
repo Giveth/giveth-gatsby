@@ -7,6 +7,7 @@
 
 import React from 'react'
 import './global.css'
+import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
 import { ThemeProvider, Box, Button, Link, Flex, Image, Text } from 'theme-ui'
