@@ -19,7 +19,6 @@ import Header from './header'
 import { WalletProvider } from '../contextProvider/WalletProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
-import SupportWidget from '../components/supportWidget'
 
 import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
@@ -31,6 +30,7 @@ import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styled from '@emotion/styled'
+import SupportWidget from './supportWidget'
 
 const StyledToastContainer = styled(ToastContainer)`
   .Toastify__close-button {
@@ -257,7 +257,6 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           <GlobalProvider>
             <ThemeProvider theme={theme}>
               <Provider template={AlertTemplate} {...AlertOptions}>
-                <SupportWidget />
                 <GithubIssue fixed={true} />
                 <XDAIPopup />
                 <Template />
