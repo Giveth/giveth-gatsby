@@ -173,13 +173,12 @@ const CreateProjectForm = props => {
         }
       }
 
-      // TODO: CHECK THIS ONLY FOR RICH TEXT : COMING SOON
       if (isDescriptionStep(submitCurrentStep)) {
         // check if file is too large
         const stringSize =
           encodeURI(data?.projectDescription).split(/%..|./).length - 1
         if (stringSize > 4000000) {
-          // 32Kb max maybe?
+          // 4Mb tops max maybe?
           return Toast({
             content: `Description too large`,
             type: 'error'

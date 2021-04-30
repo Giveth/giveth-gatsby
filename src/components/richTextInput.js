@@ -106,7 +106,6 @@ const formats = [
 ]
 
 function TextRichWithQuill(props) {
-  const [value, setValue] = useState('')
   // console.log({ value })
   return (
     <ReactQuill
