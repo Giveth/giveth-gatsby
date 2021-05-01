@@ -1,18 +1,17 @@
-/** @jsx jsx */
 import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Image, Text, jsx } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui'
 import styled from '@emotion/styled'
 
 // import graphics
-import decoratorCloud1 from '../../images/decorator-cloud1.svg'
-import decoratorCloud2 from '../../images/decorator-cloud2.svg'
-import decoratorFizzysquare from '../../images/decorator-fizzy-square-rotated.svg'
+// import decoratorCloud1 from '../../images/decorator-cloud1.svg'
+// import decoratorCloud2 from '../../images/decorator-cloud2.svg'
+// import decoratorFizzysquare from '../../images/decorator-fizzy-square-rotated.svg'
 import DecoratorAltruistic from '../../images/svg/general/decorators/a.svg'
 import DecoratorDecentralized from '../../images/svg/general/decorators/b.svg'
 import DecoratorCommunity from '../../images/svg/general/decorators/c.svg'
-import decoratorPuzzleguy from '../../images/people-puzzle.svg'
+// import decoratorPuzzleguy from '../../images/people-puzzle.svg'
 
 const Main = styled(Grid)`
   position: relative;
@@ -59,7 +58,7 @@ const InfoSection = ({ content }) => {
         }}
       >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          {content.infoHead}
+          {content?.infoHead}
         </Text>
         <Text
           pb={5}
@@ -68,7 +67,7 @@ const InfoSection = ({ content }) => {
             color: 'background'
           }}
         >
-          {content.infoSubtitle}
+          {content?.infoSubtitle}
         </Text>
         <a
           href='https://medium.com/giveth/the-future-of-giving-is-crowdfunding-the-commons-ac265e3010b8'
@@ -86,7 +85,7 @@ const InfoSection = ({ content }) => {
               mb: '6rem'
             }}
           >
-            {content.infoButtonText}
+            {content?.infoButtonText}
           </Button>
         </a>
       </Box>
@@ -103,10 +102,10 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content.feature2}
+            {content?.feature2}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            {content.feature2Text}
+            {content?.feature2Text}
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
@@ -118,7 +117,7 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content.feature1}
+            {content?.feature1}
           </Text>
           <Text
             sx={{
@@ -126,7 +125,7 @@ const InfoSection = ({ content }) => {
               color: 'background'
             }}
           >
-            {content.feature1Text}
+            {content?.feature1Text}
           </Text>
         </Box>
         <Box sx={{ maxWidth: '320px' }}>
@@ -138,10 +137,10 @@ const InfoSection = ({ content }) => {
               py: '1.5rem'
             }}
           >
-            {content.feature3}
+            {content?.feature3}
           </Text>
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
-            {content.feature3Text}
+            {content?.feature3Text}
           </Text>
         </Box>
       </Grid>
@@ -158,19 +157,19 @@ const InfoSection = ({ content }) => {
               letterSpacing: 'more'
             }}
           >
-            {content.featureCta}
+            {content?.featureCta}
           </Button>
         </a>
       </Box>
       <Box sx={{ justifySelf: 'center', textAlign: 'center' }}>
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
-          {content.infoHead2}
+          {content?.infoHead2}
         </Text>
         <Text
           pb={5}
           sx={{ variant: 'text.large', maxWidth: '580px', color: 'background' }}
         >
-          {content.infoSubtitle2}
+          {content?.infoSubtitle2}
         </Text>
       </Box>
       <Grid gap={1} columns={[1, 3, 3]} sx={{ justifyItems: 'center' }}>
@@ -186,7 +185,7 @@ const InfoSection = ({ content }) => {
           }}
         >
           <Text sx={{ variant: 'headings.h4', color: 'background' }}>
-            {content.userType1Title}
+            {content?.userType1Title}
           </Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
             Create a project and get donations in crypto.{' '}
@@ -207,7 +206,7 @@ const InfoSection = ({ content }) => {
           {isMobile ? (
             <div sx={{ height: '20px' }} />
           ) : (
-            <Image src={decoratorPuzzleguy} alt='' />
+            <Image src={'/images/people-puzzle.svg'} alt='' />
           )}
         </Box>
         <Grid
@@ -243,7 +242,7 @@ const InfoSection = ({ content }) => {
       {!isMobile ? (
         <Decorator>
           <img
-            src={decoratorCloud1}
+            src={'/images/decorator-cloud1.svg'}
             alt=''
             sx={{
               position: 'absolute',
@@ -253,7 +252,7 @@ const InfoSection = ({ content }) => {
             className='semitransparent'
           />
           <img
-            src={decoratorCloud2}
+            src={'/images/decorator-cloud2.svg'}
             alt=''
             sx={{
               position: 'absolute',
@@ -263,7 +262,7 @@ const InfoSection = ({ content }) => {
             className='semitransparent'
           />
           <img
-            src={decoratorCloud2}
+            src={'/images/decorator-cloud2.svg'}
             alt=''
             sx={{
               position: 'absolute',
@@ -273,7 +272,7 @@ const InfoSection = ({ content }) => {
             className='semitransparent'
           />
           <img
-            src={decoratorFizzysquare}
+            src={'/images/decorator-fizzy-square-rotated.svg'}
             alt=''
             sx={{
               position: 'relative',

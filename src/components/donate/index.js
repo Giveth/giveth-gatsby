@@ -2,7 +2,7 @@
 import React from 'react'
 import { Flex, Box, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 import OnlyFiat from './onlyFiat'
 import Success from './success'
 import ProjectListing from '../projectListing'

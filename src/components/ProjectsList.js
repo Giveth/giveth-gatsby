@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import {
   Box,
   Button,
@@ -12,13 +11,12 @@ import {
 } from 'theme-ui'
 import React, { useState } from 'react'
 import ProjectCard from './projectCard'
-import NoImage from '../images/no-image-available.jpg'
 import SearchIcon from '../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
 import DropdownInput from '../components/dropdownInput'
-import theme from '../gatsby-plugin-theme-ui'
+import theme from '../utils/theme-ui'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import * as JsSearch from 'js-search'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
@@ -217,6 +215,7 @@ const ProjectsList = props => {
     }
   ]
   const projectsFilteredSorted = projectsFiltered
+    ?.slice()
     ?.sort(sortFunctions[sortBy])
     ?.slice(0, limit)
 
@@ -434,7 +433,9 @@ const ProjectsList = props => {
                             name={project.title}
                             slug={project.slug}
                             donateAddress={project.donateAddress}
-                            image={project.image || NoImage}
+                            image={
+                              project.image || '/images/no-image-available.jpg'
+                            }
                             raised={project.balance}
                             project={project}
                           />

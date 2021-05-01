@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { Spinner, Flex, Text } from 'theme-ui'
-import theme from '../../gatsby-plugin-theme-ui'
+import theme from '../../utils/theme-ui'
 import DonationsTable from './donationsTable'
 
 const Funds = styled.div`

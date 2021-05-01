@@ -27,7 +27,7 @@ import {
 import { PROJECT_DONATIONS } from '../../apollo/gql/donations'
 import { GET_USER } from '../../apollo/gql/auth'
 import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui'
+import theme from '../../utils/theme-ui'
 import FirstGiveBadge from './firstGiveBadge'
 
 const DonationsTab = React.lazy(() => import('./donationsTab'))

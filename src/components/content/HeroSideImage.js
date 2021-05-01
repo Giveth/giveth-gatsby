@@ -2,25 +2,27 @@
  * Decorative images
  */
 import React from 'react'
-import { jsx } from 'theme-ui'
-import givethHeroSide from '../../images/decorator-leaf.svg'
+import Image from 'next/image'
 // import co2kenHeroSide from ''
 
-const siteId = process.env.GATSBY_SITE_ID
+const siteId = process.env.NEXT_PUBLIC_SITE_ID
 
 let heroSide
 if (siteId === 'giveth') {
-  heroSide = givethHeroSide
+  heroSide = '/images/decorator-leaf.svg'
 } else if (siteId === 'co2ken') {
-  heroSide = givethHeroSide
+  heroSide = '/images/decorator-leaf.svg'
 }
 const HeroSide = () => {
   //if (!heroSide) return null
+  // return null
   return (
-    <img
+    <Image
       src={heroSide}
       alt=''
-      sx={{ position: 'absolute', bottom: '10vh', left: '-70px' }}
+      width='100%'
+      height='100%'
+      // sx={{ position: 'absolute', bottom: '10vh', left: '-70px' }}
     />
   )
 }

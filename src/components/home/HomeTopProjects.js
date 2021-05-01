@@ -1,13 +1,11 @@
-/** @jsx jsx */
-
-import { jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import { FETCH_ALL_PROJECTS } from '../../apollo/gql/projects'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import ProjectsList, { OrderByDirection, OrderByField } from '../ProjectsList'
 import { useState, useEffect } from 'react'
 
 const HomeTopProjects = props => {
+  const router = useRouter()
   const { projects = [], categories, fromHomePage } = props
   const client = useApolloClient()
   const [showProjects, setShowProjects] = useState(projects)
@@ -47,7 +45,7 @@ const HomeTopProjects = props => {
       projects={showProjects}
       categories={categories}
       totalCount={null}
-      loadMore={() => navigate('/projects')}
+      loadMore={() => router.push('/projects')}
       hasMore
       selectOrderByField={orderByField => {
         setLimit(2)

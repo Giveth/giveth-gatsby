@@ -29,7 +29,6 @@ function createApolloClient() {
       Authorization: token ? `Bearer ${token}` : ''
     }
     if (typeof window !== 'undefined') {
-      console.log('did i get in?')
       if (localStorage.getItem(appUser)) {
         const user = JSON.parse(localStorage.getItem(appUser))
         const userAddress = user?.addresses && user.addresses[0]

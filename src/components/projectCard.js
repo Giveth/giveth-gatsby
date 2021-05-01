@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { Heading, Box, Button, Card, Flex, IconButton, Text } from 'theme-ui'
-import { navigate, Link } from 'gatsby'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 import { useApolloClient, useQuery } from '@apollo/client'
 import RichTextViewer from './richTextViewer'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
 import {
   TOGGLE_PROJECT_REACTION,
@@ -135,6 +136,7 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectCard = props => {
+  const router = useRouter()
   const { user, isLoggedIn } = useWallet()
   const { project, shadowed } = props
   const client = useApolloClient()
@@ -328,7 +330,7 @@ const ProjectCard = props => {
                 color: theme.colors.primary
               }}
               onClick={() => {
-                !props.disabled && navigate(`/donate/${props?.slug}`)
+                !props.disabled && router.push(`/donate/${props?.slug}`)
               }}
             >
               Donate

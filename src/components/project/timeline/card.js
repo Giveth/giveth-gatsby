@@ -21,7 +21,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/client'
 import styled from '@emotion/styled'
 
-import theme from '../../../gatsby-plugin-theme-ui'
+import theme from '../../../utils/theme-ui'
 
 import Jdenticon from 'react-jdenticon'
 import iconShare from '../../../images/icon-share.svg'

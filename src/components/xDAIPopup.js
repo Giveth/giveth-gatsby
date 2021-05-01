@@ -1,7 +1,5 @@
 import React from 'react'
-import { Flex, Text, Button } from 'theme-ui'
-import Image from 'next/image'
-import iconStreamlineGas from '../images/icon-streamline-gas.svg'
+import { Flex, Text, Button, Image } from 'theme-ui'
 
 const XDAIPopupClosed = props => {
   const { fixed } = props
@@ -78,11 +76,9 @@ const XDAIPopupClosed = props => {
             width='64px'
             alt=''
           />
-          <img
-            src={iconStreamlineGas}
-            style={{ marginRight: '12px' }}
-            height='18px'
-            width='18px'
+          <Image
+            src={'/images/icon-streamline-gas.svg'}
+            style={{ height: '18px', width: '18px', marginRight: '12px' }}
             alt=''
           />
           <Text color='background'>Save on gas fees, use xDAI network!</Text>

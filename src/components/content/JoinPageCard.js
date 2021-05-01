@@ -3,7 +3,7 @@ import { Heading, Grid, Button, Card, Text } from 'theme-ui'
 import Link from 'next/link'
 import styled from '@emotion/styled'
 
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 
 const CardContainer = styled(Card)`
   background-color: ${theme.colors.background};

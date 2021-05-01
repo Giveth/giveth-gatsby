@@ -1,13 +1,13 @@
+import React from "react";
 import { client } from "../src/apollo/client";
 import { useState } from "react";
-import { jsx } from "theme-ui";
 import Layout from "../src/components/layout";
 // import Seo from '../components/seo'
 import Hero from "../src/components/home/HeroSection";
-// import InfoSection from "../src/components/home/InfoSection";
-// import UpdatesSection from "../src/components/home/UpdatesSection";
-// import HomeTopProjects from "../src/components/home/HomeTopProjects";
-// import { PopupContext } from '../contextProvider/popupProvider'
+import InfoSection from "../src/components/home/InfoSection";
+import UpdatesSection from "../src/components/home/UpdatesSection";
+import HomeTopProjects from "../src/components/home/HomeTopProjects";
+import { PopupContext } from "../src/contextProvider/popupProvider";
 
 import { FETCH_ALL_PROJECTS } from "../src/apollo/gql/projects";
 
@@ -19,7 +19,7 @@ const IndexContent = ({
   categories,
   allProject,
 }) => {
-  // const popup = React.useContext(PopupContext)
+  const popup = React.useContext(PopupContext);
   // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
   const [popupShown, setPopupShown] = useState(false);
   // useEffect(() => {
@@ -29,18 +29,17 @@ const IndexContent = ({
   //     setPopupShown(true)
   //   }
   // }, [])
-
   return (
     <>
       <Hero content={content} />
-      {/* <HomeTopProjects
+      <HomeTopProjects
         fromHomePage
-        projects={projects}
+        projects={topProjects}
         categories={categories}
         totalCount={allProject?.totalCount}
-      /> */}
-      {/* {!hideInfo === true ? <InfoSection content={content} /> : null} */}
-      {/* <UpdatesSection content={content} /> */}
+      />
+      {!hideInfo === true ? <InfoSection content={content} /> : null}
+      <UpdatesSection content={content} />
     </>
   );
 };
@@ -59,8 +58,8 @@ const IndexPage = (props) => {
         hideInfo={hideInfo}
         // content={content}
         // html={null}
-        location={location}
-        topProjects={topProjects?.projects}
+        // location={location}
+        topProjects={topProjects}
         categories={topProjects?.categories}
         allProject={null}
       />

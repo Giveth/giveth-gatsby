@@ -5,7 +5,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 
 import { ProjectContext } from '../../../contextProvider/projectProvider'
 import { Button, Flex, Text } from 'theme-ui'
-import theme from '../../../gatsby-plugin-theme-ui'
+import theme from '../../../utils/theme-ui'
 
 const Card = React.lazy(() => import('./card'))
 

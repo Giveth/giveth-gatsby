@@ -1,6 +1,5 @@
 import React from 'react'
-import { Flex, Text, Button } from 'theme-ui'
-import Image from 'next/image'
+import { Flex, Text, Button, Image } from 'theme-ui'
 import { FaGithub } from 'react-icons/fa'
 import { IoMdClose } from 'react-icons/io'
 import theme from '../utils/theme-ui'

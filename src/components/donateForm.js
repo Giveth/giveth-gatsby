@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import styled from '@emotion/styled'
 import BigNumber from 'bignumber.js'
 
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui/index'
 
 const DonationForm = styled.form`
   display: grid;

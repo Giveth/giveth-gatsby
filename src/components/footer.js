@@ -26,7 +26,7 @@ const LinkBox = styled(Box)`
   }
 `
 
-const FooterLink = styled(Link)`
+const FooterLink = styled.a`
   text-decoration: none;
   font-family: ${theme.fonts.heading}, sans-serif;
   color: ${theme.colors.bodyDark};

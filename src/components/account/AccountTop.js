@@ -5,7 +5,7 @@ import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import iconVerticalLine from '../../images/icon-vertical-line.svg'
 import { useMediaQuery } from 'react-responsive'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 
 const UserSpan = styled.span`
   position: relative;

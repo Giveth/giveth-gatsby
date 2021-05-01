@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Select from 'react-select'
 import { Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui/index'
 import iconManifest from '../../node_modules/cryptocurrency-icons/manifest.json'
 import ETHIcon from '../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
@@ -42,8 +42,9 @@ const SelectWithAutocomplete = ({
       )
       if (found) {
         import(
-          `../../node_modules/cryptocurrency-icons/32/color/${value?.symbol?.toLowerCase() ||
-            'eth'}.png`
+          `../../node_modules/cryptocurrency-icons/32/color/${
+            value?.symbol?.toLowerCase() || 'eth'
+          }.png`
         ).then(importedImg => {
           img = importedImg?.default
           setIcon(img)

@@ -1,9 +1,8 @@
-/** @jsx jsx */
 import React from 'react'
 import { Grid, Box, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
-import { useMediumFeed } from './MediumFeed'
+// import { useMediumFeed } from './MediumFeed'
 import MailchimpSignup from './MailchimpSignup'
 
 import decoratorElements from '../../images/decorator-elements.svg'
@@ -19,7 +18,9 @@ const Container = styled(Box)`
 
 const UpdatesSection = () => {
   // import Object containing the last two Medium Posts with a hook
-  const mediumPosts = useMediumFeed()
+  // TODO: FIX MEDIUM POSTS FOR NEXTJS
+  // const mediumPosts = useMediumFeed()
+  const mediumPosts = null
 
   // use Media Query to check device width
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -54,7 +55,7 @@ const UpdatesSection = () => {
             {/**
              * Map medium content nodes from node Object and destructure to variables
              * */}
-            {mediumPosts.allMediumPost.edges.map(({ node }) => {
+            {mediumPosts?.allMediumPost.edges.map(({ node }) => {
               const {
                 id,
                 title,

@@ -6,7 +6,7 @@ import { getEtherscanPrefix, titleCase } from '../../utils'
 import { navigate } from 'gatsby'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
-import theme from '../../gatsby-plugin-theme-ui'
+import theme from '../../utils/theme-ui'
 import { Input, Flex, Spinner, Text, jsx } from 'theme-ui'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import dayjs from 'dayjs'
@@ -218,8 +218,9 @@ const MyDonations = props => {
 
   const getIcon = async currency => {
     const icon = await import(
-      `../../../node_modules/cryptocurrency-icons/32/color/${currency.toLowerCase() ||
-        'eth'}.png`
+      `../../../node_modules/cryptocurrency-icons/32/color/${
+        currency.toLowerCase() || 'eth'
+      }.png`
     )
     return icon?.default
   }

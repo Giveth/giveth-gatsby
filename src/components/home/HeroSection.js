@@ -1,12 +1,12 @@
+import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
 import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import HeroImage from '../content/HeroImage'
 import HeroSideImage from '../content/HeroSideImage'
 // import givethHeroMain from '../../images/people-header.svg'
 // import co2kenHeroMain from '../../images/tree-planting.jpg'
-// const siteId = process.env.GATSBY_SITE_ID
+// const siteId = process.env.NEXT_PUBLIC_SITE_ID
 
 // console.log(`HeroImages : ${JSON.stringify(HeroImages, null, 2)}`)
 // let heroMain
@@ -16,7 +16,7 @@ import HeroSideImage from '../content/HeroSideImage'
 //   heroMain = co2kenHeroMain
 // }
 // import decorative graphics
-import decoratorLeaf from '../../images/decorator-leaf.svg'
+// import decoratorLeaf from '../../images/decorator-leaf.svg'
 // import imgPeopleHeader from '../../images/people-header.svg'
 
 const HeroSection = styled(Grid)`
@@ -39,7 +39,7 @@ const Hero = ({ content }) => {
 
   return (
     <HeroSection>
-      <HeroSideImage />
+      {/* <HeroSideImage /> */}
       <div id='placeholder' />
       <HeroText p={['10px', null, '80px']}>
         {' '}
@@ -52,7 +52,7 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content?.mainHead}
+          {content?.mainHead || 'Waiting for content'}
         </Heading>
         <Heading
           sx={{
@@ -63,7 +63,7 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content?.headBold}
+          {content?.headBold || 'Waiting for content'}
         </Heading>
         <Text
           pt={4}
@@ -75,7 +75,7 @@ const Hero = ({ content }) => {
             lineHeight: 'taller'
           }}
         >
-          {content?.mainText}
+          {content?.mainText || 'Waiting for content'}
         </Text>
         <Grid
           rows={2}
@@ -92,7 +92,7 @@ const Hero = ({ content }) => {
                 variant: 'buttons.big'
               }}
             >
-              {content?.mainButton}
+              {content?.mainButton || 'Waiting for content'}
             </Button>
           </Link>
           <Link
@@ -107,7 +107,7 @@ const Hero = ({ content }) => {
                 justifySelf: 'center'
               }}
             >
-              {content?.mainButtonText}
+              {content?.mainButtonText || 'Waiting for content'}
             </Text>
           </Link>
         </Grid>

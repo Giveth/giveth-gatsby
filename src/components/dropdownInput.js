@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import DropIcon from '../images/svg/general/dropdown-arrow.svg'
-import theme from '../gatsby-plugin-theme-ui'
+import theme from '../utils/theme-ui'
 import { Flex, Text } from 'theme-ui'
 import useComponentVisible from '../utils/useComponentVisible'
 

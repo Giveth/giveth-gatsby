@@ -1,9 +1,7 @@
-/** @jsx jsx */
 import { Grid, Button, Input, jsx, Text, theme } from 'theme-ui'
-import { graphql } from 'gatsby'
 import React, { useState } from 'react'
 import { useAlert } from 'react-alert'
-import addToMailchimp from 'gatsby-plugin-mailchimp'
+// import addToMailchimp from 'gatsby-plugin-mailchimp'
 import SubscribedAnimation from '../animations/subscribed'
 import { useMediaQuery } from 'react-responsive'
 
@@ -14,10 +12,11 @@ const MailchimpSignup = () => {
   const handleSubmit = async e => {
     if (email !== '') {
       e.preventDefault()
-      const result = await addToMailchimp(email)
-        .then(console.log(email))
-        .then(setSubscribed(true))
-      return result
+      // TODO: ADD MAILCHIMP FOR NEXTJS
+      // const result = await addToMailchimp(email)
+      //   .then(console.log(email))
+      //   .then(setSubscribed(true))
+      return false
     } else {
       alert.show('Please enter a valid email address')
     }

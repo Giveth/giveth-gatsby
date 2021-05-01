@@ -12,7 +12,7 @@ import {
 } from 'theme-ui'
 import Web3 from 'web3'
 import { BiArrowBack } from 'react-icons/bi'
-import theme from '../../../gatsby-plugin-theme-ui/index'
+import theme from '../../../utils/theme-ui/index'
 import { useApolloClient, useQuery } from '@apollo/client'
 import {
   GET_LINK_BANK_CREATION,

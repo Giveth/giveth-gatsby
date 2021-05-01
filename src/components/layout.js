@@ -1,8 +1,7 @@
 import React from 'react'
 import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
-import { Link, Flex, Text } from 'theme-ui'
-import Image from 'next/image'
+import { Link, Flex, Text, Image } from 'theme-ui'
 import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 import theme from '../utils/theme-ui'
@@ -140,15 +139,6 @@ const CookiesBanner = () => {
 
 const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
   const APIKEY = process.env.GATSBY_GOOGLE_MAPS_API_KEY
-  const data = useStaticQuery(graphql`
-    query SiteTitleQuery {
-      site {
-        siteMetadata {
-          title
-        }
-      }
-    }
-  `)
 
   const Template = () => {
     if (asDialog) {
@@ -163,7 +153,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
         <>
           {!noHeader ? (
             <Header
-              siteTitle={data.site.siteMetadata.title}
+              // siteTitle={data.site.siteMetadata.title}
               isHomePage={isHomePage}
             />
           ) : null}
@@ -177,7 +167,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
             }}
           >
             <main>{children}</main>
-            {!noFooter && <Footer />}
+            {/* {!noFooter && <Footer />} */}
           </div>
           <CookiesBanner />
         </>

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Button, Flex, Text, Spinner } from 'theme-ui'
 import { getEtherscanPrefix } from '../../utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 
 const etherscanPrefix = getEtherscanPrefix()
 const InProgressModal = ({ showModal, setShowModal, txHash }) => {

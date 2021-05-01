@@ -1,6 +1,11 @@
+import dynamic from 'next/dynamic'
+
 import Web3 from 'web3'
-import Torus from '@toruslabs/torus-embed'
+// import Torus from '@toruslabs/torus-embed'
 import detectEthereumProvider from '@metamask/detect-provider'
+
+// const Torus = dynamic(() => import('@toruslabs/torus-embed'))
+const Torus = dynamic(() => import('@toruslabs/torus-embed'), { ssr: false })
 
 // TODO: SET wallet address to this link
 const metamask = {

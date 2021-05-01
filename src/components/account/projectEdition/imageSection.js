@@ -3,7 +3,7 @@ import { Flex, Grid, Box, Image, Text } from 'theme-ui'
 import { useDropzone } from 'react-dropzone'
 import { toBase64 } from '../../../utils'
 import styled from '@emotion/styled'
-import theme from '../../../gatsby-plugin-theme-ui'
+import theme from '../../../utils/theme-ui'
 
 import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery1.svg'
 import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery2.svg'

@@ -6,7 +6,7 @@ import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
 import { loadStripe } from '@stripe/stripe-js'
 import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui/index'
 
 import ComingSoon1 from '../../images/coming-soon-gear.png'
 import ComingSoon2 from '../../images/coming-soon.png'

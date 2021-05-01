@@ -13,10 +13,10 @@ import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
 
 // import graphics
-import iconVerticalLine from '../images/icon-vertical-line.svg'
-import iconSearch from '../images/icon-search.svg'
-import decoratorCloud1 from '../images/decorator-cloud1.svg'
-import decoratorCloud2 from '../images/decorator-cloud2.svg'
+// import iconVerticalLine from '../images/icon-vertical-line.svg'
+// import iconSearch from '../images/icon-search.svg'
+// import decoratorCloud1 from '../images/decorator-cloud1.svg'
+// import decoratorCloud2 from '../images/decorator-cloud2.svg'
 
 const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;
@@ -159,7 +159,7 @@ const Decorator = styled.div`
 
 const Login = dynamic(() => import('./torus/login'))
 
-const siteId = process.env.GATSBY_SITE_ID
+const siteId = process.env.NEXT_PUBLIC_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
@@ -209,7 +209,7 @@ const Header = ({ siteTitle, isHomePage }) => {
           {!isMobile ? (
             <Decorator>
               <img
-                src={decoratorCloud1}
+                src={'/images/decorator-cloud1.svg'}
                 alt=''
                 sx={{
                   position: 'absolute',
@@ -219,7 +219,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                 className='hide'
               />
               <img
-                src={decoratorCloud2}
+                src={'/images/decorator-cloud2.svg'}
                 alt=''
                 sx={{
                   position: 'absolute',
@@ -238,11 +238,11 @@ const Header = ({ siteTitle, isHomePage }) => {
           >
             {isMobile ? (
               <Logo
-                siteId={process.env.GATSBY_SITE_ID}
+                siteId={process.env.NEXT_PUBLIC_SITE_ID}
                 alt=''
                 width='40px'
                 height='40px'
-                sx={{ mr: 3 }}
+                style={{ mr: 3 }}
               />
             ) : (
               <LogoSpan
@@ -250,7 +250,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                   hasScrolled || !isHomePage ? 'HeaderLogoScrolled' : ''
                 }
               >
-                <Logo alt='' />
+                <Logo alt='' width='100px' height='100px' />
                 {siteId === 'giveth' ? (
                   <Text
                     pl={3}
@@ -313,12 +313,12 @@ const Header = ({ siteTitle, isHomePage }) => {
                 )}
                 {projectSearch === 'true' && (
                   <IconButton>
-                    <img src={iconSearch} alt='' />
+                    <img src={'/images/icon-search.svg'} alt='' />
                   </IconButton>
                 )}
               </Flex>
             )}
-            <img src={iconVerticalLine} alt='' />
+            <img src={'/images/icon-vertical-line.svg'} alt='' />
             <Login />
           </UserSpan>
         </HeaderSpan>

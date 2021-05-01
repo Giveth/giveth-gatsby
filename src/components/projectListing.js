@@ -4,7 +4,7 @@ import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
 import RichTextViewer from './richTextViewer'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui/index'
 // import Donate from '../components/donateForm'
 
 // import iconShare from '../images/icon-share.svg'
