@@ -145,14 +145,18 @@ const CreateProjectForm = props => {
   const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
     let project = {}
     try {
+      console.log({ submitCurrentStep, data, formData })
       if (isCategoryStep(submitCurrentStep)) {
-        const projectCategory = {
-          ...data
-        }
         project = {
           ...formData,
-          projectCategory
+          projectCategory: {
+            ...data,
+            projectDescription: null
+          }
         }
+        // TODO: For some reason we are getting projectDescription inside the category
+        // we need to figure out why
+        delete project?.projectCategory['projectDescription']
       } else {
         project = {
           ...formData,
@@ -160,19 +164,18 @@ const CreateProjectForm = props => {
         }
       }
 
-      // TODO: CHECK THIS ONLY FOR RICH TEXT : COMING SOON
-      // if (isDescriptionStep(submitCurrentStep)) {
-      //   // check if file is too large
-      //   const stringSize =
-      //     encodeURI(data?.projectDescription).split(/%..|./).length - 1
-      //   if (stringSize > 32000) {
-      //     // 32Kb max maybe?
-      //     return Toast({
-      //       content: `Description too large`,
-      //       type: 'error'
-      //     })
-      //   }
-      // }
+      if (isDescriptionStep(submitCurrentStep)) {
+        // check if file is too large
+        const stringSize =
+          encodeURI(data?.projectDescription).split(/%..|./).length - 1
+        if (stringSize > 4000000) {
+          // 4Mb tops max maybe?
+          return Toast({
+            content: `Description too large`,
+            type: 'error'
+          })
+        }
+      }
 
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
@@ -186,7 +189,6 @@ const CreateProjectForm = props => {
           projectWalletAddress = user.addresses[0]
         }
 
-        // HERE
         const { data: addressValidation } = await client.query({
           query: WALLET_ADDRESS_IS_VALID,
           variables: {
@@ -201,11 +203,9 @@ const CreateProjectForm = props => {
               content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
               type: 'error'
             })
-          } else if (reason === 'smart-contract') {
+          } else if (reason === 'address-used') {
             return Toast({
-              content: `Eth address ${projectWalletAddress} ${
-                !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
-              }is already being used for a project`,
+              content: `Eth address ${projectWalletAddress} is already being used for a project`,
               type: 'error'
             })
           } else {
@@ -225,6 +225,7 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
+      console.log({ project })
       setInputLoading(false)
       setFormData(project)
       doNextStep()

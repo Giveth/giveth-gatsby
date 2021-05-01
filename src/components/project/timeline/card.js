@@ -19,8 +19,6 @@ import {
 } from '../../../apollo/gql/projects'
 import localizedFormat from 'dayjs/plugin/localizedFormat'
 import { useApolloClient } from '@apollo/client'
-import ReactQuill from 'react-quill'
-import RichTextInput from '../../richTextInput'
 import styled from '@emotion/styled'
 
 import theme from '../../../gatsby-plugin-theme-ui'
@@ -30,6 +28,10 @@ import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
 import RaisedHands from '../../../images/decorator-raised-hands.png'
+
+import RichTextViewer from '../../richTextViewer'
+
+const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
 dayjs.extend(localizedFormat)
 
@@ -68,7 +70,7 @@ const CardFooter = styled.span`
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-  margin: 1rem 0 0.5rem 0;
+  margin: -0.5rem 0 0.5rem 0;
   padding: 0rem 1rem;
 `
 const Top = styled(Flex)`
@@ -106,6 +108,8 @@ const TimelineCard = props => {
   const [user, setUser] = useState(null)
   const { content, reactions, number } = props
   const client = useApolloClient()
+  const isSSR = typeof window === 'undefined'
+
   const react = async () => {
     try {
       await client?.mutate({
@@ -189,31 +193,35 @@ const TimelineCard = props => {
             value={newInput}
             onChange={e => setNewInput(e.target.value)}
           /> */}
-          <RichTextInput
-            style={{
-              width: '100%',
-              height: '400px',
-              fontFamily: 'body',
-              padding: '1.125rem 1rem',
-              borderRadius: '12px',
-              resize: 'none',
-              '&::placeholder': {
-                variant: 'body',
-                color: 'bodyLight'
-              }
-            }}
-            value={newInput}
-            placeholder='Write your update...'
-            onChange={(newValue, delta, source) => {
-              try {
-                setNewInput(newValue)
-              } catch (error) {
-                console.log({ error })
-              }
-            }}
-            // onChange={e => getLength(e)}
-            // maxLength={2000}
-          />
+          {!isSSR && (
+            <React.Suspense fallback={<div />}>
+              <RichTextInput
+                style={{
+                  width: '100%',
+                  height: '400px',
+                  fontFamily: 'body',
+                  padding: '1.125rem 1rem',
+                  borderRadius: '12px',
+                  resize: 'none',
+                  '&::placeholder': {
+                    variant: 'body',
+                    color: 'bodyLight'
+                  }
+                }}
+                value={newInput}
+                placeholder='Write your update...'
+                onChange={(newValue, delta, source) => {
+                  try {
+                    setNewInput(newValue)
+                  } catch (error) {
+                    console.log({ error })
+                  }
+                }}
+                // onChange={e => getLength(e)}
+                // maxLength={2000}
+              />
+            </React.Suspense>
+          )}
           <Flex sx={{ my: 2, mx: 3, justifyContent: 'flex-end' }}>
             <Button
               sx={{
@@ -224,10 +232,15 @@ const TimelineCard = props => {
                 marginTop: '3rem',
                 zIndex: 5
               }}
-              onClick={() => {
-                props.newUpdateOption({ title: newTitle, content: newInput })
-                setNewTitle('')
-                setNewInput('')
+              onClick={async () => {
+                const res = await props.newUpdateOption({
+                  title: newTitle,
+                  content: newInput
+                })
+                if (res !== false) {
+                  setNewTitle('')
+                  setNewInput('')
+                }
               }}
             >
               <Text variant='text.bold'>SUBMIT</Text>
@@ -323,12 +336,7 @@ const TimelineCard = props => {
               </Badge>
             </Creator>
           )}
-          <ReactQuill
-            style={{ fontFamily: `Red Hat Text, sans serif` }}
-            value={content?.content}
-            readOnly={true}
-            theme={'bubble'}
-          />
+          <RichTextViewer content={content?.content} />
           {
             // <Text sx={{ variant: 'text.default' }}>{content?.content}</Text>
           }

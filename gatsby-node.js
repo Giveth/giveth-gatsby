@@ -4,6 +4,7 @@
  * See: https://www.gatsbyjs.org/docs/node-apis/
  */
 const fetch = require('isomorphic-fetch')
+const webpack = require(`webpack`)
 const { setContext } = require('@apollo/client/link/context')
 const { ApolloClient, InMemoryCache, HttpLink, gql } = require('@apollo/client')
 
@@ -177,8 +178,20 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
             test: /\@sentry\/gatsby/,
             use: loaders.null()
           }
+          // {
+          //   test: /\.js$/,
+          //   exclude: /node_modules(?!\/quill-image-drop-module|quill-image-resize-module)/,
+          //   loader: 'babel-loader',
+          //   query: {}
+          // }
         ]
-      }
+      },
+      plugins: [
+        new webpack.ProvidePlugin({
+          'window.Quill': 'quill',
+          Quill: 'quill/dist/quill.js'
+        })
+      ]
     })
   }
 }

@@ -4,7 +4,7 @@ import { getEtherscanTxs } from '../../utils'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { PopupContext } from '../../contextProvider/popupProvider'
-// import ReactQuill from 'react-quill'
+import RichTextViewer from '../richTextViewer'
 
 import testImg from '../../images/giveth_bg.jpg'
 import CancelledModal from './cancelledModal'
@@ -156,6 +156,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           : null
         setCurrentProjectView({
           ...currentProjectView,
+          project: projectReFetched.project[0],
           ethBalance,
           donations,
           admin: admin?.data?.user,
@@ -212,7 +213,6 @@ export const ProjectDonatorView = ({ pageContext }) => {
       return false
     }
   }
-
   return (
     <>
       <CancelledModal isOpen={isCancelled} />
@@ -261,7 +261,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   wordBreak: 'break-word'
                 }}
               >
-                {pageContext?.project?.title}
+                {currentProjectView?.project?.title ||
+                  pageContext?.project?.title}
               </Text>
               <Flex
                 sx={{
@@ -289,7 +290,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                   </Link>
                 )}
 
-                {pageContext?.project?.impactLocation && (
+                {(currentProjectView?.project?.impactLocation ||
+                  pageContext?.project?.impactLocation) && (
                   <Flex>
                     <ImLocation size='24px' color={theme.colors.secondary} />
                     <Text
@@ -300,7 +302,8 @@ export const ProjectDonatorView = ({ pageContext }) => {
                         px: 2
                       }}
                     >
-                      {pageContext?.project?.impactLocation}
+                      {currentProjectView?.project?.impactLocation ||
+                        pageContext?.project?.impactLocation}
                     </Text>
                   </Flex>
                 )}
@@ -441,13 +444,13 @@ export const ProjectDonatorView = ({ pageContext }) => {
                     color: 'black'
                   }}
                 >
-                  {/* <ReactQuill
-                    style={{ fontFamily: `Red Hat Text, sans serif` }}
-                    value={pageContext?.project?.description}
-                    readOnly={true}
-                    theme={'bubble'}
-                  /> */}
-                  {pageContext?.project?.description}
+                  <RichTextViewer
+                    content={
+                      currentProjectView?.project?.description ||
+                      pageContext?.project?.description
+                    }
+                  />
+                  {/* {pageContext?.project?.description} */}
                 </Text>
               </>
             ) : currentTab === 'updates' && !isSSR ? (

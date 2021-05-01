@@ -7,6 +7,7 @@
 
 import React from 'react'
 import './global.css'
+import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
 import { useStaticQuery, graphql } from 'gatsby'
 import { ThemeProvider, Box, Button, Link, Flex, Image, Text } from 'theme-ui'
@@ -207,6 +208,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
           defer
         />
+        <script src='/node_modules/quill-video-resize-module/video-resize.min.js' />
         <script type='text/javascript'>
           {`
           let map;
