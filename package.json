@@ -112,7 +112,9 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
     "cy:open": "npx cypress open",
     "cy:e2e": "npx cypress run --spec cypress/integration/e2e/**/*.spec.js",
-    "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js"
+    "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
+    "cy:open:ganache": "ganache-cli -p 8545 && npx cypress open",
+    "start-ganache": "ganache-cli -p 8545"
   },
   "repository": {
     "type": "git",
