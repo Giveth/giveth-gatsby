@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
+import dynamic from 'next/dynamic'
 import { useMutation } from '@apollo/client'
 import Image from 'next/image'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
@@ -13,7 +14,7 @@ import { SAVE_DONATION } from '../../apollo/gql/donations'
 // import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
 import Modal from '../modal'
-import Select from '../selectWithAutocomplete'
+// import Select from '../selectWithAutocomplete'
 import QRCode from 'qrcode.react'
 import { BsCaretDownFill } from 'react-icons/bs'
 import { ensRegex, getERC20List } from '../../utils'
@@ -35,6 +36,10 @@ import InProgressModal from './inProgressModal'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as transaction from '../../services/transaction'
 import { saveDonation, saveDonationTransaction } from '../../services/donation'
+
+const Select = dynamic(() => import('../selectWithAutocomplete'), {
+  ssr: false
+})
 
 let provider
 
@@ -171,7 +176,7 @@ const OnlyCrypto = props => {
   useEffect(() => {
     const init = async () => {
       fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${tokenSymbol}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.GATSBY_CRYPTOCOMPARE_KEY}`
+        `https://min-api.cryptocompare.com/data/price?fsym=${tokenSymbol}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.NEXT_CRYPTOCOMPARE_KEY}`
       )
         .then(response => response.json())
         .then(data => setTokenPrice(data.USD))
@@ -274,21 +279,21 @@ const OnlyCrypto = props => {
   }, [userWallet, selectedToken, selectedTokenBalance])
 
   useEffect(() => {
-    let img = ''
+    // let img = ''
     // const found = iconManifest?.find(
     //   i => i?.symbol === tokenSymbol?.toUpperCase()
     // )
-    const found = null
-    if (found) {
-      import(
-        `../../../node_modules/cryptocurrency-icons/32/color/${
-          tokenSymbol?.toLowerCase() || 'eth'
-        }.png`
-      ).then(importedImg => {
-        img = importedImg?.default
-        setIcon(img)
-      })
-    }
+    // if (found) {
+    //   import(
+    //     `../../../node_modules/cryptocurrency-icons/32/color/${
+    //       tokenSymbol?.toLowerCase() || 'eth'
+    //     }.png`
+    //   ).then(importedImg => {
+    //     img = importedImg?.default
+    //     console.log({ img })
+    //     setIcon(img)
+    //   })
+    // }
   }, [tokenSymbol, icon])
 
   const donation = parseFloat(amountTyped)
@@ -678,12 +683,14 @@ const OnlyCrypto = props => {
               }}
             >
               <Image
-                src={icon || `assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
+                src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                 alt={tokenSymbol}
                 onError={ev => {
                   // ev.target.src = ETHIcon
                   ev.target.onerror = null
                 }}
+                width={'32px'}
+                height={'32px'}
                 style={{ width: '32px', height: '32px' }}
               />
               <Text sx={{ ml: 2, mr: 3 }}>{tokenSymbol}</Text>
@@ -766,8 +773,8 @@ const OnlyCrypto = props => {
               )}
               {!isXDAI && (
                 <SaveGasMessage>
-                  <img
-                    src={iconStreamlineGas}
+                  <Image
+                    src={'/images/icon-streamline-gas.svg'}
                     style={{ marginRight: '12px' }}
                     height='18px'
                     width='18px'

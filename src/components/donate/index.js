@@ -1,5 +1,5 @@
 import React from 'react'
-import { Flex, Box, Text, jsx } from 'theme-ui'
+import { Flex, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
 import OnlyFiat from './onlyFiat'
@@ -15,7 +15,7 @@ import {
   TwitterIcon
 } from 'react-share'
 
-// const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
+const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
 
 // CONSTANTS
 
@@ -31,9 +31,11 @@ const RIGHT_BOX_STYLE = {
   borderBottomRightRadius: '0.2rem'
 }
 
-const ProjectContainer = styled.div`
+const ProjectContainer = styled(Flex)`
   width: 25vw;
+  flex-direction: column;
   margin: 0 3.125rem 0 0;
+  align-items: center;
   @media (max-width: 800px) {
     width: 100%;
   }
@@ -54,6 +56,7 @@ const Share = styled.div``
 const SocialIcons = styled.div`
   display: flex;
   margin: 1rem 0;
+  justify-content: center;
   * {
     margin: 0 0.3rem;
   }
@@ -81,7 +84,8 @@ const Options = styled.div`
   }
 `
 
-const OptionTypesBox = styled(Box)`
+const OptionTypesBox = styled(Flex)`
+  flex-direction: column;
   cursor: pointer;
   width: 50%;
   align-items: center;
@@ -125,7 +129,7 @@ const DonateIndex = props => {
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO && !isSSR ? (
         <React.Suspense fallback={<div />}>
-          {/* <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} /> */}
+          <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
         </React.Suspense>
       ) : (
         <OnlyFiat project={project} />

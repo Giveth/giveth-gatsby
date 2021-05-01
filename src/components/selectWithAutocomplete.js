@@ -10,16 +10,6 @@ import theme from '../utils/theme-ui/index'
 // import iconManifest from '../../node_modules/cryptocurrency-icons/manifest.json'
 // import ETHIcon from '../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
-// const iconManifest = dynamic(
-//   () => import('../../node_modules/cryptocurrency-icons/manifest.json'),
-//   { ssr: false }
-// )
-
-// const ETHIcon = dynamic(
-//   () => import('../../node_modules/cryptocurrency-icons/svg/color/eth.svg'),
-//   { ssr: false }
-// )
-
 const SelectWithAutocomplete = ({
   content,
   width,
@@ -28,7 +18,6 @@ const SelectWithAutocomplete = ({
   menuIsOpen,
   isTokenList
 }) => {
-  console.log({ iconManifest })
   const options = content || [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'strawberry', label: 'Strawberry' },
@@ -55,17 +44,17 @@ const SelectWithAutocomplete = ({
       // const found = iconManifest?.find(
       //   i => i?.symbol === value?.symbol?.toUpperCase()
       // )
-      // // const found = null
-      // if (found) {
-      //   import(
-      //     `../../node_modules/cryptocurrency-icons/32/color/${
-      //       value?.symbol?.toLowerCase() || 'eth'
-      //     }.png`
-      //   ).then(importedImg => {
-      //     img = importedImg?.default
-      //     setIcon(img)
-      //   })
-      // }
+      const found = null
+      if (found) {
+        // import(
+        //   `../../node_modules/cryptocurrency-icons/32/color/${
+        //     value?.symbol?.toLowerCase() || 'eth'
+        //   }.png`
+        // ).then(importedImg => {
+        //   img = importedImg?.default
+        //   setIcon(img)
+        // })
+      }
 
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -73,10 +62,11 @@ const SelectWithAutocomplete = ({
             src={icon || `/assets/tokens/${value?.symbol?.toUpperCase()}.png`}
             alt={value?.symbol}
             onError={ev => {
-              ev.target.src = ETHIcon
+              // ev.target.src = ETHIcon
               ev.target.onerror = null
             }}
-            style={{ width: '32px', height: '32px' }}
+            width={'32px'}
+            height={'32px'}
           />
           <Text variant='text.default' color='secondary' sx={{ pl: 2 }}>
             {`${value?.symbol}`}

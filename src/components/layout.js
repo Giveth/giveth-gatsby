@@ -137,7 +137,7 @@ const CookiesBanner = () => {
 }
 
 const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
-  const APIKEY = process.env.GATSBY_GOOGLE_MAPS_API_KEY
+  const APIKEY = process.env.NEXT_GOOGLE_MAPS_API_KEY
 
   const Template = () => {
     if (asDialog) {
