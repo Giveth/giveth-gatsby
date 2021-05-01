@@ -189,7 +189,7 @@ describe('Project creation', () => {
         .contains(/next/i)
         .click()
     })
-    xit('checks that the right values are shown', () => {
+    it('checks that the right values are shown', () => {
       cy.wait(2000)
       cy.findByText(projectData.projectName).should('exist')
       cy.findByText(projectData.projectAdmin).should('exist')
