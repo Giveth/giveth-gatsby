@@ -1,6 +1,5 @@
 import React from 'react'
 import { Flex, Text, Image } from 'theme-ui'
-import GiverBadge from '../../images/giverBadge@40x40.png'
 
 function FirstGiveBadge() {
   return (
@@ -14,7 +13,10 @@ function FirstGiveBadge() {
       }}
     >
       <Flex sx={{ flex: 0.2, mr: 2 }}>
-        <Image src={GiverBadge} sx={{ objectFit: 'contain' }} />
+        <Image
+          src={'/images/giverBadge@40x40.png'}
+          sx={{ objectFit: 'contain' }}
+        />
       </Flex>
       <Flex sx={{ flexDirection: 'column', flex: 0.8 }}>
         <Text

@@ -1,14 +1,10 @@
-/** @jsx jsx */
 import React from 'react'
 import { Flex, Box, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../../utils/theme-ui/index'
+import theme from '../../utils/theme-ui'
 import OnlyFiat from './onlyFiat'
 import Success from './success'
 import ProjectListing from '../projectListing'
-
-import { useApolloClient } from '@apollo/client'
-import { FETCH_PROJECT } from '../../apollo/gql/projects'
 
 import {
   FacebookShareButton,
@@ -18,9 +14,8 @@ import {
   TwitterShareButton,
   TwitterIcon
 } from 'react-share'
-import testImg from '../../images/logos/giveth-logo.jpg'
 
-const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
+// const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
 
 // CONSTANTS
 
@@ -105,25 +100,11 @@ const DonateIndex = props => {
   const [isAfterPayment, setIsAfterPayment] = React.useState(null)
   const [paymentSessionId, setPaymentSessionId] = React.useState(null)
   const [isCancelled, setIsCancelled] = React.useState(null)
-  const client = useApolloClient()
 
   React.useEffect(() => {
-    const checkProject = async () => {
-      // GET PROJECT -- mainly to check status client side
-      const { data: projectReFetched } = await client.query({
-        query: FETCH_PROJECT,
-        variables: { id: project?.id },
-        fetchPolicy: 'network-only'
-      })
-      if (
-        projectReFetched?.project?.length > 0 &&
-        projectReFetched.project[0].status?.id !== '5'
-      ) {
-        setIsCancelled(true)
-      }
+    if (project?.status?.id !== '5') {
+      setIsCancelled(true)
     }
-    // Check type
-    checkProject()
     const search = getUrlParams(props?.location?.search)
     setIsAfterPayment(search?.success === 'true')
     if (search?.sessionId) setPaymentSessionId(search?.sessionId)
@@ -131,8 +112,8 @@ const DonateIndex = props => {
 
   // TODO: Implement this on a utils file
   function getUrlParams(search) {
-    const hashes = search.slice(search.indexOf('?') + 1).split('&')
-    return hashes.reduce((params, hash) => {
+    const hashes = search?.slice(search.indexOf('?') + 1).split('&')
+    return hashes?.reduce((params, hash) => {
       const [key, val] = hash.split('=')
       return Object.assign(params, { [key]: decodeURIComponent(val) })
     }, {})
@@ -144,7 +125,7 @@ const DonateIndex = props => {
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO && !isSSR ? (
         <React.Suspense fallback={<div />}>
-          <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
+          {/* <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} /> */}
         </React.Suspense>
       ) : (
         <OnlyFiat project={project} />
@@ -203,7 +184,7 @@ const DonateIndex = props => {
 
   const ShareIcons = ({ message, centered }) => {
     const shareTitle = `Make a donation today to ${project?.title}!`
-    const url = location.href
+    const url = location?.href
 
     return (
       <Share
@@ -261,7 +242,7 @@ const DonateIndex = props => {
             project={project}
             name={project?.title}
             description={project?.description}
-            image={project?.image || testImg}
+            image={project?.image || '/images/logos/giveth-logo.jpg'}
             raised={1223}
             category={project?.categories || 'Blockchain 4 Good'}
             listingId='key1'
@@ -286,7 +267,7 @@ const DonateIndex = props => {
           name={project?.title}
           project={project}
           description={project?.description}
-          image={project?.image || testImg}
+          image={project?.image || '/images/logos/giveth-logo.jpg'}
           raised={1223}
           categories={project?.categories}
           listingId='key1'

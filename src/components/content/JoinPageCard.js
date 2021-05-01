@@ -82,7 +82,7 @@ const JoinChatCard = ({ data }) => (
                   }
                 </Text>
               </CardContent>
-              <Link to={edges.node.onboardingLink}>
+              <Link href={edges.node.onboardingLink}>
                 <Button
                   mt={2}
                   mb={'2rem'}

@@ -130,7 +130,7 @@ const HighFive = ({
               Add another project
             </Text>
           </Link> */}
-          <Link to={`/project/${addedProject?.slug}`}>
+          <Link href={`/project/${addedProject?.slug}`}>
             <Text
               sx={{
                 fontSize: 3,

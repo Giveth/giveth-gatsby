@@ -61,7 +61,7 @@ const AccountTop = props => {
         <UserSpan>
           {isMobile ? null : (
             <span>
-              <CreateLink to={isDonation ? '/projects' : '/create'}>
+              <CreateLink href={isDonation ? '/projects' : '/create'}>
                 <Text
                   sx={{
                     color: 'primary',

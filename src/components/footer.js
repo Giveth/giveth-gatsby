@@ -223,7 +223,7 @@ const Footer = () => {
           >
             Support us{' '}
             <FooterLink
-              to={`/donate/${theme.donationSlug}`}
+              href={`/donate/${theme.donationSlug}`}
               sx={{ variant: 'links.nav' }}
             >
               with your donation

@@ -46,7 +46,6 @@ const IndexContent = ({
 
 const IndexPage = (props) => {
   const { data, topProjects } = props;
-  console.log({ props });
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION

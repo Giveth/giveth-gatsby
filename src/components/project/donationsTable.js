@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import React from 'react'
 import { ethers } from 'ethers'
 import { ProjectContext } from '../../contextProvider/projectProvider'

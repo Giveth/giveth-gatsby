@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import Link from 'next/link'
+// import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { IconButton, Text, jsx, Flex } from 'theme-ui'
+import { IconButton, Text, Link, jsx, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 import theme from '../utils/theme-ui'
@@ -11,12 +11,6 @@ import Logo from './content/Logo'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
-
-// import graphics
-// import iconVerticalLine from '../images/icon-vertical-line.svg'
-// import iconSearch from '../images/icon-search.svg'
-// import decoratorCloud1 from '../images/decorator-cloud1.svg'
-// import decoratorCloud2 from '../images/decorator-cloud2.svg'
 
 const HeaderContainer = styled.header`
   transition: max-height 0.8s ease;

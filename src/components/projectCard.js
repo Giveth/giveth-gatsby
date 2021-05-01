@@ -315,7 +315,7 @@ const ProjectCard = props => {
             </Givers>
             <Link
               onClick={() => !props.disabled}
-              to={`/project/${props?.slug || ''}`}
+              href={`/project/${props?.slug || ''}`}
             >
               <Button sx={{ variant: 'buttons.default', mt: 2 }}>
                 Learn More

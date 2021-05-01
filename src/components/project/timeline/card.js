@@ -27,7 +27,6 @@ import Jdenticon from 'react-jdenticon'
 import iconShare from '../../../images/icon-share.svg'
 import iconHeart from '../../../images/icon-heart.svg'
 import DarkClouds from '../../../images/svg/general/decorators/dark-clouds.svg'
-import RaisedHands from '../../../images/decorator-raised-hands.png'
 
 import RichTextViewer from '../../richTextViewer'
 
@@ -280,7 +279,7 @@ const TimelineCard = props => {
           >
             {props?.specialContent?.content}
           </Text>
-          <RaisedHandsImg src={RaisedHands} />
+          <RaisedHandsImg src={'/images/decorator-raised-hands.png'} />
         </SpecialCardContainer>
       </Box>
     )

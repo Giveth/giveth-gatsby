@@ -1,15 +1,11 @@
-/** @jsx jsx */
 import React, { useState } from 'react'
 import { Button, Checkbox, Input, Flex, Label, Text, jsx } from 'theme-ui'
 import { useApolloClient } from '@apollo/client'
 import Tooltip from '../../components/tooltip'
 import styled from '@emotion/styled'
-import { loadStripe } from '@stripe/stripe-js'
+// import { loadStripe } from '@stripe/stripe-js'
 import { GET_DONATION_SESSION } from '../../apollo/gql/projects'
-import theme from '../../utils/theme-ui/index'
-
-import ComingSoon1 from '../../images/coming-soon-gear.png'
-import ComingSoon2 from '../../images/coming-soon.png'
+import theme from '../../utils/theme-ui'
 
 const GIVETH_DONATION_AMOUNT = 5
 const COMING_SOON = true
@@ -135,29 +131,29 @@ const OnlyFiat = props => {
           cancelUrl: `${window.location.origin}/donate/${slug}?success=false`
         }
       })
-      goStripe(data)
+      // goStripe(data)
     } catch (error) {
       alert(error?.message?.split('GraphQL error: ')[1])
       console.log({ error })
     }
   }
 
-  const goStripe = async data => {
-    // Get Stripe.js instance
-    const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY, {
-      stripeAccount: data?.getStripeProjectDonationSession?.accountId
-    })
-    // When the customer clicks on the button, redirect them to Checkout.
-    const result = await stripe.redirectToCheckout({
-      sessionId: data?.getStripeProjectDonationSession?.sessionId
-    })
+  // const goStripe = async data => {
+  //   // Get Stripe.js instance
+  //   const stripe = await loadStripe(process.env.STRIPE_PUBLIC_KEY, {
+  //     stripeAccount: data?.getStripeProjectDonationSession?.accountId
+  //   })
+  //   // When the customer clicks on the button, redirect them to Checkout.
+  //   const result = await stripe.redirectToCheckout({
+  //     sessionId: data?.getStripeProjectDonationSession?.sessionId
+  //   })
 
-    if (result.error) {
-      // If `redirectToCheckout` fails due to a browser or network
-      // error, display the localized error message to your customer
-      // using `result.error.message`.
-    }
-  }
+  //   if (result.error) {
+  //     // If `redirectToCheckout` fails due to a browser or network
+  //     // error, display the localized error message to your customer
+  //     // using `result.error.message`.
+  //   }
+  // }
 
   // if (called && !loading) {
   //   goStripe()
@@ -229,8 +225,11 @@ const OnlyFiat = props => {
           Coming Soon
         </Text>
         <Flex>
-          <img src={ComingSoon1} sx={{ ml: -6 }} />
-          <img src={ComingSoon2} sx={{ position: 'absolute', mt: 5, ml: 4 }} />
+          <img src={'/images/coming-soon-gear.png'} sx={{ ml: -6 }} />
+          <img
+            src={'/images/coming-soon.png'}
+            sx={{ position: 'absolute', mt: 5, ml: 4 }}
+          />
         </Flex>
       </Flex>
     )

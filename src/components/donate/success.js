@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Box, Link, Flex, Text, jsx } from 'theme-ui'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import { useMediaQuery } from 'react-responsive'
-import { useApolloClient } from '@apollo/client'
+import { client } from '../../apollo/client'
 import { base64ToBlob, getEtherscanPrefix } from '../../utils'
 import styled from '@emotion/styled'
 import ConfettiAnimation from '../animations/confetti'
@@ -37,11 +36,10 @@ const DownloadReceipt = styled(Box)`
 `
 
 const Success = props => {
+  const router = useRouter()
   const { isLoggedIn, login } = useWallet()
   const { project, sessionId, hash } = props
   const [pdfBase64, setPdfBase64] = useState(null)
-
-  const client = useApolloClient()
 
   const downloadPDF = () => {
     const blob = base64ToBlob(pdfBase64)
@@ -135,7 +133,7 @@ const Success = props => {
             Thank you for your support{' '}
             <span
               sx={{ color: 'yellow', ml: 2, cursor: 'pointer' }}
-              onClick={() => navigate('/account?view=donations')}
+              onClick={() => router.push('/account?view=donations')}
             >
               View your donations
             </span>

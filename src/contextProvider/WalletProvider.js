@@ -1,6 +1,7 @@
 import detectEthereumProvider from '@metamask/detect-provider'
 import React, { useState, useEffect, useContext } from 'react'
 import { keccak256 } from 'ethers/lib/utils'
+import { client } from '../apollo/client'
 import { promisify } from 'util'
 import { ethers } from 'ethers'
 import Web3 from 'web3'
@@ -11,15 +12,14 @@ import { PopupContext } from '../contextProvider/popupProvider'
 import LoadingModal from '../components/loadingModal'
 import getSigner from '../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
-import { useApolloClient } from '@apollo/client'
 import * as Auth from '../services/auth'
 import Toast from '../components/toast'
 import { getWallet } from '../wallets'
 import User from '../entities/user'
 
 const WalletContext = React.createContext()
-const network = process.env.GATSBY_NETWORK
-const networkId = process.env.GATSBY_NETWORK_ID
+const network = process.env.NEXT_NETWORK
+const networkId = process.env.NEXT_NETWORK_ID
 
 let EVENT_SETUP_DONE = false
 let wallet = {}
@@ -46,7 +46,6 @@ function WalletProvider(props) {
   const [loading, setLoading] = useState(false)
   const [isLoggedIn, setIsLoggedIn] = useState(Auth.checkIfLoggedIn())
   const usePopup = useContext(PopupContext)
-  const client = useApolloClient()
 
   const initWallet = async walletProvider => {
     const provider = await detectEthereumProvider()
@@ -144,9 +143,7 @@ function WalletProvider(props) {
         },
         domain: {
           name: 'Giveth Login',
-          chainId: loginFromXDAI
-            ? 100
-            : parseInt(process.env.GATSBY_NETWORK_ID),
+          chainId: loginFromXDAI ? 100 : parseInt(process.env.NEXT_NETWORK_ID),
           version: '1'
         },
         message: {
@@ -219,7 +216,7 @@ function WalletProvider(props) {
     const loginFromXDAI = !wallet?.isTorus && currentChainId === 100
 
     const signedMessage = await signMessage(
-      process.env.GATSBY_OUR_SECRET,
+      process.env.NEXT_OUR_SECRET,
       publicAddress,
       loginFromXDAI
     )

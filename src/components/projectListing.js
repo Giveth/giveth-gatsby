@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import styled from '@emotion/styled'
 
 import RichTextViewer from './richTextViewer'
@@ -9,11 +9,6 @@ import theme from '../utils/theme-ui/index'
 
 // import iconShare from '../images/icon-share.svg'
 // import iconHeart from '../images/icon-heart.svg'
-
-import ProjectImageGallery1 from '../images/svg/create/projectImageGallery1.svg'
-import ProjectImageGallery2 from '../images/svg/create/projectImageGallery2.svg'
-import ProjectImageGallery3 from '../images/svg/create/projectImageGallery3.svg'
-import ProjectImageGallery4 from '../images/svg/create/projectImageGallery4.svg'
 
 const CardContainer = styled(Card)`
   position: relative;
@@ -122,6 +117,7 @@ const Categories = ({ categories }) => {
 }
 
 const ProjectListing = props => {
+  const router = useRouter()
   const [hoverStyle, setHoverStyle] = React.useState(false)
   return (
     <Box
@@ -139,12 +135,12 @@ const ProjectListing = props => {
           key={props.listingId + '_card'}
           onClick={() => {
             if (props.wholeClickable)
-              return navigate(`/project/${props?.project?.slug}`)
+              return router.push(`/project/${props?.project?.slug}`)
             if (hoverStyle) return
             !props.disabled &&
               (props?.action
                 ? props.action()
-                : navigate(`/donate/${props?.id}`))
+                : router.push(`/donate/${props?.id}`))
           }}
           style={{
             cursor: props.wholeClickable

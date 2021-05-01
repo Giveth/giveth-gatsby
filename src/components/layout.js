@@ -6,7 +6,6 @@ import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
 import theme from '../utils/theme-ui'
 import Header from './header'
-import { WalletProvider } from '../contextProvider/WalletProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
 
@@ -178,17 +177,15 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
   return (
     <>
       <PopupProvider>
-        <WalletProvider>
-          <GlobalProvider>
-            <Provider template={AlertTemplate} {...AlertOptions}>
-              <GithubIssue fixed={true} />
-              <XDAIPopup />
-              <Template />
-              <Popup />
-            </Provider>
-          </GlobalProvider>
-          <StyledToastContainer />
-        </WalletProvider>
+        <GlobalProvider>
+          <Provider template={AlertTemplate} {...AlertOptions}>
+            <GithubIssue fixed={true} />
+            <XDAIPopup />
+            <Template />
+            <Popup />
+          </Provider>
+        </GlobalProvider>
+        <StyledToastContainer />
       </PopupProvider>
     </>
   )

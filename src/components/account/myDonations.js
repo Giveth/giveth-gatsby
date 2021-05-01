@@ -14,8 +14,8 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import DropdownInput from '../dropdownInput'
 import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
-import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
-import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+// import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
+// import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
 dayjs.extend(localizedFormat)
 
@@ -226,9 +226,10 @@ const MyDonations = props => {
   }
 
   const populateIcons = async item => {
-    const found = iconManifest?.find(
-      i => i?.symbol === item?.currency.toUpperCase()
-    )
+    // const found = iconManifest?.find(
+    //   i => i?.symbol === item?.currency.toUpperCase()
+    // )
+    const found = null
     let icon = null
     if (found) icon = await getIcon(item?.currency)
     return { ...item, icon }
@@ -339,7 +340,7 @@ const MyDonations = props => {
                         }
                         alt={i.currency}
                         onError={ev => {
-                          ev.target.src = ETHIcon
+                          // ev.target.src = ETHIcon
                           ev.target.onerror = null
                         }}
                         style={{

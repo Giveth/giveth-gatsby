@@ -1,15 +1,16 @@
-/** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import { useMutation } from '@apollo/client'
+import Image from 'next/image'
 import { Button, Flex, Label, Text, jsx } from 'theme-ui'
-import { useApolloClient } from '@apollo/client'
+import { client } from '../../apollo/client'
 import { PopupContext } from '../../contextProvider/popupProvider'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
-import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
-import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+// TODO: FIX TOKEN ICONS
+// import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
+// import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
 
 import Modal from '../modal'
 import Select from '../selectWithAutocomplete'
@@ -165,7 +166,6 @@ const OnlyCrypto = props => {
     wallet: userWallet
   } = useWallet()
 
-  const client = useApolloClient()
   const { triggerPopup } = usePopup
 
   useEffect(() => {
@@ -275,9 +275,10 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     let img = ''
-    const found = iconManifest?.find(
-      i => i?.symbol === tokenSymbol?.toUpperCase()
-    )
+    // const found = iconManifest?.find(
+    //   i => i?.symbol === tokenSymbol?.toUpperCase()
+    // )
+    const found = null
     if (found) {
       import(
         `../../../node_modules/cryptocurrency-icons/32/color/${
@@ -676,11 +677,11 @@ const OnlyCrypto = props => {
                 ml: 3
               }}
             >
-              <img
+              <Image
                 src={icon || `assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                 alt={tokenSymbol}
                 onError={ev => {
-                  ev.target.src = ETHIcon
+                  // ev.target.src = ETHIcon
                   ev.target.onerror = null
                 }}
                 style={{ width: '32px', height: '32px' }}
