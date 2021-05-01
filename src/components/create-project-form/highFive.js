@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { Text, Flex, Box } from 'theme-ui'
 import ProjectListing from '../projectListing'
 import { FaTwitter, FaFacebook, FaLinkedin } from 'react-icons/fa'
@@ -142,7 +142,7 @@ const HighFive = ({
               View my project
             </Text>
           </Link>
-          <Link to='/'>
+          <Link href='/'>
             <Text
               sx={{
                 fontSize: 3,

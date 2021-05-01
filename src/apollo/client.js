@@ -1,58 +1,75 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { createUploadLink } from 'apollo-upload-client'
+import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import fetch from 'isomorphic-fetch'
 import gql from 'graphql-tag'
 import {
   getLocalStorageUserLabel,
   getLocalStorageTokenLabel
 } from '../services/auth'
 
-const gatsbyUser = getLocalStorageUserLabel()
+let apolloClient
 
-const httpLink = createUploadLink({ uri: process.env.GATSBY_APOLLO_SERVER })
+function createApolloClient() {
+  // Declare variable to store authToken
+  let token
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem(getLocalStorageTokenLabel())
+  const appUser = getLocalStorageUserLabel()
 
-  // return the headers to the context so httpLink can read them
-  const mutation = {
-    authorization: token ? `Bearer ${token}` : ''
-  }
-  if (localStorage.getItem(gatsbyUser)) {
-    const user = JSON.parse(localStorage.getItem(gatsbyUser))
-    const userAddress = user?.addresses && user.addresses[0]
+  const httpLink = createHttpLink({
+    uri: process.env.NEXT_APOLLO_SERVER
+  })
 
-    if (userAddress) mutation['wallet-address'] = userAddress
-  }
-
-  return {
-    headers: {
-      ...headers,
-      ...mutation
-    }
-  }
-})
-
-export const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: authLink.concat(httpLink),
-  typeDefs: gql`
-    enum OrderField {
-      CreationDate
-      Balance
+  const authLink = setContext((_, { headers }) => {
+    // get the authentication token from local storage if it exists
+    if (typeof window !== 'undefined') {
+      token = localStorage.getItem(getLocalStorageTokenLabel())
     }
 
-    enum OrderDirection {
-      ASC
-      DESC
+    // return the headers to the context so httpLink can read them
+    const mutation = {
+      Authorization: token ? `Bearer ${token}` : ''
+    }
+    if (typeof window !== 'undefined') {
+      console.log('did i get in?')
+      if (localStorage.getItem(appUser)) {
+        const user = JSON.parse(localStorage.getItem(appUser))
+        const userAddress = user?.addresses && user.addresses[0]
+
+        if (userAddress) mutation['wallet-address'] = userAddress
+      }
     }
 
-    type OrderBy {
-      field: OrderField!
-      direction: OrderDirection!
+    return {
+      headers: {
+        ...headers,
+        ...mutation
+      }
     }
-  `,
-  fetch
-})
+  })
+
+  const client = new ApolloClient({
+    ssrMode: typeof window === 'undefined',
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+    typeDefs: gql`
+      enum OrderField {
+        CreationDate
+        Balance
+      }
+
+      enum OrderDirection {
+        ASC
+        DESC
+      }
+
+      type OrderBy {
+        field: OrderField!
+        direction: OrderDirection!
+      }
+    `,
+    fetch
+  })
+
+  return client
+}
+
+export const client = createApolloClient()

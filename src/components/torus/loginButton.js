@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { Text, Button, jsx } from 'theme-ui'
 import { wallets } from '../../wallets'

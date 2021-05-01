@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, Text, Flex, Box } from 'theme-ui'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import iconVerticalLine from '../../images/icon-vertical-line.svg'
@@ -38,7 +38,7 @@ const AccountTop = props => {
       }}
     >
       <Link
-        to='/'
+        href='/'
         sx={{
           textDecoration: 'none',
           display: 'flex',

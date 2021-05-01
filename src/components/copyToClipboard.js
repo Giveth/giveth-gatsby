@@ -1,6 +1,6 @@
 import React from 'react'
 import { Flex, Text } from 'theme-ui'
-import theme from '../gatsby-plugin-theme-ui'
+import theme from '../utils/theme-ui'
 import { FiCopy } from 'react-icons/fi'
 
 const CopyToClipboard = ({ text, size = '18px', children }) => {

@@ -16,7 +16,7 @@ import NoImage from '../images/no-image-available.jpg'
 import SearchIcon from '../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import DropdownInput from '../components/dropdownInput'
 import theme from '../gatsby-plugin-theme-ui'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -259,7 +259,7 @@ const ProjectsList = props => {
             >{`(${totalCount})`}</span>
           )}
         </Text>
-        <CreateLink to='/create'>Create a project</CreateLink>
+        <CreateLink href='/create'>Create a project</CreateLink>
       </Flex>
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
@@ -445,7 +445,7 @@ const ProjectsList = props => {
               {fromHomePage && (
                 <Flex style={{ justifyContent: 'center' }}>
                   <Link
-                    to='/projects'
+                    href='/projects'
                     sx={{
                       textAlign: 'center'
                     }}

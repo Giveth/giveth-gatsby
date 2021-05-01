@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { Button, Flex, Text, Spinner } from 'theme-ui'
 import { getEtherscanPrefix } from '../../utils'
 import { useWallet } from '../../contextProvider/WalletProvider'
@@ -76,7 +76,7 @@ const InProgressModal = ({ showModal, setShowModal, txHash }) => {
         {isLoggedIn && (
           <Link
             style={{ textDecoration: 'none', color: theme.colors.primary }}
-            to='/account?view=donations'
+            href='/account?view=donations'
           >
             My Account.
           </Link>

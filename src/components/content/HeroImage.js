@@ -1,18 +1,17 @@
 /**
  * Decorative images
  */
-import React from 'react'
+import Image from 'next/image'
 import givethHeroSide from '../../images/decorator-leaf.svg'
 // import co2kenHeroSide from ''
 import givethHeroMain from '../../images/people-header.svg'
-import co2kenHeroMain from '../../images/tree-planting.jpg'
 import styled from '@emotion/styled'
 
 const siteId = process.env.GATSBY_SITE_ID
 
 let heroMain
 if (siteId === 'giveth') {
-  heroMain = givethHeroMain
+  heroMain = <Image alt='tree planting' src='/images/tree-planting.jpg' />
 } else if (siteId === 'co2ken') {
   heroMain = co2kenHeroMain
 }

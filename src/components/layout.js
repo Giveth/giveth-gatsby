@@ -1,21 +1,11 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React from 'react'
-import './global.css'
 import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
-import { useStaticQuery, graphql } from 'gatsby'
-import { ThemeProvider, Box, Button, Link, Flex, Image, Text } from 'theme-ui'
+import { Link, Flex, Text } from 'theme-ui'
+import Image from 'next/image'
 import { positions, Provider } from 'react-alert'
 import AlertTemplate from 'react-alert-template-mui'
-import InfoIcon from '../images/info_outline.png'
-import CornerLeave from '../images/corner-leave.png'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui'
 import Header from './header'
 import { WalletProvider } from '../contextProvider/WalletProvider'
 import GlobalProvider from '../contextProvider/globalProvider'
@@ -25,9 +15,7 @@ import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
 import XDAIPopup from './xDAIPopup'
 import Footer from './footer'
-import Toast from './toast'
 import Popup from './popup'
-import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styled from '@emotion/styled'
@@ -118,7 +106,7 @@ const CookiesBanner = () => {
       <Flex
         sx={{ alignItems: 'center', flexDirection: ['column', 'row', 'row'] }}
       >
-        <Image src={InfoIcon} sx={{ mb: [2, 0, 0] }} />
+        <Image src={'/images/info_outline.png'} sx={{ mb: [2, 0, 0] }} />
         <Text sx={{ color: 'blue', ml: 2, mb: [2, 0, 0] }}>
           This site uses cookies to provide you with an awesome user experience.
           By using it, you accept our{' '}
@@ -199,71 +187,15 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
 
   return (
     <>
-      <Helmet>
-        <script
-          src='https://cdn.jsdelivr.net/npm/@toruslabs/torus-embed'
-          crossOrigin='anonymous'
-        />
-        <script
-          src={`https://maps.googleapis.com/maps/api/js?key=${APIKEY}&libraries=places&v=weekly`}
-          defer
-        />
-        <script src='/node_modules/quill-video-resize-module/video-resize.min.js' />
-        <script type='text/javascript'>
-          {`
-          let map;
-          function initMap(setLocation) {
-              map = new google.maps.Map(document.getElementById('map'), {
-                  center: {lat: 0, lng: 0 },
-                  zoom: 1,
-                  mapTypeControl: false,
-                  panControl: false,
-                  zoomControl: false,
-                  streetViewControl: false
-              });
-              // Create the autocomplete object and associate it with the UI input control.
-              autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById("autocomplete"),
-                {
-                  types: ["geocode"],
-                }  
-              );
-              places = new google.maps.places.PlacesService(map);
-              autocomplete.addListener("place_changed",function(e){
-                onPlaceChanged(setLocation);
-              });
-          }
-          function onPlaceChanged(setLocation) {
-            const place = autocomplete.getPlace();
-            if (place) {
-              if (place.geometry) {
-                map.panTo(place.geometry.location);
-                var marker = new google.maps.Marker({
-                  position: place.geometry.location,
-                  map: map,
-                  title: place.formatted_address
-                });
-                map.setZoom(13);
-                setLocation(place.formatted_address)
-              } else {
-                document.getElementById("autocomplete").placeholder = "Search a Location";
-              }
-            }
-          }
-        `}
-        </script>
-      </Helmet>
       <PopupProvider>
         <WalletProvider>
           <GlobalProvider>
-            <ThemeProvider theme={theme}>
-              <Provider template={AlertTemplate} {...AlertOptions}>
-                <GithubIssue fixed={true} />
-                <XDAIPopup />
-                <Template />
-                <Popup />
-              </Provider>
-            </ThemeProvider>
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <GithubIssue fixed={true} />
+              <XDAIPopup />
+              <Template />
+              <Popup />
+            </Provider>
           </GlobalProvider>
           <StyledToastContainer />
         </WalletProvider>

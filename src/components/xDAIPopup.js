@@ -1,8 +1,7 @@
 import React from 'react'
-import { Flex, Text, Button, Image } from 'theme-ui'
+import { Flex, Text, Button } from 'theme-ui'
+import Image from 'next/image'
 import iconStreamlineGas from '../images/icon-streamline-gas.svg'
-import iconBgGas from '../images/background-gas.png'
-import xDAIcon from '../images/xDAI_ETH_icon.png'
 
 const XDAIPopupClosed = props => {
   const { fixed } = props
@@ -50,7 +49,7 @@ const XDAIPopupClosed = props => {
         }}
       >
         <Image
-          src={xDAIcon}
+          src={'/images/xDAI_ETH_icon.png'}
           sx={{
             display: ['none', 'block', 'block'],
             objectFit: 'contain',
@@ -72,8 +71,8 @@ const XDAIPopupClosed = props => {
           Giveth supports donations in most popular Cryptocurrencies.
         </Text>
         <Flex sx={{ flexDirection: 'row', alignItems: 'center' }}>
-          <img
-            src={iconBgGas}
+          <Image
+            src={'/images/background-gas.png'}
             style={{ position: 'absolute', marginLeft: '-32px' }}
             height='64px'
             width='64px'

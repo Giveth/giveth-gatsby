@@ -1,14 +1,13 @@
-/** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { navigate, Link } from 'gatsby'
-import Loadable from '@loadable/component'
+import Link from 'next/link'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import { IconButton, Text, jsx, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui'
 import Logo from './content/Logo'
-import { useLocation } from '@reach/router'
 import Headroom from 'react-headroom'
 import { PopupContext } from '../contextProvider/popupProvider'
 import { useWallet } from '../contextProvider/WalletProvider'
@@ -158,21 +157,22 @@ const Decorator = styled.div`
   position: absolute;
 `
 
-const Login = Loadable(() => import('./torus/login'))
+const Login = dynamic(() => import('./torus/login'))
+
 const siteId = process.env.GATSBY_SITE_ID
 const projectSearch = process.env.PROJECT_SEARCH
 
 const Header = ({ siteTitle, isHomePage }) => {
-  const location = useLocation()
+  const router = useRouter()
   const { isLoggedIn, user } = useWallet()
   const usePopup = React.useContext(PopupContext)
   const { triggerPopup } = usePopup
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   const [hasScrolled, setScrollState] = useState(false)
   const [navHidden, setHideNavbar] = useState(false)
-  const pathname = location?.pathname?.split('/')[1]
+  const pathname = router.pathname?.split('/')[1]
   useEffect(() => {
-    function handleScroll () {
+    function handleScroll() {
       const scrollTop = window.pageYOffset
       {
         if (scrollTop >= 50) {
@@ -183,7 +183,7 @@ const Header = ({ siteTitle, isHomePage }) => {
       }
     }
     window.addEventListener('scroll', handleScroll)
-    return function cleanup () {
+    return function cleanup() {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
@@ -193,7 +193,7 @@ const Header = ({ siteTitle, isHomePage }) => {
     if (!user?.name || !user?.email || user.email === '') {
       return triggerPopup('IncompleteProfile')
     }
-    navigate('/create')
+    router.push('/create')
   }
 
   return (
@@ -231,7 +231,7 @@ const Header = ({ siteTitle, isHomePage }) => {
             </Decorator>
           ) : null}
           <Link
-            to='/'
+            href='/'
             sx={{
               textDecoration: 'none'
             }}
@@ -276,7 +276,7 @@ const Header = ({ siteTitle, isHomePage }) => {
 
           <MiddleSpan>
             <NavLink
-              to='/'
+              href='/'
               sx={{
                 display: ['none', 'block', 'block'],
                 color: isHomePage ? 'primary' : 'secondary'
@@ -285,14 +285,14 @@ const Header = ({ siteTitle, isHomePage }) => {
               Home
             </NavLink>
             <NavLink
-              to='/join'
+              href='/join'
               sx={{ color: pathname === 'join' ? 'primary' : 'secondary' }}
             >
               Community
             </NavLink>
-            {/* <NavLink to='/causes'>Causes</NavLink> */}
+            {/* <NavLink href='/causes'>Causes</NavLink> */}
             <NavLink
-              to='/projects'
+              href='/projects'
               sx={{ color: pathname === 'projects' ? 'primary' : 'secondary' }}
             >
               Projects
@@ -305,7 +305,7 @@ const Header = ({ siteTitle, isHomePage }) => {
                 {pathname !== 'projects' && (
                   <CreateLink onClick={goCreate}>Create a project</CreateLink>
                   // <NavLink
-                  //   to='/create'
+                  //   href='/create'
                   //   sx={{ color: 'secondary', textTransform: 'upperCase' }}
                   // >
                   //   Create a project

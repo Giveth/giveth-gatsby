@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import { Link } from 'gatsby'
+import { Link } from 'next/link'
 import { Box, Grid, Text, jsx } from 'theme-ui'
 import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui'
 
 // import graphics
 import logo from '../images/giveth-logo-blue.svg'
@@ -82,7 +81,7 @@ const CreditsSection = styled(Grid)`
 
 const Footer = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-  function romanize (num) {
+  function romanize(num) {
     if (!+num) return false
     let digits = String(+num).split(''),
       key = [
@@ -131,20 +130,20 @@ const Footer = () => {
     <Container p={[0, 3, 5]} sx={{ position: 'relative' }}>
       <SiteLinks gap={0} pt={[1, 4, 6]}>
         {isMobile ? null : (
-          <Link to='/'>
+          <Link href='/'>
             <img src={logo} alt='logo' width='40px' height='40px' />
           </Link>
         )}
         <InnerGrid>
           <LinkBox>
-            <FooterLink to='/'>Home</FooterLink>
-            {/* <FooterLink to='/causes'>Causes</FooterLink> */}
-            <FooterLink to='/projects'>Projects</FooterLink>
+            <FooterLink href='/'>Home</FooterLink>
+            {/* <FooterLink href='/causes'>Causes</FooterLink> */}
+            <FooterLink href='/projects'>Projects</FooterLink>
           </LinkBox>
           <LinkBox>
-            <FooterLink to='/about'>About Us</FooterLink>
-            <FooterLink to='/faq'>FAQ</FooterLink>
-            <FooterLink to='/partnerships'>Partnerships</FooterLink>
+            <FooterLink href='/about'>About Us</FooterLink>
+            <FooterLink href='/faq'>FAQ</FooterLink>
+            <FooterLink href='/partnerships'>Partnerships</FooterLink>
             <FooterExternalLink
               href='https://docs.giveth.io'
               target='_blank'
@@ -166,8 +165,8 @@ const Footer = () => {
             >
               Blog <FiExternalLink size='18px' />
             </FooterExternalLink>
-            <FooterLink to='/contact'>Contact</FooterLink>
-            <FooterLink to='/tos'>Terms of Use</FooterLink>
+            <FooterLink href='/contact'>Contact</FooterLink>
+            <FooterLink href='/tos'>Terms of Use</FooterLink>
           </LinkBox>
           <LinkBox>
             <FooterExternalLink
@@ -205,7 +204,7 @@ const Footer = () => {
             >
               Social Coding <FiExternalLink size='18px' />
             </FooterExternalLink>
-            <FooterLink to='/join'>Join Our Community</FooterLink>
+            <FooterLink href='/join'>Join Our Community</FooterLink>
           </LinkBox>
         </InnerGrid>
         <DonateSection

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Flex, Text } from 'theme-ui'
 import Modal from 'react-modal'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 
 const customStyles = {
   overlay: {
@@ -44,7 +44,7 @@ function CancelledModal(props) {
           Check out these other{' '}
           <Link
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
-            to='/projects'
+            href='/projects'
           >
             <Text
               variant='headings.h5'

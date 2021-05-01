@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { Button, Flex, Text } from 'theme-ui'
 
 export const CloseModal = ({ showModal, setShowModal }) => (
@@ -59,7 +59,7 @@ export const CloseModal = ({ showModal, setShowModal }) => (
           border: '2px solid #AAAFCA'
         }}
       >
-        <Link to='/' sx={{ textDecoration: 'none' }}>
+        <Link href='/' sx={{ textDecoration: 'none' }}>
           Yes
         </Link>
       </Button>

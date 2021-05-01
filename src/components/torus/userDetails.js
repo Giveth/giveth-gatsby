@@ -1,11 +1,10 @@
-/** @jsx jsx */
 import { Button, Text, jsx } from 'theme-ui'
 import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
@@ -218,7 +217,7 @@ const UserDetails = () => {
           </MenuTitle>
           {parseNetwork()}
           <Link
-            to='/account'
+            href='/account'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
             <MenuItem
@@ -250,7 +249,7 @@ const UserDetails = () => {
             </MenuItem>
           </a>
           <Link
-            to='/account?data=all&view=projects'
+            href='/account?data=all&view=projects'
             sx={{ textDecoration: 'none', textDecorationLine: 'none' }}
           >
             <MenuItem

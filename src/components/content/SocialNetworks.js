@@ -12,7 +12,7 @@ import {
   FaLinkedin
 } from 'react-icons/fa'
 
-import theme from '../../gatsby-plugin-theme-ui/index'
+import theme from '../../utils/theme-ui'
 
 const SocialContainer = styled.div`
   @media (max-width: 850px) {

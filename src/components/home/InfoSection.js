@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Image, Text, jsx } from 'theme-ui'
 import theme from '../../gatsby-plugin-theme-ui/index'
@@ -190,12 +190,12 @@ const InfoSection = ({ content }) => {
           </Text>
           <Text pb={3} sx={{ variant: 'text.paragraph', color: 'background' }}>
             Create a project and get donations in crypto.{' '}
-            <Link to='/create' className='intextlink'>
+            <Link href='/create' className='intextlink'>
               Create your project
             </Link>{' '}
             and start raising funds.
           </Text>
-          <Link to='/create'>
+          <Link href='/create'>
             <Button
               sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
             >
@@ -226,12 +226,12 @@ const InfoSection = ({ content }) => {
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             Use our platform to give donations to a cause or a project. Easily
             donate to the{' '}
-            <Link to='/projects' className='intextlink'>
+            <Link href='/projects' className='intextlink'>
               project
             </Link>{' '}
             you most care about.
           </Text>
-          <Link to='/projects'>
+          <Link href='/projects'>
             <Button
               sx={{ variant: 'buttons.default', fontSize: 2, mt: '1.5rem' }}
             >

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Flex, Text } from 'theme-ui'
+import Image from 'next/image'
 import styled from '@emotion/styled'
 import Modal from 'react-modal'
 import { useWallet } from '../../contextProvider/WalletProvider'
@@ -9,7 +10,6 @@ import { SiFacebook, SiTwitter, SiReddit, SiDiscord } from 'react-icons/si'
 import { MdEmail } from 'react-icons/md'
 import decoratorClouds from '../../images/decorator-clouds.svg'
 import metamaskLogo from '../../images/logos/metamask-fox.svg'
-import poweredByTorus from '../../images/powered-by-torus.png'
 
 const customStyles = {
   overlay: {
@@ -198,7 +198,7 @@ function LoginModal(props) {
                 />
               ))}
             </Flex>
-            <img src={poweredByTorus} />
+            <Image src={'/images/powered-by-torus.png'} />
             <Text
               sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}
             >

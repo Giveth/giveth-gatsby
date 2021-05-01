@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, Text, Flex, Box } from 'theme-ui'
 import React from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { BsArrowLeft } from 'react-icons/bs'
 import styled from '@emotion/styled'
 import MyProjects from './myProjects'

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { Button, Flex, Text, Input } from 'theme-ui'
 
 export const LocationInputModal = ({

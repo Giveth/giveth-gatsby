@@ -21,7 +21,7 @@ export const UserProjects = props => {
         <Text variant='text.default' color='secondary' mt={3}>
           Don't stop here! There are other projects you can donate to.
         </Text>
-        <Link to='/projects'>
+        <Link href='/projects'>
           <Button sx={{ variant: 'buttons.default', fontSize: 2, mt: 4 }}>
             BROWSE PROJECTS
           </Button>

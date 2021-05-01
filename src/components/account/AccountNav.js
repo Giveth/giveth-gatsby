@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, Text, Box } from 'theme-ui'
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FiExternalLink } from 'react-icons/fi'
@@ -115,7 +115,7 @@ const AccountNav = props => {
         >
           <Text sx={{ mb: '8px', variant: 'links.grey' }}>Support</Text>
         </Link>
-        <Link to='/' sx={{ textDecoration: 'none' }} onClick={handleLogout}>
+        <Link href='/' sx={{ textDecoration: 'none' }} onClick={handleLogout}>
           <Text sx={{ mb: '8px', variant: 'links.grey' }}>Sign Out</Text>
         </Link>
       </Box>

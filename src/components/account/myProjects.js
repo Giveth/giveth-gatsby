@@ -84,7 +84,7 @@ const MyProjects = props => {
           )
         })}
         <SpecialCard
-          to='/create'
+          href='/create'
           sx={{ cursor: 'pointer', textDecoration: 'none' }}
         >
           {' '}

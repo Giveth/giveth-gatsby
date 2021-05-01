@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, NavLink, Text } from 'theme-ui'
 import styled from '@emotion/styled'
-import theme from '../gatsby-plugin-theme-ui/index'
+import theme from '../utils/theme-ui'
 
 import LeftArrow from '../images/svg/general/left-arrow.svg'
 import Confetti from '../images/svg/donation/confetti.svg'
@@ -51,7 +51,7 @@ const DialogContent = styled.div`
   margin: 3.813rem 0 0 0;
 `
 
-export default function Dialog ({ children }) {
+export default function Dialog({ children }) {
   return (
     <DialogContainer p={4} color='white' bg={theme.colors.secondary}>
       <LeftConfetti />

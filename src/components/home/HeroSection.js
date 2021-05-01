@@ -1,12 +1,11 @@
-/** @jsx jsx */
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Box, Button, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import HeroImage from '../content/HeroImage'
 import HeroSideImage from '../content/HeroSideImage'
-import givethHeroMain from '../../images/people-header.svg'
-import co2kenHeroMain from '../../images/tree-planting.jpg'
+// import givethHeroMain from '../../images/people-header.svg'
+// import co2kenHeroMain from '../../images/tree-planting.jpg'
 // const siteId = process.env.GATSBY_SITE_ID
 
 // console.log(`HeroImages : ${JSON.stringify(HeroImages, null, 2)}`)
@@ -40,7 +39,7 @@ const Hero = ({ content }) => {
 
   return (
     <HeroSection>
-      <HeroSideImage></HeroSideImage>
+      <HeroSideImage />
       <div id='placeholder' />
       <HeroText p={['10px', null, '80px']}>
         {' '}
@@ -53,7 +52,7 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content.mainHead}
+          {content?.mainHead}
         </Heading>
         <Heading
           sx={{
@@ -64,7 +63,7 @@ const Hero = ({ content }) => {
             color: 'secondaryDark'
           }}
         >
-          {content.headBold}
+          {content?.headBold}
         </Heading>
         <Text
           pt={4}
@@ -76,7 +75,7 @@ const Hero = ({ content }) => {
             lineHeight: 'taller'
           }}
         >
-          {content.mainText}
+          {content?.mainText}
         </Text>
         <Grid
           rows={2}
@@ -84,7 +83,7 @@ const Hero = ({ content }) => {
             width: '290px'
           }}
         >
-          <Link to='/projects'>
+          <Link href='/projects'>
             <Button
               mt={4}
               p={4}
@@ -93,11 +92,11 @@ const Hero = ({ content }) => {
                 variant: 'buttons.big'
               }}
             >
-              {content.mainButton}
+              {content?.mainButton}
             </Button>
           </Link>
           <Link
-            to='/create'
+            href='/create'
             sx={{
               variant: 'links.nav',
               justifySelf: 'center'
@@ -108,7 +107,7 @@ const Hero = ({ content }) => {
                 justifySelf: 'center'
               }}
             >
-              {content.mainButtonText}
+              {content?.mainButtonText}
             </Text>
           </Link>
         </Grid>

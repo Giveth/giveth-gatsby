@@ -16,7 +16,7 @@ import { FaShareAlt } from 'react-icons/fa'
 import { ImLocation } from 'react-icons/im'
 import { BsHeartFill } from 'react-icons/bs'
 
-import { Link } from 'gatsby'
+import Link from 'next/link'
 import { useQuery, useApolloClient } from '@apollo/client'
 import {
   TOGGLE_PROJECT_REACTION,
@@ -544,7 +544,7 @@ export const ProjectDonatorView = ({ pageContext }) => {
           </Flex>
 
           {/* <Flex sx={{ justifyContent: 'center', mt: 2 }}>
-            <Link to='/projects' style={{ textDecoration: 'none' }}>
+            <Link href='/projects' style={{ textDecoration: 'none' }}>
               <Text
                 sx={{
                   variant: 'text.medium',

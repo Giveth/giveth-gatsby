@@ -1,18 +1,16 @@
 import React from 'react'
-import logo from '../../images/giveth-logo-blue.svg'
-import coTookenLogo from '../../images/logos/co2ken-logo.png'
-// import Img from 'gatsby-image'
+import Image from 'next/image'
 
 const Logo = props => {
   let siteLogo
   const siteId = process.env.GATSBY_SITE_ID
 
   if (siteId === 'giveth') {
-    siteLogo = logo
+    siteLogo = '/images/giveth-logo-blue.svg'
   } else if (siteId === 'co2ken') {
-    siteLogo = coTookenLogo
+    siteLogo = '/images/logos/co2ken-logo.png'
   }
-  return <img src={siteLogo} alt='logo' {...props} />
+  return <Image src={siteLogo} alt='logo' {...props} />
 }
 
 export default Logo
