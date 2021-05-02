@@ -13,7 +13,6 @@ import React, { useState } from 'react'
 import ProjectCard from './projectCard'
 import SearchIcon from '../images/svg/general/search-icon.svg'
 import styled from '@emotion/styled'
-import PropTypes from 'prop-types'
 import Link from 'next/link'
 import DropdownInput from '../components/dropdownInput'
 import theme from '../utils/theme-ui'
@@ -33,7 +32,8 @@ export const OrderByDirection = {
   DESC: 'DESC'
 }
 
-const CreateLink = styled(Link)`
+const CreateLink = styled.a`
+  cursor: pointer;
   text-align: right;
   text-decoration: none;
   font-family: 'Red Hat Display', sans-serif;
@@ -238,7 +238,7 @@ const ProjectsList = props => {
             width: '50%'
           }}
         >
-          <span
+          <Box
             sx={{
               variant: 'headings.h1',
               width: ['100%', null, null],
@@ -248,7 +248,7 @@ const ProjectsList = props => {
             }}
           >
             Projects{' '}
-          </span>
+          </Box>
           {totalCount && (
             <span
               sx={{
@@ -258,7 +258,9 @@ const ProjectsList = props => {
             >{`(${totalCount})`}</span>
           )}
         </Text>
-        <CreateLink href='/create'>Create a project</CreateLink>
+        <Link href='/create'>
+          <CreateLink>Create a project</CreateLink>
+        </Link>
       </Flex>
       <ProjectSection pt={4} sx={{ variant: 'grayBox' }}>
         <div
@@ -473,10 +475,4 @@ const ProjectsList = props => {
   )
 }
 
-ProjectsList.propTypes = {
-  projects: PropTypes.array.isRequired,
-  categories: PropTypes.array.isRequired,
-  totalCount: PropTypes.number.isRequired,
-  selectOrderByField: PropTypes.func.isRequired
-}
 export default ProjectsList

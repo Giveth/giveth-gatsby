@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
-import Image from 'next/image'
-import dynamic from 'next/dynamic'
 import Select from 'react-select'
-import { Text, Flex } from 'theme-ui'
+import { Image, Text, Flex } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../utils/theme-ui/index'
 
 // TODO: FIX ICONS
-// import iconManifest from '../../node_modules/cryptocurrency-icons/manifest.json'
-// import ETHIcon from '../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+import iconManifest from '../../public/assets/cryptocurrency-icons/manifest.json'
+const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 const SelectWithAutocomplete = ({
   content,
@@ -41,28 +39,23 @@ const SelectWithAutocomplete = ({
     // Special render for tokens, showing extra info
     if (isTokenList) {
       let img = ''
-      // const found = iconManifest?.find(
-      //   i => i?.symbol === value?.symbol?.toUpperCase()
-      // )
-      const found = null
-      if (found) {
-        // import(
-        //   `../../node_modules/cryptocurrency-icons/32/color/${
-        //     value?.symbol?.toLowerCase() || 'eth'
-        //   }.png`
-        // ).then(importedImg => {
-        //   img = importedImg?.default
-        //   setIcon(img)
-        // })
-      }
+      const found = iconManifest?.find(
+        i => i?.symbol === value?.symbol?.toUpperCase()
+      )
 
       toShow = (
         <Flex style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image
-            src={icon || `/assets/tokens/${value?.symbol?.toUpperCase()}.png`}
+            src={
+              found
+                ? `/assets/cryptocurrency-icons/32/color/${
+                    value?.symbol?.toLowerCase() || 'eth'
+                  }.png`
+                : `/assets/tokens/${value?.symbol?.toUpperCase()}.png`
+            }
             alt={value?.symbol}
             onError={ev => {
-              // ev.target.src = ETHIcon
+              ev.target.src = ETHIcon
               ev.target.onerror = null
             }}
             width={'32px'}

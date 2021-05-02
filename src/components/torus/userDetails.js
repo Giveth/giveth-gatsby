@@ -1,6 +1,5 @@
-import { Button, Text, jsx } from 'theme-ui'
-import { useContext, useState } from 'react'
 import styled from '@emotion/styled'
+import { Button, Text, jsx } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
@@ -67,7 +66,13 @@ const Dot = styled.div`
   display: inline-block;
   margin: 0 4px 0 0;
 `
-
+const StyledButton = styled.a`
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+  align-items: center;
+  padding: 0.5rem;
+`
 const UserDetails = () => {
   const {
     ref,
@@ -92,7 +97,6 @@ const UserDetails = () => {
 
   const parseNetwork = () => {
     let dotColor
-    console.log({ currentNetwork })
     switch (currentNetwork) {
       case 'main':
         dotColor = 'greenishBlue'
@@ -138,15 +142,8 @@ const UserDetails = () => {
   }
   return (
     <div ref={ref}>
-      <Button
+      <StyledButton
         sx={{ variant: 'buttons.nofill' }}
-        style={{
-          display: 'flex',
-          cursor: 'pointer',
-          alignItems: 'center',
-          padding: '0.5rem',
-          border: '0'
-        }}
         onClick={() => setIsComponentVisible(!isComponentVisible)}
       >
         {user?.avatar ? (
@@ -157,7 +154,7 @@ const UserDetails = () => {
               height: '30px',
               borderRadius: '15px'
             }}
-            onerror={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}
+            onError={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}
             src={user?.avatar}
             className='avatarimage'
           />
@@ -177,7 +174,7 @@ const UserDetails = () => {
         >
           {user.getName()}
         </Text>
-      </Button>
+      </StyledButton>
       {isComponentVisible ? (
         <AccountDetails>
           <MenuTitle

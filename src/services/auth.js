@@ -34,8 +34,8 @@ export const logout = (callback = () => {}) => {
 }
 
 export function getLocalStorageUserLabel() {
-  const nextUser = process.env.NEXT_LOCAL_USER_LABEL
-    ? process.env.NEXT_LOCAL_USER_LABEL + '_' + process.env.ENVIRONMENT
+  const nextUser = process.env.NEXT_PUBLIC_LOCAL_USER_LABEL
+    ? process.env.NEXT_PUBLIC_LOCAL_USER_LABEL + '_' + process.env.ENVIRONMENT
     : 'nextUser' + '_' + process.env.ENVIRONMENT
 
   return nextUser

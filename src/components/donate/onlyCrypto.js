@@ -9,10 +9,6 @@ import { PopupContext } from '../../contextProvider/popupProvider'
 import { REGISTER_PROJECT_DONATION } from '../../apollo/gql/projects'
 import { SAVE_DONATION } from '../../apollo/gql/donations'
 
-// TODO: FIX TOKEN ICONS
-// import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
-// import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
-
 import Modal from '../modal'
 // import Select from '../selectWithAutocomplete'
 import QRCode from 'qrcode.react'
@@ -25,7 +21,6 @@ import CopyToClipboard from '../copyToClipboard'
 import SVGLogo from '../../images/svg/donation/qr.svg'
 import iconStreamlineGas from '../../images/icon-streamline-gas.svg'
 import iconQuestionMark from '../../images/icon-question-mark.svg'
-import { ethers } from 'ethers'
 import theme from '../../utils/theme-ui'
 import getSigner from '../../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
@@ -36,6 +31,10 @@ import InProgressModal from './inProgressModal'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import * as transaction from '../../services/transaction'
 import { saveDonation, saveDonationTransaction } from '../../services/donation'
+import { ethers } from 'ethers'
+
+import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
+const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 const Select = dynamic(() => import('../selectWithAutocomplete'), {
   ssr: false
@@ -176,7 +175,7 @@ const OnlyCrypto = props => {
   useEffect(() => {
     const init = async () => {
       fetch(
-        `https://min-api.cryptocompare.com/data/price?fsym=${tokenSymbol}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.NEXT_CRYPTOCOMPARE_KEY}`
+        `https://min-api.cryptocompare.com/data/price?fsym=${tokenSymbol}&tsyms=USD,EUR,CNY,JPY,GBP&api_key=${process.env.NEXT_PUBLIC_CRYPTOCOMPARE_KEY}`
       )
         .then(response => response.json())
         .then(data => setTokenPrice(data.USD))
@@ -186,7 +185,6 @@ const OnlyCrypto = props => {
             wallet: wallet => {
               if (wallet.provider) {
                 setWallet(wallet)
-
                 const ethersProvider = new ethers.providers.Web3Provider(
                   wallet.provider
                 )
@@ -279,21 +277,16 @@ const OnlyCrypto = props => {
   }, [userWallet, selectedToken, selectedTokenBalance])
 
   useEffect(() => {
-    // let img = ''
-    // const found = iconManifest?.find(
-    //   i => i?.symbol === tokenSymbol?.toUpperCase()
-    // )
-    // if (found) {
-    //   import(
-    //     `../../../node_modules/cryptocurrency-icons/32/color/${
-    //       tokenSymbol?.toLowerCase() || 'eth'
-    //     }.png`
-    //   ).then(importedImg => {
-    //     img = importedImg?.default
-    //     console.log({ img })
-    //     setIcon(img)
-    //   })
-    // }
+    let img = ''
+    const found = iconManifest?.find(
+      i => i?.symbol === tokenSymbol?.toUpperCase()
+    )
+    if (found) {
+      img = `/assets/cryptocurrency-icons/32/color/${
+        tokenSymbol?.toLowerCase() || 'eth'
+      }.png`
+      setIcon(img)
+    }
   }, [tokenSymbol, icon])
 
   const donation = parseFloat(amountTyped)
@@ -686,7 +679,7 @@ const OnlyCrypto = props => {
                 src={icon || `/assets/tokens/${tokenSymbol?.toUpperCase()}.png`}
                 alt={tokenSymbol}
                 onError={ev => {
-                  // ev.target.src = ETHIcon
+                  ev.target.src = ETHIcon
                   ev.target.onerror = null
                 }}
                 width={'32px'}

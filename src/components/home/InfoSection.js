@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Button, Image, Text, jsx } from 'theme-ui'
+import { Grid, Box, Flex, Button, Image, Text, jsx } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import styled from '@emotion/styled'
 
@@ -48,8 +48,9 @@ const InfoSection = ({ content }) => {
         mb: ['2rem', 0, 0]
       }}
     >
-      <Box
+      <Flex
         sx={{
+          flexDirection: 'column',
           justifySelf: 'center',
           textAlign: 'center',
           pt: '100px',
@@ -88,12 +89,12 @@ const InfoSection = ({ content }) => {
             {content?.infoButtonText}
           </Button>
         </a>
-      </Box>
+      </Flex>
       <Grid
         columns={[1, 3, 3]}
         sx={{ justifyItems: 'center', textAlign: 'center' }}
       >
-        <Box sx={{ maxWidth: '320px' }}>
+        <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
           <DecoratorDecentralized />
           <Text
             sx={{
@@ -107,8 +108,8 @@ const InfoSection = ({ content }) => {
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             {content?.feature2Text}
           </Text>
-        </Box>
-        <Box sx={{ maxWidth: '320px' }}>
+        </Flex>
+        <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
           <DecoratorAltruistic />
           <Text
             sx={{
@@ -127,8 +128,8 @@ const InfoSection = ({ content }) => {
           >
             {content?.feature1Text}
           </Text>
-        </Box>
-        <Box sx={{ maxWidth: '320px' }}>
+        </Flex>
+        <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
           <DecoratorCommunity />
           <Text
             sx={{
@@ -142,9 +143,17 @@ const InfoSection = ({ content }) => {
           <Text sx={{ variant: 'text.paragraph', color: 'background' }}>
             {content?.feature3Text}
           </Text>
-        </Box>
+        </Flex>
       </Grid>
-      <Box pt={4} pb={6} sx={{ justifySelf: 'center', textAlign: 'center' }}>
+      <Flex
+        pt={4}
+        pb={6}
+        sx={{
+          flexDirection: 'column',
+          justifySelf: 'center',
+          textAlign: 'center'
+        }}
+      >
         <a
           href='https://giveth.io/join'
           target='_blank'
@@ -160,8 +169,14 @@ const InfoSection = ({ content }) => {
             {content?.featureCta}
           </Button>
         </a>
-      </Box>
-      <Box sx={{ justifySelf: 'center', textAlign: 'center' }}>
+      </Flex>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          justifySelf: 'center',
+          textAlign: 'center'
+        }}
+      >
         <Text pb={3} sx={{ variant: 'headings.h2', color: 'background' }}>
           {content?.infoHead2}
         </Text>
@@ -171,7 +186,7 @@ const InfoSection = ({ content }) => {
         >
           {content?.infoSubtitle2}
         </Text>
-      </Box>
+      </Flex>
       <Grid gap={1} columns={[1, 3, 3]} sx={{ justifyItems: 'center' }}>
         <Grid
           p={2}

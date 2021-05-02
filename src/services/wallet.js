@@ -1,6 +1,12 @@
 import Web3 from 'web3'
 import React from 'react'
+
+// import dynamic from 'next/dynamic'
 import { getWallet } from '../wallets'
+
+// const getWallet = dynamic(() => import('../wallets').then(md => md.getWallet), {
+//   ssr: false
+// })
 
 export function isAddressENS(address) {
   return address.toLowerCase().indexOf('.eth') > -1

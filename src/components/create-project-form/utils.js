@@ -8,8 +8,8 @@ import {
 import Web3 from 'web3'
 import { ethers } from 'ethers'
 
-const infuraId = process.env.NEXT_INFURA_ID
-const network = process.env.NEXT_NETWORK
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID
+const network = process.env.NEXT_PUBLIC_NETWORK
 const provider = new ethers.providers.InfuraProvider(network, infuraId)
 
 export async function getProjectWallet(projectWalletAddress) {

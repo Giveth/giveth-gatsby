@@ -1,11 +1,8 @@
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 
 import Web3 from 'web3'
-// import Torus from '@toruslabs/torus-embed'
+import dynamic from 'next/dynamic'
 import detectEthereumProvider from '@metamask/detect-provider'
-
-// const Torus = dynamic(() => import('@toruslabs/torus-embed'))
-const Torus = dynamic(() => import('@toruslabs/torus-embed'), { ssr: false })
 
 // TODO: SET wallet address to this link
 const metamask = {
@@ -61,6 +58,11 @@ export const wallets = {
       wallets.torus.web3 = web3Inst
     },
     init: async (buildEnv, network) => {
+      if (typeof window === 'undefined') {
+        return
+      }
+      const Torus = await require('@toruslabs/torus-embed')
+
       if (wallets?.torus?.torus?.isInitialized) return true
       const torus = new Torus()
       await torus.init({

@@ -1,10 +1,10 @@
 import Notify from 'bnc-notify'
 import Onboard from 'bnc-onboard'
 
-const networkId = process.env.NEXT_NETWORK_ID
-const rpcUrl = process.env.NEXT_ETHEREUM_NODE
-const dappId = process.env.NEXT_BLOCK_NATIVE_DAPP_ID
-const portisKey = process.env.NEXT_PORTIS_KEY
+const networkId = process.env.NEXT_PUBLIC_NETWORK_ID
+const rpcUrl = process.env.NEXT_PUBLIC_ETHEREUM_NODE
+const dappId = process.env.NEXT_PUBLIC_BLOCK_NATIVE_DAPP_ID
+const portisKey = process.env.NEXT_PUBLIC_PORTIS_KEY
 export function initOnboard(subscriptions, currentChainId) {
   return Onboard({
     dappId,

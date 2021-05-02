@@ -1,4 +1,5 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 import { Flex, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
@@ -15,7 +16,7 @@ import {
   TwitterIcon
 } from 'react-share'
 
-const OnlyCrypto = React.lazy(() => import('./onlyCrypto'))
+const OnlyCrypto = dynamic(() => import('./onlyCrypto'), { ssr: false })
 
 // CONSTANTS
 
@@ -128,9 +129,7 @@ const DonateIndex = props => {
 
     const ShowPaymentOption = () => {
       return paymentType === CRYPTO && !isSSR ? (
-        <React.Suspense fallback={<div />}>
-          <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
-        </React.Suspense>
+        <OnlyCrypto project={project} setHashSent={val => setHashSent(val)} />
       ) : (
         <OnlyFiat project={project} />
       )

@@ -29,7 +29,15 @@ import { useWallet } from '../../../contextProvider/WalletProvider'
 import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
+// import dynamic from 'next/dynamic'
 import { getWallet } from '../../../wallets'
+
+// const getWallet = dynamic(
+//   () => import('../../../wallets').then(md => md.getWallet),
+//   {
+//     ssr: false
+//   }
+// )
 // import RichTextInput from '../../richTextInput'
 let wallet = null
 let web3 = null

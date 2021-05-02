@@ -8,8 +8,8 @@ import { useWallet } from '../../contextProvider/WalletProvider'
 import { FcGoogle } from 'react-icons/fc'
 import { SiFacebook, SiTwitter, SiReddit, SiDiscord } from 'react-icons/si'
 import { MdEmail } from 'react-icons/md'
-import decoratorClouds from '../../images/decorator-clouds.svg'
-import metamaskLogo from '../../images/logos/metamask-fox.svg'
+import DecoratorClouds from '../../images/decorator-clouds.svg'
+import MetamaskLogo from '../../images/logos/metamask-fox.svg'
 
 const customStyles = {
   overlay: {
@@ -86,7 +86,6 @@ function LoginModal(props) {
 
   const initLogin = (walletProvider, verifier) => {
     try {
-      console.log({ walletProvider, verifier })
       login({ walletProvider, verifier })
       setModalOpen(false)
     } catch (error) {
@@ -109,11 +108,9 @@ function LoginModal(props) {
             minHeight: '520px'
           }}
         >
-          <img
-            src={decoratorClouds}
-            alt='signup-clouds'
-            style={{ position: 'absolute', left: '5%', padding: '2rem 0' }}
-          />
+          <div style={{ position: 'absolute', left: '5%', padding: '2rem 0' }}>
+            <DecoratorClouds />
+          </div>
           <Text
             sx={{
               variant: 'text.default',
@@ -198,15 +195,19 @@ function LoginModal(props) {
                 />
               ))}
             </Flex>
-            <Image src={'/images/powered-by-torus.png'} />
+            <Image
+              src={'/images/powered-by-torus.png'}
+              width='100%'
+              height='32px'
+              objectFit='contain'
+            />
             <Text
               sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}
             >
               Already have a crypto wallet?
             </Text>
             <LongBtn onClick={() => initLogin('metamask')}>
-              <img
-                src={metamaskLogo}
+              <MetamaskLogo
                 style={{
                   width: '32px',
                   height: '32px'

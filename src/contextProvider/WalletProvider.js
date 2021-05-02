@@ -4,6 +4,7 @@ import { keccak256 } from 'ethers/lib/utils'
 import { client } from '../apollo/client'
 import { promisify } from 'util'
 import { ethers } from 'ethers'
+import dynamic from 'next/dynamic'
 import Web3 from 'web3'
 
 import { getToken, validateAuthToken } from '../services/token'
@@ -14,12 +15,13 @@ import getSigner from '../services/ethersSigner'
 import tokenAbi from 'human-standard-token-abi'
 import * as Auth from '../services/auth'
 import Toast from '../components/toast'
-import { getWallet } from '../wallets'
 import User from '../entities/user'
 
+import { getWallet } from '../wallets'
+
 const WalletContext = React.createContext()
-const network = process.env.NEXT_NETWORK
-const networkId = process.env.NEXT_NETWORK_ID
+const network = process.env.NEXT_PUBLIC_NETWORK
+const networkId = process.env.NEXT_PUBLIC_NETWORK_ID
 
 let EVENT_SETUP_DONE = false
 let wallet = {}
@@ -101,7 +103,13 @@ function WalletProvider(props) {
   }
 
   useEffect(() => {
-    initWallet(localStorageUser?.walletType)
+    const start = () => {
+      if (typeof window === 'undefined') {
+        return
+      }
+      initWallet(localStorageUser?.walletType)
+    }
+    start()
   }, [])
 
   async function logout(walletLoggedOut) {
@@ -115,7 +123,7 @@ function WalletProvider(props) {
   async function signMessage(message, publicAddress, loginFromXDAI) {
     try {
       await checkNetwork()
-      console.log({ loginFromXDAI })
+      console.log({ loginFromXDAI }, process.env.NEXT_PUBLIC_NETWORK_ID)
       let signedMessage = null
       const customPrefix = `\u0019${window.location.hostname} Signed Message:\n`
       const prefixWithLength = Buffer.from(
@@ -143,7 +151,9 @@ function WalletProvider(props) {
         },
         domain: {
           name: 'Giveth Login',
-          chainId: loginFromXDAI ? 100 : parseInt(process.env.NEXT_NETWORK_ID),
+          chainId: loginFromXDAI
+            ? 100
+            : parseInt(process.env.NEXT_PUBLIC_NETWORK_ID),
           version: '1'
         },
         message: {
@@ -153,7 +163,6 @@ function WalletProvider(props) {
           }
         }
       })
-
       const { result } = await send({
         method: 'eth_signTypedData_v4',
         params: [publicAddress, msgParams],
@@ -216,11 +225,11 @@ function WalletProvider(props) {
     const loginFromXDAI = !wallet?.isTorus && currentChainId === 100
 
     const signedMessage = await signMessage(
-      process.env.NEXT_OUR_SECRET,
+      process.env.NEXT_PUBLIC_OUR_SECRET,
       publicAddress,
       loginFromXDAI
     )
-
+    console.log('secret', process.env.NEXT_PUBLIC_OUR_SECRET)
     if (!signedMessage) return
 
     const { userIDFromDB, token, dbUser } = await getToken(

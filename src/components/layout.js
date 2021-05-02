@@ -17,6 +17,8 @@ import Popup from './popup'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styled from '@emotion/styled'
+import dynamic from 'next/dynamic'
+import { WalletProvider } from '../contextProvider/WalletProvider'
 
 const StyledToastContainer = styled(ToastContainer)`
   .Toastify__close-button {
@@ -137,7 +139,7 @@ const CookiesBanner = () => {
 }
 
 const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
-  const APIKEY = process.env.NEXT_GOOGLE_MAPS_API_KEY
+  const APIKEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
 
   const Template = () => {
     if (asDialog) {
@@ -166,7 +168,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
             }}
           >
             <main>{children}</main>
-            {/* {!noFooter && <Footer />} */}
+            {!noFooter && <Footer />}
           </div>
           <CookiesBanner />
         </>
@@ -174,19 +176,29 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
     }
   }
 
+  // const BrowserHOC = ({ children }) => {
+  //   if (typeof window === 'undefined') {
+  //     return <>{children}</>
+  //   } else {
+  //     return <WalletProvider>{children}</WalletProvider>
+  //   }
+  // }
+
   return (
     <>
-      <PopupProvider>
-        <GlobalProvider>
-          <Provider template={AlertTemplate} {...AlertOptions}>
-            <GithubIssue fixed={true} />
-            <XDAIPopup />
-            <Template />
-            <Popup />
-          </Provider>
-        </GlobalProvider>
-        <StyledToastContainer />
-      </PopupProvider>
+      <WalletProvider>
+        <PopupProvider>
+          <GlobalProvider>
+            <Provider template={AlertTemplate} {...AlertOptions}>
+              <GithubIssue fixed={true} />
+              <XDAIPopup />
+              <Template />
+              <Popup />
+            </Provider>
+          </GlobalProvider>
+          <StyledToastContainer />
+        </PopupProvider>
+      </WalletProvider>
     </>
   )
 }

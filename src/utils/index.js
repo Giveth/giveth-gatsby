@@ -51,8 +51,9 @@ export async function getEtherscanTxs(
   isDonor = false
 ) {
   try {
-    const apiKey = process.env.NEXT_ETHERSCAN_API_KEY
-    const api = process.env.NEXT_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
+    const apiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY
+    const api =
+      process.env.NEXT_PUBLIC_NETWORK_ID === '3' ? 'api-ropsten' : 'api'
     const balance = await fetch(
       `https://${api}.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${apiKey}`
     )

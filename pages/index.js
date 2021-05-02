@@ -1,6 +1,8 @@
 import React from "react";
+import * as matter from "gray-matter";
 import { client } from "../src/apollo/client";
 import { useState } from "react";
+import GivethContent from "../src/content/giveth.md";
 import Layout from "../src/components/layout";
 // import Seo from '../components/seo'
 import Hero from "../src/components/home/HeroSection";
@@ -14,7 +16,6 @@ import { FETCH_ALL_PROJECTS } from "../src/apollo/gql/projects";
 const IndexContent = ({
   hideInfo,
   content,
-  location,
   topProjects,
   categories,
   allProject,
@@ -45,7 +46,7 @@ const IndexContent = ({
 };
 
 const IndexPage = (props) => {
-  const { data, topProjects } = props;
+  const { data, content, topProjects } = props;
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION
@@ -55,7 +56,7 @@ const IndexPage = (props) => {
       {/* <Seo title='Home' /> */}
       <IndexContent
         hideInfo={hideInfo}
-        // content={content}
+        content={content}
         // html={null}
         // location={location}
         topProjects={topProjects}
@@ -71,9 +72,13 @@ export async function getServerSideProps() {
     query: FETCH_ALL_PROJECTS,
     variables: { limit: 3 },
   });
+
+  const mdContent = matter(GivethContent);
+
   return {
     props: {
       topProjects: response?.projects,
+      content: mdContent?.data,
     },
   };
 }

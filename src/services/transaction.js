@@ -48,7 +48,7 @@ export async function send(
 }
 
 export function notify(hash) {
-  if (process.env.NEXT_NETWORK === 'ropsten') return
+  if (process.env.NEXT_PUBLIC_NETWORK === 'ropsten') return
 
   notify.config({ desktopPosition: 'topRight' })
   const { emitter } = notify.hash(hash)
@@ -76,8 +76,8 @@ export async function getHashInfo(txHash, isXDAI) {
   try {
     const web3 = new Web3(
       isXDAI
-        ? process.env.NEXT_XDAI_NODE_HTTP_URL
-        : process.env.NEXT_ETHEREUM_NODE
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
     const txInfo = await web3.eth.getTransaction(txHash)
     console.log({ txInfo })
@@ -92,8 +92,8 @@ export async function getTxFromHash(transactionHash, isXDAI) {
   try {
     const web3 = new Web3(
       isXDAI
-        ? process.env.NEXT_XDAI_NODE_HTTP_URL
-        : process.env.NEXT_ETHEREUM_NODE
+        ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+        : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
     console.log({ web3 })
     const tx = await web3.eth.getTransaction(transactionHash)
@@ -112,8 +112,8 @@ export async function confirmEtherTransaction(
 ) {
   const web3 = new Web3(
     isXDAI
-      ? process.env.NEXT_XDAI_NODE_HTTP_URL
-      : process.env.NEXT_ETHEREUM_NODE
+      ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
+      : process.env.NEXT_PUBLIC_ETHEREUM_NODE
   )
   const MAX_INTENTS = 20 // one every second
   web3.eth.getTransactionReceipt(transactionHash, function (err, receipt) {
