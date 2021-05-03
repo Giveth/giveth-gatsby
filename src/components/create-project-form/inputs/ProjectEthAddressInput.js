@@ -52,7 +52,7 @@ export const ProjectEthAddressInput = ({
           type='text'
           id='projectWalletAddress'
           name='projectWalletAddress'
-          ref={register()}
+          {...register('projectWalletAddress')}
           defaultValue={currentValue}
           placeholder='0x00000...'
           onChange={e => onChangeAddress(e)}

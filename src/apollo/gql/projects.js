@@ -33,6 +33,9 @@ const FETCH_ALL_PROJECTS = gql`
       totalDonations
       totalHearts
     }
+    categories {
+      name
+    }
   }
 `
 
@@ -458,6 +461,14 @@ const WALLET_ADDRESS_IS_VALID = gql`
   }
 `
 
+const GET_CATEGORIES = gql`
+  query GetCategories {
+    categories {
+      name
+    }
+  }
+`
+
 export {
   FETCH_PROJECTS,
   FETCH_ALL_PROJECTS,
@@ -481,5 +492,6 @@ export {
   ACTIVATE_PROJECT,
   DEACTIVATE_PROJECT,
   FETCH_MY_PROJECTS,
-  WALLET_ADDRESS_IS_VALID
+  WALLET_ADDRESS_IS_VALID,
+  GET_CATEGORIES
 }

@@ -31,7 +31,7 @@ export const ProjectNameInput = ({
           type='text'
           id='projectName'
           name='projectName'
-          ref={register({ required: true })}
+          {...register('projectName', { required: true })}
           defaultValue={currentValue}
           placeholder='Project Name'
           maxLength={55}

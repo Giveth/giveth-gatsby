@@ -57,7 +57,7 @@ export const ProjectImpactLocationInput = ({
           name='projectImpactLocation'
           type='hidden'
           value={location}
-          ref={register}
+          {...register('projectImpactLocation')}
         />
         <Label
           sx={{

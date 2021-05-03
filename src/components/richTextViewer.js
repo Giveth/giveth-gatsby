@@ -8,7 +8,7 @@ function RichTextViewer({ content }) {
   return (
     <div>
       {!isSSR && (
-        <React.Suspense fallback={<p> cy </p>}>
+        <React.Suspense fallback={<div />}>
           <ReactQuill
             style={{ fontFamily: `Red Hat Text, sans serif` }}
             value={content}

@@ -1,11 +1,10 @@
 import React from 'react'
+import Image from 'next/image'
 import { Grid, Box, Heading, Text, jsx } from 'theme-ui'
 import styled from '@emotion/styled'
 import { useMediaQuery } from 'react-responsive'
 // import { useMediumFeed } from './MediumFeed'
 import MailchimpSignup from './MailchimpSignup'
-
-import decoratorElements from '../../images/decorator-elements.svg'
 
 // apply style to elements
 const Main = styled(Grid)`
@@ -28,15 +27,19 @@ const UpdatesSection = () => {
   return (
     <React.Fragment>
       {isMobile ? null : (
-        <img
-          src={decoratorElements}
-          alt=''
-          sx={{
+        <div
+          className='semitransparent'
+          style={{
             float: 'right',
             translate: '-30px 150px'
           }}
-          className='semitransparent'
-        />
+        >
+          <Image
+            src='/images/decorator-elements.svg'
+            width='100%'
+            height='100%'
+          />
+        </div>
       )}
       <Container p={[2, 3, 5]} sx={{ position: 'relative' }}>
         <Main>

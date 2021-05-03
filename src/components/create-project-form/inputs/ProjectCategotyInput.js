@@ -48,7 +48,7 @@ export const ProjectCategoryInput = ({
                 key={`${category.name}-checkbox`}
                 id={category.name}
                 name={category.name}
-                ref={register}
+                {...register(category.name)}
                 defaultChecked={
                   currentValue
                     ? currentValue[category.name][0] === 'on'

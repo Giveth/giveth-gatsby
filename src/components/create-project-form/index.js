@@ -10,7 +10,7 @@ import {
   Link,
   Text
 } from 'theme-ui'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import {
   GET_PROJECT_BY_ADDRESS,
   WALLET_ADDRESS_IS_VALID
@@ -37,6 +37,7 @@ import ConfirmationModal from '../confirmationModal'
 import Toast from '../toast'
 
 const CreateProjectForm = props => {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [inputIsLoading, setInputLoading] = useState(false)
   const [incompleteProfile, setIncompleteProfile] = useState(false)
@@ -68,7 +69,7 @@ const CreateProjectForm = props => {
       }
 
       // usePopup?.triggerPopup('WelcomeLoggedOut')
-      // navigate('/', { state: { welcome: true } })
+      // router.push('/', { state: { welcome: true } })
     }
   }, [])
 
@@ -226,6 +227,7 @@ const CreateProjectForm = props => {
         }
         project.projectWalletAddress = projectWalletAddress
       }
+      project.projectDescription = project?.projectDescription || ''
 
       window?.localStorage.setItem(
         'create-form',
@@ -248,7 +250,7 @@ const CreateProjectForm = props => {
     }
   }
 
-  const stepTransitions = useTransition(currentStep, null, {
+  const stepTransitions = useTransition(currentStep, {
     from: {
       opacity: 0,
       transform: 'translate3d(100%,0,0)',
@@ -259,7 +261,6 @@ const CreateProjectForm = props => {
   })
 
   const [showCloseModal, setShowCloseModal] = useState(false)
-
   useEffect(() => {
     const checkProjectWallet = async () => {
       if (!user) return null
@@ -279,7 +280,7 @@ const CreateProjectForm = props => {
       setLoading(false)
     }
     if (!isLoggedIn) {
-      navigate('/', { state: { welcome: true, flashMessage } })
+      router.push('/', { state: { welcome: true, flashMessage } })
     } else if (!user?.name || !user?.email || user.email === '') {
       usePopup?.triggerPopup('IncompleteProfile')
       setIncompleteProfile(true)
@@ -374,7 +375,7 @@ const CreateProjectForm = props => {
                     <Spinner variant='spinner.medium' />
                   </Flex>
                 ) : (
-                  stepTransitions.map(({ item, props, key }) => {
+                  stepTransitions((props, item, key) => {
                     const Step = steps[item]
                     return <Step key={key} animationStyle={props} />
                   })
@@ -397,17 +398,6 @@ const CreateProjectForm = props => {
   )
 }
 
-/** Validating propTypes */
-CreateProjectForm.propTypes = {
-  onSubmit: PropTypes.func
-}
-
-/** Default Props */
-CreateProjectForm.defaultProps = {
-  onSubmit: () => {}
-}
-
-/** export the typeform component */
 export default CreateProjectForm
 
 function isDescriptionStep(currentStep) {

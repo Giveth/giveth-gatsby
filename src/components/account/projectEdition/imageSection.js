@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Flex, Grid, Box, Image, Text } from 'theme-ui'
+import NextImage from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import { toBase64 } from '../../../utils'
 import styled from '@emotion/styled'
@@ -9,7 +10,6 @@ import ProjectImageGallery1 from '../../../images/svg/create/projectImageGallery
 import ProjectImageGallery2 from '../../../images/svg/create/projectImageGallery2.svg'
 import ProjectImageGallery3 from '../../../images/svg/create/projectImageGallery3.svg'
 import ProjectImageGallery4 from '../../../images/svg/create/projectImageGallery4.svg'
-import placeHolder from '../../../images/placeholder.png'
 
 const Selection = styled(Box)`
   cursor: pointer;
@@ -90,9 +90,12 @@ function ImageSection({ image, register }) {
             ref={register}
           />
           {displayImage === undefined ? (
-            <Image
-              src={placeHolder}
-              sx={{ objectFit: 'cover', maxHeight: '150px' }}
+            <NextImage
+              src={'/images/placeholder.png'}
+              width='100%'
+              height='100%'
+              objectFit='cover'
+              // sx={{ objectFit: 'cover', maxHeight: '150px' }}
             />
           ) : displayImage?.startsWith('data:') ||
             displayImage?.startsWith('http') ? (

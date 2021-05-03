@@ -233,9 +233,10 @@ const ProjectsList = props => {
           margin: '1.5em 0'
         }}
       >
-        <Text
-          style={{
-            width: '50%'
+        <Flex
+          sx={{
+            flexDirection: 'row',
+            alignItems: 'flex-end'
           }}
         >
           <Box
@@ -250,14 +251,14 @@ const ProjectsList = props => {
             Projects{' '}
           </Box>
           {totalCount && (
-            <span
+            <Text
               sx={{
-                variant: 'headings.h5',
+                variant: 'headings.h4',
                 color: 'bodyLight'
               }}
-            >{`(${totalCount})`}</span>
+            >{`(${totalCount})`}</Text>
           )}
-        </Text>
+        </Flex>
         <Link href='/create'>
           <CreateLink>Create a project</CreateLink>
         </Link>

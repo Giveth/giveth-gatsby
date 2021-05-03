@@ -1,17 +1,9 @@
 import Link from 'next/link'
+import NextImage from 'next/image'
 import { useMediaQuery } from 'react-responsive'
-import { Grid, Box, Flex, Button, Image, Text, jsx } from 'theme-ui'
+import { Grid, Box, Flex, Image, Button, Text, jsx } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import styled from '@emotion/styled'
-
-// import graphics
-// import decoratorCloud1 from '../../images/decorator-cloud1.svg'
-// import decoratorCloud2 from '../../images/decorator-cloud2.svg'
-// import decoratorFizzysquare from '../../images/decorator-fizzy-square-rotated.svg'
-import DecoratorAltruistic from '../../images/svg/general/decorators/a.svg'
-import DecoratorDecentralized from '../../images/svg/general/decorators/b.svg'
-import DecoratorCommunity from '../../images/svg/general/decorators/c.svg'
-// import decoratorPuzzleguy from '../../images/people-puzzle.svg'
 
 const Main = styled(Grid)`
   position: relative;
@@ -95,7 +87,11 @@ const InfoSection = ({ content }) => {
         sx={{ justifyItems: 'center', textAlign: 'center' }}
       >
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
-          <DecoratorDecentralized />
+          <NextImage
+            src='/images/svg/general/decorators/b.svg'
+            width='100%'
+            height='100%'
+          />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -110,7 +106,11 @@ const InfoSection = ({ content }) => {
           </Text>
         </Flex>
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
-          <DecoratorAltruistic />
+          <NextImage
+            src='/images/svg/general/decorators/a.svg'
+            width='100%'
+            height='100%'
+          />
           <Text
             sx={{
               variant: 'headings.h4',
@@ -130,7 +130,11 @@ const InfoSection = ({ content }) => {
           </Text>
         </Flex>
         <Flex sx={{ maxWidth: '320px', flexDirection: 'column' }}>
-          <DecoratorCommunity />
+          <NextImage
+            src='/images/svg/general/decorators/c.svg'
+            width='100%'
+            height='100%'
+          />
           <Text
             sx={{
               variant: 'headings.h4',

@@ -15,14 +15,16 @@ const FinalVerificationStep = ({
 }) => {
   const chosenCategories = []
   for (const category in formData.projectCategory) {
-    if (formData.projectCategory[category].length !== 0) {
+    if (
+      !!formData.projectCategory[category] &&
+      formData.projectCategory[category]?.length !== 0
+    ) {
       chosenCategories.push(
         categoryList?.filter(categoryItem => categoryItem.name === category)[0]
           ?.value
       )
     }
   }
-
   // IF WE WANT TO REMOVE THE IMG TAG
   // const formattedDescription = formData?.projectDescription?.replace(
   //   /<img .*?>/g,
@@ -145,18 +147,20 @@ const FinalVerificationStep = ({
             Edit
           </Button>
         </Flex>
-        <Text
-          sx={{
-            fontSize: 3,
-            fontFamily: 'body',
-            color: 'secondary',
-            mt: '9px',
-            width: '500px',
-            wordWrap: 'break-word'
-          }}
-        >
-          <RichTextViewer content={desc} />
-        </Text>
+        {desc && (
+          <Text
+            sx={{
+              fontSize: 3,
+              fontFamily: 'body',
+              color: 'secondary',
+              mt: '9px',
+              width: '500px',
+              wordWrap: 'break-word'
+            }}
+          >
+            <RichTextViewer content={desc} />
+          </Text>
+        )}
       </>
       <>
         <Flex>
@@ -195,7 +199,7 @@ const FinalVerificationStep = ({
           }}
         >
           {chosenCategories
-            ?.filter(i => !!i)
+            ?.filter(i => !!i && i !== false)
             ?.map(category => {
               return (
                 <Text

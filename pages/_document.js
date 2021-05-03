@@ -41,49 +41,6 @@ export default class extends Document {
             defer
           />
           <script src="/node_modules/quill-video-resize-module/video-resize.min.js" />
-          <script type="text/javascript">
-            {`
-          let map;
-          function initMap(setLocation) {
-              map = new google.maps.Map(document.getElementById('map'), {
-                  center: {lat: 0, lng: 0 },
-                  zoom: 1,
-                  mapTypeControl: false,
-                  panControl: false,
-                  zoomControl: false,
-                  streetViewControl: false
-              });
-              // Create the autocomplete object and associate it with the UI input control.
-              autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById("autocomplete"),
-                {
-                  types: ["geocode"],
-                }  
-              );
-              places = new google.maps.places.PlacesService(map);
-              autocomplete.addListener("place_changed",function(e){
-                onPlaceChanged(setLocation);
-              });
-          }
-          function onPlaceChanged(setLocation) {
-            const place = autocomplete.getPlace();
-            if (place) {
-              if (place.geometry) {
-                map.panTo(place.geometry.location);
-                var marker = new google.maps.Marker({
-                  position: place.geometry.location,
-                  map: map,
-                  title: place.formatted_address
-                });
-                map.setZoom(13);
-                setLocation(place.formatted_address)
-              } else {
-                document.getElementById("autocomplete").placeholder = "Search a Location";
-              }
-            }
-          }
-        `}
-          </script>
         </Head>
         <body>
           <InitializeColorMode />

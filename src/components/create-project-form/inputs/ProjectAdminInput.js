@@ -32,7 +32,7 @@ export const ProjectAdminInput = ({
           type='text'
           id='projectAdmin'
           name='projectAdmin'
-          ref={register}
+          {...register('projectAdmin')}
           defaultValue={currentValue}
           maxLength={55}
           placeholder='Project Admin'

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { Button, Text, jsx } from 'theme-ui'
+import { Button, Image, Text, jsx } from 'theme-ui'
 import theme from '../../utils/theme-ui'
 import useComponentVisible from '../../utils/useComponentVisible'
 import Jdenticon from 'react-jdenticon'
@@ -140,6 +140,7 @@ const UserDetails = () => {
   const handleLogout = () => {
     logout()
   }
+
   return (
     <div ref={ref}>
       <StyledButton
@@ -147,14 +148,14 @@ const UserDetails = () => {
         onClick={() => setIsComponentVisible(!isComponentVisible)}
       >
         {user?.avatar ? (
-          <img
+          <Image
             alt=''
-            style={{
+            sx={{
               width: '30px',
               height: '30px',
               borderRadius: '15px'
             }}
-            onError={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}
+            onerror={`this.onerror=null;this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqenVtmZ7dQULkiedSFuZ_YPmNonJGLDYGHA&usqp=CAU';`}
             src={user?.avatar}
             className='avatarimage'
           />

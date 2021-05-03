@@ -1,11 +1,11 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Box, Grid, Text, jsx } from 'theme-ui'
 import { useMediaQuery } from 'react-responsive'
 import styled from '@emotion/styled'
 import theme from '../utils/theme-ui'
 
 // import graphics
-import Logo from '../images/giveth-logo-blue.svg'
 import SocialNetworks from './content/SocialNetworks'
 
 import { FiExternalLink } from 'react-icons/fi'
@@ -131,7 +131,11 @@ const Footer = () => {
       <SiteLinks gap={0} pt={[1, 4, 6]}>
         {!isMobile && (
           <Link href='/'>
-            <Logo width='40px' height='40px' />
+            <Image
+              src={'/images/giveth-logo-blue.svg'}
+              width='40px'
+              height='40px'
+            />
           </Link>
         )}
         <InnerGrid>
