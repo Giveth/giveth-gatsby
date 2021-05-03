@@ -9,6 +9,7 @@ import theme from '../utils/theme-ui'
 import Header from './header'
 import GlobalProvider from '../contextProvider/globalProvider'
 import { PopupProvider } from '../contextProvider/popupProvider'
+import { QueryParamProvider } from '../contextProvider/queryParamProvider'
 
 import Dialog from './dialog'
 import GithubIssue from './GithubIssue'
@@ -235,12 +236,14 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
       <WalletProvider>
         <PopupProvider>
           <GlobalProvider>
-            <Provider template={AlertTemplate} {...AlertOptions}>
-              <GithubIssue fixed={true} />
-              <XDAIPopup />
-              <Template />
-              <Popup />
-            </Provider>
+            <QueryParamProvider>
+              <Provider template={AlertTemplate} {...AlertOptions}>
+                <GithubIssue fixed={true} />
+                <XDAIPopup />
+                <Template />
+                <Popup />
+              </Provider>
+            </QueryParamProvider>
           </GlobalProvider>
           <StyledToastContainer />
         </PopupProvider>

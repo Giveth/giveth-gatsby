@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import React from 'react'
 import { getEtherscanPrefix, titleCase } from '../../utils'
 import Pagination from 'react-js-pagination'

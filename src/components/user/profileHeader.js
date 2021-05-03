@@ -1,6 +1,6 @@
 import React from 'react'
 import Avatar from '../avatar'
-import { Text, Box, Link, Flex } from 'theme-ui'
+import { Text, Link, Flex } from 'theme-ui'
 import { getEtherscanPrefix } from '../../utils'
 
 export const ProfileHeader = props => {
@@ -8,9 +8,10 @@ export const ProfileHeader = props => {
   const etherscanPrefix = getEtherscanPrefix()
   const TitleBox = ({ title, content }) => {
     return (
-      <Box
+      <Flex
         sx={{
           width: '100%',
+          flexDirection: 'column',
           padding: '20px 24px',
           margin: '0 10px',
           backgroundColor: 'softGray',
@@ -28,7 +29,7 @@ export const ProfileHeader = props => {
           {title}
         </Text>
         <Text sx={{ color: 'primary', fontSize: 7 }}>{content}</Text>
-      </Box>
+      </Flex>
     )
   }
 
@@ -56,7 +57,7 @@ export const ProfileHeader = props => {
           size={100}
           address={user?.walletAddress}
         />
-        <Box sx={{ ml: [0, '27px', '27px'] }}>
+        <Flex sx={{ flexDirection: 'column', ml: [0, '27px', '27px'] }}>
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Link
             sx={{ textDecoration: 'none' }}
@@ -93,7 +94,7 @@ export const ProfileHeader = props => {
               {user?.url}
             </Text>
           </Link>
-        </Box>
+        </Flex>
       </Flex>
       <Flex
         sx={{
