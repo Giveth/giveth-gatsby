@@ -258,7 +258,7 @@ const Layout = ({ isHomePage, children, asDialog, noHeader, noFooter }) => {
           <GlobalProvider>
             <ThemeProvider theme={theme}>
               <Provider template={AlertTemplate} {...AlertOptions}>
-                <GithubIssue fixed={true} />
+                <GithubIssue fixed />
                 <XDAIPopup />
                 <Template />
                 <Popup />

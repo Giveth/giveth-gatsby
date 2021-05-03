@@ -35,7 +35,7 @@ const LongBtn = styled(Flex)`
   margin: 20px 0;
 `
 
-function ChangeNetworkPopup({ close }) {
+function ChangeNetworkPopup ({ close }) {
   return (
     <Flex
       sx={{
@@ -97,17 +97,17 @@ function ChangeNetworkPopup({ close }) {
   )
 }
 
-function WelcomeLoggedOutPopup({ close }) {
+function WelcomeLoggedOutPopup ({ close }) {
   const { isLoggedIn, login } = useWallet()
 
   if (isLoggedIn) {
     close()
     return null
   }
-  return <LoginModal isOpen={true} close={close} login={login} />
+  return <LoginModal isOpen close={close} login={login} />
 }
 
-function IncompleteProfilePopup({ close }) {
+function IncompleteProfilePopup ({ close }) {
   return (
     <Flex
       sx={{
@@ -171,7 +171,7 @@ function IncompleteProfilePopup({ close }) {
   )
 }
 
-function InsufficientFundsPopup({ close }) {
+function InsufficientFundsPopup ({ close }) {
   return (
     <Flex
       sx={{
@@ -242,7 +242,7 @@ function InsufficientFundsPopup({ close }) {
   )
 }
 
-function SharePopup() {
+function SharePopup () {
   const usePopup = React.useContext(PopupContext)
   const { value } = usePopup
   const { title, description, slug } = value?.extra
@@ -289,7 +289,7 @@ function SharePopup() {
   )
 }
 
-function Popup() {
+function Popup () {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
   const setView = () => {

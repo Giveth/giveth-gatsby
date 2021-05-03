@@ -5,7 +5,7 @@ import detectEthereumProvider from '@metamask/detect-provider'
 // TODO: SET wallet address to this link
 const metamask = {
   isInitialized: false,
-  supportLink: `https://etherscan.io/address/`,
+  supportLink: 'https://etherscan.io/address/',
   setweb3: function (provider) {
     const web3Inst = new Web3(provider)
     metamask.web3 = web3Inst
@@ -36,7 +36,7 @@ const metamask = {
     return true
   },
   logout: async () => {
-    //No need to logout of Torus it happens automatically when the user closes the window
+    // No need to logout of Torus it happens automatically when the user closes the window
     // wallet.torus.logout()
   },
   isLoggedIn: () => {
@@ -84,7 +84,7 @@ export const wallets = {
           }
         }
       })
-      //await torus.login()
+      // await torus.login()
       wallets.torus.torus = torus
       wallets.torus.setweb3(torus.provider)
       wallets.torus.provider = torus.provider
