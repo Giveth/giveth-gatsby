@@ -1,17 +1,16 @@
-/** @jsx jsx */
 import React, { useContext, useState } from 'react'
-import { Link, navigate } from 'gatsby'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { useQueryParams, StringParam } from 'use-query-params'
 import ProjectCard from '../projectListing'
 import ProjectEdition from './projectEdition/index'
 import styled from '@emotion/styled'
 import theme from '../../utils/theme-ui'
-import { Box, Grid, Text, jsx } from 'theme-ui'
+import { Flex, Grid, Text, jsx } from 'theme-ui'
 import DarkClouds from '../../images/svg/general/decorators/dark-clouds.svg'
-import RaisedHand from '../../images/decorator-raised-one-hand.png'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
-const SpecialCard = styled(Link)`
+const SpecialCard = styled.div`
   display: flex;
   width: 100%;
   height: 240px;
@@ -39,6 +38,7 @@ const RaisedHandImg = styled.img`
 `
 
 const MyProjects = props => {
+  const router = useRouter()
   const { projects, edit } = props
 
   const [editProject, setEditProject] = useState(edit)
@@ -62,7 +62,7 @@ const MyProjects = props => {
   }
 
   if (!isLoggedIn) {
-    navigate('/', { state: { welcome: true } })
+    router.push('/', { state: { welcome: true } })
   }
   return (
     <>
@@ -83,43 +83,44 @@ const MyProjects = props => {
             />
           )
         })}
-        <SpecialCard
-          href='/create'
-          sx={{ cursor: 'pointer', textDecoration: 'none' }}
-        >
-          {' '}
-          <DarkClouds
-            style={{ position: 'absolute', top: '41px', right: '34px' }}
-          />
-          <Box
-            sx={{
-              width: '60%',
-              pb: 2,
-              pt: 4,
-              textAlign: 'center',
-              alignSelf: 'center',
-              textDecoration: 'none'
-            }}
-          >
-            <Text
+        <Link href='/create'>
+          <SpecialCard sx={{ cursor: 'pointer', textDecoration: 'none' }}>
+            {' '}
+            <DarkClouds
+              style={{ position: 'absolute', top: '41px', right: '34px' }}
+            />
+            <Flex
               sx={{
-                variant: 'text.default',
-                color: 'bodyLight'
+                flexDirection: 'column',
+                cursor: 'pointer',
+                width: '60%',
+                pb: 2,
+                pt: 4,
+                textAlign: 'center',
+                alignSelf: 'center',
+                textDecoration: 'none'
               }}
             >
-              Start raising funds
-            </Text>
-            <Text
-              sx={{
-                variant: 'headings.h4',
-                color: 'background'
-              }}
-            >
-              Create a Project
-            </Text>
-          </Box>
-          <RaisedHandImg src={RaisedHand} />
-        </SpecialCard>
+              <Text
+                sx={{
+                  variant: 'text.default',
+                  color: 'bodyLight'
+                }}
+              >
+                Start raising funds
+              </Text>
+              <Text
+                sx={{
+                  variant: 'headings.h4',
+                  color: 'background'
+                }}
+              >
+                Create a Project
+              </Text>
+            </Flex>
+            <RaisedHandImg src={'/images/decorator-raised-one-hand.png'} />
+          </SpecialCard>
+        </Link>
       </Grid>
     </>
   )

@@ -1,6 +1,5 @@
-/** @jsx jsx */
 import React from 'react'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import { jsx, Text, Flex, Spinner, Box } from 'theme-ui'
 import { useQueryParams, StringParam } from 'use-query-params'
 import { useQuery } from '@apollo/client'
@@ -27,6 +26,7 @@ const UserSpan = styled.span`
 `
 
 const AccountPage = props => {
+  const router = useRouter()
   const { user, isLoggedIn } = useWallet()
   const fromWalletAddress = user.getWalletAddress()
   const userWallets = user.walletAddresses
@@ -47,7 +47,6 @@ const AccountPage = props => {
     data: StringParam
   })
   const isSSR = typeof window === 'undefined'
-
   if (dataLoading || projectsLoading) {
     return (
       <>
@@ -59,7 +58,7 @@ const AccountPage = props => {
   }
 
   if (!isLoggedIn) {
-    navigate('/', { state: { welcome: true } })
+    router.push('/', { state: { welcome: true } })
     return null
   }
 

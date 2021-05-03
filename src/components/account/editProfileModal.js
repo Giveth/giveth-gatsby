@@ -38,7 +38,14 @@ const customStyles = {
 }
 
 const InputBox = props => {
-  const { title, placeholderText, name, register, errors, refExtras } = props
+  const {
+    title,
+    placeholderText,
+    name,
+    register,
+    errors,
+    refExtras = null
+  } = props
   return (
     <Box sx={{ mt: 3, mb: 2, width: '100%' }}>
       <Text
@@ -49,7 +56,7 @@ const InputBox = props => {
       </Text>
       <Input
         name={name}
-        ref={register(refExtras)}
+        {...register(name, refExtras)}
         sx={{
           width: '100%',
           fontFamily: 'body',
@@ -155,35 +162,35 @@ function EditProfileModal(props) {
               size={100}
               address={user.getWalletAddress()}
             />
-            <Box sx={{ ml: '27px' }}>
+            <Flex sx={{ flexDirection: 'column', ml: '27px' }}>
               <Text sx={{ color: 'secondary', fontSize: 7 }}>
                 {wallet?.user?.name}
               </Text>
               <Text sx={{ color: 'bodyDark', fontSize: 3 }}>
                 {wallet?.user?.email}
               </Text>
-            </Box>
+            </Flex>
           </Flex>
           <InputBox
             title='First Name'
             name='firstName'
             placeholderText='First Name'
-            register={register}
             errors={errors}
+            register={register}
           />
           <InputBox
             title='Last Name'
             placeholderText='Last Name'
             name='lastName'
-            register={register}
             errors={errors}
+            register={register}
           />
           <InputBox
             title='Email'
             placeholderText='Email address'
             name='email'
-            register={register}
             errors={errors}
+            register={register}
             refExtras={{
               // required: 'Required',
               pattern: {
@@ -196,15 +203,15 @@ function EditProfileModal(props) {
             title='Location'
             placeholderText='Location'
             name='location'
-            register={register}
             errors={errors}
+            register={register}
           />
           <InputBox
             title='Website or URL'
             placeholderText='website'
             name='url'
-            register={register}
             errors={errors}
+            register={register}
           />
           <Flex
             sx={{ flexDirection: 'row', width: '100%', alignItems: 'center' }}

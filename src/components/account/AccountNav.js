@@ -1,5 +1,4 @@
-/** @jsx jsx */
-import { jsx, Text, Box } from 'theme-ui'
+import { jsx, Flex, Text, Box } from 'theme-ui'
 import Link from 'next/link'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
@@ -31,7 +30,7 @@ const AccountNav = props => {
     logout()
   }
   return (
-    <Box sx={{ pr: '8%' }}>
+    <Flex sx={{ flexDirection: 'column', pr: '8%' }}>
       <Text
         sx={{
           fontFamily: 'heading',
@@ -43,7 +42,7 @@ const AccountNav = props => {
       >
         My Account
       </Text>
-      <Box sx={{ maxWidth: '80%' }}>
+      <Flex sx={{ flexDirection: 'column', maxWidth: '80%' }}>
         {options.map((i, index) => {
           return (
             <a
@@ -75,8 +74,14 @@ const AccountNav = props => {
             </a>
           )
         })}
-      </Box>
-      <Box sx={{ mt: ['35px', '70px', '70px'], maxWidth: '60%' }}>
+      </Flex>
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          mt: ['35px', '70px', '70px'],
+          maxWidth: '60%'
+        }}
+      >
         <Link
           href={`${wallet?.supportLink}/${user.getWalletAddress()}`}
           target='_blank'
@@ -118,8 +123,8 @@ const AccountNav = props => {
         <Link href='/' sx={{ textDecoration: 'none' }} onClick={handleLogout}>
           <Text sx={{ mb: '8px', variant: 'links.grey' }}>Sign Out</Text>
         </Link>
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   )
 }
 export default AccountNav

@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import { jsx, Text, Flex, Box } from 'theme-ui'
 import Link from 'next/link'
 import { BsArrowLeft } from 'react-icons/bs'
@@ -14,7 +13,7 @@ const UserSpan = styled.span`
   align-items: center;
   justify-self: end;
 `
-const CreateLink = styled(Link)`
+const CreateLink = styled.div`
   text-decoration: none;
   font-family: 'Red Hat Display', sans-serif;
   text-transform: uppercase;
@@ -37,34 +36,38 @@ const AccountTop = props => {
         height: '128px'
       }}
     >
-      <Link
-        href='/'
-        sx={{
-          textDecoration: 'none',
-          display: 'flex',
-          alignItems: 'center',
-          width: '80px',
-          justifyContent: 'space-between',
-          variant: 'links.default'
-        }}
-      >
-        <BsArrowLeft size='24px' />
-        <Text
-          sx={{
-            color: 'primary'
+      <Link href='/'>
+        <span
+          href='/'
+          style={{
+            cursor: 'pointer',
+            textDecoration: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            width: '80px',
+            justifyContent: 'space-between',
+            variant: 'links.default'
           }}
         >
-          Giveth
-        </Text>
+          <BsArrowLeft size='24px' color={theme.colors.primary} />
+          <Text
+            sx={{
+              color: 'primary'
+            }}
+          >
+            Giveth
+          </Text>
+        </span>
       </Link>
       <Flex>
         <UserSpan>
           {isMobile ? null : (
-            <span>
-              <CreateLink href={isDonation ? '/projects' : '/create'}>
+            <Link href={isDonation ? '/projects' : '/create'}>
+              <CreateLink>
                 <Text
                   sx={{
                     color: 'primary',
+                    cursor: 'pointer',
                     '&:hover': {
                       color: 'accent'
                     }
@@ -73,7 +76,7 @@ const AccountTop = props => {
                   {isDonation ? 'Donate' : 'Create a project'}
                 </Text>
               </CreateLink>
-            </span>
+            </Link>
           )}
           <img src={iconVerticalLine} alt='' />
           {/* <Login onLogin={onLogin} balance={balance} /> */}

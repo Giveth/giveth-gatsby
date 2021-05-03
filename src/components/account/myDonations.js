@@ -1,9 +1,8 @@
-/** @jsx jsx */
 import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import { ProjectContext } from '../../contextProvider/projectProvider'
 import { getEtherscanPrefix, titleCase } from '../../utils'
-import { navigate } from 'gatsby'
+import { useRouter } from 'next/router'
 import Pagination from 'react-js-pagination'
 import SearchIcon from '../../images/svg/general/search-icon.svg'
 import theme from '../../utils/theme-ui'
@@ -16,6 +15,8 @@ import { FiCopy, FiExternalLink } from 'react-icons/fi'
 
 // import iconManifest from '../../../node_modules/cryptocurrency-icons/manifest.json'
 // import ETHIcon from '../../../node_modules/cryptocurrency-icons/svg/color/eth.svg'
+import iconManifest from '../../../public/assets/cryptocurrency-icons/manifest.json'
+const ETHIcon = '/assets/cryptocurrency-icons/32/color/eth.png'
 
 dayjs.extend(localizedFormat)
 
@@ -155,6 +156,7 @@ const FilterBox = styled(Flex)`
 `
 
 const MyDonations = props => {
+  const router = useRouter()
   const options = ['All Donations', 'Fiat', 'Crypto']
   // const { user } = useWallet()
   const [currentDonations, setCurrentDonations] = React.useState([])
@@ -216,22 +218,16 @@ const MyDonations = props => {
     }
   )
 
-  const getIcon = async currency => {
-    const icon = await import(
-      `../../../node_modules/cryptocurrency-icons/32/color/${
-        currency.toLowerCase() || 'eth'
-      }.png`
-    )
-    return icon?.default
-  }
-
   const populateIcons = async item => {
-    // const found = iconManifest?.find(
-    //   i => i?.symbol === item?.currency.toUpperCase()
-    // )
-    const found = null
-    let icon = null
-    if (found) icon = await getIcon(item?.currency)
+    let img = ''
+    const found = iconManifest?.find(
+      i => i?.symbol === item?.symbol?.toUpperCase()
+    )
+    let icon = found
+      ? `/assets/cryptocurrency-icons/32/color/${
+          item?.symbol?.toLowerCase() || 'eth'
+        }.png`
+      : `/assets/tokens/${item?.symbol?.toUpperCase()}.png`
     return { ...item, icon }
   }
 
@@ -321,7 +317,9 @@ const MyDonations = props => {
                           color: 'primary',
                           cursor: 'pointer'
                         }}
-                        onClick={() => navigate(`/project/${i?.project?.slug}`)}
+                        onClick={() =>
+                          router.push(`/project/${i?.project?.slug}`)
+                        }
                       >
                         {titleCase(i?.project?.title) || i?.donor}
                       </Text>
@@ -340,7 +338,7 @@ const MyDonations = props => {
                         }
                         alt={i.currency}
                         onError={ev => {
-                          // ev.target.src = ETHIcon
+                          ev.target.src = ETHIcon
                           ev.target.onerror = null
                         }}
                         style={{

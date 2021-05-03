@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import React, { useState, useEffect } from 'react'
 import { useWallet } from '../../contextProvider/WalletProvider'
 import { Button, Box, Flex, Text, jsx } from 'theme-ui'
@@ -44,7 +43,9 @@ const MyAccount = ({ info }) => {
           size={100}
           address={user.getWalletAddress()}
         />
-        <Box sx={{ ml: '27px', textAlign: 'flex-end' }}>
+        <Flex
+          sx={{ flexDirection: 'column', ml: '27px', textAlign: 'flex-end' }}
+        >
           <Text sx={{ color: 'secondary', fontSize: 7 }}>{user?.name}</Text>
           <Text sx={{ color: 'bodyDark', fontSize: 3 }}>{user?.email}</Text>
           <Text
@@ -58,7 +59,7 @@ const MyAccount = ({ info }) => {
           >
             Edit Public Profile
           </Text>
-        </Box>
+        </Flex>
       </Flex>
       <Flex sx={{ mt: '40px', alignItems: 'center' }}>
         <Text sx={{ textTransform: 'uppercase', fontSize: 0 }}>
@@ -80,8 +81,9 @@ const MyAccount = ({ info }) => {
         {user.getWalletAddress()}
       </Text>
       <Flex sx={{ mt: '40px' }}>
-        <Box
+        <Flex
           sx={{
+            flexDirection: 'column',
             width: ['50%', '30%', '30%'],
             height: '100px',
             paddingTop: '20px',
@@ -102,9 +104,10 @@ const MyAccount = ({ info }) => {
           <Text sx={{ color: 'primary', fontSize: 7 }}>
             {info?.myDonations}
           </Text>
-        </Box>
-        <Box
+        </Flex>
+        <Flex
           sx={{
+            flexDirection: 'column',
             width: ['50%', '30%', '30%'],
             height: '100px',
             paddingTop: '20px',
@@ -126,7 +129,7 @@ const MyAccount = ({ info }) => {
           <Text sx={{ color: 'primary', fontSize: 7 }}>
             {info?.myProjects || 0}
           </Text>
-        </Box>
+        </Flex>
       </Flex>
       {/* <Box
         sx={{
