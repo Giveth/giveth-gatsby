@@ -1,7 +1,4 @@
 
-import { ProjectNameInput } from '../components/create-project-form/inputs/ProjectNameInput';
-import { isAddressENS } from '../services/wallet';
-import { Location } from '@reach/router';
 import {
   getLocalStorageUserLabel,
   getLocalStorageTokenLabel

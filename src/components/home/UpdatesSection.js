@@ -94,7 +94,6 @@ const UpdatesSection = ({ mediumPosts }) => {
                     }}
                   >
                     {node?.title}
-                    aa
                   </Text>
                   <Text sx={{ variant: 'text.large', color: 'secondary' }}>
                     {/* {previewContent.subtitle} */}
