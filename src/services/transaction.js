@@ -95,11 +95,9 @@ export async function getTxFromHash(transactionHash, isXDAI) {
         ? process.env.NEXT_PUBLIC_XDAI_NODE_HTTP_URL
         : process.env.NEXT_PUBLIC_ETHEREUM_NODE
     )
-    console.log({ web3 })
     const tx = await web3.eth.getTransaction(transactionHash)
     return tx
   } catch (error) {
-    console.log({ error })
     return false
   }
 }

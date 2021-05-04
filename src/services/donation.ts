@@ -1,4 +1,3 @@
-import Logger from '../Logger'
 import { SAVE_DONATION, SAVE_DONATION_TRANSACTION } from '../apollo/gql/donations'
 import { client } from '../apollo/client'
 

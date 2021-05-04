@@ -1,5 +1,5 @@
 import { jsx, Text, Box } from "theme-ui";
-// import Seo from "../src/components/seo";
+import Seo from "../src/components/seo";
 import styled from "@emotion/styled";
 import Layout from "../src/components/layout";
 
@@ -18,7 +18,7 @@ const Tos = ({ data }) => {
   // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      {/* <Seo title="Terms of Use" /> */}
+      <Seo title="Terms of Use" />
       <Main sx={{ fontFamily: "heading" }}>
         <Container>
           <h1>TERMS OF USE</h1>

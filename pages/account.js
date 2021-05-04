@@ -1,12 +1,11 @@
 import React from "react";
 import AccountIndex from "../src/components/account";
-// import Seo from "../src/components/seo";
+import Seo from "../src/components/seo";
 import Layout from "../src/components/layout";
-// TODO: ADD SEO
 const AccountPage = (props) => {
   return (
     <Layout noHeader>
-      {/* <Seo /> */}
+      <Seo />
       <AccountIndex />
     </Layout>
   );

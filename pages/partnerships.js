@@ -2,7 +2,7 @@ import { jsx, Flex, Grid, Text, Box, Button } from "theme-ui";
 import theme from "../src/utils/theme-ui";
 import { fetchEntries } from "../src/utils/contentfulPosts";
 import React from "react";
-// import Seo from '../components/seo'
+import Seo from "../src/components/seo";
 import Link from "next/link";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS } from "@contentful/rich-text-types";
@@ -105,7 +105,7 @@ const Partnerships = ({ friendsLogos, partners }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 825px)" });
   return (
     <Layout>
-      {/* <Seo title='Our partnerships' /> */}
+      <Seo title="Our partnerships" />
       {!isMobile ? (
         <Decorator>
           <img

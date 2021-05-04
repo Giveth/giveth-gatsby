@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { client } from "../../src/apollo/client";
 import { jsx, Text, Flex, Spinner } from "theme-ui";
 import Layout from "../../src/components/layout";
-// import Seo from '../src/components/seo'
+import Seo from "../src/components/seo";
 import { PublicProfileView } from "../../src/components/user";
 import { FETCH_USER_PROJECTS } from "../../src/apollo/gql/projects";
 import { GET_USER_BY_ADDRESS } from "../../src/apollo/gql/auth";
@@ -13,7 +13,7 @@ const User = (props) => {
 
   return (
     <Layout>
-      {/* <Seo title={user?.name ? `${user?.name} at Giveth` : 'Giveth Profile'} /> */}
+      <Seo title={user?.name ? `${user?.name}` : "Giveth Profile"} />
       {user ? (
         <PublicProfileView {...props} />
       ) : (

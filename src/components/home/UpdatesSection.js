@@ -17,12 +17,11 @@ const Container = styled(Box)`
 
 const UpdatesSection = ({ mediumPosts }) => {
   // import Object containing the last two Medium Posts with a hook
-  // TODO: FIX MEDIUM POSTS FOR NEXTJS
   // const mediumPosts = useMediumFeed()
 
   // use Media Query to check device width
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
-
+  // return null
   return (
     <React.Fragment>
       {isMobile ? null : (
@@ -57,36 +56,35 @@ const UpdatesSection = ({ mediumPosts }) => {
             {/**
              * Map medium content nodes from node Object and destructure to variables
              * */}
-            {mediumPosts.map(({ node }) => {
-              const {
-                id,
-                title,
-                previewContent,
-                author,
-                createdAt,
-                virtuals,
-                uniqueSlug
-              } = node
+            {mediumPosts?.map(node => {
+              // const {
+              //   id,
+              //   title,
+              //   previewContent,
+              //   author,
+              //   createdAt,
+              //   virtuals,
+              //   uniqueSlug
+              // } = node
+              // const published = new Date(createdAt.toString())
 
-              const published = new Date(createdAt.toString())
+              // const minutesToRead = Math.round(virtuals.readingTime)
+              const minutesToRead = ''
 
-              const minutesToRead = Math.round(virtuals.readingTime)
-
-              const meta = `${minutesToRead} min read`
-
-              const url = 'https://medium.com/Giveth/' + uniqueSlug
+              // const meta = `${minutesToRead} min read`
+              const meta = ``
 
               return (
                 <Grid
                   columns={(1, 'auto')}
                   rows={6}
-                  key={id}
+                  key={node?.guid}
                   sx={{ maxWidth: '500px' }}
                   p={[2, 0, 0]}
                 >
                   <Text
                     as='a'
-                    href={url}
+                    href={node?.link}
                     target='_blank'
                     rel='noopener noreferrer'
                     sx={{
@@ -95,29 +93,31 @@ const UpdatesSection = ({ mediumPosts }) => {
                       textDecoration: 'none'
                     }}
                   >
-                    {title}
+                    {node?.title}
+                    aa
                   </Text>
                   <Text sx={{ variant: 'text.large', color: 'secondary' }}>
-                    {previewContent.subtitle}
+                    {/* {previewContent.subtitle} */}
                   </Text>
                   <Grid rows={2} gap={0}>
                     <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
-                      {author.name}
+                      {node?.author}
                     </Text>
 
                     <Text sx={{ variant: 'text.medium', color: 'bodyDark' }}>
-                      {new Intl.DateTimeFormat('en-US', {
+                      {/* {new Intl.DateTimeFormat('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: '2-digit'
-                      }).format(published)}
+                      }).format(node?.pubDate)} */}
+                      {node?.pubDate}
                       {' - '}
-                      {meta}
+                      {/* {meta} */}
                     </Text>
                   </Grid>
                   <Text
                     as='a'
-                    href={url}
+                    href={node?.link}
                     target='_blank'
                     rel='noopener noreferrer'
                     sx={{ variant: 'links.readmore' }}

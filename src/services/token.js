@@ -3,8 +3,7 @@ import * as Auth from '../services/auth'
 import { client } from '../apollo/client'
 import { DO_LOGIN, VALIDATE_TOKEN } from '../apollo/gql/auth'
 import Web3 from 'web3'
-// TODO: IMPLEMENT THIS FOR NEXT
-// import Logger from '../Logger'
+import Logger from '../Logger'
 /**
  * Ok the user has a token, but is it still valid?
  * @param {} user
@@ -23,7 +22,7 @@ export async function validateAuthToken(token) {
     return isValid
   } catch (error) {
     console.error('Error in token login', error)
-    // Logger.captureException(error)
+    Logger.captureException(error)
   }
 }
 
@@ -53,7 +52,7 @@ export async function getToken(user, signedMessage, isXDAI) {
       }
     } catch (error) {
       console.log('Error in token login', error)
-      // Logger.captureException(error)
+      Logger.captureException(error)
     }
   }
 }

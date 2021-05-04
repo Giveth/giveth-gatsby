@@ -4,7 +4,7 @@ import { client } from "../src/apollo/client";
 import { useState } from "react";
 import GivethContent from "../src/content/giveth.md";
 import Layout from "../src/components/layout";
-// import Seo from '../components/seo'
+import Seo from "../src/components/seo";
 import Hero from "../src/components/home/HeroSection";
 import InfoSection from "../src/components/home/InfoSection";
 import UpdatesSection from "../src/components/home/UpdatesSection";
@@ -41,7 +41,7 @@ const IndexContent = ({
         totalCount={allProject?.totalCount}
       />
       {!hideInfo === true ? <InfoSection content={content} /> : null}
-      <UpdatesSection mediumPosts={null} />
+      <UpdatesSection mediumPosts={mediumPosts} />
     </>
   );
 };
@@ -55,7 +55,7 @@ const IndexPage = (props) => {
 
   return (
     <Layout isHomePage="true">
-      {/* <Seo title='Home' /> */}
+      <Seo title="Home" />
       <IndexContent
         hideInfo={hideInfo}
         content={content}
@@ -87,7 +87,7 @@ export async function getServerSideProps() {
     props: {
       topProjects: response?.projects,
       content: mdContent?.data,
-      mediumPosts: mediumPosts || {},
+      mediumPosts: mediumPosts?.items?.slice(0, 2) || {},
     },
   };
 }

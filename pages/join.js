@@ -1,14 +1,14 @@
 import { jsx, Flex, Grid } from "theme-ui";
 import { fetchEntries } from "../src/utils/contentfulPosts";
 import Layout from "../src/components/layout";
-// import Seo from '../src/components/seo'
+import Seo from "../src/components/seo";
 import Hero from "../src/components/content/JoinPageHero";
 import JoinChatCard from "../src/components/content/JoinPageCard";
 
 const JoinPage = ({ joinChat }) => {
   return (
     <Layout>
-      {/* <Seo title='Join our community' /> */}
+      <Seo title="Join our community" />
       <Hero />
       <Flex sx={{ justifyContent: "center", backgroundColor: "lightestBlue" }}>
         <Grid

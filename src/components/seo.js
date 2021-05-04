@@ -7,26 +7,25 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Helmet } from 'react-helmet'
-import { useStaticQuery, graphql } from 'gatsby'
+import { NextSeo } from 'next-seo'
 
 const DEFAULT_SEO_IMAGE = 'https://i.imgur.com/uPFEgJu.png'
 
 function Seo({ description, lang, meta, title, image }) {
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-            description
-            author
-          }
-        }
-      }
-    `
-  )
-  const metaDescription = description || site.siteMetadata.description
+  // const { site } = useStaticQuery(
+  //   graphql`
+  //     query {
+  //       site {
+  //         siteMetadata {
+  //           title
+  //           description
+  //           author
+  //         }
+  //       }
+  //     }
+  //   `
+  // )
+  const metaDescription = description
   const base64Regex = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
   let metaImage = image
   if (base64Regex.test(image?.split(',')[1])) {
@@ -39,50 +38,32 @@ function Seo({ description, lang, meta, title, image }) {
   }
   // console.log({ metaImage })
   return (
-    <Helmet
-      htmlAttributes={{
-        lang
-      }}
+    <NextSeo
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
-      meta={[
-        {
-          name: 'description',
-          content: metaDescription
-        },
-        {
-          property: 'og:title',
-          content: title
-        },
-        {
-          property: 'og:description',
-          content: metaDescription
-        },
-        {
-          property: 'og:type',
-          content: 'website'
-        },
-        {
-          property: 'og:image',
-          content: metaImage
-        },
-        {
-          name: 'twitter:card',
-          content: 'summary'
-        },
-        {
-          name: 'twitter:creator',
-          content: site.siteMetadata.author
-        },
-        {
-          name: 'twitter:title',
-          content: title
-        },
-        {
-          name: 'twitter:description',
-          content: metaDescription
-        }
-      ].concat(meta)}
+      description={metaDescription}
+      canonical='https://www.giveth.io/'
+      titleTemplate={`%s | Giveth`}
+      openGraph={{
+        url: 'https://www.giveth.io/',
+        title: title,
+        description: metaDescription,
+        images: [
+          {
+            url: metaImage,
+            width: 800,
+            height: 600,
+            alt: 'Og Image Alt'
+          }
+          // {
+          //   url: 'https://www.example.ie/og-image-02.jpg',
+          //   width: 900,
+          //   height: 800,
+          //   alt: 'Og Image Alt Second',
+          // // },
+          // { url: 'https://www.example.ie/og-image-03.jpg' },
+          // { url: 'https://www.example.ie/og-image-04.jpg' },
+        ]
+      }}
     />
   )
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import _ from 'lodash'
 import styled from '@emotion/styled'
 import dynamic from 'next/dynamic'
 import { useMutation } from '@apollo/client'
@@ -248,29 +249,34 @@ const OnlyCrypto = props => {
 
   useEffect(() => {
     const setBalance = async () => {
-      const signer = getSigner(userWallet)
-      const account = ((await userWallet?.web3?.eth.getAccounts()) || [''])[0]
-      if (account) {
-        let balance
-        if (selectedToken?.address) {
-          const instance = new ethers.Contract(
-            selectedToken?.address,
-            tokenAbi,
-            signer
-          )
-          const decimals = ethers.BigNumber.from(
-            (await instance.decimals()) || 0
-          )
-          balance = ethers.utils.formatUnits(
-            (await instance.balanceOf(account)) || 0,
-            decimals
-          )
-        } else {
-          balance = ethers.utils.formatEther(
-            (await userWallet?.web3?.eth.getBalance(account)) || 0
-          )
+      try {
+        if (_.isEmpty(userWallet)) return
+        const signer = getSigner(userWallet)
+        const account = ((await userWallet?.web3?.eth.getAccounts()) || [''])[0]
+        if (account) {
+          let balance
+          if (selectedToken?.address) {
+            const instance = new ethers.Contract(
+              selectedToken?.address,
+              tokenAbi,
+              signer
+            )
+            const decimals = ethers.BigNumber.from(
+              (await instance.decimals()) || 0
+            )
+            balance = ethers.utils.formatUnits(
+              (await instance.balanceOf(account)) || 0,
+              decimals
+            )
+          } else {
+            balance = ethers.utils.formatEther(
+              (await userWallet?.web3?.eth.getBalance(account)) || 0
+            )
+          }
+          setSelectedTokenBalance(balance)
         }
-        setSelectedTokenBalance(balance)
+      } catch (error) {
+        console.log({ error })
       }
     }
     setBalance()
@@ -768,7 +774,6 @@ const OnlyCrypto = props => {
                 <SaveGasMessage>
                   <Image
                     src={'/images/icon-streamline-gas.svg'}
-                    style={{ marginRight: '12px' }}
                     height='18px'
                     width='18px'
                     alt=''
@@ -777,7 +782,8 @@ const OnlyCrypto = props => {
                     sx={{
                       variant: 'text.medium',
                       textAlign: 'left',
-                      color: 'background'
+                      color: 'background',
+                      marginLeft: '12px'
                     }}
                   >
                     Save on gas fees, switch to xDAI network.

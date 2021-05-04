@@ -1,7 +1,7 @@
 import { client } from "../../src/apollo/client";
 import DonatorView from "../../src/components/project/donatorView";
 import Layout from "../../src/components/layout";
-
+import Seo from "../../src/components/seo";
 import {
   GET_PROJECT_UPDATES,
   FETCH_PROJECT_BY_SLUG,
@@ -13,6 +13,14 @@ import { PROJECT_DONATIONS } from "../../src/apollo/gql/donations";
 const Project = (props) => {
   return (
     <Layout>
+      <Seo
+        title={
+          props?.project?.title
+            ? `Check out ${props?.project?.title}`
+            : "Check out this project!"
+        }
+        image={props?.project?.image}
+      />
       <DonatorView {...props} />
     </Layout>
   );
@@ -22,7 +30,7 @@ export async function getServerSideProps(props) {
   const { query } = props;
 
   // Fetch Project
-  const { loading, error = null, data: fetchProject } = await client.query({
+  const { data: fetchProject } = await client.query({
     query: FETCH_PROJECT_BY_SLUG,
     variables: { slug: query?.slug },
     fetchPolicy: "network-only",
@@ -60,7 +68,7 @@ export async function getServerSideProps(props) {
   const reactions = reactionsFetch?.getProjectReactions;
 
   // Get project admin Info
-  const { data: projectAdmin } = /^\d+$/.test(project?.admin)
+  const admin = /^\d+$/.test(project?.admin)
     ? await client?.query({
         query: GET_USER,
         variables: {
@@ -69,15 +77,13 @@ export async function getServerSideProps(props) {
       })
     : null;
 
-  const admin = projectAdmin?.user;
-
   return {
     props: {
       project,
       donations,
       updates,
       reactions,
-      admin,
+      admin: admin?.data?.user || {},
     },
   };
 }

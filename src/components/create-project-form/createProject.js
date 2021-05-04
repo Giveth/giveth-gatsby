@@ -3,7 +3,7 @@ import Link from 'next/link'
 import dynamic from 'next/dynamic'
 import * as queryString from 'query-string'
 import Web3 from 'web3'
-// import Seo from "../src/components/seo";
+import Seo from '../../components/seo'
 import { useMutation } from '@apollo/client'
 import { Flex, Text, Spinner, Image } from 'theme-ui'
 import { FETCH_PROJECTS, ADD_PROJECT } from '../../apollo/gql/projects'
@@ -113,7 +113,7 @@ const CreateProject = props => {
       } catch (error) {
         if (error.message === 'Access denied') {
           // TODO : FIX LOGGER
-          // Logger.captureException(error);
+          Logger.captureException(error)
           logout(
             setErrorMessage(
               <>
@@ -313,7 +313,7 @@ const CreateProject = props => {
           maxWidth: '1440px'
         }}
       >
-        {/* <Seo title='Create Project' /> */}
+        <Seo title='Create Project' />
 
         <ProjectForm />
       </div>

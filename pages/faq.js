@@ -1,7 +1,7 @@
 import { jsx, Text, Box } from "theme-ui";
 import { fetchEntries } from "../src/utils/contentfulPosts";
 import React from "react";
-// import Seo from '../src/components/seo'
+import Seo from "../src/components/seo";
 import styled from "@emotion/styled";
 
 import Layout from "../src/components/layout";
@@ -13,7 +13,7 @@ const Faq = ({ faqs }) => {
   // const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
   return (
     <Layout>
-      {/* <Seo title='FAQ' /> */}
+      <Seo title="FAQ" />
       <Main>
         <Text sx={{ variant: "headings.h2", textAlign: "center" }}>FAQ</Text>
         <ContentFaq data={faqs} isopen />
