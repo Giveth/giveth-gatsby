@@ -174,7 +174,6 @@ const MyDonations = props => {
         setCurrentDonations(props?.donations)
         setLoading(false)
       }
-      console.log('lolo', props?.donations)
     }
 
     setup()

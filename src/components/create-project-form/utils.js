@@ -5,14 +5,13 @@ import {
   isWalletAddressValid,
   isAddressENS
 } from '../../services/wallet'
-import Web3 from 'web3'
 import { ethers } from 'ethers'
 
 const infuraId = process.env.GATSBY_INFURA_ID
 const network = process.env.GATSBY_NETWORK
 const provider = new ethers.providers.InfuraProvider(network, infuraId)
 
-export async function getProjectWallet(projectWalletAddress) {
+export async function getProjectWallet (projectWalletAddress) {
   if (projectWalletAddress) {
     try {
       const isENS = await isAddressENS(projectWalletAddress)
@@ -31,7 +30,7 @@ export async function getProjectWallet(projectWalletAddress) {
   return projectWalletAddress
 }
 
-export async function projectWalletAlreadyUsed(projectWalletAddress) {
+export async function projectWalletAlreadyUsed (projectWalletAddress) {
   const res = await client.query({
     query: GET_PROJECT_BY_ADDRESS,
     variables: {
@@ -44,7 +43,7 @@ export async function projectWalletAlreadyUsed(projectWalletAddress) {
   return false
 }
 
-export async function isSmartContract(projectWalletAddress) {
+export async function isSmartContract (projectWalletAddress) {
   const code = await provider.getCode(projectWalletAddress)
 
   return code !== '0x'

@@ -72,6 +72,7 @@ const AltCardContent = styled.span`
   bottom: 0;
   display: flex;
   flex: 1;
+  z-index: 2;
   width: 100%;
   flex-direction: column;
   position: absolute;
@@ -305,7 +306,9 @@ const ProjectListing = props => {
               }}
             >
               <RichTextViewer
-                content={props?.description?.replace(/<img .*?>/g, '')}
+                content={props?.description
+                  ?.replace(/<img .*?>/g, '')
+                  .replace(/<iframe .*?>/g, '')}
               />
               {
                 /* Description String */

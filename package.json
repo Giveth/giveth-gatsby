@@ -95,8 +95,10 @@
     "@testing-library/cypress": "^7.0.6",
     "babel-preset-gatsby": "^0.12.2",
     "cypress": "^6.8.0",
+    "ganache-cli": "^6.12.2",
     "cypress-localstorage-commands": "^1.4.4",
     "husky": "^4.3.8",
+    "netlify-plugin-cypress": "^2.2.0",
     "standard": "^16.0.3"
   },
   "keywords": [
@@ -111,7 +113,12 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "cy:open": "npx cypress open",
+    "cy:e2e": "npx cypress run --spec cypress/integration/e2e/**/*.spec.js",
+    "cy:web3": "npx cypress run --spec cypress/integration/web3/**/*.spec.js",
+    "cy:open:ganache": "ganache-cli -p 8545 && npx cypress open",
+    "start-ganache": "ganache-cli -p 8545"
   },
   "repository": {
     "type": "git",
