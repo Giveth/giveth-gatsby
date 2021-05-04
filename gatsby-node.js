@@ -177,6 +177,10 @@ exports.onCreateWebpackConfig = ({ stage, loaders, actions }) => {
           {
             test: /\@sentry\/gatsby/,
             use: loaders.null()
+          },
+          {
+            test: /\@widgetbot\/react-embed/,
+            use: loaders.null()
           }
           // {
           //   test: /\.js$/,

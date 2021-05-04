@@ -31,6 +31,7 @@ import { Helmet } from 'react-helmet'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import styled from '@emotion/styled'
+import SupportWidget from './supportWidget'
 
 const StyledToastContainer = styled(ToastContainer)`
   .Toastify__close-button {
