@@ -22,7 +22,7 @@
   "settings": {
     // Differentiate our giveth2 workspace from other open VSCode windows
     "workbench.colorCustomizations": {
-      "titleBar.activeBackground": "#5144c2"   
+      "titleBar.activeBackground": "#5144c2"
     },
     // "workbench.colorCustomizations": {
     //   "statusBar.background": "#c2449f",
