@@ -1,17 +1,17 @@
-import React from "react";
-import * as matter from "gray-matter";
-import { client } from "../src/apollo/client";
-import { useState } from "react";
-import GivethContent from "../src/content/giveth.md";
-import Layout from "../src/components/layout";
-import Seo from "../src/components/seo";
-import Hero from "../src/components/home/HeroSection";
-import InfoSection from "../src/components/home/InfoSection";
-import UpdatesSection from "../src/components/home/UpdatesSection";
-import HomeTopProjects from "../src/components/home/HomeTopProjects";
-import { PopupContext } from "../src/contextProvider/popupProvider";
+import React from 'react'
+import * as matter from 'gray-matter'
+import { client } from '../src/apollo/client'
+import { useState } from 'react'
+import GivethContent from '../src/content/giveth.md'
+import Layout from '../src/components/layout'
+import Seo from '../src/components/seo'
+import Hero from '../src/components/home/HeroSection'
+import InfoSection from '../src/components/home/InfoSection'
+import UpdatesSection from '../src/components/home/UpdatesSection'
+import HomeTopProjects from '../src/components/home/HomeTopProjects'
+import { PopupContext } from '../src/contextProvider/popupProvider'
 
-import { FETCH_ALL_PROJECTS } from "../src/apollo/gql/projects";
+import { FETCH_ALL_PROJECTS } from '../src/apollo/gql/projects'
 
 const IndexContent = ({
   hideInfo,
@@ -21,9 +21,9 @@ const IndexContent = ({
   allProject,
   mediumPosts,
 }) => {
-  const popup = React.useContext(PopupContext);
+  const popup = React.useContext(PopupContext)
   // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
-  const [popupShown, setPopupShown] = useState(false);
+  const [popupShown, setPopupShown] = useState(false)
   // useEffect(() => {
   //   if (location?.state?.welcome && !popupShown) {
   //     const extra = location?.state?.flashMessage || false
@@ -43,15 +43,15 @@ const IndexContent = ({
       {!hideInfo === true ? <InfoSection content={content} /> : null}
       <UpdatesSection mediumPosts={mediumPosts} />
     </>
-  );
-};
+  )
+}
 
 const IndexPage = (props) => {
-  const { data, content, mediumPosts, topProjects } = props;
+  const { data, content, mediumPosts, topProjects } = props
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION
-    : false;
+    : false
 
   return (
     <Layout isHomePage="true">
@@ -67,21 +67,21 @@ const IndexPage = (props) => {
         allProject={null}
       />
     </Layout>
-  );
-};
+  )
+}
 
 export async function getServerSideProps() {
   const { loading, error = null, data: response } = await client.query({
     query: FETCH_ALL_PROJECTS,
     variables: { limit: 3 },
-  });
+  })
 
-  const mdContent = matter(GivethContent);
+  const mdContent = matter(GivethContent)
 
   const medium = await fetch(
-    "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth"
-  );
-  const mediumPosts = await medium.json();
+    'https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth'
+  )
+  const mediumPosts = await medium.json()
 
   return {
     props: {
@@ -89,7 +89,7 @@ export async function getServerSideProps() {
       content: mdContent?.data,
       mediumPosts: mediumPosts?.items?.slice(0, 2) || {},
     },
-  };
+  }
 }
 
-export default IndexPage;
+export default IndexPage

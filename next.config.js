@@ -1,4 +1,8 @@
 module.exports = {
+  // Uncomment this to allow eslint on build
+  // experimental: {
+  //   eslint: true,
+  // },
   typescript: {
     ignoreBuildErrors: true,
   },
