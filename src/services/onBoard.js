@@ -5,7 +5,7 @@ const networkId = process.env.GATSBY_NETWORK_ID
 const rpcUrl = process.env.GATSBY_ETHEREUM_NODE
 const dappId = process.env.GATSBY_BLOCK_NATIVE_DAPP_ID
 const portisKey = process.env.GATSBY_PORTIS_KEY
-export function initOnboard(subscriptions, currentChainId) {
+export function initOnboard (subscriptions, currentChainId) {
   return Onboard({
     dappId,
     hideBranding: false,
@@ -44,10 +44,10 @@ export function initOnboard(subscriptions, currentChainId) {
         // { walletName: 'squarelink', apiKey: '87288b677f8cfb09a986' },
         { walletName: 'authereum', disableNotifications: true },
         // { walletName: 'trust', rpcUrl },
-        // {
-        //   walletName: 'walletConnect',
-        //   infuraKey: 'd5e29c9b9a9d4116a7348113f57770a8'
-        // },
+        {
+          walletName: 'walletConnect',
+          infuraKey: process.env.GATSBY_INFURA_ID
+        },
         { walletName: 'opera' },
         { walletName: 'operaTouch' },
         { walletName: 'imToken', rpcUrl },
@@ -66,7 +66,7 @@ export function initOnboard(subscriptions, currentChainId) {
   })
 }
 
-export function initNotify() {
+export function initNotify () {
   return Notify({
     dappId,
     networkId: parseInt(networkId)
