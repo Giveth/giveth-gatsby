@@ -48,7 +48,7 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
               flexDirection: 'column'
             }}
           >
-            <Text sx={{ variant: 'text.medium', color: 'secondary' }}>
+            <Text sx={{ variant: 'text.large', color: 'secondary' }}>
               TOTAL FUNDS RAISED:
             </Text>
             <Flex
@@ -58,10 +58,12 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
               }}
             >
               <Text
+                // variant={['headings.h3', null, 'headings.display']}
                 sx={{
                   pr: 4,
-                  variant: ['headings.h3', null, 'headings.display'],
-                  color: 'secondary'
+                  color: 'secondary',
+                  variant: 'headings.display'
+                  // variant: ['headings.h3', 'headings.display', 'headings.display']
                 }}
               >
                 {totalUSDonations?.toLocaleString('en-US', {
@@ -71,7 +73,8 @@ const DonationsTab = ({ project, donations: projectDonations }) => {
               </Text>
               <Text
                 sx={{
-                  variant: ['headings.h6', null, 'headings.h5'],
+                  // variant: ['headings.h6', null, 'headings.h5'],
+                  variant: 'headings.h5',
                   pb: 3,
                   color: 'secondary'
                 }}
