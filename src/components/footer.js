@@ -14,6 +14,10 @@ import { FiExternalLink } from 'react-icons/fi'
 const Container = styled(Box)`
   margin: 0 auto;
   max-width: 1440px;
+
+  @media (max-width: 850) {
+    margin-bottom: 0;
+  }
 `
 
 const LinkBox = styled(Box)`
@@ -22,7 +26,7 @@ const LinkBox = styled(Box)`
   width: 150px;
   line-height: 2;
   @media (max-width: 850px) {
-    font-size: 12px;
+    font-size: 10px;
     width: 100px;
   }
 `
@@ -46,6 +50,13 @@ const FooterExternalLink = styled.a`
   }
 `
 
+const ExtIcon = styled(FiExternalLink)`
+  size: 16px;
+  @media (max-width: 850) {
+    size: 8px;
+  }
+`
+
 const SiteLinks = styled(Grid)`
   grid-template-columns: auto 1fr auto;
 
@@ -60,7 +71,7 @@ const InnerGrid = styled(Grid)`
   justify-content: space-between;
   padding: 0 100px 0 100px;
   @media (max-width: 1024px) {
-    grid-template-columns: repeat(3, 100px);
+    grid-template-columns: repeat(3, 80px);
     justify-content: center;
     padding: 0.5rem;
   }
@@ -76,12 +87,15 @@ const CreditsSection = styled(Grid)`
     grid-template-columns: 1fr;
     justify-content: center;
     padding-left: 0;
-    padding: 0.5rem;
+    padding: 1rem;
+    background-color: ${theme.colors.lightestBlue};
+    text-align: center;
   }
 `
 
 const Footer = () => {
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
+
   function romanize (num) {
     if (!+num) return false
     let digits = String(+num).split(''),
@@ -129,7 +143,7 @@ const Footer = () => {
 
   return (
     <Container p={[0, 3, 5]} sx={{ position: 'relative' }}>
-      <SiteLinks gap={0} pt={[1, 4, 6]}>
+      <SiteLinks gap={0} p={[1, null, null]} pt={[1, 4, 6]}>
         {isMobile ? null : (
           <Link to='/'>
             <img src={logo} alt='logo' width='40px' height='40px' />
@@ -150,21 +164,21 @@ const Footer = () => {
               target='_blank'
               rel='noopener noreferrer'
             >
-              Docs <FiExternalLink size='18px' />
+              Docs <ExtIcon />
             </FooterExternalLink>
             <FooterExternalLink
               href='https://wiki.giveth.io'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Wiki <FiExternalLink size='18px' />
+              Wiki <ExtIcon />
             </FooterExternalLink>
             <FooterExternalLink
               href='https://medium.com/giveth'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Blog <FiExternalLink size='18px' />
+              Blog <ExtIcon />
             </FooterExternalLink>
             <FooterLink to='/contact'>Contact</FooterLink>
             <FooterLink to='/tos'>Terms of Use</FooterLink>
@@ -175,35 +189,35 @@ const Footer = () => {
               target='_blank'
               rel='noopener noreferrer'
             >
-              Giveth TRACE <FiExternalLink size='18px' />
+              Giveth TRACE <ExtIcon />
             </FooterExternalLink>
             <FooterExternalLink
               href='https://commonsstack.org'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Commons Stack <FiExternalLink size='18px' />
+              Commons Stack <ExtIcon />
             </FooterExternalLink>
             <FooterExternalLink
               href='https://wiki.giveth.io/governance/'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Governance <FiExternalLink size='18px' />
+              Governance <ExtIcon />
             </FooterExternalLink>
             <FooterExternalLink
               href='https://galaxy.giveth.io/'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Galaxy Projects <FiExternalLink size='18px' />
+              Galaxy Projects <ExtIcon />
             </FooterExternalLink>
             <FooterExternalLink
               href='https://galaxy.giveth.io/#socialcoding'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Social Coding <FiExternalLink size='18px' />
+              Social Coding <ExtIcon />
             </FooterExternalLink>
             <FooterLink to='/join'>Join Our Community</FooterLink>
           </LinkBox>
@@ -234,8 +248,7 @@ const Footer = () => {
       </SiteLinks>
 
       <CreditsSection
-        pt={[1, 3, 6]}
-        mb={[4, null, null]}
+        pt={[3, 3, 6]}
         sx={{
           alignContent: 'center'
         }}

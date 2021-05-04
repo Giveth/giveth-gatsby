@@ -82,3 +82,5 @@ yarn-error.log
 
 # Cypress
 cypress.env.json
+cypress/screenshots
+cypress/videos

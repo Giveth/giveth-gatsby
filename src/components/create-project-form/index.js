@@ -1,15 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import {
-  Box,
-  Heading,
-  Flex,
-  Button,
-  Spinner,
-  Progress,
-  Link,
-  Text
-} from 'theme-ui'
+import { Box, Heading, Flex, Button, Spinner, Progress, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import {
   GET_PROJECT_BY_ADDRESS,
@@ -58,7 +49,7 @@ const CreateProjectForm = props => {
 
   useEffect(() => {
     doValidateToken()
-    async function doValidateToken() {
+    async function doValidateToken () {
       const isValid = await validateToken()
       // console.log(`isValid : ${JSON.stringify(isValid, null, 2)}`)
 
@@ -154,14 +145,18 @@ const CreateProjectForm = props => {
   const onSubmit = (formData, submitCurrentStep, doNextStep) => async data => {
     let project = {}
     try {
+      console.log({ submitCurrentStep, data, formData })
       if (isCategoryStep(submitCurrentStep)) {
-        let projectCategory = {
-          ...data
-        }
         project = {
           ...formData,
-          projectCategory
+          projectCategory: {
+            ...data,
+            projectDescription: null
+          }
         }
+        // TODO: For some reason we are getting projectDescription inside the category
+        // we need to figure out why
+        delete project?.projectCategory['projectDescription']
       } else {
         project = {
           ...formData,
@@ -169,19 +164,18 @@ const CreateProjectForm = props => {
         }
       }
 
-      // TODO: CHECK THIS ONLY FOR RICH TEXT : COMING SOON
-      // if (isDescriptionStep(submitCurrentStep)) {
-      //   // check if file is too large
-      //   const stringSize =
-      //     encodeURI(data?.projectDescription).split(/%..|./).length - 1
-      //   if (stringSize > 32000) {
-      //     // 32Kb max maybe?
-      //     return Toast({
-      //       content: `Description too large`,
-      //       type: 'error'
-      //     })
-      //   }
-      // }
+      if (isDescriptionStep(submitCurrentStep)) {
+        // check if file is too large
+        const stringSize =
+          encodeURI(data?.projectDescription).split(/%..|./).length - 1
+        if (stringSize > 4000000) {
+          // 4Mb tops max maybe?
+          return Toast({
+            content: `Description too large`,
+            type: 'error'
+          })
+        }
+      }
 
       if (isFinalConfirmationStep(submitCurrentStep, steps)) {
         const didEnterWalletAddress = !!data?.projectWalletAddress
@@ -195,7 +189,6 @@ const CreateProjectForm = props => {
           projectWalletAddress = user.addresses[0]
         }
 
-        // HERE
         const { data: addressValidation } = await client.query({
           query: WALLET_ADDRESS_IS_VALID,
           variables: {
@@ -210,16 +203,14 @@ const CreateProjectForm = props => {
               content: `Eth address ${projectWalletAddress} is a smart contract. We do not support smart contract wallets at this time because we use multiple blockchains, and there is a risk of your losing donations.`,
               type: 'error'
             })
-          } else if (reason === 'smart-contract') {
+          } else if (reason === 'address-used') {
             return Toast({
-              content: `Eth address ${projectWalletAddress} ${
-                !didEnterWalletAddress ? '(your logged in wallet address) ' : ''
-              }is already being used for a project`,
+              content: `Eth address ${projectWalletAddress} is already being used for a project`,
               type: 'error'
             })
           } else {
             return Toast({
-              content: `Eth address not valid`,
+              content: 'Eth address not valid',
               type: 'error'
             })
           }
@@ -234,6 +225,7 @@ const CreateProjectForm = props => {
       if (isLastStep(submitCurrentStep, steps)) {
         props.onSubmit(project)
       }
+      console.log({ project })
       setInputLoading(false)
       setFormData(project)
       doNextStep()
@@ -288,7 +280,7 @@ const CreateProjectForm = props => {
   }, [user, isLoggedIn, client, formData])
 
   useEffect(() => {
-    //Checks localstorage to reset form
+    // Checks localstorage to reset form
     const localCreateForm = window?.localStorage.getItem('create-form')
     localCreateForm && setFormData(JSON.parse(localCreateForm))
   }, [])
@@ -409,18 +401,18 @@ CreateProjectForm.defaultProps = {
 /** export the typeform component */
 export default CreateProjectForm
 
-function isDescriptionStep(currentStep) {
+function isDescriptionStep (currentStep) {
   return currentStep === 2
 }
 
-function isCategoryStep(currentStep) {
+function isCategoryStep (currentStep) {
   return currentStep === 3
 }
 
-function isFinalConfirmationStep(currentStep, steps) {
+function isFinalConfirmationStep (currentStep, steps) {
   return currentStep === steps.length - 2
 }
 
-function isLastStep(currentStep, steps) {
+function isLastStep (currentStep, steps) {
   return currentStep === steps.length - 1
 }

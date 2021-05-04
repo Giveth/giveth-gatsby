@@ -45,7 +45,7 @@ const UpdatesSection = () => {
           <Text
             sx={{ variant: 'text.larger', maxWidth: '780px', color: 'colors' }}
           >
-            Subscribe to our Newsletter and get all updates straight to your
+            Subscribe to our newsletter and get all updates straight to your
             mailbox!
           </Text>
           <MailchimpSignup />

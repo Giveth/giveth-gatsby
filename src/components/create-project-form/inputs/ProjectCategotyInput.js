@@ -5,7 +5,7 @@ import { animated } from 'react-spring'
 export const ProjectCategoryInput = ({
   register,
   currentValue,
-  categoryList,
+  categoryList = [],
   animationStyle,
   goBack
 }) => {
@@ -16,7 +16,7 @@ export const ProjectCategoryInput = ({
           fontSize: 8,
           fontFamily: 'heading'
         }}
-        htmlFor='projectDescription'
+        htmlFor='projectCategory'
       >
         Please select a category
       </Label>

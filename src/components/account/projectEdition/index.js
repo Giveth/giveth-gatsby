@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Flex,
@@ -30,14 +30,17 @@ import ImageSection from './imageSection'
 import styled from '@emotion/styled'
 import Toast from '../../toast'
 import { getWallet } from '../../../wallets'
+// import RichTextInput from '../../richTextInput'
 let wallet = null
 let web3 = null
+
+const RichTextInput = React.lazy(() => import('../../richTextInput'))
 
 const CustomInput = styled(Input)`
   color: ${theme.colors.secondary};
 `
 
-function ProjectEditionForm (props) {
+function ProjectEditionForm(props) {
   const {
     goBack,
     setCancelModal,
@@ -51,12 +54,14 @@ function ProjectEditionForm (props) {
 
   const [loading, setLoading] = useState(false)
   const [categories, setCategories] = useState(null)
+  const [desc, setDesc] = useState(null)
   const [isActive, setIsActive] = useState(null)
 
-  const { register, handleSubmit, errors } = useForm() // initialize the hook
+  const { register, handleSubmit, setValue, errors } = useForm() // initialize the hook
 
   useEffect(() => {
     setCategories(project?.categories)
+    setDesc(project?.description || '')
     setIsActive(project?.status?.id === '5')
   }, [project])
 
@@ -96,6 +101,8 @@ function ProjectEditionForm (props) {
       </Label>
     )
   }
+  const isSSR = typeof window === 'undefined'
+
   console.log({ project, isActive })
   return (
     <>
@@ -160,7 +167,12 @@ function ProjectEditionForm (props) {
           )}
         </form>
       </Flex>
-      <form onSubmit={handleSubmit(updateProject)}>
+      <form
+        onSubmit={handleSubmit((data, e) => {
+          console.log({ data, desc })
+          updateProject({ ...data, desc })
+        })}
+      >
         <>
           <ImageSection image={project?.image} register={register} />
           <Flex sx={{ width: '70%', flexDirection: 'column' }}>
@@ -176,7 +188,7 @@ function ProjectEditionForm (props) {
               title='Project Description'
               htmlFor='editDescription'
             />
-            <Textarea
+            {/* <Textarea
               sx={{
                 resize: 'none',
                 fontFamily: 'body',
@@ -187,7 +199,37 @@ function ProjectEditionForm (props) {
               defaultValue={project?.description}
               ref={register}
               rows={12}
-            />
+            /> */}
+            {!isSSR && (
+              <React.Suspense fallback={<div />}>
+                <RichTextInput
+                  style={{
+                    width: '100%',
+                    marginBottom: '20px',
+                    height: '400px',
+                    fontFamily: 'body',
+                    padding: '1.125rem 1rem',
+                    borderRadius: '12px',
+                    resize: 'none',
+                    '&::placeholder': {
+                      variant: 'body',
+                      color: 'bodyLight'
+                    }
+                  }}
+                  value={desc}
+                  placeholder='Write your update...'
+                  onChange={(newValue, delta, source) => {
+                    try {
+                      console.log({ newValue })
+                      setValue('editDescription', newValue)
+                      setDesc(newValue)
+                    } catch (error) {
+                      console.log({ error })
+                    }
+                  }}
+                />
+              </React.Suspense>
+            )}
             <CustomLabel title='Category' htmlFor='editCategory' />
             <Box sx={{ height: '320px', overflow: 'scroll' }}>
               {categories &&
@@ -350,7 +392,7 @@ function ProjectEditionForm (props) {
   )
 }
 
-function ProjectEdition (props) {
+function ProjectEdition(props) {
   const [loading, setLoading] = useState(false)
   const client = useApolloClient()
   const [showModal, setShowModal] = useState(false)
@@ -417,7 +459,7 @@ function ProjectEdition (props) {
     }
   }, [project])
 
-  async function updateProject (data) {
+  async function updateProject(data) {
     try {
       // Validate eth address
       let ethAddress = data.editWalletAddress
@@ -457,7 +499,7 @@ function ProjectEdition (props) {
 
       const projectData = {
         title: data.editTitle,
-        description: data.editDescription,
+        description: data.desc || data.editDescription,
         admin: project.admin,
         impactLocation: mapLocation || project?.impactLocation,
         categories: projectCategories,
@@ -465,7 +507,6 @@ function ProjectEdition (props) {
       }
 
       // Validate Image
-      console.log({ data })
       if (data?.editImage && project?.image !== data?.editImage) {
         if (data?.editImage.length === 1) {
           projectData.imageStatic = data.editImage
