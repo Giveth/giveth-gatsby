@@ -2,7 +2,6 @@ import React from "react";
 import * as matter from "gray-matter";
 import { client } from "../src/apollo/client";
 import { useState } from "react";
-import { fetchEntries } from "../src/utils/contentfulPosts";
 import GivethContent from "../src/content/giveth.md";
 import Layout from "../src/components/layout";
 // import Seo from '../components/seo'
@@ -20,6 +19,7 @@ const IndexContent = ({
   topProjects,
   categories,
   allProject,
+  mediumPosts,
 }) => {
   const popup = React.useContext(PopupContext);
   // const [afterRenderProjects, setAfterRenderProjects] = useState(null)
@@ -41,19 +41,17 @@ const IndexContent = ({
         totalCount={allProject?.totalCount}
       />
       {!hideInfo === true ? <InfoSection content={content} /> : null}
-      <UpdatesSection content={content} />
+      <UpdatesSection mediumPosts={null} />
     </>
   );
 };
 
 const IndexPage = (props) => {
-  const { data, content, contentful, topProjects } = props;
+  const { data, content, mediumPosts, topProjects } = props;
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION
     : false;
-
-  console.log({ contentful });
 
   return (
     <Layout isHomePage="true">
@@ -61,6 +59,7 @@ const IndexPage = (props) => {
       <IndexContent
         hideInfo={hideInfo}
         content={content}
+        mediumPosts={mediumPosts}
         // html={null}
         // location={location}
         topProjects={topProjects}
@@ -79,12 +78,16 @@ export async function getServerSideProps() {
 
   const mdContent = matter(GivethContent);
 
-  // TODO: medium posts
+  const medium = await fetch(
+    "https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/giveth"
+  );
+  const mediumPosts = await medium.json();
 
   return {
     props: {
       topProjects: response?.projects,
       content: mdContent?.data,
+      mediumPosts: mediumPosts || {},
     },
   };
 }

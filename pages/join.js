@@ -1,11 +1,11 @@
 import { jsx, Flex, Grid } from "theme-ui";
-
+import { fetchEntries } from "../src/utils/contentfulPosts";
 import Layout from "../src/components/layout";
 // import Seo from '../src/components/seo'
 import Hero from "../src/components/content/JoinPageHero";
 import JoinChatCard from "../src/components/content/JoinPageCard";
 
-const JoinPage = ({ data }) => {
+const JoinPage = ({ joinChat }) => {
   return (
     <Layout>
       {/* <Seo title='Join our community' /> */}
@@ -17,44 +17,27 @@ const JoinPage = ({ data }) => {
           columns={[1, 1, 2]}
           sx={{ maxWidth: "80vw" }}
         >
-          <JoinChatCard data={data?.contentChats?.edges} />
+          <JoinChatCard data={joinChat} />
         </Grid>
       </Flex>
     </Layout>
   );
 };
 
-export default JoinPage;
+export async function getServerSideProps() {
+  // contentful
+  const joinReq = await fetchEntries({
+    contentType: "contentJoinChatprovider",
+  });
+  const joinChat = await joinReq.map((j) => {
+    return j.fields;
+  });
 
-// export const query = graphql`
-//   query JoinChatQuery {
-//     contentChats: allContentfulContentJoinChatprovider(
-//       sort: { order: ASC, fields: createdAt }
-//     ) {
-//       edges {
-//         node {
-//           id
-//           platformTitle
-//           descriptionText
-//           onboardingLink
-//           platformLogo {
-//             id
-//             file {
-//               url
-//               fileName
-//               contentType
-//             }
-//           }
-//           cardBackgroundImage {
-//             id
-//             file {
-//               url
-//               fileName
-//               contentType
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `
+  return {
+    props: {
+      joinChat: joinChat || {},
+    },
+  };
+}
+
+export default JoinPage;

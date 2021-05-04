@@ -248,32 +248,3 @@ export async function getServerSideProps() {
 }
 
 export default Partnerships;
-
-// export const query = graphql`
-//   query FriendsQuery {
-//     contentFriends: allContentfulFriendslogos {
-//       edges {
-//         node {
-//           id
-//           name
-//           description
-//           link
-//           logo {
-//             file {
-//               url
-//             }
-//           }
-//         }
-//       }
-//     }
-//     contentPartnerships: allContentfulContentPartnerships {
-//       nodes {
-//         title
-//         subtitle
-//         moreInfo {
-//           json
-//         }
-//       }
-//     }
-//   }
-// `

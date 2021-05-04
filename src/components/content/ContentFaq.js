@@ -106,9 +106,10 @@ const ArrowUp = styled(AiOutlineDown)`
   padding: 0.1rem;
 `
 
-const ContentFaq = ({ data, isopen }) => {
+const ContentFaq = ({ faqs, isopen }) => {
   const [hash, setHash] = useState('')
-
+  console.log({ faqs })
+  return null
   const richTextOptions = {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: node => {

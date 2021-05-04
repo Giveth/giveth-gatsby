@@ -49,6 +49,7 @@
     "react": "17.0.2",
     "react-alert": "^7.0.2",
     "react-alert-template-mui": "^1.0.7",
+    "react-collapsible": "^2.8.3",
     "react-dom": "17.0.2",
     "react-dropzone": "^11.3.2",
     "react-headroom": "^3.1.1",

@@ -15,11 +15,10 @@ const Container = styled(Box)`
   max-width: 1440px;
 `
 
-const UpdatesSection = () => {
+const UpdatesSection = ({ mediumPosts }) => {
   // import Object containing the last two Medium Posts with a hook
   // TODO: FIX MEDIUM POSTS FOR NEXTJS
   // const mediumPosts = useMediumFeed()
-  const mediumPosts = null
 
   // use Media Query to check device width
   const isMobile = useMediaQuery({ query: '(max-width: 825px)' })
@@ -58,7 +57,7 @@ const UpdatesSection = () => {
             {/**
              * Map medium content nodes from node Object and destructure to variables
              * */}
-            {mediumPosts?.allMediumPost.edges.map(({ node }) => {
+            {mediumPosts.map(({ node }) => {
               const {
                 id,
                 title,

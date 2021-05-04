@@ -38,12 +38,12 @@ const Logo = styled.img`
 
 const JoinChatCard = ({ data }) => (
   <>
-    {data?.map(edges => {
+    {data?.map(join => {
       return (
-        <CardContainer key={edges.node.id + '_card'}>
+        <CardContainer key={join.platformLogo.sys.id + '_card'}>
           <Background
-            key={edges.node.id + '_div'}
-            src={edges.node.cardBackgroundImage.file.url}
+            key={join.platformLogo.sys.id + '_div'}
+            src={join.cardBackgroundImage.fields.file.url}
             style={{ width: '70%' }}
             alt=''
           />
@@ -59,9 +59,9 @@ const JoinChatCard = ({ data }) => (
                   background: 'none',
                   position: 'relative'
                 }}
-                key={edges.node.id + '_heading'}
+                key={join.platformLogo.sys.id + '_heading'}
               >
-                {edges.node.platformTitle}
+                {join.platformTitle}
               </Heading>
 
               <CardContent>
@@ -78,11 +78,11 @@ const JoinChatCard = ({ data }) => (
                   {
                     /* Description String */
 
-                    edges.node.descriptionText
+                    join.descriptionText
                   }
                 </Text>
               </CardContent>
-              <Link href={edges.node.onboardingLink}>
+              <Link href={join.onboardingLink}>
                 <Button
                   mt={2}
                   mb={'2rem'}
@@ -97,13 +97,13 @@ const JoinChatCard = ({ data }) => (
                     position: 'relative'
                   }}
                 >
-                  Join us on {edges.node.platformTitle}
+                  Join us on {join.platformTitle}
                 </Button>
               </Link>
             </div>
             <Logo
-              src={edges.node.platformLogo.file.url}
-              alt={edges.node.platformTitle + ' logo'}
+              src={join.platformLogo.fields.file.url}
+              alt={join.platformTitle + ' logo'}
               width='90px'
             />
           </Grid>
