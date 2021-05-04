@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, Button, Flex, Text } from 'theme-ui'
 import styled from '@emotion/styled'
 import Modal from './modal'
@@ -82,14 +82,15 @@ function ChangeNetworkPopup({ close }) {
   )
 }
 
-function WelcomeLoggedOutPopup({ close }) {
+function WelcomeLoggedOutPopup(props) {
+  const { value, clearPopup } = props
   const { isLoggedIn, login } = useWallet()
-
   if (isLoggedIn) {
-    close()
     return null
   }
-  return <LoginModal isOpen={true} close={close} login={login} />
+  return (
+    <LoginModal isOpen={value} close={() => clearPopup(false)} login={login} />
+  )
 }
 
 function IncompleteProfilePopup({ close }) {
@@ -277,10 +278,9 @@ function SharePopup() {
 function Popup() {
   const usePopup = React.useContext(PopupContext)
   const { value, clearPopup } = usePopup
+
   const setView = () => {
     switch (value?.type) {
-      case 'WelcomeLoggedOut':
-        return <WelcomeLoggedOutPopup close={clearPopup} />
       case 'IncompleteProfile':
         return <IncompleteProfilePopup close={clearPopup} />
       case 'InsufficientFunds':
@@ -298,6 +298,11 @@ function Popup() {
         return null
     }
   }
+  // special case that is already a modal
+  if (value?.type === 'WelcomeLoggedOut') {
+    return <WelcomeLoggedOutPopup {...usePopup} />
+  }
+
   return value ? (
     <Modal isOpen={value} onRequestClose={() => clearPopup()}>
       {setView()}

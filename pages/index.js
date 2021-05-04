@@ -2,6 +2,7 @@ import React from "react";
 import * as matter from "gray-matter";
 import { client } from "../src/apollo/client";
 import { useState } from "react";
+import { fetchEntries } from "../src/utils/contentfulPosts";
 import GivethContent from "../src/content/giveth.md";
 import Layout from "../src/components/layout";
 // import Seo from '../components/seo'
@@ -46,11 +47,14 @@ const IndexContent = ({
 };
 
 const IndexPage = (props) => {
-  const { data, content, topProjects } = props;
+  const { data, content, contentful, topProjects } = props;
   // const { markdownRemark, topProjects, allProject } = data;
   const hideInfo = process.env.HIDE_INFO_SECTION
     ? process.env.HIDE_INFO_SECTION
     : false;
+
+  console.log({ contentful });
+
   return (
     <Layout isHomePage="true">
       {/* <Seo title='Home' /> */}
@@ -74,6 +78,8 @@ export async function getServerSideProps() {
   });
 
   const mdContent = matter(GivethContent);
+
+  // TODO: medium posts
 
   return {
     props: {

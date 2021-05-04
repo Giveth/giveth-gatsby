@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import Link from 'next/link'
 import { useMediaQuery } from 'react-responsive'
 import { Grid, Heading, Text, jsx } from 'theme-ui'

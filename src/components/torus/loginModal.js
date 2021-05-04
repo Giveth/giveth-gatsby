@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Box, Flex, Text } from 'theme-ui'
 import Image from 'next/image'
 import styled from '@emotion/styled'
-import Modal from 'react-modal'
+import Modal from '../modal'
 import { useWallet } from '../../contextProvider/WalletProvider'
 
 import { FcGoogle } from 'react-icons/fc'
@@ -70,12 +70,7 @@ const TinyBtn = styled(Box)`
 `
 
 function LoginModal(props) {
-  const [modalOpen, setModalOpen] = useState(true)
   const { login } = useWallet()
-
-  React.useEffect(() => {
-    Modal.setAppElement('body')
-  })
   const IconBtn = ({ icon, action }) => {
     return (
       <TinyBtn onClick={action} sx={{ p: 4 }}>
@@ -87,147 +82,143 @@ function LoginModal(props) {
   const initLogin = (walletProvider, verifier) => {
     try {
       login({ walletProvider, verifier })
-      setModalOpen(false)
+      props?.close()
     } catch (error) {
       console.log({ error })
     }
   }
-
   return (
-    <div>
-      <Modal
-        isOpen={!!modalOpen}
-        onRequestClose={() => setModalOpen(false)}
-        style={customStyles}
-        contentLabel='Login Modal'
+    <Modal
+      isOpen={props?.isOpen}
+      onRequestClose={() => props?.close()}
+      contentLabel='Login Modal'
+    >
+      <Flex
+        sx={{
+          flexDirection: 'column',
+          width: '645px',
+          minHeight: '520px'
+        }}
       >
+        <div style={{ position: 'absolute', left: '5%', padding: '2rem 0' }}>
+          <DecoratorClouds />
+        </div>
+        <Text
+          sx={{
+            variant: 'text.default',
+            cursor: 'pointer',
+            position: 'absolute',
+            right: '5%',
+            top: '5%'
+          }}
+          onClick={e => {
+            e.preventDefault()
+            props.close()
+          }}
+        >
+          Close
+        </Text>
         <Flex
           sx={{
             flexDirection: 'column',
-            width: '645px',
-            minHeight: '520px'
+            alignItems: 'center',
+            textAlign: 'center',
+            py: 4
           }}
         >
-          <div style={{ position: 'absolute', left: '5%', padding: '2rem 0' }}>
-            <DecoratorClouds />
-          </div>
-          <Text
-            sx={{
-              variant: 'text.default',
-              cursor: 'pointer',
-              position: 'absolute',
-              right: '5%',
-              top: '5%'
-            }}
-            onClick={e => {
-              e.preventDefault()
-              setModalOpen(false)
-            }}
-          >
-            Close
+          <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
+            Welcome to Giveth
           </Text>
-          <Flex
-            sx={{
-              flexDirection: 'column',
-              alignItems: 'center',
-              textAlign: 'center',
-              py: 4
-            }}
+          <Text
+            sx={{ variant: 'text.large', color: 'secondary', mt: 2, mb: 4 }}
           >
-            <Text sx={{ variant: 'headings.h4', color: 'secondary', pt: 5 }}>
-              Welcome to Giveth
-            </Text>
-            <Text
-              sx={{ variant: 'text.large', color: 'secondary', mt: 2, mb: 4 }}
-            >
-              Please sign in to your account and start using Giveth.
-            </Text>
+            Please sign in to your account and start using Giveth.
+          </Text>
 
-            <LongBtn onClick={() => initLogin('torus', 'google')}>
-              <FcGoogle size={36} />
-              <Text
-                sx={{
-                  variant: 'text.default',
-                  color: 'secondary',
-                  fontWeight: '500',
-                  pl: 3
-                }}
-              >
-                Sign in with Google
-              </Text>
-            </LongBtn>
-            <Flex
+          <LongBtn onClick={() => initLogin('torus', 'google')}>
+            <FcGoogle size={36} />
+            <Text
               sx={{
-                width: '100%',
-                justifyContent: 'space-evenly',
-                px: 4,
-                flexDirection: 'row'
+                variant: 'text.default',
+                color: 'secondary',
+                fontWeight: '500',
+                pl: 3
               }}
             >
-              {[
-                { name: 'email', logo: <MdEmail size={32} color='#AAAFCA' /> },
-                {
-                  name: 'facebook',
-                  logo: <SiFacebook size={32} color='#AAAFCA' />
-                },
-                {
-                  name: 'twitter',
-                  logo: <SiTwitter size={32} color='#AAAFCA' />
-                },
-                {
-                  name: 'reddit',
-                  logo: <SiReddit size={32} color='#AAAFCA' />
-                },
-                {
-                  name: 'discord',
-                  logo: <SiDiscord size={32} color='#AAAFCA' />
+              Sign in with Google
+            </Text>
+          </LongBtn>
+          <Flex
+            sx={{
+              width: '100%',
+              justifyContent: 'space-evenly',
+              px: 4,
+              flexDirection: 'row'
+            }}
+          >
+            {[
+              { name: 'email', logo: <MdEmail size={32} color='#AAAFCA' /> },
+              {
+                name: 'facebook',
+                logo: <SiFacebook size={32} color='#AAAFCA' />
+              },
+              {
+                name: 'twitter',
+                logo: <SiTwitter size={32} color='#AAAFCA' />
+              },
+              {
+                name: 'reddit',
+                logo: <SiReddit size={32} color='#AAAFCA' />
+              },
+              {
+                name: 'discord',
+                logo: <SiDiscord size={32} color='#AAAFCA' />
+              }
+            ].map((i, index) => (
+              <IconBtn
+                key={index}
+                icon={i.logo}
+                action={() =>
+                  initLogin(
+                    'torus',
+                    i.name === 'email' || i.name === 'twitter' ? null : i.name
+                  )
                 }
-              ].map((i, index) => (
-                <IconBtn
-                  key={index}
-                  icon={i.logo}
-                  action={() =>
-                    initLogin(
-                      'torus',
-                      i.name === 'email' || i.name === 'twitter' ? null : i.name
-                    )
-                  }
-                />
-              ))}
-            </Flex>
-            <Image
-              src={'/images/powered-by-torus.png'}
-              width='100%'
-              height='32px'
-              objectFit='contain'
+              />
+            ))}
+          </Flex>
+          <Image
+            src={'/images/powered-by-torus.png'}
+            width='100%'
+            height='32px'
+            objectFit='contain'
+          />
+          <Text
+            sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}
+          >
+            Already have a crypto wallet?
+          </Text>
+          <LongBtn onClick={() => initLogin('metamask')}>
+            <MetamaskLogo
+              style={{
+                width: '32px',
+                height: '32px'
+              }}
             />
             <Text
-              sx={{ variant: 'text.default', color: 'secondary', mt: 5, mb: 2 }}
+              sx={{
+                variant: 'text.default',
+                fontWeight: '500',
+                color: 'secondary',
+                pl: 3
+              }}
             >
-              Already have a crypto wallet?
+              Sign in with Metamask
             </Text>
-            <LongBtn onClick={() => initLogin('metamask')}>
-              <MetamaskLogo
-                style={{
-                  width: '32px',
-                  height: '32px'
-                }}
-              />
-              <Text
-                sx={{
-                  variant: 'text.default',
-                  fontWeight: '500',
-                  color: 'secondary',
-                  pl: 3
-                }}
-              >
-                Sign in with Metamask
-              </Text>
-            </LongBtn>
-          </Flex>
+          </LongBtn>
         </Flex>
-      </Modal>
-    </div>
+      </Flex>
+    </Modal>
   )
 }
 

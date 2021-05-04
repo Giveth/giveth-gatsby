@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import { jsx, Flex, Image, Grid, Text, Box, Button, Heading } from 'theme-ui'
 import theme from '../../utils/theme-ui/index'
 import React, { useState, useEffect } from 'react'

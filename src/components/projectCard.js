@@ -138,7 +138,7 @@ const Categories = ({ categories }) => {
 const ProjectCard = props => {
   const router = useRouter()
   const { user, isLoggedIn } = useWallet()
-  const { project, shadowed } = props
+  const { project, fromViewStyle, shadowed } = props
   const client = useApolloClient()
   const [altStyle, setAltStyle] = useState(false)
   const usePopup = useContext(PopupContext)
@@ -354,11 +354,16 @@ const ProjectCard = props => {
               WebkitBoxOrient: 'vertical'
             }}
           >
-            <RichTextViewer
-              content={project?.description
-                ?.replace(/<img .*?>/g, '')
-                .replace(/<iframe .*?>/g, '')}
-            />
+            {fromViewStyle ? (
+              project?.description
+            ) : (
+              <RichTextViewer
+                content={project?.description
+                  ?.replace(/<img .*?>/g, '')
+                  .replace(/<iframe .*?>/g, '')}
+              />
+            )}
+
             {
               /* Description String */
               // project?.description

@@ -29,7 +29,7 @@ const customStyles = {
   }
 }
 
-function LoginModal (props) {
+function LoginModal(props) {
   React.useEffect(() => {
     Modal.setAppElement('body')
   })

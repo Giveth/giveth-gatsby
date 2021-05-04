@@ -38,7 +38,7 @@ const Logo = styled.img`
 
 const JoinChatCard = ({ data }) => (
   <>
-    {data.map(edges => {
+    {data?.map(edges => {
       return (
         <CardContainer key={edges.node.id + '_card'}>
           <Background
