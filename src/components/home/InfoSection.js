@@ -83,7 +83,10 @@ const InfoSection = ({ content }) => {
               background: 'unset',
               px: '3rem',
               py: '0.875rem',
-              mb: '6rem'
+              mb: '6rem',
+              borderSize: '2px',
+              borderStyle: 'solid',
+              borderColor: 'colors.bodyLight'
             }}
           >
             {content.infoButtonText}
