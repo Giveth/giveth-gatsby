@@ -13,9 +13,15 @@
   },
   "folders": [
     {
+      "name": "cypress",
+      "path": "../../../Downloads/giveth-2-849937e655736af786e475a160659e87f8bcf44f/cypress"
+    },
+    {
+      "name": "giveth-2",
       "path": "."
     },
     {
+      "name": "impact-graph",
       "path": "../impact-graph"
     }
   ],

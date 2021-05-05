@@ -44,10 +44,10 @@ export function initOnboard(subscriptions, currentChainId) {
         // { walletName: 'squarelink', apiKey: '87288b677f8cfb09a986' },
         { walletName: 'authereum', disableNotifications: true },
         // { walletName: 'trust', rpcUrl },
-        // {
-        //   walletName: 'walletConnect',
-        //   infuraKey: 'd5e29c9b9a9d4116a7348113f57770a8'
-        // },
+        {
+          walletName: 'walletConnect',
+          infuraKey: process.env.NEXT_PUBLIC_INFURA_ID
+        },
         { walletName: 'opera' },
         { walletName: 'operaTouch' },
         { walletName: 'imToken', rpcUrl },

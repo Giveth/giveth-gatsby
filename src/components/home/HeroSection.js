@@ -22,7 +22,7 @@ import HeroSideImage from '../content/HeroSideImage'
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
   position: relative;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
     grid-template-columns: 1fr;
     min-height: 100vh;
   }
@@ -30,8 +30,11 @@ const HeroSection = styled(Grid)`
 
 const HeroText = styled(Box)`
   position: absolute;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
     position: static;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
   }
 `
 const Hero = ({ content }) => {
@@ -39,7 +42,7 @@ const Hero = ({ content }) => {
 
   return (
     <HeroSection>
-      {/* <HeroSideImage /> */}
+      {isMobile ? null : <HeroSideImage />}
       <div id='placeholder' />
       <HeroText p={['10px', null, '80px']}>
         {' '}
@@ -70,7 +73,7 @@ const Hero = ({ content }) => {
           pb={2}
           sx={{
             variant: 'text.large',
-            width: ['95%', '60%', '70%'],
+            width: ['100%', '60%', '70%'],
             color: 'secondary',
             lineHeight: 'taller'
           }}
@@ -80,13 +83,12 @@ const Hero = ({ content }) => {
         <Grid
           rows={2}
           sx={{
-            width: '290px'
+            justifyContent: ['center', 'start', 'start']
           }}
         >
           <Link href='/projects'>
             <Button
-              mt={4}
-              p={4}
+              mt={[4, 5, 5]}
               sx={{
                 width: '290px',
                 variant: 'buttons.big'
@@ -95,16 +97,11 @@ const Hero = ({ content }) => {
               {content?.mainButton || 'Waiting for content'}
             </Button>
           </Link>
-          <Link
-            href='/create'
-            sx={{
-              variant: 'links.nav',
-              justifySelf: 'center'
-            }}
-          >
+          <Link href='/create'>
             <Text
               sx={{
-                justifySelf: 'center'
+                variant: 'links.nav',
+                justifySelf: ['center']
               }}
             >
               {content?.mainButtonText || 'Waiting for content'}
@@ -112,7 +109,7 @@ const Hero = ({ content }) => {
           </Link>
         </Grid>
       </HeroText>
-      <Box sx={{ minHeight: '100vh' }}>
+      <Box sx={{ minHeight: [null, null, '100vh'] }}>
         {isMobile ? null : <HeroImage alt='' />}
       </Box>
     </HeroSection>

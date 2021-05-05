@@ -59,7 +59,7 @@ function WalletProvider(props) {
     }
     console.log(`wallet.isTorus : ${JSON.stringify(wallet.isTorus, null, 2)}`)
 
-    await wallet.init('production', network)
+    await wallet.init(process.env.NEXT_PUBLIC_ENVIRONMENT, network)
     const networkName = await wallet?.web3.eth.net.getNetworkType()
     const currentChainId = await wallet?.web3.eth.net.getId()
 
@@ -74,6 +74,9 @@ function WalletProvider(props) {
     setCurrentNetwork(networkName)
     setCurrentChainId(currentChainId)
     setReady(true)
+
+    // TESTS ONLY --------------
+    if (provider.isTest) return
 
     // EVENTS ONLY --------------
 
