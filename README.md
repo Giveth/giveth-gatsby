@@ -31,7 +31,7 @@ If you want to contribute, pls say hello to us in chat -  [https://giveth.io/joi
 ### Install impact-graph from GitHub
 In order to develop locally you need to clone the backend server as well. We are using https://github.com/Giveth/impact-graph for this.
 
-- via SSH on the CLI:
+- via the CLI:
     ```bash
     git clone git@github.com:Giveth/impact-graph.git
     cd impact-graph
