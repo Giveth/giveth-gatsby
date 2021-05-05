@@ -201,9 +201,9 @@ const MyDonations = props => {
       case 'All Donations':
         return items
       case 'Fiat':
-        return items?.filter(item => item.currency === 'USD')
+        return items?.filter(item => item.donationType !== 'crypto')
       case 'Crypto':
-        return items?.filter(item => item.currency === 'ETH')
+        return items?.filter(item => item.donationType === 'crypto')
       default:
         return items
     }
