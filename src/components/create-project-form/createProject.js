@@ -112,7 +112,6 @@ const CreateProject = props => {
         }
       } catch (error) {
         if (error.message === 'Access denied') {
-          // TODO : FIX LOGGER
           Logger.captureException(error)
           logout(
             setErrorMessage(
