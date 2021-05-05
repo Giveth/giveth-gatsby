@@ -23,16 +23,18 @@ import decoratorLeaf from '../../images/decorator-leaf.svg'
 const HeroSection = styled(Grid)`
   grid-template-columns: 1fr auto;
   position: relative;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
     grid-template-columns: 1fr;
-    min-height: 100vh;
   }
 `
 
 const HeroText = styled(Box)`
   position: absolute;
-  @media (max-width: '850px') {
+  @media (max-width: 850px) {
     position: static;
+    justify-content: center;
+    padding: 1rem;
+    text-align: center;
   }
 `
 const Hero = ({ content }) => {
@@ -40,7 +42,7 @@ const Hero = ({ content }) => {
 
   return (
     <HeroSection>
-      <HeroSideImage></HeroSideImage>
+      {isMobile ? null : <HeroSideImage />}
       <div id='placeholder' />
       <HeroText p={['10px', null, '80px']}>
         {' '}
@@ -71,7 +73,7 @@ const Hero = ({ content }) => {
           pb={2}
           sx={{
             variant: 'text.large',
-            width: ['95%', '60%', '70%'],
+            width: ['100%', '60%', '70%'],
             color: 'secondary',
             lineHeight: 'taller'
           }}
@@ -81,13 +83,14 @@ const Hero = ({ content }) => {
         <Grid
           rows={2}
           sx={{
-            width: '290px'
+            justifyContent: ['center', 'start', 'start']
           }}
         >
-          <Link to='/projects'>
+          <Link
+            to='/projects'
+          >
             <Button
-              mt={4}
-              p={4}
+              mt={[4, 5, 5]}
               sx={{
                 width: '290px',
                 variant: 'buttons.big'
@@ -100,20 +103,16 @@ const Hero = ({ content }) => {
             to='/create'
             sx={{
               variant: 'links.nav',
-              justifySelf: 'center'
+              justifySelf: ['center']
             }}
           >
-            <Text
-              sx={{
-                justifySelf: 'center'
-              }}
-            >
+            <Text>
               {content.mainButtonText}
             </Text>
           </Link>
         </Grid>
       </HeroText>
-      <Box sx={{ minHeight: '100vh' }}>
+      <Box sx={{ minHeight: [null, null, '100vh'] }}>
         {isMobile ? null : <HeroImage alt='' />}
       </Box>
     </HeroSection>

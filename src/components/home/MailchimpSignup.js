@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { Grid, Button, Input, jsx, Text, theme } from 'theme-ui'
+import { graphql } from 'gatsby'
 import React, { useState } from 'react'
 import { useAlert } from 'react-alert'
 import addToMailchimp from 'gatsby-plugin-mailchimp'

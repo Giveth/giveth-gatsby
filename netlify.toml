@@ -4,11 +4,22 @@
 # [[plugins]]
 #  package = "netlify-plugin-gatsby-cache"
 
+[[plugins]]
+  # https://github.com/cypress-io/netlify-plugin-cypress
+  package = "netlify-plugin-cypress"
+  # We don't need to run all tests, just a few sanity specs
+  [plugins.inputs]
+    enable = false
+  # let's test the local site before deploy
+  [plugins.inputs.postBuild]
+    enable = true
+    spec = "cypress/integration/e2e/*.js"
+
 [build.environment]
-# cache Cypress binary in local "node_modules" folder so Netlify caches it
-CYPRESS_CACHE_FOLDER = "./node_modules/CypressBinary"
-# set TERM variable for terminal output
-TERM = "xterm"
+  # cache Cypress binary in local "node_modules" folder so Netlify caches it
+  CYPRESS_CACHE_FOLDER = "./node_modules/CypressBinary"
+  # set TERM variable for terminal output
+  TERM = "xterm"
 
 [[redirects]]
   from = "/donate/:id"

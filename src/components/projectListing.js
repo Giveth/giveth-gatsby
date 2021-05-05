@@ -3,6 +3,7 @@ import { Heading, Box, Card, Flex, Button, Text } from 'theme-ui'
 import { navigate } from 'gatsby'
 import styled from '@emotion/styled'
 
+import RichTextViewer from './richTextViewer'
 import theme from '../gatsby-plugin-theme-ui/index'
 // import Donate from '../components/donateForm'
 
@@ -71,6 +72,7 @@ const AltCardContent = styled.span`
   bottom: 0;
   display: flex;
   flex: 1;
+  z-index: 2;
   width: 100%;
   flex-direction: column;
   position: absolute;
@@ -303,10 +305,14 @@ const ProjectListing = props => {
                 WebkitBoxOrient: 'vertical'
               }}
             >
+              <RichTextViewer
+                content={props?.description
+                  ?.replace(/<img .*?>/g, '')
+                  .replace(/<iframe .*?>/g, '')}
+              />
               {
                 /* Description String */
-
-                props?.description
+                // props?.description
               }
             </Text>
           </CardContent>

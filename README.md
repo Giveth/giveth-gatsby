@@ -115,3 +115,22 @@ Please refer to some examples in the code to see how we deal with styles. Local 
 ### Code conventions
 - as mentioned above contributor code should be linted with StandardJS
 - React components for into the folder `/src/components` and component filenames should be written in Camel case.
+
+### Testing
+
+We use Cypress to handle end-to-end testing.
+Basic testing can be handled in Netlify but not the tests that required a wallet connected to the DApp. For the latter, you'll need a local setup.
+
+Commands to run tests:
+- All tests: `npx cy:open`
+- Basic end-to-end tests: `npx cy:e2e`
+- Web3 tests: `npx cy:web3`
+
+The setup for web3 testing is the following:
+- Create a `cypress.env.json` as the `cypress.env.example.json`
+- Paste your local Giveth Token that you can find in your `localStorage` by going to your Giveth's DApp (inspect -> console -> Type `localStorage` in the console). Take the following variable: `giveth_user_local_token`
+- Run the following command to instanciate a HTTP Web3 Provider: `ganache-cli -p 8545`
+
+Now you can run tests that require a wallet!
+
+If you face some issues verify the Giveth token step and the ganache cli is launched. Then re-run the `npx cy:open` command.
