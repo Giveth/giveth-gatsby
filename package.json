@@ -57,7 +57,7 @@
     "i": "^0.3.6",
     "isomorphic-fetch": "^2.2.1",
     "js-search": "^2.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "npm": "^6.14.13",
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.1",
